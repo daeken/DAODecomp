@@ -40,6 +40,8 @@ def build_commands(build_dir, output_dir, jobs, windows=None):
         ("memory_negative", [py, str(ROOT / "validation/validate_memory.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/memory"), *common], ROOT),
         ("object_counters_all", [py, str(ROOT / "validation/validate_object_counters.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/object-counters"), *common], ROOT),
         ("object_counters_negative", [py, str(ROOT / "validation/validate_object_counters.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/object-counters"), *common], ROOT),
+        ("indexed_stores_all", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
+        ("indexed_stores_negative", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
     ]
 
 
@@ -48,6 +50,7 @@ def publication_paths(output_dir):
     registry = json.loads((ROOT / "analysis/functions.json").read_text())
     positives, negatives = [], []
     active_object_counters = False
+    active_indexed_stores = False
     for function in registry["functions"]:
         status = function.get("status")
         if status not in {"implemented", "corpus_pass", "reviewed", "integrated"}:
@@ -66,11 +69,16 @@ def publication_paths(output_dir):
             positives.append(output_dir / "reports/object-counters" / (function["name"] + "-all.json"))
             if function["name"] == "fn_00061f40":
                 negatives.append(output_dir / "reports/object-counters/fn_00061f40-mutant.json")
+        elif backend == "indexed-stores-001":
+            active_indexed_stores = True
+            positives.append(output_dir / "reports/indexed-stores" / (function["name"] + "-all.json"))
+            if function["name"] == "fn_00347d10":
+                negatives.append(output_dir / "reports/indexed-stores/fn_00347d10-mutant.json")
         else:
             raise ValueError(f"unsupported validation backend for implemented function {function['name']}: {backend}")
-    expected_negative_controls = 3 if active_object_counters else 2
+    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores)
     if not positives or len(negatives) != expected_negative_controls:
-        raise ValueError("registry lacks an expected scalar, memory, or active object counter negative-control function")
+        raise ValueError("registry lacks an expected scalar, memory, or active backend negative-control function")
     return positives, negatives
 
 

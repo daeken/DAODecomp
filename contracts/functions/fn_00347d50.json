@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50",
+  "inputs": {
+    "arena": "bytes",
+    "object": "u32",
+    "index": "u32",
+    "value": "u32",
+    "entry_eax": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512
+  },
+  "calls": [],
+  "preconditions": "A 512-byte initialized ordinary RAM allocation mapped at guest 0x02000000; object is an offset in [0,128], with any byte alignment. ECX = allocation base + object, and must remain unchanged at original return. Index and value are full u32 stack slots, callee cleanup is eight bytes; entry_eax supplies all incoming EAX bits. Let k = index & 0xff. For k < 7, only one byte at object+0x138+k may be written (low 8 value bits), and the return is k. For k >= 7, no arena read or write is permitted and the full return is (entry_eax & 0xffffff00) | k. No arena reads are permitted on either path; all 512 arena bytes and all EAX bits are observed afterward. Private valid stack, DF clear, normal return only; nonvolatile registers must be preserved. No calls, globals, relocations, stack writes, concurrency, MMIO, exceptions, address wrap or faulting/null objects. At this high-level boundary, the object argument is passed by value; original ECX preservation is checked, but no native x86 ABI bridge is tested. Other flags and volatile registers, including partial EDX effects, are excluded; future composition or a binary ABI bridge must separately account for any caller-dependent register relation. This arena and offset are an explicit fixture domain, not a recovered complete class layout."
+}

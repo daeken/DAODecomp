@@ -487,6 +487,84 @@
         402284
       ],
       "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d10",
+      "name": "fn_00347d10",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439888,
+      "size": 27,
+      "code_sha256": "acd0dc3dd8dbbe128d55e7ac25bdcde85ac685c4222b24797dcf890666728ba1",
+      "abi": {
+        "eax": "entry_eax",
+        "ecx": "arena + object; preserved at original boundary",
+        "stack_arguments": [
+          "index",
+          "value"
+        ],
+        "stack_cleanup": 8,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d10.json",
+      "source": "src/indexed_stores.cpp",
+      "evidence": "analysis/indexed-stores-001.md",
+      "observed_direct_callsite_rvas": [
+        3441242,
+        3444220,
+        3450655,
+        4146372,
+        4146404,
+        4146436,
+        2773224,
+        3443168,
+        3564468
+      ],
+      "backend": "indexed-stores-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50",
+      "name": "fn_00347d50",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439952,
+      "size": 25,
+      "code_sha256": "51ae9670e9f0b5766f3e931e1e55901979ec857014b0fb5c7b03caaff3fb7bf7",
+      "abi": {
+        "eax": "entry_eax",
+        "ecx": "arena + object; preserved at original boundary",
+        "stack_arguments": [
+          "index",
+          "value"
+        ],
+        "stack_cleanup": 8,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d50.json",
+      "source": "src/indexed_stores.cpp",
+      "evidence": "analysis/indexed-stores-001.md",
+      "observed_direct_callsite_rvas": [
+        3441253,
+        3444231,
+        3450670,
+        4146388,
+        4146420,
+        4146452,
+        2773242,
+        3443179,
+        3564484
+      ],
+      "backend": "indexed-stores-001"
     }
   ]
 }

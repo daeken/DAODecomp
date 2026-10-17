@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "Object counters integrated and full automatic checkpoint passed: 16 functions, 5562 emulator cases, 95 tooling tests, build/CTest/synthetic checks and three game negative controls. Evidence: analysis/validation/object-counters-001.json.",
-  "active_group": "object-fields-001",
+  "checkpoint": "Indexed setters integrated and full checkpoint passed:18 functions,8426 emulator cases,104 tooling tests,build/CTest/synthetic checks and4game negative controls; elapsed1269.977s. Evidence:analysis/validation/indexed-stores-001.json.",
+  "active_group": "linked-structures-001",
   "groups": [
     {
       "id": "memory-001",
@@ -23,7 +23,7 @@
     },
     {
       "id": "object-fields-001",
-      "status": "counters_integrated_indexed_pending",
+      "status": "integrated_validated",
       "rvas": [
         "0x00061f40",
         "0x00061f60",
@@ -32,14 +32,12 @@
         "0x00347d50"
       ],
       "scope": "Conditional object-field counters and indexed stores",
-      "next_action": "Prepare/review exact byte/word GuestMemory stores and a separate indexed-store adapter using the characterized fixtures. Preserve full incoming-EAX return relation and explicitly justify/check caller-dependent ECX mapping. Freeze acceptance before paired implementation; keep counter/memory-001 contracts unchanged.",
+      "next_action": "Retain full regression coverage. Continue with independently characterized linked-structures-001 and its pending contracts/backend.",
       "handoff": "local/pilots/object-fields-001/handoff.md",
       "proposed_packets": "local/pilots/object-fields-001/proposed-packets.json",
       "characterization": "local/pilots/object-fields-001/characterization.json",
       "observations": "4268 original-only states plus 41 register probes; no candidate accepted.",
-      "backend_gaps": [
-        "Indexed setters need exact byte/word writes and an explicit incoming-EAX relation if full return bits are retained; callers reuse ECX."
-      ],
+      "backend_gaps": [],
       "counter_backend": "object-counters-001",
       "counter_review": "analysis/reviews/object-counters-001-contract.json",
       "counter_pipeline": "local/pairs/object-counters-001-freeze-1-run/status.json",
@@ -48,43 +46,92 @@
       "completed_rvas": [
         "0x00061f40",
         "0x00061f60",
-        "0x00061f80"
-      ],
-      "remaining_rvas": [
+        "0x00061f80",
         "0x00347d10",
         "0x00347d50"
       ],
-      "counter_validation_record": "analysis/validation/object-counters-001.json"
+      "remaining_rvas": [],
+      "counter_validation_record": "analysis/validation/object-counters-001.json",
+      "indexed_backend": "indexed-stores-001",
+      "indexed_contract_review": "analysis/reviews/indexed-stores-001-contract.json",
+      "indexed_pipeline": "local/pairs/indexed-stores-001-freeze-1-run/status.json",
+      "indexed_source_review": "analysis/reviews/indexed-stores-001-source.json",
+      "indexed_worker_measurements": "analysis/pilots/indexed-stores-001.json",
+      "indexed_validation_record": "analysis/validation/indexed-stores-001.json"
     },
     {
       "id": "linked-structures-001",
-      "status": "queued",
+      "status": "original_evidence_reviewed_contracts_pending",
       "rvas": [
         "0x00018390",
         "0x000183d0"
       ],
-      "scope": "Paired linked-structure operations; object graph and aliasing contracts required",
-      "next_action": "Review caller/callee composition and valid graph invariants before creating fixtures."
+      "scope": "Event-node queue append/pop; original callers use Windows events, requiring separate synchronization and lifetime contracts",
+      "next_action": "Prepare and independently review a disjoint 512-byte graph contract/backend:32-byte list, up to4 distinct12-byte nodes, explicit null vs offset0 mapping, exact branch footprints, stale inactive links, permutation/unaligned/boundary and composition fixtures. Apply the five independent-review corrections; retain original handoff as historical. Freeze acceptance before any implementation.",
+      "handoff": "local/pilots/linked-structures-001/handoff.json",
+      "independent_review": "local/pilots/linked-structures-001/independent-review.json",
+      "independent_review_raw_sha256": "94d1744c100896c6569157d61b1c16722a128c68d1499aebeb8b984d408e5982",
+      "evidence": "analysis/linked-structures-001.md"
     }
   ],
   "infrastructure_backlog": [
     {
       "id": "evidence-dependency-scope",
-      "status": "audit_only_design_reviewed",
+      "status": "ignored_shadow_proposal_needs_independent_review",
       "reason": "Whole-registry/CMake/all-source hashes currently invalidate all prior corpus records on every addition; complete checkpoint reruns will become expensive as recovery grows.",
-      "next_action": "Implement a non-counting object-counter shadow audit first, preserving all v1 hashes/counts and forbidding backfill. Narrow reuse is not approved: address complete name/pilot/dispatch registry projection, tracked build closure, runtime package resolution, and absent/search/input-set dependencies, with adversarial staged-snapshot tests.",
+      "next_action": "Independent review on a later activation of ignored audit-only proposal and9 adversarial tests. Current audit intentionally incomplete/unusable/count0: missing snapshot attestation, toolchain/link/archive closure, actual Python/libunicorn resolution, external/negative input sets, generated cases and private re-verification. Do not integrate before review, reuse old evidence, backfill or narrow v1 acceptance.",
       "design": "local/pilots/evidence-dependencies-001/design.md",
       "structured_design": "local/pilots/evidence-dependencies-001/design.json",
       "design_sha256": "95127a9945670bec3f3606a08f599bd817dd5f0c1359262cfe15a565f1104791",
-      "design_review": "local/pilots/evidence-dependencies-001/review.json"
+      "design_review": "local/pilots/evidence-dependencies-001/review.json",
+      "proposal_directory": "local/pilots/evidence-dependencies-001/shadow-proposal",
+      "proposal_patch_sha256": "d1490f2c7b6922e29745e1a536deda175b3ec7919020b2173acb1e0781017e07",
+      "measurement": "local/pilots/evidence-dependencies-001/shadow-proposal/measurement.json",
+      "measurement_sha256": "6f1339675c98620f06bc5b206c005683114b967486fc110346eb283e7bf35027"
     },
     {
       "id": "paired-prompt-deduplication",
-      "status": "measured_pending_implementation_review",
+      "status": "ignored_v2_proposal_approved_pending_integration",
       "evidence": "local/pairs/object-counters-001-prompt-sizes.json",
       "reason": "Counter reviewer prompt contains 188273 bytes; repeated per-report artifact maps contribute 39903 bytes. Repair also resends execution provenance unrelated to candidate source repair.",
-      "next_action": "Deduplicate identical provenance with explicit references while retaining every binding/hash domain, compiler/ABI evidence and full durable reports. Keep repair feedback public-only, complete counterexamples and pass/fail identities; make passing-function preservation generic. Test that no evidence or negative-gate requirement is lost. This is a presentation optimization, not permission to narrow acceptance."
+      "next_action": "Apply exact v2 patches only when reviewed base hash still matches (or refresh review). Run all tooling checks before future packet freeze. V2 supplied24 tests and independent adversarial checks pass; savings8.51% reviewer/2.69% repair on captured counter prompts. Preserve rejected v1; current indexed pipeline/checkpoint remains unchanged.",
+      "proposal_directory": "local/pilots/paired-prompt-deduplication-001/v2",
+      "proposal_patch_sha256": "6cccabcfda2e6fe256a089f04952ce3e2ab946635b644c1b08ff08568dbde3ee",
+      "measurement": "local/pilots/paired-prompt-deduplication-001/v2/measurement.json",
+      "measured_prompt_bytes": {
+        "review_before": 188273,
+        "review_after": 172248,
+        "repair_before": 41377,
+        "repair_after": 40262
+      },
+      "independent_review": "local/pilots/paired-prompt-deduplication-001/v2/independent-review.json",
+      "independent_review_raw_sha256": "e293dd33a3f897482d1ad50f4d4cf0d0f28c521c7dbfa96520f2b03ce519b5f5"
     }
   ],
-  "blockers": []
+  "blockers": [
+    {
+      "group": "linked-structures-001",
+      "scope": "Windows caller integration; isolated leaves can proceed",
+      "missing_evidence": "Allocator/CreateEventA failure behavior, WaitForSingleObject/SetEvent/ResetEvent lifetime and synchronization helpers at RVAs0x1a980/0x1a9c0 with concurrent schedules are unresolved. No-op dependency stubs cannot validate the caller group.",
+      "function_rvas": [
+        "0x00018320",
+        "0x00018450",
+        "0x00018540",
+        "0x00018570",
+        "0x0001a980",
+        "0x0001a9c0"
+      ]
+    }
+  ],
+  "activation": {
+    "started_utc": "2026-10-17T18:09:29Z",
+    "group": "indexed-stores-001",
+    "infrastructure_assignments": 10,
+    "pipeline_request_limit": 4,
+    "total_worker_request_limit": 12,
+    "coordinator": "Local checkpoint complete; no active model workers. Git/CI finalization remains in current coordinator; verify status before continuing.",
+    "notes": "Ten infrastructure assignments (indexed3, linked2, prompt-dedup4, ignored dependency-shadow proposal1) plus2source-pipeline CLIrequests; activation limit12 reached. No further worker requests until a later activation. Infrastructure usage unavailable.",
+    "pipeline_request_count": 2,
+    "total_worker_requests": 12
+  }
 }

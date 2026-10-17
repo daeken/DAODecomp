@@ -1,0 +1,213 @@
+{
+  "candidate_accepted": false,
+  "candidate_executed": false,
+  "candidate_reviewed": false,
+  "compiled_game_negative_control_executed": false,
+  "decision": "approved_for_current_bounded_domain",
+  "domain": {
+    "accepted_index": "k=index&0xff; accepted iff k<7",
+    "alignment": "any byte",
+    "arena_bytes": 512,
+    "arena_reads": "none on either path",
+    "inputs": "index, value and entry_eax are full u32 bit patterns; initialized ordinary RAM; DF clear; private stack",
+    "normal_return_only": true,
+    "object_max": 128,
+    "object_min": 0,
+    "return": "accepted: k zero extended; rejected: (entry_eax&0xffffff00)|k"
+  },
+  "executed_checks": [
+    {
+      "command": ".venv/bin/python local/pilots/indexed-stores-001-review/original_probe.py",
+      "result": "2864 original-only indexed cases plus18repeats passed; ECX preserved for every run, exact EAX and wholearena checked; all18call sites and both slices reverified"
+    },
+    {
+      "baseline_git_head": "ea419f2accb3f317f504fb9f54cd65d023485eaf",
+      "baseline_oracle_sha256": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+      "description": "Same script compares prior committed oracle639e4903... with extended oracle on every public+heldout case for previous memory/counter backends",
+      "result": "2046cases matched exactly in fresh Unicorn instances with default optional argument; no candidate involved"
+    },
+    {
+      "command": ".venv/bin/python local/pilots/indexed-stores-001-review/protocol_probe.py",
+      "result": "40public/heldout boundary states through actual original protocol in80fresh processes; repeatable and equal to independent full observations"
+    },
+    {
+      "command": ".venv/bin/python local/pilots/indexed-stores-001-review/shared_build_probe.py",
+      "result": "Fresh isolated source snapshot: current CMake configured, guest_memory_tests and both synthetic targets built, CTest guest_memory passed, synthetic positive59passes and mutant53passes/6stable mismatches. No indexed candidate library/executable was built or run."
+    },
+    {
+      "command": "c++ -std=c++20 -Wall -Wextra -Wpedantic -Werror -Iinclude -fsyntax-only validation/indexed_store_native_runner.cpp",
+      "result": "passed"
+    },
+    {
+      "command": "c++ -std=c++20 -Wall -Wextra -Wpedantic -Werror -DDAO_INDEXED_STORE_MUTANT=1 -Iinclude -fsyntax-only validation/indexed_store_native_runner.cpp",
+      "result": "passed"
+    },
+    {
+      "command": ".venv/bin/python -m unittest tests.test_indexed_stores tests.test_memory tests.test_checkpoint -v",
+      "result": "30passed; no skips"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "result": "104passed; no skips"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "104ran,23optional Unicorn skips; all remaining passed"
+    }
+  ],
+  "findings": [],
+  "functions": [
+    {
+      "code_sha256": "acd0dc3dd8dbbe128d55e7ac25bdcde85ac685c4222b24797dcf890666728ba1",
+      "field_offset": 298,
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d10",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_00347d10",
+      "observation": "all EAX bits and all512arena bytes; original ECX asserted; high-level object argument by value, no binary bridge",
+      "original_abi": {
+        "eax": "entry_eax full u32",
+        "ecx": "arena_base+object; preserved",
+        "stack_arguments": [
+          "index u32 slot",
+          "value u32 slot"
+        ],
+        "stack_cleanup": 8
+      },
+      "readable": [],
+      "rva": 3439888,
+      "size": 27,
+      "suites": {
+        "heldout": {
+          "canonical_json_sha256": "b3a5d3e881893b62ba3fe94eb9395c600ddd89e330400a2d167a404354c7d294",
+          "count": 128,
+          "source_fixture": "local/pilots/object-fields-001/fn_00347d10-heldout-proposed.json"
+        },
+        "public": {
+          "canonical_json_sha256": "1bbe0717f3842dd6949c7b36e2481a7feff24d302bf10f14f631c3347b14c512",
+          "count": 1304,
+          "source_fixture": "local/pilots/object-fields-001/fn_00347d10-public-proposed.json"
+        }
+      },
+      "writable": "if (index&0xff)<7: one exact selected field; otherwise empty",
+      "write_width": 2
+    },
+    {
+      "code_sha256": "51ae9670e9f0b5766f3e931e1e55901979ec857014b0fb5c7b03caaff3fb7bf7",
+      "field_offset": 312,
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_00347d50",
+      "observation": "all EAX bits and all512arena bytes; original ECX asserted; high-level object argument by value, no binary bridge",
+      "original_abi": {
+        "eax": "entry_eax full u32",
+        "ecx": "arena_base+object; preserved",
+        "stack_arguments": [
+          "index u32 slot",
+          "value u32 slot"
+        ],
+        "stack_cleanup": 8
+      },
+      "readable": [],
+      "rva": 3439952,
+      "size": 25,
+      "suites": {
+        "heldout": {
+          "canonical_json_sha256": "060d0a88f0e6b75a449bb18566889a29936136c0daae460e42b46a3a5ffbc902",
+          "count": 128,
+          "source_fixture": "local/pilots/object-fields-001/fn_00347d50-heldout-proposed.json"
+        },
+        "public": {
+          "canonical_json_sha256": "4e863177e143cee1521bf0326f4cf69e8e7b3bdbfcda1b7a7eb4cf68343ace12",
+          "count": 1304,
+          "source_fixture": "local/pilots/object-fields-001/fn_00347d50-public-proposed.json"
+        }
+      },
+      "writable": "if (index&0xff)<7: one exact selected field; otherwise empty",
+      "write_width": 1
+    }
+  ],
+  "group": "indexed-stores-001",
+  "host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "unicorn": "2.1.4"
+  },
+  "native_windows_validated": false,
+  "original_findings": [
+    "Pinned original module hash and contiguous27/25byte slices reverified directly; Capstone and LLVM cover/equal every original byte. No overlapping base relocations.",
+    "All18direct caller opcodes and saved context bytes rechecked against the pinned PE. Some paired callers reuse ECX without reloading it; original preservation is therefore explicitly asserted.",
+    "MOV AL reads only index low8; unsigned CMP AL,7 selects accepted/rejected paths. Accepted paths read only low16/low8 of the value stack slot, MOVZX EAX,AL clears upper bits, and write one little-endian word/byte. Rejected paths leave incoming EAX upper24 bits intact and touch no arena storage.",
+    "The contract excludes partial EDX/flag effects at this high-level boundary and names future composition/ABI obligations. The native function takes object by value; no actual x86 binary bridge register behavior is claimed."
+  ],
+  "proof": false,
+  "review_kind": "independent pre-dispatch acceptance-system review",
+  "reviewed_artifacts_sha256": {
+    "CMakeLists.txt": "4c05f3515e783ae7bd374b21910d98e51365d2a6e826a937f4bb28b53ee69f0b",
+    "analysis/functions.json": "afd83d0c6c03a5c8c75acadd2be466d62af0755df9d9e6f74ecf96a79b441f7e",
+    "analysis/indexed-stores-001.md": "539aff6bcf19d15ba852248d27956ad99b92db2069d211974fe6dfd02a4ff4bf",
+    "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+    "contracts/functions/fn_00347d10.json": "2ca475f470dfba440be2c6ba09e32a8c613185dac921c1fe628634346497576e",
+    "contracts/functions/fn_00347d50.json": "3c2fbaded2f8e7e013a04fe03ea5e7abca120aa89557ecd7119475c14bf40954",
+    "include/dao/guest_memory.hpp": "7f526eb54986f73eaaabdb51d9ce39fcfc923293f38e5dbcfa0ec3d33ee193c5",
+    "include/dao/indexed_stores.hpp": "2cc76b7064222e96e9a126437643a6e8140c694e09c2281fffda9ecd02bfa5d8",
+    "local/pairs/indexed-stores-001-prepare.py": "3a760fa37d38a9c0432da03e6b74fc3c515f79cf5f251333979606784341a53f",
+    "local/pilots/object-fields-001/characterization.json": "dd03ddad08e6d9fa60bda7d21fe09dc42e55b13b249ea2fa6786f410fa015c4c",
+    "local/pilots/object-fields-001/fn_00347d10-heldout-proposed.json": "1459d1a9e941f6c88a37edccb802f63294170d0a3e4bdc2b9b3b9bb4b748a729",
+    "local/pilots/object-fields-001/fn_00347d10-llvm.txt": "bdda999b3b53c89c76b344343d39943664effb97e6e22ea10bed790e897705c2",
+    "local/pilots/object-fields-001/fn_00347d10-public-proposed.json": "19ce998af896509f3316307145201b232b2955df75b7847045aa75fbd8f87c88",
+    "local/pilots/object-fields-001/fn_00347d50-heldout-proposed.json": "44ead5451e6cc27bdaabf7c34b72a6474a0605679460fa16f2c3028dfc99ec71",
+    "local/pilots/object-fields-001/fn_00347d50-llvm.txt": "b399df41ee3dadbb91a8ccfd956531a9cb5c0a3c034a4d6df9e18400be54dfe3",
+    "local/pilots/object-fields-001/fn_00347d50-public-proposed.json": "35f66d6d0bb9fac963c4df77082cfbad9b959e111606b20b6b6e148ffe6c6980",
+    "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+    "tests/guest_memory.cpp": "fbe5f4b14ba2a7cd6d649643a99728a3488ea61a0af442f2972e467969688ca1",
+    "tests/test_checkpoint.py": "f1dbbc02a8a89af1702587f4ccc8aafbe102353ceddc909ce4df1ce32dbfe6c8",
+    "tests/test_indexed_stores.py": "56143b6f5224c7a4740b7644b1eb1d2810739e95f3e09b0e1da35347672965a0",
+    "tests/test_memory.py": "74af3248d0e7252a8294648c9f018c476371566b6ff548f61716d236793603da",
+    "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "tools/daodecomp/memory.py": "7ba86168d8c39c7207de1da61913d3682161ea0a37de65b62b504941286d860c",
+    "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+    "tools/run_model_packet.py": "996146000ac97a4dfd842bc42bcb21e89125f83cf2dd4eb8bed6a74396ec14ce",
+    "tools/run_recovery_pair.py": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+    "tools/validate_checkpoint.py": "746a18bae15248a2bddd789348f9e4c626968df169527fa89c5ea67d7723ad6c",
+    "validation/indexed_store_cases.py": "1e925fa87c7ae8996bb0b0c0d26266c91c5ba21ff995f8c2574707c35884d727",
+    "validation/indexed_store_native_runner.cpp": "936294ecf7383b64c8f12583cff6d7534159d453728760a78ad435cb9eb3cf82",
+    "validation/indexed_store_runner.py": "949b760de90d7c3716c144d238a22f60146786a05238e817d4d12ab3a309cb84",
+    "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+    "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+    "validation/validate_indexed_stores.py": "261a403228bb9f2c78249cf401c97909872c67e648499d4c88652a3ab43487c8"
+  },
+  "reviewer": "memory_contract_review",
+  "schema_version": 1,
+  "scope_limits": [
+    "Approval binds only the exact listed acceptance artifacts and copied corpus bytes, not a candidate implementation or every state in the domain. Any acceptance change requires refreshed review.",
+    "Measurements ran on macOS ARM64 with original x86 execution under Unicorn. C++ helper/synthetic targets ran natively on that host. No native Windows or full game validation is established.",
+    "Candidate source is a placeholder and excluded from reviewed artifact hashes. No indexed candidate was implemented, linked, run or source-approved; no compiled game negative-control result is claimed.",
+    "Original ECX preservation is checked, while C++ object-by-value is a logical state relation. Future raw x86 ABI bridges and caller-dependent EDX/flag behavior require separate evidence.",
+    "Only initialized single-threaded ordinary RAM, one512byte allocation, object0..128, no address wrap, DF clear and normal return are included. Faults/nulls/MMIO/concurrency/exceptions/full class layout remain outside scope.",
+    "After freezing, the candidate must pass actual automatic build/public/heldout/full-public-negative gates and a separate source reviewer. Complete integration/checkpoint evidence remains future work."
+  ],
+  "shared_helper_and_backend_findings": [
+    "GuestMemory write_u8/write_u16 validate full1/2byte bounds and declared write footprint before any store. Word stores use defined byte-wise little-endian semantics without surrounding reads, alignment assumptions or widened writes. Existing dword check paths retain default width4 and class state layout is unchanged.",
+    "execute_memory preserved_registers defaults to empty, accepts only distinct explicitly supplied entry-register names, and checks their exit values in addition to existing stack/nonvolatile/DF/footprint/budget checks. Previous callers retain default behavior.",
+    "The actual indexed original adapter supplies incoming EAX and ECX, both full32bit stack slots, cleanup8, no readable arena ranges, conditional exact-width writable ranges and preserved_registers=(ecx,).",
+    "Native adapter uses a write-only GuestMemory with the same conditional ranges, validates full u32 inputs/object bounds/lowercase512byte state, and serializes the complete arena plus unsigned return. Rejected paths receive no memory permissions.",
+    "All four generated corpora exactly equal the independently characterized1304public/128heldout fixtures. Full1304public word-store negative control clears upper EAX bits only on rejected paths after the real candidate call. Original-only observations show747return differences for that software mutation; actual compiled candidate/mutant gate remains required.",
+    "Validator hashes binary/executable/corpus/contracts/registry/reference metadata/CMake/cache/compile metadata/backend/helper/PE/header/source dependencies, repeats each side in fresh processes, and preserves strict error/nondeterminism rejection. Report names match the reviewed preparation helper.",
+    "Checkpoint extension includes both implemented indexed positives and the word-store negative; contracted entries remain unpublished, unsupported implemented backends remain errors. Preparation checks exact reviewed hashes and source corpus copies before freezing, then automatic gates precede a separate source review."
+  ],
+  "supplementary_evidence_sha256": {
+    "local/pilots/indexed-stores-001-review/original-probes.json": "732ba3888186140d3f09f9d7551f4c461caf23d079b4c427b1d036834ac392d5",
+    "local/pilots/indexed-stores-001-review/original_probe.py": "b4faeb4bbc16ada8e5b6997e3a9ca60e1e821d102652413db4dbf68f27e7cb6e",
+    "local/pilots/indexed-stores-001-review/protocol-probes.json": "55d0745a61e1071afc9306060f01306f7971589c260f03652d618b20d421b1f9",
+    "local/pilots/indexed-stores-001-review/protocol_probe.py": "e931076329995a8b8c7f35d23eba6cfc8a8c7ab2f979fb02cf37d75e71dbbabe",
+    "local/pilots/indexed-stores-001-review/shared-build-probes.json": "2c2a3a38440fff744a4634e68009b2e3541284da0a531cfde14a8118b56aec25",
+    "local/pilots/indexed-stores-001-review/shared_build_probe.py": "4d35ccc13c3008a2d9788b2a2c1380b29aa2c649a60ed138e3f02eba515e070f"
+  },
+  "timestamp_utc": "2026-10-17T18:17:31.120320+00:00",
+  "local_report_sha256": "c6734109500006572363a8a1d0fea8c908211627202fa029d98b5e48edc8182e",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reviewer_reasoning_effort": "high"
+}

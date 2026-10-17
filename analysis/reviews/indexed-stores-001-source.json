@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "source_sha256": "5b1278d9f1ba51156844e1f6578f71a56c0bc94eaa0b354efec1350aa325c311",
+  "review_raw_file_sha256": "8707804bd2444cde676131e4226a76f46da0407086c6743fc53bb8c8b983465a",
+  "review": {
+    "decision": "approve",
+    "issues": [],
+    "limitations": [
+      "Approval covers only src/indexed_stores.cpp, raw SHA-256 5b1278d9f1ba51156844e1f6578f71a56c0bc94eaa0b354efec1350aa325c311, under the frozen contracts; registry integration is not approved.",
+      "Original execution used Unicorn 2.1.4; candidate execution used native macOS ARM64 C++20 with AppleClang 21. No native Windows/x86 ABI bridge or whole-game validation is established.",
+      "Scope is initialized ordinary RAM in the specified 512-byte arena, object offsets 0..128, and normal returns. Faults, address wrap, MMIO, concurrency, exceptions, complete class layout, EDX effects and flags remain excluded.",
+      "Review used supplied material only; hashes and execution bindings were not independently recomputed."
+    ],
+    "summary": "Both implementations match the supplied complete instruction slices bound to the pinned DAOrigins.exe SHA-256, RVAs and slice hashes. Low-byte index conversion and unsigned comparison reproduce MOV AL/CMP/JAE; accepted returns zero-extend k, while rejected returns preserve incoming EAX upper 24 bits. Exact word/byte helpers reproduce value truncation and little-endian stores without arena reads or surrounding writes. Bounds remain inside the arena; byte-wise access supports unaligned and overlapping guest storage without host-pointer alias assumptions. Arithmetic, conversions and helper shifts are defined within the contract. Original ECX preservation, nonvolatile preservation and ret 8 are supported by instruction evidence and oracle checks; the C++ interface implements the declared high-level mapping. Supplied verified bindings connect this source and frozen contracts/corpora to successful builds, both synthetic commands, 1304 public and 128 heldout cases per function, and 747 expected negative-control mismatches. These results support scoped approval, not proof of whole-game behavior."
+  },
+  "integration_transition": {
+    "schema_version": 1,
+    "before_registry_raw_sha256": "afd83d0c6c03a5c8c75acadd2be466d62af0755df9d9e6f74ecf96a79b441f7e",
+    "after_registry_raw_sha256": "e4ead0cbe181538b7167192f45e484064895a26b4d1ecbfe8c0516fb70d7591e",
+    "change": "Only the two package function statuses change from contracted to implemented. All identity, ABI, source, contract and backend fields remain identical.",
+    "functions": [
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d10",
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50"
+    ],
+    "source_sha256": "5b1278d9f1ba51156844e1f6578f71a56c0bc94eaa0b354efec1350aa325c311",
+    "frozen_acceptance_artifacts_match_before_promotion": true
+  },
+  "scope": "Independent text-only source review after automatic deterministic gates. Final checkout validation is recorded separately."
+}

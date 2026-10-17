@@ -52,6 +52,28 @@ class MemoryGuardTests(unittest.TestCase):
         for code, error in [("31db c3", "nonvolatile"), ("fd c3", "direction flag")]:
             with self.assertRaisesRegex(RuntimeError, error): self.run_code(code)
 
+    def test_explicit_caller_register_preservation(self):
+        self.run_code("31c9 c3")  # Existing callers allow volatile ECX changes.
+        with self.assertRaisesRegex(RuntimeError, "explicitly preserved"):
+            self.run_code("31c9 c3", preserved_registers=("ecx",))
+        result, _ = self.run_code("89c8 c3", preserved_registers=("ecx",))
+        self.assertEqual(result, ARENA_BASE + 3)
+
+    def test_preservation_requires_distinct_explicit_registers(self):
+        for names in (None, "ecx", ("edx",), ("ecx", "ecx"), ([],)):
+            with self.assertRaisesRegex(ValueError, "preserved registers"):
+                self.run_code("c3", preserved_registers=names)
+
+    def test_exact_narrow_write_without_read_access(self):
+        for code, width, expected in (("c601ab c3", 1, b"\xab"),
+                                      ("66c7013412 c3", 2, b"\x34\x12")):
+            _, after = self.run_code(code, readable=[], writable=[(3, width)])
+            self.assertEqual(after, bytes(range(3)) + expected + bytes(range(3 + width, 32)))
+        with self.assertRaisesRegex(RuntimeError, "write outside"):
+            self.run_code("66c7013412 c3", readable=[], writable=[(3, 1)])
+        with self.assertRaisesRegex(RuntimeError, "read outside"):
+            self.run_code("8b01 c3", readable=[], writable=[(3, 2)])
+
     def test_unfinished_loop_is_not_success(self):
         with self.assertRaisesRegex(RuntimeError, "within budget"):
             self.run_code("ebfe", instruction_budget=8)

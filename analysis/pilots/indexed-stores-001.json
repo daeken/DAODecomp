@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "status": "integrated-validated",
+  "candidate_target": "src/indexed_stores.cpp",
+  "source": "local/pairs/indexed-stores-001-freeze-1-run/accepted/candidate.cpp",
+  "source_sha256": "5b1278d9f1ba51156844e1f6578f71a56c0bc94eaa0b354efec1350aa325c311",
+  "manifest": "local/pairs/indexed-stores-001-freeze-1-run/manifest.json",
+  "manifest_canonical_json_sha256": "9431c3436db3afd38a8e215263f9d4135e6be1618c1e47c940581adae59a9771",
+  "manifest_raw_file_sha256": "98a835943317233548a254ca8db7aab00a2655e25cbf85984729dce7599e5fa4",
+  "acceptance_review": "local/pilots/indexed-stores-001-review/acceptance-review.json",
+  "candidate_review": "local/pairs/indexed-stores-001-freeze-1-run/review-response.json",
+  "candidate_review_decision": "approve",
+  "candidate_review_raw_sha256": "8707804bd2444cde676131e4226a76f46da0407086c6743fc53bb8c8b983465a",
+  "status_path": "local/pairs/indexed-stores-001-freeze-1-run/status.json",
+  "frozen_registry": "local/pairs/indexed-stores-001-freeze-1-run/frozen/analysis/functions.json",
+  "frozen_registry_raw_sha256": "afd83d0c6c03a5c8c75acadd2be466d62af0755df9d9e6f74ecf96a79b441f7e",
+  "pipeline_request_count": 2,
+  "maximum_pipeline_requests": 4,
+  "requests": [
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/attempt-1/model/request/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/attempt-1/model/request/response.json",
+        "-"
+      ],
+      "elapsed_seconds": 7.185,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "implementation",
+      "outer": {
+        "argv": [
+          "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+          "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/frozen/tools/run_model_packet.py",
+          "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/attempt-1/model/prompt.txt",
+          "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/attempt-1/model/request",
+          "--model",
+          "gpt-6-luna",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp",
+        "elapsed_seconds": 7.276,
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 195
+      },
+      "output_exists": true,
+      "packet_sha256": "b79702c8fd89dde093def9f42507de76c31b27e3f98cdda66d7daa0e59ed9463",
+      "prompt_sha256": "b79702c8fd89dde093def9f42507de76c31b27e3f98cdda66d7daa0e59ed9463",
+      "reasoning_effort": "medium",
+      "requested_model": "gpt-6-luna",
+      "reused": false,
+      "schema_version": 1,
+      "timed_out": false,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 25456,
+          "output_tokens": 495,
+          "reasoning_output_tokens": 0
+        }
+      ]
+    },
+    {
+      "argv": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6.1-sol",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--skip-git-repo-check",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/review/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/review/response.json",
+        "-"
+      ],
+      "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-stores-001-freeze-1-run/review/empty-workspace",
+      "elapsed_seconds": 16.256,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "review",
+      "prompt_sha256": "81c120df4418a0a1ee7cc67d7fda5893331d1093cba3f8e38e785350a979fad3",
+      "requested_model": "gpt-6.1-sol",
+      "reused": false,
+      "timed_out": false,
+      "timeout_seconds": 180,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 97890,
+          "output_tokens": 572,
+          "reasoning_output_tokens": 151
+        }
+      ]
+    }
+  ],
+  "reported_usage_sum": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 123346,
+    "output_tokens": 1067,
+    "reasoning_output_tokens": 151
+  },
+  "model_request_elapsed_seconds_sum": 23.441,
+  "pipeline_elapsed_seconds": 768.38,
+  "infrastructure_assignments": {
+    "count": 10,
+    "agent_count": 3,
+    "usage": null,
+    "usage_status": "unavailable; not estimated",
+    "scope": "Indexed infrastructure3; linked original characterization/review2; ignored prompt-dedup proposal/review/repair/re-review4; ignored evidence-dependency shadow proposal1. Infrastructure token usage unavailable.",
+    "coordinator_may_update_final_assignment_count": true
+  },
+  "accounting_note": "Pipeline CLI-reported worker usage only. Infrastructure-agent and coordinator usage/account charges are unavailable and not estimated. Cache/reasoning fields retain CLI semantics and are not additive billing totals.",
+  "accepted_game_case_counts": {
+    "public": {
+      "fn_00347d10": {
+        "corpus_pass": 1304
+      },
+      "fn_00347d50": {
+        "corpus_pass": 1304
+      }
+    },
+    "heldout": {
+      "fn_00347d10": {
+        "corpus_pass": 128
+      },
+      "fn_00347d50": {
+        "corpus_pass": 128
+      }
+    },
+    "negative": {
+      "fn_00347d10": {
+        "corpus_pass": 557,
+        "mismatch": 747
+      }
+    }
+  },
+  "positive_game_case_count": 2864,
+  "synthetic_case_counts": {
+    "synthetic.json": {
+      "corpus_pass": 59
+    },
+    "synthetic-mutant.json": {
+      "mismatch": 6,
+      "corpus_pass": 53
+    }
+  },
+  "failed_candidate_runs": [],
+  "preparation_readiness_history": "Initial local readiness checks ran before two contracts/registry entries existed:2 passed,1 failed,1 error; no model requests. All4 unchanged readiness checks passed after root setup.",
+  "integration_plan": {
+    "expected_registry_changes": {
+      "fn_00347d10": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      },
+      "fn_00347d50": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      }
+    },
+    "all_other_contract_abi_identity_fields": "unchanged",
+    "owner": "root coordinator; not applied by this worker"
+  },
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "orchestrator_startup_sha256": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+  "preparation_helper_raw_sha256": "3a760fa37d38a9c0432da03e6b74fc3c515f79cf5f251333979606784341a53f",
+  "scope": "Frozen ordinary initialized 512-byte arena; object 0..128; exact narrow writes/no arena reads, full incoming-EAX dependency on rejection; original ECX preservation checked. High-level C++ mapping only, not x86 ABI bridge.",
+  "native_windows_validated": false,
+  "proof": false,
+  "model_requests_closed": true,
+  "coordinator_integration": {
+    "status": "exact source integrated with two status-only registry promotions; full checkpoint passed",
+    "transition_record": "local/pairs/indexed-stores-001-freeze-1-run/integration-transition.json",
+    "transition_record_raw_sha256": "05519944b59f2bddcd6e80452ed8ff386b59033ed2696e1f329f775d2d7ebe3d",
+    "checkpoint_directory": "reports/checkpoint-indexed-stores-001",
+    "checkpoint_result": "passed"
+  },
+  "local_summary_sha256": "7211709b24524a1dda788aa86b58e221336ae5d9cd3b113f2638754ab7301d2d",
+  "integration_evidence": "analysis/validation/indexed-stores-001.json",
+  "activation_total_worker_requests": 12,
+  "checkpoint": {
+    "path": "reports/checkpoint-indexed-stores-001/checkpoint.json",
+    "sha256": "7b8318d356d02b4b754a7a154cd88222e7f216901dd6ff8d32b311724d541345",
+    "status": "passed",
+    "functions": 18,
+    "game_input_cases": 8426,
+    "tooling_tests": 104,
+    "elapsed_seconds": 1269.977,
+    "proof": false,
+    "native_windows_validated": false
+  }
+}

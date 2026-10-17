@@ -49,8 +49,8 @@ For each coherent group:
 
 The memory-001 group adds two fixed-size copies with aliasing and a bit mutation
 routine. Object counters extend exact memory observations to 512-byte allocations
-and distinct sentinel behavior. The next indexed-store functions need reviewed
-byte/word stores and explicit incoming-register observations. Follow the queue's
+and distinct sentinel behavior. Indexed-store validation adds exact byte/word
+writes and explicit incoming-register observations. Follow the queue's
 current checkpoint and blockers. Grow toward dependent functions and subsystems,
 not merely maximize tiny leaf counts.
 
@@ -69,7 +69,8 @@ Linux/macOS host, choosing new output and record paths each time:
 ```
 
 It builds, runs tooling/CTest/synthetic controls, checks all registered scalar,
-memory and object-counter functions and their negative controls, verifies report/input hashes, then
+memory, object-counter and indexed-store functions and their negative controls,
+verifies report/input hashes, then
 publishes compact evidence and refreshes README progress. A failed step stops
 publication and leaves logs plus `checkpoint.json`. It does not stage, commit or
 push. Windows full checkpoints are currently rejected because the game validators

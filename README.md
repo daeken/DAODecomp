@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 16 |
-| C++ implementations | 16 |
-| Implementations with current emulator corpus evidence | 16 |
-| Input cases across those functions (excluding repeat runs) | 5,562 |
+| Functions in the recovery registry | 18 |
+| C++ implementations | 18 |
+| Implementations with current emulator corpus evidence | 18 |
+| Input cases across those functions (excluding repeat runs) | 8,426 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -51,6 +51,8 @@ After building and installing the dependencies below, with the original game at
 .venv/bin/python validation/validate_memory.py --expect-mismatch
 .venv/bin/python validation/validate_object_counters.py --suite all --jobs 3
 .venv/bin/python validation/validate_object_counters.py --expect-mismatch
+.venv/bin/python validation/validate_indexed_stores.py --suite all --jobs 2
+.venv/bin/python validation/validate_indexed_stores.py --expect-mismatch
 ```
 
 The runner verifies binary/slice hashes and executes the registered arithmetic and
@@ -75,6 +77,11 @@ See the [memory recovery record](analysis/memory-001.md).
 The object-counter adapter uses separate 512-byte allocations and checks exact
 field footprints, wraparound and sentinel return values. See the
 [object-counter recovery record](analysis/object-counters-001.md).
+
+The indexed-store adapter checks conditional byte/word writes, truncation, all
+incoming EAX bits on rejected indexes, and preserved ECX in the original slice.
+Its negative control incorrectly clears the upper return bits on rejected indexes.
+See the [indexed-store recovery record](analysis/indexed-stores-001.md).
 
 ## Run the demonstration
 

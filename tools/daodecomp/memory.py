@@ -9,7 +9,7 @@ ARENA_BASE = 0x02000000
 
 
 def execute_memory(address, code, arena, *, registers, stack_arguments, readable,
-                   writable, stack_cleanup, instruction_budget=1000):
+                   writable, stack_cleanup, instruction_budget=1000, preserved_registers=()):
     from unicorn import (Uc, UC_ARCH_X86, UC_MODE_32, UC_PROT_READ, UC_PROT_WRITE,
                          UC_PROT_EXEC, UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE)
     from unicorn.x86_const import (UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX,
@@ -26,6 +26,10 @@ def execute_memory(address, code, arena, *, registers, stack_arguments, readable
             or any(type(v) is not int or not 0 <= v <= 0xffffffff
                    for v in [*registers.values(), *stack_arguments])):
         raise ValueError("unsupported memory ABI")
+    if (type(preserved_registers) not in (tuple, list)
+            or any(type(name) is not str or name not in registers for name in preserved_registers)
+            or len(set(preserved_registers)) != len(preserved_registers)):
+        raise ValueError("preserved registers must be distinct explicit entry registers")
     for offset, size in [*readable, *writable]:
         if type(offset) is not int or type(size) is not int or not 0 <= offset < offset + size <= len(arena):
             raise ValueError("invalid memory footprint")
@@ -79,6 +83,8 @@ def execute_memory(address, code, arena, *, registers, stack_arguments, readable
         raise RuntimeError("leaf did not return with declared stack balance within budget")
     if any(machine.reg_read(reg) != value for reg, value in saved.items()):
         raise RuntimeError("leaf clobbered a nonvolatile register")
+    if any(machine.reg_read(reg_ids[name]) != registers[name] for name in preserved_registers):
+        raise RuntimeError("leaf clobbered an explicitly preserved register")
     if machine.reg_read(UC_X86_REG_EFLAGS) & 0x400:
         raise RuntimeError("leaf returned with direction flag set")
     return machine.reg_read(UC_X86_REG_EAX), bytes(machine.mem_read(ARENA_BASE, len(arena)))
