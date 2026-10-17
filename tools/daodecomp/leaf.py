@@ -1,4 +1,4 @@
-"""Strict concrete backend for reviewed, read-only x86 cdecl(u32)->u32 leaves.
+"""Strict concrete backend for reviewed, read-only single-argument x86 leaves.
 
 This is deliberately not a PE loader or an automatic function runner. The caller
 must supply a reviewed contiguous slice with no relocations or dependencies.
@@ -31,7 +31,8 @@ def load_slice(path, module_sha256, rva, size, code_sha256):
     return metadata["image_base"] + rva, code
 
 
-def execute_leaf(address, code, value):
+def execute_leaf(address, code, value, *, argument="stack", return_bits=32, stack_cleanup=0,
+                 preserved_registers=()):
     from unicorn import (Uc, UC_ARCH_X86, UC_MODE_32, UC_PROT_READ, UC_PROT_WRITE,
                          UC_PROT_EXEC, UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE)
     from unicorn.x86_const import (UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX,
@@ -40,6 +41,11 @@ def execute_leaf(address, code, value):
                                   UC_X86_REG_EFLAGS)
     if type(value) is not int or not 0 <= value <= 0xffffffff:
         raise ValueError("expected u32 input")
+    if (argument not in ("stack", "eax", "ecx") or type(return_bits) is not int
+            or return_bits not in (8, 32) or type(stack_cleanup) is not int
+            or stack_cleanup not in (0, 4) or (argument != "stack" and stack_cleanup != 0)
+            or any(reg not in ("ecx", "edx") for reg in preserved_registers)):
+        raise ValueError("unsupported scalar ABI")
     if not code or address < 0 or address + len(code) > 0x100000000:
         raise ValueError("invalid instruction range")
     machine = Uc(UC_ARCH_X86, UC_MODE_32)
@@ -59,6 +65,11 @@ def execute_leaf(address, code, value):
         machine.reg_write(reg, contents)
     for i, reg in enumerate((UC_X86_REG_EAX, UC_X86_REG_ECX, UC_X86_REG_EDX)):
         machine.reg_write(reg, (value ^ (0x12345678 * (i + 1))) & 0xffffffff)
+    if argument != "stack":
+        machine.reg_write({"eax": UC_X86_REG_EAX, "ecx": UC_X86_REG_ECX}[argument], value)
+    for name in preserved_registers:
+        reg = {"ecx": UC_X86_REG_ECX, "edx": UC_X86_REG_EDX}[name]
+        saved[reg] = machine.reg_read(reg)
     machine.reg_write(UC_X86_REG_ESP, sp)
     machine.reg_write(UC_X86_REG_EFLAGS, 0x202)  # DF clear, normal cdecl entry.
 
@@ -67,7 +78,8 @@ def execute_leaf(address, code, value):
             raise RuntimeError("execution escaped reviewed function slice")
 
     def on_read(uc, access, location, size, contents, _):
-        if not sp <= location or location + size > sp + 8:
+        readable_end = sp + (8 if argument == "stack" else 4)
+        if not sp <= location or location + size > readable_end:
             raise RuntimeError("read outside return-address/argument footprint")
 
     def on_write(uc, access, location, size, contents, _):
@@ -77,10 +89,10 @@ def execute_leaf(address, code, value):
     machine.hook_add(UC_HOOK_MEM_READ, on_read)
     machine.hook_add(UC_HOOK_MEM_WRITE, on_write)
     machine.emu_start(address, stop, count=100)
-    if machine.reg_read(UC_X86_REG_EIP) != stop or machine.reg_read(UC_X86_REG_ESP) != sp + 4:
-        raise RuntimeError("leaf did not return with cdecl stack balance within budget")
+    if machine.reg_read(UC_X86_REG_EIP) != stop or machine.reg_read(UC_X86_REG_ESP) != sp + 4 + stack_cleanup:
+        raise RuntimeError("leaf did not return with declared stack balance within budget")
     if any(machine.reg_read(reg) != contents for reg, contents in saved.items()):
         raise RuntimeError("leaf clobbered a nonvolatile register")
     if machine.reg_read(UC_X86_REG_EFLAGS) & 0x400:
         raise RuntimeError("leaf returned with direction flag set")
-    return machine.reg_read(UC_X86_REG_EAX)
+    return machine.reg_read(UC_X86_REG_EAX) & ((1 << return_bits) - 1)

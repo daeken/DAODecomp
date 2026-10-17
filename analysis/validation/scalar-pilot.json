@@ -1,0 +1,534 @@
+{
+  "build": "CMake RelWithDebInfo, C++20, -O2 -g -DNDEBUG -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off",
+  "command": [
+    ".venv/bin/python",
+    "validation/validate_leaves.py",
+    "--suite",
+    "all",
+    "--jobs",
+    "4",
+    "--report-dir",
+    "reports/luna-001/final"
+  ],
+  "compiler": [
+    "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "Target: arm64-apple-darwin27.0.0"
+  ],
+  "date": "2026-10-17",
+  "evidence_level": "emulator_corpus_agreement",
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "native_windows_validated": false,
+  "proof": false,
+  "python": "3.14.7",
+  "records": [
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/byte_swap_u32.json": "170f3e289f0d88e9f5a62bc6ddff29e0800371843f7046267060223e8d558122",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/byte_swap_u32-all-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "603739ce9c9bf9dc548f6eb478605eb80af31e0aef504b7beee7080f8a6a1c2a",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "elapsed_seconds": 44.412,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0004a3f0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/byte_swap_u32-all.json",
+      "report_sha256": "6f40a39906b6cf80d372deb5845124c19bbeaa6ea537f11d21de63185a9a6f26",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/bit_mask_or_all-all-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "elapsed_seconds": 45.172,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/bit_mask_or_all-all.json",
+      "report_sha256": "52fe6116ccf41e06c5be895140b5c1db659c6279a6a4c9f96375ea1a87f6d06c",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_00184920.json": "7dd64109be3cdbdc282fc7d7bc81887ee50948dadcb311108a97fe23155b813b",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_00184920-all-cases.json": "42e82d0764d32aa704150cb085a0084e6c1b6e41462d3fe0e9cf460e445c6162",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "65b03f32cec46b4dc5d211dddfe5bf08fd400a9ac16311bfb36f124c79ec5de6",
+      "corpus_canonical_sha256": "44d9b1c209690b79a15c256756cac9a41af11ab4dccbd283e8a75dacea40f727",
+      "elapsed_seconds": 58.199,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_00184920-all.json",
+      "report_sha256": "9aa1d83fd964f292eb95e4f15aa0dcedbd08fa0d47bfc1c35282bb046440811e",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_0052aad0.json": "50c0dc95b47c7199769b4e29bfc69fc1fc5c448e80d469e7ad30f8507a89837e",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_0052aad0-all-cases.json": "0a32c517af2c7fa34fd5fd1df4233ccd4c798d630eb1ee84ba3df143fff0b822",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "733de798163e438e58d4f1ef93a31a1cc974558757f101353cceeadc296a0242",
+      "corpus_canonical_sha256": "0e1fa2a9c9ad841c8b02dd2a0d59f91a9ddab793aa362b612774108d1ac28b36",
+      "elapsed_seconds": 58.216,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_0052aad0-all.json",
+      "report_sha256": "0c70fc25acf9125d86de99defd8b4c56726f77e140c29f6ab3d054144de3ac76",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_005851a0.json": "5065c79dc02d9ca743c9a95b6b09844d8cf757a93ab6414679e490c350423c1d",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_005851a0-all-cases.json": "e31be1356cf59993b5aa9c7257c36f2e94929967d6991b88e5834b11044f2bd6",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "8a8808dd40cbdbd54852d07ff90200068ddacc865b25006026be714312fbc553",
+      "corpus_canonical_sha256": "07a54cbbce8a477a1a35fad41e3aedfc7a87a2a7e88d2ff0ed5add9515a257a9",
+      "elapsed_seconds": 55.738,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_005851a0-all.json",
+      "report_sha256": "51288896c14c4491aad389d41a18bd9502e85530372b6e599e52965f15ebb760",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_005c0c00.json": "d9a18d1ab76beb596a14474fed91dc5fee3a53b7d5264d5539a33b8f445826bd",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_005c0c00-all-cases.json": "51bddb960e0f73cda3ca2e695b383430a8f24a788946a1b3a4abcae91b9c223e",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "7d5e9b4b38767f7979941491544e3c8448b70c2d59f0d57bd0901e6201e0df41",
+      "corpus_canonical_sha256": "53f95f16f719aa9d9d8a63b82ba1924ac190b6eb82b85b669b5a1619438a5f6e",
+      "elapsed_seconds": 55.509,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_005c0c00-all.json",
+      "report_sha256": "e4c088f9f39e5b8b99e8dad0c20129e7642fdcaafc361f68ac444a2f16e43e8b",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004d79c0.json": "eb59c2f781a68f57c56e46a8bfe551a1f68b4648de2d847f583f78985ff791a0",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_004d79c0-all-cases.json": "49da26d78431d40e5e2391f980ad4bc50e63e20344cbb84276745b77e92d1564",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "08d5372fa701fe054a5f6acc359a297b50d382e5f557920145bdb4145f5d7455",
+      "corpus_canonical_sha256": "98235eef4fe281a4b0e0c2618032ee3256015619649abc43fd32373f3498f749",
+      "elapsed_seconds": 147.846,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_004d79c0-all.json",
+      "report_sha256": "f4bb944eacf73f5acec28649128e2af0b35d1dca222c6afe3f6ad4b01adcaffa",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b6e70.json": "8accf9841ad678067251afa095e65df7c2c99d2d963f3127617faf635f27e31a",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_004b6e70-all-cases.json": "aba6e4935f0761779374f94bce1ef7510e8afcc28888014436fb321445426f4b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "4b6ba9b75b3bd7f22b3e714821050e9b83853bfc03694e4f8cc01be0ecd75449",
+      "corpus_canonical_sha256": "354bcd7a9542682d2ad8a964fc966f56d21c5721f06e727a3e5666b7a0d5230f",
+      "elapsed_seconds": 148.063,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_004b6e70-all.json",
+      "report_sha256": "6df5628b018cb2f29305aa0df0b4c0950522237bed788cbe0edabf4fc2d2e4e2",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b65b0.json": "6db8c5b99781bd636105f52a595da1140ec8786e843a943ef4b613f5bc75e27b",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_004b65b0-all-cases.json": "32035f585005b1c56bc1b4cc1dc68b43aa0cfcd1dc2ef3ca77454d2dd64fa63b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "00e115dab190476d4a3e7959d42812fac73bdbb5127591a00769e8151bb65370",
+      "corpus_canonical_sha256": "3ac835e7139fdc82a676aba9e6bfb1f6a56a3331c4c5cd2bd9c4554b682e7651",
+      "elapsed_seconds": 145.714,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_004b65b0-all.json",
+      "report_sha256": "2897022177c39c46c3ec4974b3b13ac6cfe04948e40680b1dbf7d58532b026b9",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b64d0.json": "f5164741a009259319758d26eee8e248b7086b58210b709465e44e416e227d91",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/fn_004b64d0-all-cases.json": "e15d353d882b29afed3a063d659e14b9ca9ccef1855f2fde3ae4cbb8b413e894",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "7a9b1ef66d0b73cf55f1bfe5a542eed13c57d54363b6d71b28c7ff214067de0f",
+      "corpus_canonical_sha256": "8ba1cd28904e8f93b3a9b8c0d1029b232e4ed796adad66d210f90559bf41a0dd",
+      "elapsed_seconds": 144.669,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/fn_004b64d0-all.json",
+      "report_sha256": "87d184e65f5e4c1eeea44fe267ee29a23a722ee63a7dc935a1f1443dedec4c0f",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "f3d426ee1d4e827eadb3ab3b6e4be148bf236fb2b8d28982a5bc4d4650374167",
+        "analysis/functions.json": "826886e288070102c70c37a62eaaf83bb81eb11a67ca0b916df104688d098df4",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "463884bc145f56cbad08c7f6c9e0a88a0863e61199b084d1cde408da45562034",
+        "build/dao_leaf_mutant": "7d3ddf7f6a43c74b0f9b269cc542727700c47e972d92613c1c14a73b0baeb8ec",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/luna-001/final/bit_mask_or_all-mutant-cases.json": "3b01a21043c13f6bb9b6c5213f215ae958d6d82dd6b624070e4fe655654d707f",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "e50f3cafceb108bcabb14038911d53997f88ae1795c378e81fb157fdc35016ce"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 3,
+        "mismatch": 1
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "a3bce07ac0790de0efe0748f8aff03566e04451002e49990bc63d7214ff34805",
+      "elapsed_seconds": 1.186,
+      "first_counterexample": {
+        "candidate": 2147483648,
+        "inputs": {
+          "value": 4294967295
+        },
+        "original": 4294967295
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "negative_control": true,
+      "repeats_per_side": 2,
+      "report": "reports/luna-001/final/bit_mask_or_all-mutant.json",
+      "report_sha256": "d652579be98c1b5f131319093cfd266b35c3fd32c0b6765c1d46312a19d2f460",
+      "status": "failed",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    }
+  ],
+  "schema_version": 1,
+  "synthetic_checks": {
+    "negative_control": {
+      "corpus_pass": 53,
+      "mismatch": 6
+    },
+    "positive": {
+      "corpus_pass": 59
+    }
+  },
+  "tooling_tests": {
+    "command": ".venv/bin/python -m unittest discover -s tests -v",
+    "passed": 42,
+    "skipped": 0
+  },
+  "unicorn": "2.1.4",
+  "validation_wall_seconds": 245.933
+}

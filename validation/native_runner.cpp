@@ -1,4 +1,5 @@
 #include "dao/primitives.hpp"
+#include "dao/scalar_pilot.hpp"
 #include <cstdint>
 #include <iostream>
 #include <limits>
@@ -20,6 +21,22 @@ int main(int argc, char** argv) {
 #else
         result = dao::bit_mask_or_all(value);
 #endif
+    } else if (std::string_view{argv[1]} == "fn_00184920") {
+        result = dao::fn_00184920(value);
+    } else if (std::string_view{argv[1]} == "fn_0052aad0") {
+        result = dao::fn_0052aad0(value);
+    } else if (std::string_view{argv[1]} == "fn_005851a0") {
+        result = dao::fn_005851a0(value);
+    } else if (std::string_view{argv[1]} == "fn_005c0c00") {
+        result = dao::fn_005c0c00(value);
+    } else if (std::string_view{argv[1]} == "fn_004d79c0") {
+        result = dao::fn_004d79c0(value);
+    } else if (std::string_view{argv[1]} == "fn_004b6e70") {
+        result = dao::fn_004b6e70(value);
+    } else if (std::string_view{argv[1]} == "fn_004b65b0") {
+        result = dao::fn_004b65b0(value);
+    } else if (std::string_view{argv[1]} == "fn_004b64d0") {
+        result = dao::fn_004b64d0(value);
     } else {
         return 2;
     }

@@ -5,6 +5,11 @@ a bit-mask helper with an all-bits sentinel. Their names describe observed behav
 original names and subsystem ownership remain unknown. Binary identities, contracts
 and evidence are recorded in `analysis/functions.json` and `analysis/first-leaves.md`.
 
+`scalar_integer.cpp` and `scalar_byte.cpp` contain the low-cost model pilot's
+arithmetic and byte-processing routines. Their stable RVA names avoid treating
+model-suggested labels as original symbols. The pilot record separates Luna output,
+counterexample-guided repair and Sol escalation; see `analysis/pilots/luna-001.md`.
+
 Add modules based on the observed call graph and ownership boundaries, rather than
 guessing the game's subsystem layout. Keep ABI bridges separate from portable
 behavior. The native C++ has corpus agreement with emulated original instructions;

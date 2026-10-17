@@ -79,3 +79,28 @@ class LeafGuardTests(unittest.TestCase):
     def test_direction_flag_rejected(self):
         with self.assertRaisesRegex(RuntimeError, "direction flag"):
             self.run_code("fd c3")
+
+    def test_register_argument_and_partial_return(self):
+        # Hand-authored mov al, cl; ret, with unknown high return bits.
+        result = execute_leaf(0x401000, bytes.fromhex("88c8 c3"), 0xdeadbeef,
+                              argument="ecx", return_bits=8)
+        self.assertEqual(result, 0xef)
+
+    def test_declared_stack_cleanup(self):
+        self.assertEqual(execute_leaf(0x401000, bytes.fromhex("8b442404 c20400"),
+                                      77, stack_cleanup=4), 77)
+
+    def test_register_abi_cannot_read_stack_argument(self):
+        with self.assertRaisesRegex(RuntimeError, "read outside"):
+            execute_leaf(0x401000, bytes.fromhex("8b442404 c3"), 77, argument="eax")
+
+    def test_custom_preserved_register_checked(self):
+        with self.assertRaisesRegex(RuntimeError, "nonvolatile"):
+            execute_leaf(0x401000, bytes.fromhex("31c9 c3"), 77,
+                         argument="ecx", preserved_registers=["ecx"])
+
+    def test_unknown_abi_rejected(self):
+        for abi in [{"argument": "edx"}, {"return_bits": 16}, {"stack_cleanup": 8},
+                    {"argument": "ecx", "stack_cleanup": 4}]:
+            with self.subTest(abi=abi), self.assertRaisesRegex(ValueError, "scalar ABI"):
+                execute_leaf(0x401000, b"\xc3", 77, **abi)

@@ -13,7 +13,7 @@ else()
   target_compile_options(dao_options INTERFACE -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off)
 endif()
 
-add_library(dao_recovered STATIC src/primitives.cpp)
+add_library(dao_recovered STATIC src/primitives.cpp src/scalar_integer.cpp src/scalar_byte.cpp)
 target_link_libraries(dao_recovered PUBLIC dao_options)
 add_executable(dao_leaf_runner validation/native_runner.cpp)
 target_link_libraries(dao_leaf_runner PRIVATE dao_recovered)

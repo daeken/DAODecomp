@@ -5,6 +5,13 @@ Once those exist, implementation becomes a bounded search with a mechanical chec
 Keep the coordinator's model context small by retrieving relevant evidence, not
 repeatedly passing the entire decompilation or game executable to every worker.
 
+The first measured [scalar pilot](../analysis/pilots/luna-001.md) now exercises this
+workflow. Luna produces source from frozen disassembly/ABI packets; a coordinator
+checks it against the original instructions and supplies concrete counterexamples
+for one retry. The pilot retains failures and escalates an unresolved function to
+Sol. Treat those results as evidence for a small scalar implementation task, not as
+a whole-game acceptance rate.
+
 ## Proposed division of work
 
 | Role | Initial model | Work |
@@ -76,6 +83,14 @@ capture usage/events; do not bypass approval or sandbox policies for throughput.
 The command shape was checked against local `codex-cli 0.163.0-alpha.10.2` help;
 no worker or paid API run was launched during setup. There is no unattended
 dispatcher, queue locking, hard budget enforcement or auto-merge implementation yet.
+
+`tools/run_model_packet.py PACKET OUTPUT_DIR --model gpt-6-luna` is the explicit
+single-packet launcher used by the later pilot. It runs a read-only, ephemeral CLI
+worker through existing login, captures structured source and usage events, and
+enforces a 180-second default timeout. It neither applies the source nor retries.
+The output directory must be new. On POSIX the timeout kills the process group;
+Windows currently kills only the direct CLI process. This is a bounded interactive
+pilot utility, not a production scheduler or a hard token/spend limiter.
 
 The Responses API also offers native multi-agent support in beta for GPT-6.1 Sol.
 Its documented subagents share the request's model. Mixed cheap/expensive routing

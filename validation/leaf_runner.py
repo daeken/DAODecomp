@@ -23,7 +23,7 @@ def main():
     if sys.argv[1] == "original":
         address, code = load_slice(sys.argv[2], function["module_sha256"], function["rva"],
                                    function["size"], function["code_sha256"])
-        result = execute_leaf(address, code, value)
+        result = execute_leaf(address, code, value, **function.get("abi", {}))
     elif sys.argv[1] == "candidate":
         raw = subprocess.run([sys.argv[2], function["name"]], input=f"{value}\n", text=True,
                              capture_output=True, check=True, timeout=3)

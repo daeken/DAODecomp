@@ -1,0 +1,578 @@
+{
+  "baseline_regression_cases": 340,
+  "cli_version": "0.163.0-alpha.10.2",
+  "cost_scope": "Hypothetical standard API price for worker inference only, calculated from CLI token events. Logged in with ChatGPT; actual account charge and coordinator token usage are unknown. Excludes discovery, contracts, review, validation and tools. Reasoning tokens are a subset of output_tokens and are not added twice.",
+  "date": "2026-10-17",
+  "final_public_and_heldout_corpus_pass": 8,
+  "final_validation_wall_seconds": 245.933,
+  "first_attempt_compile_success": 8,
+  "first_attempt_public_corpus_pass": 6,
+  "frozen_inputs_sha256": {
+    "contracts/functions/fn_00184920.json": "7dd64109be3cdbdc282fc7d7bc81887ee50948dadcb311108a97fe23155b813b",
+    "contracts/functions/fn_004b64d0.json": "f5164741a009259319758d26eee8e248b7086b58210b709465e44e416e227d91",
+    "contracts/functions/fn_004b65b0.json": "6db8c5b99781bd636105f52a595da1140ec8786e843a943ef4b613f5bc75e27b",
+    "contracts/functions/fn_004b6e70.json": "8accf9841ad678067251afa095e65df7c2c99d2d963f3127617faf635f27e31a",
+    "contracts/functions/fn_004d79c0.json": "eb59c2f781a68f57c56e46a8bfe551a1f68b4648de2d847f583f78985ff791a0",
+    "contracts/functions/fn_0052aad0.json": "50c0dc95b47c7199769b4e29bfc69fc1fc5c448e80d469e7ad30f8507a89837e",
+    "contracts/functions/fn_005851a0.json": "5065c79dc02d9ca743c9a95b6b09844d8cf757a93ab6414679e490c350423c1d",
+    "contracts/functions/fn_005c0c00.json": "d9a18d1ab76beb596a14474fed91dc5fee3a53b7d5264d5539a33b8f445826bd",
+    "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+    "local/pilots/luna-001/byte-packet.txt": "e9eba5de1e1060da7ade161ccc42d114f03b06ac09e99ba49d3520d1d4b66f68",
+    "local/pilots/luna-001/fn_00184920-heldout.json": "dbf27f99c7e8b270e560d272a8143844c69a018882094c2128d8f44c9aa7e086",
+    "local/pilots/luna-001/fn_00184920-public.json": "75c40b2c3e23cf8b2c96c7ea7493c03a421640d07bfb4ce07745c0a1fd99c4a4",
+    "local/pilots/luna-001/fn_004b64d0-heldout.json": "02405acbdce2c4de1e33d95f77d476b7a0a325dfef0de3423e874198b57490c3",
+    "local/pilots/luna-001/fn_004b64d0-public.json": "79c7d8b080d67a1cd62548e6fbb20def6d2c27e2b5349b1612dc1bec0ab2a180",
+    "local/pilots/luna-001/fn_004b65b0-heldout.json": "fc41de0fdaa0a4a5dda8e5448fc9d983546b45deaa5180d18ec54aeccef8dcda",
+    "local/pilots/luna-001/fn_004b65b0-public.json": "79c7d8b080d67a1cd62548e6fbb20def6d2c27e2b5349b1612dc1bec0ab2a180",
+    "local/pilots/luna-001/fn_004b6e70-heldout.json": "faf2b9a170b85dd87b9c57ba95646f8edb968ca86ed53ad9dc666236cc097f91",
+    "local/pilots/luna-001/fn_004b6e70-public.json": "79c7d8b080d67a1cd62548e6fbb20def6d2c27e2b5349b1612dc1bec0ab2a180",
+    "local/pilots/luna-001/fn_004d79c0-heldout.json": "5773111bbe21a502bf61575f1930dc0439779a4da293c568190f421eaeaa1edf",
+    "local/pilots/luna-001/fn_004d79c0-public.json": "79c7d8b080d67a1cd62548e6fbb20def6d2c27e2b5349b1612dc1bec0ab2a180",
+    "local/pilots/luna-001/fn_0052aad0-heldout.json": "519ebb5f8e7b58d2bdf39e174feef8d0040f688ea3fb744707e022902f6bad71",
+    "local/pilots/luna-001/fn_0052aad0-public.json": "75c40b2c3e23cf8b2c96c7ea7493c03a421640d07bfb4ce07745c0a1fd99c4a4",
+    "local/pilots/luna-001/fn_005851a0-heldout.json": "a841f479d22563681b34d26f62365af9c4cac8b0ebde8320bc704d2be066a3fd",
+    "local/pilots/luna-001/fn_005851a0-public.json": "75c40b2c3e23cf8b2c96c7ea7493c03a421640d07bfb4ce07745c0a1fd99c4a4",
+    "local/pilots/luna-001/fn_005c0c00-heldout.json": "c8f16a7d4cede0a54098629dd0fc4b3715a89a2a1734b431c572d69958a932b3",
+    "local/pilots/luna-001/fn_005c0c00-public.json": "75c40b2c3e23cf8b2c96c7ea7493c03a421640d07bfb4ce07745c0a1fd99c4a4",
+    "local/pilots/luna-001/integer-packet.txt": "845293e3b3ff9a17daf0f558d9f9899cfac440e97c4108f02e1d8b7e820165a4",
+    "local/pilots/luna-001/selected.json": "d4f6849e35ed71ac090522e99900d22c80f73965d7c03d7d309f91a94a81eba3",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+    "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d"
+  },
+  "frozen_inputs_unchanged": true,
+  "functions": [
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 133
+        },
+        "contract_canonical_sha256": "65b03f32cec46b4dc5d211dddfe5bf08fd400a9ac16311bfb36f124c79ec5de6",
+        "corpus_canonical_sha256": "ace620964a7dece8dbffe6a7a5caf8cb82ecc66320dc267d3195bba570561a1e",
+        "elapsed_seconds": 34.136,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_00184920.json",
+        "report_sha256": "d221cf75479e4ee1928382da2a29829b27d403ab965602b13ac9f2d842f9638d",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 133
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 218
+        },
+        "contract_canonical_sha256": "65b03f32cec46b4dc5d211dddfe5bf08fd400a9ac16311bfb36f124c79ec5de6",
+        "corpus_canonical_sha256": "44d9b1c209690b79a15c256756cac9a41af11ab4dccbd283e8a75dacea40f727",
+        "elapsed_seconds": 58.199,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_00184920-all.json",
+        "report_sha256": "9aa1d83fd964f292eb95e4f15aa0dcedbd08fa0d47bfc1c35282bb046440811e",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 85,
+          "public": 133
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+      "luna_retry": null,
+      "name": "fn_00184920"
+    },
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 133
+        },
+        "contract_canonical_sha256": "733de798163e438e58d4f1ef93a31a1cc974558757f101353cceeadc296a0242",
+        "corpus_canonical_sha256": "ace620964a7dece8dbffe6a7a5caf8cb82ecc66320dc267d3195bba570561a1e",
+        "elapsed_seconds": 33.587,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_0052aad0.json",
+        "report_sha256": "39f10469de41151f22ba3683c12354ef10c6f6b75d5e8404512a7726782ca2c7",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 133
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 218
+        },
+        "contract_canonical_sha256": "733de798163e438e58d4f1ef93a31a1cc974558757f101353cceeadc296a0242",
+        "corpus_canonical_sha256": "0e1fa2a9c9ad841c8b02dd2a0d59f91a9ddab793aa362b612774108d1ac28b36",
+        "elapsed_seconds": 58.216,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_0052aad0-all.json",
+        "report_sha256": "0c70fc25acf9125d86de99defd8b4c56726f77e140c29f6ab3d054144de3ac76",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 85,
+          "public": 133
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+      "luna_retry": null,
+      "name": "fn_0052aad0"
+    },
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 133
+        },
+        "contract_canonical_sha256": "8a8808dd40cbdbd54852d07ff90200068ddacc865b25006026be714312fbc553",
+        "corpus_canonical_sha256": "ace620964a7dece8dbffe6a7a5caf8cb82ecc66320dc267d3195bba570561a1e",
+        "elapsed_seconds": 33.915,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_005851a0.json",
+        "report_sha256": "a47411b7803a7e9647f2e042fe4d90fbe9b8f1dbff8716cf00ec8afa74f90d62",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 133
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 218
+        },
+        "contract_canonical_sha256": "8a8808dd40cbdbd54852d07ff90200068ddacc865b25006026be714312fbc553",
+        "corpus_canonical_sha256": "07a54cbbce8a477a1a35fad41e3aedfc7a87a2a7e88d2ff0ed5add9515a257a9",
+        "elapsed_seconds": 55.738,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_005851a0-all.json",
+        "report_sha256": "51288896c14c4491aad389d41a18bd9502e85530372b6e599e52965f15ebb760",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 85,
+          "public": 133
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+      "luna_retry": null,
+      "name": "fn_005851a0"
+    },
+    {
+      "accepted_source": "sol_escalation_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 97,
+          "mismatch": 36
+        },
+        "contract_canonical_sha256": "7d5e9b4b38767f7979941491544e3c8448b70c2d59f0d57bd0901e6201e0df41",
+        "corpus_canonical_sha256": "ace620964a7dece8dbffe6a7a5caf8cb82ecc66320dc267d3195bba570561a1e",
+        "elapsed_seconds": 33.912,
+        "first_counterexample": {
+          "candidate": 0,
+          "inputs": {
+            "value": 4
+          },
+          "original": 1
+        },
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_005c0c00.json",
+        "report_sha256": "90c6e09bda2f6cde34dcaf3e0f01b3bae156ed249997747816f27d2e8f4a8019",
+        "status": "failed",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 133
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 218
+        },
+        "contract_canonical_sha256": "7d5e9b4b38767f7979941491544e3c8448b70c2d59f0d57bd0901e6201e0df41",
+        "corpus_canonical_sha256": "53f95f16f719aa9d9d8a63b82ba1924ac190b6eb82b85b669b5a1619438a5f6e",
+        "elapsed_seconds": 55.509,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_005c0c00-all.json",
+        "report_sha256": "e4c088f9f39e5b8b99e8dad0c20129e7642fdcaafc361f68ac444a2f16e43e8b",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 85,
+          "public": 133
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+      "luna_retry": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 95,
+          "mismatch": 38
+        },
+        "contract_canonical_sha256": "7d5e9b4b38767f7979941491544e3c8448b70c2d59f0d57bd0901e6201e0df41",
+        "corpus_canonical_sha256": "ace620964a7dece8dbffe6a7a5caf8cb82ecc66320dc267d3195bba570561a1e",
+        "elapsed_seconds": 31.009,
+        "first_counterexample": {
+          "candidate": 0,
+          "inputs": {
+            "value": 4
+          },
+          "original": 1
+        },
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-2/fn_005c0c00.json",
+        "report_sha256": "4b1fd19de5eec6611955429850c11b5573d6fa5562e06637eea4a5025e02cf21",
+        "status": "failed",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 133
+        }
+      },
+      "name": "fn_005c0c00"
+    },
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 256
+        },
+        "contract_canonical_sha256": "08d5372fa701fe054a5f6acc359a297b50d382e5f557920145bdb4145f5d7455",
+        "corpus_canonical_sha256": "0477e54aa2f67786ad90fe493bc7ba4168c825871282322cd0556bc678df9995",
+        "elapsed_seconds": 63.455,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_004d79c0.json",
+        "report_sha256": "d07e96835be26dbbbb889373a9d93262c09b9804361047ba592668b4ab75b6b2",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 256
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 576
+        },
+        "contract_canonical_sha256": "08d5372fa701fe054a5f6acc359a297b50d382e5f557920145bdb4145f5d7455",
+        "corpus_canonical_sha256": "98235eef4fe281a4b0e0c2618032ee3256015619649abc43fd32373f3498f749",
+        "elapsed_seconds": 147.846,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_004d79c0-all.json",
+        "report_sha256": "f4bb944eacf73f5acec28649128e2af0b35d1dca222c6afe3f6ad4b01adcaffa",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 320,
+          "public": 256
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+      "luna_retry": null,
+      "name": "fn_004d79c0"
+    },
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 256
+        },
+        "contract_canonical_sha256": "4b6ba9b75b3bd7f22b3e714821050e9b83853bfc03694e4f8cc01be0ecd75449",
+        "corpus_canonical_sha256": "0477e54aa2f67786ad90fe493bc7ba4168c825871282322cd0556bc678df9995",
+        "elapsed_seconds": 63.128,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_004b6e70.json",
+        "report_sha256": "6399dd85e5c1955154267eeb43957b7b87170ee12de245aaa86c2ba33097d1d3",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 256
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 576
+        },
+        "contract_canonical_sha256": "4b6ba9b75b3bd7f22b3e714821050e9b83853bfc03694e4f8cc01be0ecd75449",
+        "corpus_canonical_sha256": "354bcd7a9542682d2ad8a964fc966f56d21c5721f06e727a3e5666b7a0d5230f",
+        "elapsed_seconds": 148.063,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_004b6e70-all.json",
+        "report_sha256": "6df5628b018cb2f29305aa0df0b4c0950522237bed788cbe0edabf4fc2d2e4e2",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 320,
+          "public": 256
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+      "luna_retry": null,
+      "name": "fn_004b6e70"
+    },
+    {
+      "accepted_source": "luna_attempt_1",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 256
+        },
+        "contract_canonical_sha256": "00e115dab190476d4a3e7959d42812fac73bdbb5127591a00769e8151bb65370",
+        "corpus_canonical_sha256": "0477e54aa2f67786ad90fe493bc7ba4168c825871282322cd0556bc678df9995",
+        "elapsed_seconds": 63.55,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_004b65b0.json",
+        "report_sha256": "67ec07b1d66ff422b5ae3cefe9b64a8749b76f7ad57b7dde5b7a94f59648400d",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 256
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 576
+        },
+        "contract_canonical_sha256": "00e115dab190476d4a3e7959d42812fac73bdbb5127591a00769e8151bb65370",
+        "corpus_canonical_sha256": "3ac835e7139fdc82a676aba9e6bfb1f6a56a3331c4c5cd2bd9c4554b682e7651",
+        "elapsed_seconds": 145.714,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_004b65b0-all.json",
+        "report_sha256": "2897022177c39c46c3ec4974b3b13ac6cfe04948e40680b1dbf7d58532b026b9",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 320,
+          "public": 256
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+      "luna_retry": null,
+      "name": "fn_004b65b0"
+    },
+    {
+      "accepted_source": "luna_attempt_2",
+      "attempt_1": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 255,
+          "mismatch": 1
+        },
+        "contract_canonical_sha256": "7a9b1ef66d0b73cf55f1bfe5a542eed13c57d54363b6d71b28c7ff214067de0f",
+        "corpus_canonical_sha256": "0477e54aa2f67786ad90fe493bc7ba4168c825871282322cd0556bc678df9995",
+        "elapsed_seconds": 63.296,
+        "first_counterexample": {
+          "candidate": 1,
+          "inputs": {
+            "value": 32
+          },
+          "original": 0
+        },
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-1/fn_004b64d0.json",
+        "report_sha256": "2bcb67e5e1b9523dbbdf9bb56dcb65d940b84b621cd8fe956e4508fc7d39f7ae",
+        "status": "failed",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 256
+        }
+      },
+      "final": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 576
+        },
+        "contract_canonical_sha256": "7a9b1ef66d0b73cf55f1bfe5a542eed13c57d54363b6d71b28c7ff214067de0f",
+        "corpus_canonical_sha256": "8ba1cd28904e8f93b3a9b8c0d1029b232e4ed796adad66d210f90559bf41a0dd",
+        "elapsed_seconds": 144.669,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/final/fn_004b64d0-all.json",
+        "report_sha256": "87d184e65f5e4c1eeea44fe267ee29a23a722ee63a7dc935a1f1443dedec4c0f",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 320,
+          "public": 256
+        }
+      },
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+      "luna_retry": {
+        "artifacts_unchanged": true,
+        "case_counts": {
+          "corpus_pass": 256
+        },
+        "contract_canonical_sha256": "7a9b1ef66d0b73cf55f1bfe5a542eed13c57d54363b6d71b28c7ff214067de0f",
+        "corpus_canonical_sha256": "0477e54aa2f67786ad90fe493bc7ba4168c825871282322cd0556bc678df9995",
+        "elapsed_seconds": 59.621,
+        "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+        "repeats_per_side": 2,
+        "report": "reports/luna-001/attempt-2/fn_004b64d0.json",
+        "report_sha256": "8fb46ffe291bd48fe94c3d01c0137b42e980d05c033164ac10feeee8037c5262",
+        "status": "corpus_pass",
+        "suite_case_counts": {
+          "heldout": 0,
+          "public": 256
+        }
+      },
+      "name": "fn_004b64d0"
+    }
+  ],
+  "functions_attempted": 8,
+  "limitations": [
+    "Eight selected scalar functions are not representative of the whole game.",
+    "No head-to-head Sol baseline or repeated model sampling.",
+    "No native Windows original execution or symbolic proof.",
+    "Contract preparation and coordinator cost were not instrumented."
+  ],
+  "luna_accepted_after_one_retry": 7,
+  "native_windows_validated": false,
+  "pilot": "luna-001",
+  "pilot_heldout_cases": 1620,
+  "pilot_public_cases": 1556,
+  "pricing_sources": {
+    "gpt-6-luna": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "gpt-6.1-sol": "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+  },
+  "proof": false,
+  "schema_version": 1,
+  "scope": "Coordinator-characterized read-only scalar leaves; packet-to-source implementation only",
+  "sol_escalations": 1,
+  "standard_api_estimate_usd": 0.0585636,
+  "usage_by_model": {
+    "gpt-6-luna": {
+      "cached_input_tokens": 0,
+      "elapsed_seconds_sum": 38.352,
+      "input_tokens": 84781,
+      "output_tokens": 3143,
+      "reasoning_output_tokens": 0,
+      "requests": 4,
+      "standard_api_estimate_usd": 0.0100496
+    },
+    "gpt-6.1-sol": {
+      "cached_input_tokens": 0,
+      "elapsed_seconds_sum": 14.006,
+      "input_tokens": 21907,
+      "output_tokens": 470,
+      "reasoning_output_tokens": 180,
+      "requests": 1,
+      "standard_api_estimate_usd": 0.048514
+    }
+  },
+  "workers": [
+    {
+      "elapsed_seconds": 11.241,
+      "events_sha256": "26bdadb3129d76a4ce4fcd637d80583f75edd2cdf6842fc6cc35d9a981246525",
+      "model": "gpt-6-luna",
+      "packet_sha256": "845293e3b3ff9a17daf0f558d9f9899cfac440e97c4108f02e1d8b7e820165a4",
+      "reasoning_effort": "medium",
+      "response_sha256": "c562a7eec2637899441985ba71fbc3cc1d2c26548a5d682a2b67909805332740",
+      "run": "integer-attempt-1",
+      "run_metadata_sha256": "a08b42c35724fde67906fe962935074aca6165a9c8d0677ec2f7ab746c6b1ed1",
+      "standard_api_estimate_usd": 0.0025412,
+      "tool_calls": 0,
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 20787,
+        "output_tokens": 925,
+        "reasoning_output_tokens": 0
+      }
+    },
+    {
+      "elapsed_seconds": 9.033,
+      "events_sha256": "9cc1f2f9e24df87399247e304579e1ad7e00f1bac286be80ca6872238a3fb2b7",
+      "model": "gpt-6-luna",
+      "packet_sha256": "e9eba5de1e1060da7ade161ccc42d114f03b06ac09e99ba49d3520d1d4b66f68",
+      "reasoning_effort": "medium",
+      "response_sha256": "40e3f5f34dbaf90a887625901e63ed87eea867ab29caeb65b4d3a61ed368ddac",
+      "run": "byte-attempt-1",
+      "run_metadata_sha256": "c06f652108d062aff3c9291afbdd007432c0cbacc18598f2860fd09723fb0320",
+      "standard_api_estimate_usd": 0.0023904,
+      "tool_calls": 0,
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 20689,
+        "output_tokens": 643,
+        "reasoning_output_tokens": 0
+      }
+    },
+    {
+      "elapsed_seconds": 10.082,
+      "events_sha256": "2459dcae169627731d373109585c3e1214471d709e15267aa54070cbbf01a97e",
+      "model": "gpt-6-luna",
+      "packet_sha256": "67c8100b30a97d57e9655671737788be33242485910dcc31ee64f1b4bffdffd5",
+      "reasoning_effort": "medium",
+      "response_sha256": "190a46fb0cab0e89e3eef10058dc7ac902ea972e0ee0444d7a64db61eb3328ac",
+      "run": "integer-attempt-2",
+      "run_metadata_sha256": "52b5e24b8a745949612b51d0abc1a2391ea224a121f6d39337c281282e9270d2",
+      "standard_api_estimate_usd": 0.0026466,
+      "tool_calls": 0,
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 21846,
+        "output_tokens": 924,
+        "reasoning_output_tokens": 0
+      }
+    },
+    {
+      "elapsed_seconds": 7.996,
+      "events_sha256": "590eaa585012687ec4df518c2db204cbc7205da3eba1d68fbaf5a49bce91fcf2",
+      "model": "gpt-6-luna",
+      "packet_sha256": "2bbd029b7da82feaebe61336d056f7ecff8052b4452f081c85586889f99b8f2d",
+      "reasoning_effort": "medium",
+      "response_sha256": "87a3f9fecf3e1af83a92b6d221daaeaf2711717325fc91f34a78359b06b4c444",
+      "run": "byte-attempt-2",
+      "run_metadata_sha256": "e1970e0dd1a1e5630178219304e69fb4c548c40ad2d14694fbc5a5b63547550d",
+      "standard_api_estimate_usd": 0.0024714,
+      "tool_calls": 0,
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 21459,
+        "output_tokens": 651,
+        "reasoning_output_tokens": 0
+      }
+    },
+    {
+      "elapsed_seconds": 14.006,
+      "events_sha256": "043e743164acfce4d3dbd5661037cace8d3a59e24e52736235ff1915f6c93c82",
+      "model": "gpt-6.1-sol",
+      "packet_sha256": "faff71884d5c9161dd2f28bdf697ef1ceca74917d94b7a5126ab8c8b5d14aaec",
+      "reasoning_effort": "medium",
+      "response_sha256": "e292314a6a04bce408a313a88b6854a8f4783837f3e5095bd7e4c804eb863707",
+      "run": "calendar-sol-attempt-1",
+      "run_metadata_sha256": "a1b211a9a5b3b00814f009d1832e341ff5a1bf2e50aacecfecddc67d5ee46312",
+      "standard_api_estimate_usd": 0.048514,
+      "tool_calls": 0,
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 21907,
+        "output_tokens": 470,
+        "reasoning_output_tokens": 180
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+  "kind": "game",
+  "inputs": {
+    "value": "u32"
+  },
+  "return_type": "u32",
+  "memory": {},
+  "calls": [],
+  "preconditions": "Any unsigned 32-bit input bit pattern. Argument in stack; stack argument means [entry ESP+4]. Return is low 32 EAX bits, zero-extended to u32. Normal return consumes 4 return-address bytes plus 4 argument bytes. Valid private entry stack, DF clear. No memory writes, calls, globals, relocations or hidden state dependencies in the reviewed slice. Nonvolatile registers are preserved; extra preserved registers: []. Arithmetic flags and other volatile registers are not output observations."
+}

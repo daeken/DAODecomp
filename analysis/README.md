@@ -1,9 +1,10 @@
 # Function inventory
 
-`functions.json` currently records the two recovered functions from the pinned
-game binary. Their implementation status is separate from the measured evidence
-in `validation/first-leaves.json`; neither has native Windows validation or a
-symbolic proof. `static-summary.json` summarizes the much larger initial Ghidra
+`functions.json` records recovered functions from the pinned game binary. Their
+implementation status is separate from the measured evidence in `validation/`;
+current results have no native Windows validation or symbolic proof. `pilots/`
+retains model experiments, including failed attempts and escalation costs.
+`static-summary.json` summarizes the much larger initial Ghidra
 inventory, whose full output is kept under ignored `local/analysis/`.
 
 Use `(binary SHA-256, module, RVA)` as the stable identity; labels and inferred names

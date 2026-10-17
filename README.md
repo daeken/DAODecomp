@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 2 |
-| C++ implementations | 2 |
-| Implementations with current emulator corpus evidence | 2 |
-| Input cases across those functions (excluding repeat runs) | 340 |
+| Functions in the recovery registry | 10 |
+| C++ implementations | 10 |
+| Implementations with current emulator corpus evidence | 10 |
+| Input cases across those functions (excluding repeat runs) | 3,516 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -40,18 +40,22 @@ After building and installing the dependencies below, with the original game at
 `gamedata/bin_ship/DAOrigins.exe`:
 
 ```sh
-.venv/bin/python validation/validate_leaves.py
+.venv/bin/python validation/validate_leaves.py --suite all --jobs 4
 .venv/bin/python validation/validate_leaves.py --expect-mismatch
 ```
 
-The runner verifies binary/slice hashes and executes the real byte-swap and bit-mask
-functions in isolation. It checks return values, stack balance, preserved registers
+The runner verifies binary/slice hashes and executes the registered arithmetic and
+byte-processing functions in isolation. It checks return values, stack balance, preserved registers
 and the absence of memory side effects. Each implementation runs twice per input in
 fresh processes. The negative control removes the special all-bits sentinel.
-See [function evidence](analysis/first-leaves.md), the
-[validation record](analysis/validation/first-leaves.json), and
+See [initial function evidence](analysis/first-leaves.md), the
+[low-cost model pilot](analysis/pilots/luna-001.md), the
+[validation records](analysis/validation/), and
 [repeatable static analysis](docs/static-analysis.md). No Windows host is needed
 for these isolated checks; game initialization and scenario tests still need one.
+Use `--function NAME` to select a function, `--suite heldout` for the pilot's
+withheld cases, or `--report-dir PATH` to retain a separate run. Parallel validation
+uses independent processes; it does not launch model workers.
 
 ## Run the demonstration
 

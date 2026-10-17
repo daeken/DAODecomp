@@ -44,6 +44,270 @@
         349834,
         452299
       ]
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+      "name": "fn_00184920",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 1591584,
+      "size": 15,
+      "code_sha256": "5041dccf19bd1b82ea359947b897ffae6a23531b52f9c47173b019c75799dcb5",
+      "abi": {
+        "argument": "stack",
+        "return_bits": 32,
+        "stack_cleanup": 4
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00184920.json",
+      "source": "src/scalar_integer.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        1591859,
+        1591915,
+        1591967,
+        1592330,
+        1592471,
+        1592525,
+        1592608,
+        1592802,
+        1592863,
+        1593399,
+        1593453,
+        1593536,
+        1594748,
+        1596892,
+        1592722,
+        1593251
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+      "name": "fn_0052aad0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 5417680,
+      "size": 15,
+      "code_sha256": "ed49c74ab0c8cb2c1788fcd0a5fb4e7fd7c8b2e700d5acf4c6bc1082b42505ab",
+      "abi": {
+        "argument": "stack",
+        "return_bits": 32,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_0052aad0.json",
+      "source": "src/scalar_integer.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        5799572,
+        5799632,
+        5426337,
+        5426423
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+      "name": "fn_005851a0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 5788064,
+      "size": 22,
+      "code_sha256": "206ac9662d9fcde35eb4ba5f352a6342d61b6dcb8bc13d32a90fb24c1b3ff844",
+      "abi": {
+        "argument": "stack",
+        "return_bits": 32,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_005851a0.json",
+      "source": "src/scalar_integer.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        5799692,
+        5799752
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+      "name": "fn_005c0c00",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 6032384,
+      "size": 78,
+      "code_sha256": "9e3cf72dbea6cf255d8e8ebe81845241472cdf1c74a0dbdec774fbfc3456f0d3",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 32,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_005c0c00.json",
+      "source": "src/scalar_integer.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        6032642,
+        6032687,
+        6032820,
+        6032865,
+        6033680,
+        6035438,
+        6035463,
+        6036880,
+        6040297,
+        6041127,
+        6035007,
+        6035019,
+        6035200,
+        6035212,
+        6035789,
+        6038111,
+        6038123,
+        6038304,
+        6038316,
+        6038617,
+        6038925,
+        6039837
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+      "name": "fn_004d79c0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 5077440,
+      "size": 13,
+      "code_sha256": "da4006bf3e30a0ad9490649b1b02b2db4561bd5879be6d868317e9335edf90b4",
+      "abi": {
+        "argument": "eax",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004d79c0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        5078887,
+        5079762,
+        5077601,
+        5077648,
+        5077692,
+        5077736,
+        5078033,
+        5078080,
+        5077474,
+        5077519,
+        5077845
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+      "name": "fn_004b6e70",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4943472,
+      "size": 13,
+      "code_sha256": "3248f4a2e32989853efd78bf42a3653b4d9e9f7cf46e588222fa5cad2a3d25e3",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b6e70.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4943508,
+        4943562
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+      "name": "fn_004b65b0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4941232,
+      "size": 33,
+      "code_sha256": "0ba5f8ee0ceaf4eb2036a3926a38ec699adc32108720cb3782b4e01e3a91d246",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b65b0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4941425,
+        4941443
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+      "name": "fn_004b64d0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4941008,
+      "size": 30,
+      "code_sha256": "f82255a0f261c499ad75c1d6f2af63eab884d9669a3293499a0641753f53845a",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b64d0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4941155,
+        4941056
+      ],
+      "pilot": "luna-001"
     }
   ]
 }
