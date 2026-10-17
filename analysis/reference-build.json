@@ -1,0 +1,77 @@
+{
+  "extraction": {
+    "date": "2026-10-17",
+    "summary": {
+      "bytes": 39217528098,
+      "failed": 0,
+      "files": 32850,
+      "passed": 32850
+    },
+    "tool": "innoextract 1.9"
+  },
+  "gog_game_id": "1949616134",
+  "id": "gog-1.05a-10692",
+  "installer_label": "1.05 (a) (10692)",
+  "module": {
+    "architecture": "x86",
+    "characteristics": 258,
+    "coff_timestamp": 1320262995,
+    "entry_rva": 5124132,
+    "filename": "DAOrigins.exe",
+    "format": "PE32",
+    "image_base": 4194304,
+    "machine": 332,
+    "schema_version": 1,
+    "sections": [
+      {
+        "file_offset": 4096,
+        "file_size": 7180288,
+        "name": ".text",
+        "rva": 4096,
+        "virtual_size": 7177898
+      },
+      {
+        "file_offset": 7184384,
+        "file_size": 1138688,
+        "name": ".rdata",
+        "rva": 7184384,
+        "virtual_size": 1134880
+      },
+      {
+        "file_offset": 8323072,
+        "file_size": 188416,
+        "name": ".data",
+        "rva": 8323072,
+        "virtual_size": 383720
+      },
+      {
+        "file_offset": 8511488,
+        "file_size": 4096,
+        "name": ".tls",
+        "rva": 8708096,
+        "virtual_size": 142
+      },
+      {
+        "file_offset": 8515584,
+        "file_size": 1159168,
+        "name": ".rsrc",
+        "rva": 8712192,
+        "virtual_size": 1156268
+      },
+      {
+        "file_offset": 9674752,
+        "file_size": 536576,
+        "name": ".reloc",
+        "rva": 9871360,
+        "virtual_size": 532642
+      }
+    ],
+    "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+    "size": 10217312
+  },
+  "module_path": "gamedata/bin_ship/DAOrigins.exe",
+  "notes": "Extracted and checksummed only; installer scripts and game have not been executed.",
+  "product": "Dragon Age: Origins - Ultimate Edition",
+  "reference_execution_host": null,
+  "schema_version": 1
+}

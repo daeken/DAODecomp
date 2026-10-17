@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "function_id": "synthetic:saturating_counter",
+  "kind": "synthetic",
+  "inputs": {"value": "u32", "saturations": "u32", "delta": "u32"},
+  "return_type": "u32",
+  "memory": {"counter": 8},
+  "calls": [],
+  "preconditions": "Two initialized uint32 fields at a valid, aligned, non-aliasing counter address. All uint32 values are valid. No external calls. Return the old value; saturate value on unsigned addition overflow and increment the saturation count modulo 2^32 only on overflow."
+}
+

@@ -1,0 +1,32 @@
+{
+  "analysis_seconds": 190,
+  "artifacts_sha256": {
+    "local/analysis-pe.txt": "d5da3350f85c3d0bd6399cc9a6b40cc256e0c849bc216a09ebd39343d006dcd0",
+    "local/analysis/functions.json": "3eec75966d23372e90dab28c07800cb8420057e7b226cd00477f472ce78feb99",
+    "local/analysis/leaf-0004a3f0.json": "1c95c339ad74004ab0e0cd544d66cf3b81c8d44e8ca0eb1c56e337cd9452e72f",
+    "local/analysis/leaf-000518a0.json": "53164bfb6969263cc0fa4d8cd35693e5bdb24157ca518152d7edd7c407ee3a08",
+    "local/disassembly-llvm.txt": "1da1f129622121212da51ffd644a7c5160ca7c62a3378669636b01f0ea8c73ae",
+    "local/ghidra-analysis.log": "98d910655b445b7a63bd03c8645add090c919542812f0b6222a949769a5855b5",
+    "tools/ghidra/ExportInventory.java": "7a595d3648c7389b60d14ae34833389e297a6b295e3069e89e89b53f2e9b828e"
+  },
+  "compiler_spec": "windows",
+  "date": "2026-10-17",
+  "evidence_kind": "static_analysis_hypotheses",
+  "function_hypotheses": 27555,
+  "functions_at_most_64_body_bytes": 8463,
+  "generic_FUN_names": 26388,
+  "ghidra_version": "12.1.4",
+  "image_base": 4194304,
+  "language": "x86:LE:32:default",
+  "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+  "schema_version": 1,
+  "scope": "Main executable only. Default pinned-version analysis; no external DLL import. Not a complete inventory or a recovery percentage.",
+  "selected_leaves_decompiled_successfully": true,
+  "thunks": 367,
+  "unresolved_diagnostics": [
+    "ResourceDataDirectory: key exceeds maximum length of 2038",
+    "Invalid PNG data at VA 0x00b58ce4",
+    "Decompiler warning at VA 0x00869200: unable to read bytes at 0x05020100",
+    "No PDB found; external DLLs not imported"
+  ]
+}

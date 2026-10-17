@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+  "kind": "game",
+  "inputs": {
+    "value": "u32"
+  },
+  "return_type": "u32",
+  "memory": {},
+  "calls": [],
+  "preconditions": "Any unsigned 32-bit value; no restricted arithmetic domain. Valid x86 cdecl entry: readable 4-byte return address at ESP and 4-byte argument at ESP+4; DF clear. Reviewed code slice has no relocations, globals, imports or other dependencies. Return EAX is observable; arithmetic flags and caller-saved registers are not. No memory writes are permitted."
+}

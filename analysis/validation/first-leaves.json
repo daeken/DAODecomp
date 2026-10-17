@@ -1,0 +1,139 @@
+{
+  "build": "CMake RelWithDebInfo, C++20, -O2 -g -DNDEBUG -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off",
+  "compiler": [
+    "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "Target: arm64-apple-darwin27.0.0"
+  ],
+  "date": "2026-10-17",
+  "evidence_level": "emulator_corpus_agreement",
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "native_windows_validated": false,
+  "negative_control_counterexample": {
+    "mutant_return": "0x80000000",
+    "original_return": "0xffffffff",
+    "value": "0xffffffff"
+  },
+  "proof": false,
+  "python": "3.14.7",
+  "records": [
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "74adbb1cedafe400efae8c448dfba09df6ce6bbb0e55f3c2d6a07c9817f12672",
+        "analysis/functions.json": "8e69de0389c18f24d31f4e0994e5baa7b504608ddb7e3768d960eb34523420f8",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "83ecd192ea78cb7e83a8bb6dbd7bd3c57da794146c368fc09f92bf373c391b43",
+        "build/dao_leaf_runner": "b979f34461f4d6740c34853cf6a85c15bf3080daed61ee40a7ac3542d4c81f0d",
+        "contracts/functions/byte_swap_u32.json": "170f3e289f0d88e9f5a62bc6ddff29e0800371843f7046267060223e8d558122",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "reports/leaves-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "f3b905226f8496b9c3655ec54610414c7c626e0777ed0a421576e09d3f7318b7",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "6a10401055d0150d13c41974c67476c1df069a978b14f2bac71b01bac6dd3372",
+        "validation/native_runner.cpp": "6d3cc4f80dff93cf020df20cf317af6a53efcdc914c0c611491b48b4a69c593c",
+        "validation/validate_leaves.py": "8f14655573d59551a854f179cbef621e094fbcb398b3251bdbd1f18be25ebf92"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "603739ce9c9bf9dc548f6eb478605eb80af31e0aef504b7beee7080f8a6a1c2a",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0004a3f0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/byte_swap_u32.json",
+      "report_sha256": "8f7cdc54e1dd561347287f2255d0809bb221f4870ef4c9e53ecb8b2b07de9024",
+      "status": "corpus_pass"
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "74adbb1cedafe400efae8c448dfba09df6ce6bbb0e55f3c2d6a07c9817f12672",
+        "analysis/functions.json": "8e69de0389c18f24d31f4e0994e5baa7b504608ddb7e3768d960eb34523420f8",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "83ecd192ea78cb7e83a8bb6dbd7bd3c57da794146c368fc09f92bf373c391b43",
+        "build/dao_leaf_runner": "b979f34461f4d6740c34853cf6a85c15bf3080daed61ee40a7ac3542d4c81f0d",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "reports/leaves-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "f3b905226f8496b9c3655ec54610414c7c626e0777ed0a421576e09d3f7318b7",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "6a10401055d0150d13c41974c67476c1df069a978b14f2bac71b01bac6dd3372",
+        "validation/native_runner.cpp": "6d3cc4f80dff93cf020df20cf317af6a53efcdc914c0c611491b48b4a69c593c",
+        "validation/validate_leaves.py": "8f14655573d59551a854f179cbef621e094fbcb398b3251bdbd1f18be25ebf92"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/bit_mask_or_all.json",
+      "report_sha256": "093e92893bc45b4c6d85af34a5aa528ba5d703ad130861d5c4a36df76aa9c4a7",
+      "status": "corpus_pass"
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "74adbb1cedafe400efae8c448dfba09df6ce6bbb0e55f3c2d6a07c9817f12672",
+        "analysis/functions.json": "8e69de0389c18f24d31f4e0994e5baa7b504608ddb7e3768d960eb34523420f8",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "83ecd192ea78cb7e83a8bb6dbd7bd3c57da794146c368fc09f92bf373c391b43",
+        "build/dao_leaf_mutant": "c1e9838ff6839ca588f21be6eb33407d28fc998e4500cacd5e665816c29fdd0d",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "reports/leaves-mutant-cases.json": "3b01a21043c13f6bb9b6c5213f215ae958d6d82dd6b624070e4fe655654d707f",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "f3b905226f8496b9c3655ec54610414c7c626e0777ed0a421576e09d3f7318b7",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "6a10401055d0150d13c41974c67476c1df069a978b14f2bac71b01bac6dd3372",
+        "validation/native_runner.cpp": "6d3cc4f80dff93cf020df20cf317af6a53efcdc914c0c611491b48b4a69c593c",
+        "validation/validate_leaves.py": "8f14655573d59551a854f179cbef621e094fbcb398b3251bdbd1f18be25ebf92"
+      },
+      "artifacts_unchanged": true,
+      "case_counts": {
+        "corpus_pass": 3,
+        "mismatch": 1
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "a3bce07ac0790de0efe0748f8aff03566e04451002e49990bc63d7214ff34805",
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "negative_control": true,
+      "repeats_per_side": 2,
+      "report": "reports/bit_mask_or_all-mutant.json",
+      "report_sha256": "286b2fa4b69b3deed3ba6757123339e4bb827e1db16474c7ceaee4bd5f5f1489",
+      "status": "failed"
+    }
+  ],
+  "schema_version": 1,
+  "synthetic_checks": {
+    "negative_control": {
+      "corpus_pass": 53,
+      "mismatch": 6
+    },
+    "positive": {
+      "corpus_pass": 59
+    }
+  },
+  "tooling_tests": {
+    "command": ".venv/bin/python -m unittest discover -s tests -v",
+    "passed": 30,
+    "skipped": 0
+  },
+  "unicorn": "2.1.4"
+}

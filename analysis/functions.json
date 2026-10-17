@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "reference_build": "analysis/reference-build.json",
+  "functions": [
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0004a3f0",
+      "name": "byte_swap_u32",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 304112,
+      "size": 31,
+      "code_sha256": "388bec0c6f6f87e5fa5bc40a0e95a7219bbdf1f509fedf56ed7a6d200a75e862",
+      "calling_convention": "x86 cdecl",
+      "signature": "uint32_t(uint32_t)",
+      "status": "implemented",
+      "contract": "contracts/functions/byte_swap_u32.json",
+      "source": "src/primitives.cpp",
+      "evidence": "analysis/first-leaves.md",
+      "observed_direct_callsite_rvas": [
+        289146
+      ]
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "name": "bit_mask_or_all",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 333984,
+      "size": 21,
+      "code_sha256": "6906bfaa2489f87224faae5b21cf0368156773bea3cdd900613ad664fb56a174",
+      "calling_convention": "x86 cdecl",
+      "signature": "uint32_t(uint32_t)",
+      "status": "implemented",
+      "contract": "contracts/functions/bit_mask_or_all.json",
+      "source": "src/primitives.cpp",
+      "evidence": "analysis/first-leaves.md",
+      "observed_direct_callsite_rvas": [
+        348707,
+        349825,
+        349834,
+        452299
+      ]
+    }
+  ]
+}

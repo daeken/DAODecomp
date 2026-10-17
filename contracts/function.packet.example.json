@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "ready": false,
+  "function_id": null,
+  "reference": {"module": null, "sha256": null, "rva": null, "ranges": []},
+  "signature": null,
+  "calling_convention": null,
+  "preconditions": [],
+  "aliasing_and_ownership": [],
+  "observable_state": [],
+  "dependency_contracts": [],
+  "evidence_files": [],
+  "frozen_files_sha256": {},
+  "allowed_write_paths": [],
+  "validation_commands": [],
+  "model": "gpt-6.1-sol",
+  "maximum_attempts": 2,
+  "token_budget": null,
+  "deliverables": ["candidate patch", "behavior notes with instruction evidence", "validation report", "remaining uncertainties"],
+  "acceptance": "Independent rerun and review required. No oracle, comparator, frozen-fixture or shared-type edits."
+}
+

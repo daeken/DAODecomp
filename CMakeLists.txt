@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.20)
+project(DAODecomp LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+add_library(dao_options INTERFACE)
+target_include_directories(dao_options INTERFACE include)
+if(MSVC)
+  target_compile_options(dao_options INTERFACE /W4 /WX /fp:strict)
+else()
+  target_compile_options(dao_options INTERFACE -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off)
+endif()
+
+add_library(dao_recovered STATIC src/primitives.cpp)
+target_link_libraries(dao_recovered PUBLIC dao_options)
+add_executable(dao_leaf_runner validation/native_runner.cpp)
+target_link_libraries(dao_leaf_runner PRIVATE dao_recovered)
+add_executable(dao_leaf_mutant validation/native_runner.cpp)
+target_compile_definitions(dao_leaf_mutant PRIVATE DAO_LEAF_MUTANT=1)
+target_link_libraries(dao_leaf_mutant PRIVATE dao_recovered)
+
+# This example tests infrastructure; it is NOT a recovered Dragon Age function.
+add_executable(synthetic_candidate examples/synthetic/candidate.cpp)
+target_link_libraries(synthetic_candidate PRIVATE dao_options)
+add_executable(synthetic_mutant examples/synthetic/candidate.cpp)
+target_compile_definitions(synthetic_mutant PRIVATE DAO_SYNTHETIC_MUTANT=1)
+target_link_libraries(synthetic_mutant PRIVATE dao_options)
+
+include(CTest)
+find_package(Python3 3.10 REQUIRED COMPONENTS Interpreter)
+add_test(NAME tooling COMMAND ${Python3_EXECUTABLE} -m unittest discover -s tests -v)
+set_tests_properties(tooling PROPERTIES WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
