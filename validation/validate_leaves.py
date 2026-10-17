@@ -44,6 +44,7 @@ def main():
     if args.function and not set(args.function) <= names:
         parser.error("unknown function name")
     selected = [f for f in registry["functions"] if f["status"] in ("implemented", "corpus_pass", "reviewed", "integrated")
+                and f.get("backend", "scalar") == "scalar"
                 and (not args.expect_mismatch or f["name"] == "bit_mask_or_all")
                 and (not args.function or f["name"] in args.function)
                 and (args.suite != "heldout" or f.get("pilot") == "luna-001")]

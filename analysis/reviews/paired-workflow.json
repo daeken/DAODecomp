@@ -1,0 +1,96 @@
+{
+  "additional_reviewed_improvements": [
+    "CMake configuration preflight uses a disposable snapshot with an empty candidate and stops missing support before any implementation model spend.",
+    "Deterministic report source/contract/reference artifact hashes must match the executed tree/current binary; wrong source-binding regression passes.",
+    "Reviewer evidence distinguishes raw file SHA256 from canonical parsed-JSON SHA256 and includes execution host/commands/artifacts and actual build/compile_commands context.",
+    "Reviewer schema limits issue.function to declared names or wildcard *; invalid review and all refusals remain nonaccepting.",
+    "Reused response provenance records origin model separately from the scheduled attempt slot; reused Sol-origin regression passes."
+  ],
+  "candidate_accepted_by_this_review": false,
+  "candidate_code_reviewed": false,
+  "checks": [
+    {
+      "command": ".venv/bin/python -m unittest tests.test_recovery_pair tests.test_checkpoint -v",
+      "result": "28 passed; no skips; final reviewed hashes"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "result": "85 passed; no skips; final reviewed hashes"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "85 tests; 20 optional Unicorn tests skipped; remaining passed; final reviewed hashes"
+    }
+  ],
+  "conclusions": [
+    "Implementation source remains proposal data. Support files, candidate and in-place reference binary are hashed before/after deterministic commands and before package acceptance; isolated trees protect the shared checkout in the intended workflow.",
+    "Build, complete public, complete held-out and negative-control gates precede the independent reviewer. Missing/duplicate cases, wrong identities/contracts/corpora/source bindings, empty reports, nondeterminism, runner errors and failing negative controls cannot satisfy the declared gates.",
+    "Only public semantic counterexamples are given to bounded implementation retries. Held-out and negative failures stop without another implementation request receiving that case evidence.",
+    "A valid independent approve decision with no unresolved blocking/evidence issues is required for accepted-for-integration. Rejection, needs-evidence, invalid review or tool/error events fail closed. The package does not modify source/registry/evidence or integrate itself.",
+    "Checkpoint steps stop on failure, report recording revalidates current artifacts, and publication occurs after progress update succeeds. Ordinary publication exceptions remove the owned temporary evidence record, restore README when applicable and save failed status.",
+    "Tests use isolated synthetic manifests/registries and fake requesters, with no original game binary or model CLI required. Optional CMake preflight test is dependency-gated; platform helper mocking avoids mutating global OS identity."
+  ],
+  "decision": "approve_current_trusted_local_workflow",
+  "host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "review_python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]"
+  },
+  "proof": false,
+  "resolved_findings": [
+    {
+      "issue": "Public validator setup failures, missing reports and runner/oracle errors originally consumed all implementation retries without a semantic counterexample.",
+      "location": "tools/run_recovery_pair.py:431",
+      "reproduction": "Existing RecoveryPairTests fixture: set public mode to infrastructure. Before fix: implementation-exhausted and 3 implementation calls. Final behavior: needs-evidence and 1 call.",
+      "resolution": "Only reports containing stable corpus_pass/mismatch statuses and at least one mismatch can trigger public semantic repair. Missing/error/unstable evidence stops. Regression covers infrastructure, runner-error and oracle-unstable.",
+      "severity": "P2"
+    },
+    {
+      "issue": "Repair feedback originally read build-1/stderr unconditionally although compilation is normally build command2 after CMake configuration.",
+      "location": "tools/run_recovery_pair.py:611",
+      "resolution": "Collect stdout/stderr for the actual failed command index. Regression verifies build2 diagnostic reaches next proposal.",
+      "severity": "P2"
+    },
+    {
+      "issue": "An implemented function with an unsupported backend was silently omitted from a nominally passing full checkpoint.",
+      "location": "tools/validate_checkpoint.py:61",
+      "resolution": "Explicitly reject unsupported implemented backends before publication; synthetic unknown-backend registry regression passes.",
+      "severity": "P2"
+    },
+    {
+      "issue": "Reviewer raw-source hash was computed from response text rather than the written candidate file; Windows newline translation could make that provenance claim false.",
+      "location": "tools/run_recovery_pair.py:498",
+      "resolution": "Compute the raw source hash from attempt/candidate.cpp. Current macOS raw bytes are unchanged by this correction.",
+      "severity": "P2"
+    }
+  ],
+  "review_kind": "independent paired recovery/checkpoint tooling review",
+  "reviewed_artifacts_sha256": {
+    "tests/test_checkpoint.py": "d17e63711f5087d9ce8b735a86e538a9381f535aecb7192e04a8024820eca76c",
+    "tests/test_recovery_pair.py": "b3f2abf3f2abab67d1cb27900d307e4b8e8064e8d2a37eee2041c1d5c92ff500",
+    "tools/run_recovery_pair.py": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+    "tools/validate_checkpoint.py": "59987dc0e5cfd434a2e95a15738ef36de093ae342f3a6d72030f6a3554fdfcf1"
+  },
+  "reviewer": "memory_contract_review",
+  "schema_version": 1,
+  "scope_limits": [
+    "Approval applies only to these exact four file hashes in the trusted coordinator-owned local manifest workflow. Arbitrary hostile manifests, report forgery by adversarial native code and generic security sandboxing are outside this review.",
+    "No candidate implementation was re-reviewed or accepted here. Synthetic pipeline/checkpoint tests are infrastructure evidence and establish no game behavior, native execution or universal equivalence.",
+    "Tests actually ran on macOS ARM64 only. Windows branches were inspected and simulated by tests; no Windows CI execution is claimed. Full checkpoint correctly refuses Windows pending frozen validator multi-config path support.",
+    "Normal handled failures and publication rollback were reviewed; abrupt host death, external signals, filesystem failure and concurrent publishers are not claimed crash-safe transactions.",
+    "The bounded model schedule is per invocation. The coordinator still owns activation-wide request budgets, trusted manifest preparation, accepted-package integration and required actual CMake/synthetic/CI checkpoint execution.",
+    "Only scalar and memory-001 backends are currently checkpoint-supported. New implemented backends require explicit checkpoint support, and now fail publication until supplied."
+  ],
+  "supporting_artifacts_sha256": {
+    "docs/continuous-recovery.md": "a04533870004dc18d3c1d3866501e4d57585378cde9fbbf2f6ec23d86c0dd0e1",
+    "docs/paired-recovery.md": "356df4e665c316ef85d790bfa481ab6629bbf779af69f9016aa5205dd2709b5f",
+    "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tools/record_validation.py": "aaed8457faa511514e1cb686aefcffac402a2b9622241379a7c9c752a5578d22",
+    "tools/run_model_packet.py": "996146000ac97a4dfd842bc42bcb21e89125f83cf2dd4eb8bed6a74396ec14ce",
+    "tools/update_progress.py": "5071f57253fca9766c76f0a3cb9530029b5505860b1eb746048aba045607ddc2"
+  },
+  "timestamp_utc": "2026-10-17T17:25:47.761678+00:00",
+  "unresolved_findings": [],
+  "local_report_sha256": "341dec6a6cb0e4bd46ce2b64bbdbbc17ab445e857e9661b9f5b9294e9d6e7e8f",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reviewer_reasoning_effort": "high"
+}

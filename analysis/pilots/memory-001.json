@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "status": "integrated-validated",
+  "source": "local/pairs/memory-001-run-3/accepted/candidate.cpp",
+  "source_sha256": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "runs": [
+    {
+      "directory": "local/pairs/memory-001-run-1",
+      "status": "implementation-exhausted",
+      "reason": "bounded public repair attempts exhausted; no accepted package",
+      "elapsed_seconds": 28.899,
+      "new_model_request_count": 2,
+      "orchestrator_startup_sha256": null,
+      "manifest_canonical_json_sha256": "de9de7b431ad42e39d0d67281d32914225b5aeb7e613ace34c46e97ca68d8a86"
+    },
+    {
+      "directory": "local/pairs/memory-001-run-2",
+      "status": "needs-evidence",
+      "reason": "invalid review issue",
+      "elapsed_seconds": 281.133,
+      "new_model_request_count": 3,
+      "orchestrator_startup_sha256": null,
+      "manifest_canonical_json_sha256": "91d165858130daf39dfe546b777378b969c06a9afe42f3b93e8311f843fc6d60"
+    },
+    {
+      "directory": "local/pairs/memory-001-run-3",
+      "status": "accepted-for-integration",
+      "reason": "deterministic gates and independent scoped review passed",
+      "elapsed_seconds": 151.649,
+      "new_model_request_count": 1,
+      "orchestrator_startup_sha256": "47dec6d6d17c1f847f26dcfd8bf70e079af98daaaf399be0e97fac9037687450",
+      "manifest_canonical_json_sha256": "d9e98881ee3c51e98639fd50e4bb1876fed2d4ba8fb67d15a89c17a6353edb9a"
+    }
+  ],
+  "actual_distinct_model_request_count_including_original_pilot": 7,
+  "new_pipeline_model_request_count": 6,
+  "requests": [
+    {
+      "origin": "local/pilots/memory-001/luna-attempt-1/run.json",
+      "kind": "implementation",
+      "reused": false,
+      "requested_model": "gpt-6-luna",
+      "elapsed_seconds": 8.999,
+      "usage": [
+        {
+          "input_tokens": 17667,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 839,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "scope": "original pilot request, reused by pipelines"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-1",
+      "kind": "implementation",
+      "requested_model": "gpt-6-luna",
+      "elapsed_seconds": 7.946,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 12672,
+          "input_tokens": 18466,
+          "output_tokens": 868,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "scope": "failed infrastructure overhead"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-1",
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 19.39,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 23073,
+          "output_tokens": 1013,
+          "reasoning_output_tokens": 77
+        }
+      ],
+      "scope": "failed infrastructure overhead"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-2",
+      "kind": "implementation",
+      "requested_model": "gpt-6-luna",
+      "elapsed_seconds": 9.247,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 12672,
+          "input_tokens": 23901,
+          "output_tokens": 879,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "scope": "bounded implementation/public repair and refused review"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-2",
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 16.44,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 24672,
+          "output_tokens": 971,
+          "reasoning_output_tokens": 36
+        }
+      ],
+      "scope": "bounded implementation/public repair and refused review"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-2",
+      "kind": "review",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 19.729,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 31005,
+          "output_tokens": 624,
+          "reasoning_output_tokens": 189
+        }
+      ],
+      "scope": "bounded implementation/public repair and refused review"
+    },
+    {
+      "origin": "local/pairs/memory-001-run-3",
+      "kind": "review",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 15.751,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 56439,
+          "output_tokens": 782,
+          "reasoning_output_tokens": 153
+        }
+      ],
+      "scope": "authorized evidence correction and scoped review"
+    }
+  ],
+  "reported_usage_sum": {
+    "input_tokens": 195223,
+    "cached_input_tokens": 25344,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5976,
+    "reasoning_output_tokens": 455
+  },
+  "model_request_elapsed_seconds_sum": 97.502,
+  "scope": "CLI-reported worker usage only; coordinator usage/account charges not measured. Reasoning/cache fields retain CLI semantics and are not additive billing totals. Original pilot counted once; reused copies not counted again.",
+  "measured_case_counts": {
+    "public": {
+      "fn_00061fa0": {
+        "corpus_pass": 37
+      },
+      "fn_0013af20": {
+        "corpus_pass": 53
+      },
+      "fn_0035bc40": {
+        "corpus_pass": 264
+      }
+    },
+    "heldout": {
+      "fn_00061fa0": {
+        "corpus_pass": 80
+      },
+      "fn_0013af20": {
+        "corpus_pass": 80
+      },
+      "fn_0035bc40": {
+        "corpus_pass": 128
+      }
+    },
+    "negative": {
+      "fn_00061fa0": {
+        "corpus_pass": 25,
+        "mismatch": 12
+      }
+    }
+  },
+  "positive_game_case_count": 642,
+  "review_note_correction": "Second reviewer prose said742 passing cases; reports establish354public+288heldout=642. Its source-level scoped approval remains preserved unchanged.",
+  "final_tool_sha256": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+  "final_tests_sha256": "b3f2abf3f2abab67d1cb27900d307e4b8e8064e8d2a37eee2041c1d5c92ff500",
+  "final_tool_diff_from_run3_start": "One raw-source hash labeling fix: hash candidate.cpp bytes instead of source.encode() for Windows newline translation; macOS bytes unchanged.",
+  "native_windows_validated": false,
+  "proof": false,
+  "local_summary_sha256": "e41663686d1fe3d568a14411f3efa9b0a55431b862da7bfb4802efce7ece0183",
+  "acceptance_package": {
+    "candidate_target": "src/memory_primitives.cpp",
+    "functions": [
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013af20",
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40"
+    ],
+    "group": "memory-001",
+    "manifest_sha256": "d9e98881ee3c51e98639fd50e4bb1876fed2d4ba8fb67d15a89c17a6353edb9a",
+    "native_windows_validated": false,
+    "proof": false,
+    "review_sha256": "b9b3ba816d801ebe4c2bcd608894e03f91ca2a53682913238ae849cb4620181b",
+    "schema_version": 1,
+    "scope": "frozen emulator corpus plus independent source review; integration requires coordinator",
+    "source_sha256": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31"
+  },
+  "integration_evidence": "analysis/validation/memory-001.json",
+  "checkpoint": {
+    "path": "reports/checkpoint-memory-001/checkpoint.json",
+    "sha256": "a6549fbecc0519e911d567049de902e2b6aae582f1b6ed495c002f867fbe915d",
+    "status": "passed",
+    "functions": 13,
+    "game_input_cases": 4158,
+    "tooling_tests": 85,
+    "elapsed_seconds": 398.376,
+    "proof": false,
+    "native_windows_validated": false
+  }
+}

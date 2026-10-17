@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "mode": "continuous",
+  "checkpoint": "memory-001 integrated and full automatic checkpoint passed: 13 functions, 4158 emulator cases, tooling/build/synthetic checks and both game negative controls. Evidence: analysis/validation/memory-001.json.",
+  "active_group": "object-fields-001",
+  "groups": [
+    {
+      "id": "memory-001",
+      "status": "integrated_validated",
+      "rvas": [
+        "0x00061fa0",
+        "0x0013af20",
+        "0x0035bc40"
+      ],
+      "scope": "16/24-byte sequential dword copies with overlap; bit mutation in guest memory",
+      "next_action": "Retain regression coverage; continue with object-field counters.",
+      "contract_review": "local/pilots/memory-001/contract-review.json",
+      "initial_failure": "Bit routine returns mutated word instead of EAX word index; frozen tests remain unchanged.",
+      "accepted_package": "local/pairs/memory-001-run-3/accepted/package.json",
+      "source_review": "analysis/reviews/memory-001-source.json",
+      "worker_measurements": "analysis/pilots/memory-001.json",
+      "validation_record": "analysis/validation/memory-001.json"
+    },
+    {
+      "id": "object-fields-001",
+      "status": "characterized_pending_backend",
+      "rvas": [
+        "0x00061f40",
+        "0x00061f60",
+        "0x00061f80",
+        "0x00347d10",
+        "0x00347d50"
+      ],
+      "scope": "Conditional object-field counters and indexed stores",
+      "next_action": "Start with the three counter functions using the independently prepared handoff and proposed packet. Build/review a separate larger-arena adapter without changing memory-001 contracts. Then use paired automatic implementation and review gates.",
+      "handoff": "local/pilots/object-fields-001/handoff.md",
+      "proposed_packets": "local/pilots/object-fields-001/proposed-packets.json",
+      "characterization": "local/pilots/object-fields-001/characterization.json",
+      "observations": "4268 original-only states plus 41 register probes; no candidate accepted.",
+      "backend_gaps": [
+        "Counter fields need an arena larger than 128 bytes.",
+        "Indexed setters need byte/word writes and an explicit incoming-EAX relation if full return bits are retained; callers reuse ECX."
+      ]
+    },
+    {
+      "id": "linked-structures-001",
+      "status": "queued",
+      "rvas": [
+        "0x00018390",
+        "0x000183d0"
+      ],
+      "scope": "Paired linked-structure operations; object graph and aliasing contracts required",
+      "next_action": "Review caller/callee composition and valid graph invariants before creating fixtures."
+    }
+  ],
+  "infrastructure_backlog": [
+    {
+      "id": "evidence-dependency-scope",
+      "status": "queued",
+      "reason": "Whole-registry/CMake/all-source hashes currently invalidate all prior corpus records on every addition; complete checkpoint reruns will become expensive as recovery grows.",
+      "next_action": "Design per-function build and acceptance dependency manifests with strict invalidation tests, preserving hashes of every input that can affect compiled behavior; do not merely omit dependencies to keep counts high."
+    }
+  ],
+  "blockers": []
+}

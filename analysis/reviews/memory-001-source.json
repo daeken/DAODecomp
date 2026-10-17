@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "requested_model": "gpt-6.1-sol",
+  "review_raw_file_sha256": "b9b3ba816d801ebe4c2bcd608894e03f91ca2a53682913238ae849cb4620181b",
+  "source_sha256": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+  "review": {
+    "decision": "approve",
+    "issues": [
+      {
+        "detail": "The instruction bytes support an equality skip followed by four sequential dword load/store pairs. The candidate preserves partial-overlap propagation, unaligned access, the exact 16-byte footprint and the normalized destination return.",
+        "function": "fn_00061fa0",
+        "severity": "note"
+      },
+      {
+        "detail": "The instruction bytes support an equality skip followed by six sequential dword load/store pairs. The candidate preserves partial-overlap propagation, unaligned access, the exact 24-byte footprint and the normalized destination return.",
+        "function": "fn_0013af20",
+        "severity": "note"
+      },
+      {
+        "detail": "The candidate matches the low-byte enabled test, logical index shift, masked unsigned bit shift, four-byte read/modify/write and full EAX return of index >> 5. Contract bounds prevent address overflow; high index values requiring storage outside the arena are excluded.",
+        "function": "fn_0035bc40",
+        "severity": "note"
+      },
+      {
+        "detail": "The previous provenance gaps are resolved by the supplied raw/canonical hash domains, verified artifact bindings, compiler commands, ABI adapters and successful build/demo records. Public and held-out results total 742 passing cases; the overlap mutant produces 12 mismatches. These results corroborate the instruction-level review.",
+        "function": "*",
+        "severity": "note"
+      }
+    ],
+    "limitations": [
+      "Text-only review; hashes, binary extraction and execution records were not independently recomputed. Function identities are tied to the supplied module SHA-256, RVAs and recorded slice hashes; LLVM symbol labels do not establish original names.",
+      "Recorded execution used AppleClang 21 on macOS arm64 and Unicorn 2.1.4 for original x86 slices. There is no native Windows x86 validation or tested replacement x86 ABI bridge.",
+      "The original adapter maps arguments and checks stack cleanup, preserved registers, DF, slice containment and footprints. The candidate adapter observes the complete u32 result and all 128 arena bytes.",
+      "Approval covers only the declared ordinary-memory, single-threaded, nonwrapping 128-byte domain with a separate valid stack and normal returns. Faults, concurrency, MMIO and other allocation domains remain excluded.",
+      "Corpus agreement and synthetic demos are not proof of whole-game behavior. Registry integration is not approved."
+    ],
+    "summary": "Approve only the scoped source package with raw SHA-256 91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31. No behavioral discrepancy was found against the supplied instruction bytes within the frozen contracts. GuestMemory preserves little-endian aliasing and unaligned access without host pointer casts; bounded unsigned arithmetic and shifts have defined C++ semantics."
+  },
+  "coordinator_correction": "The review prose says 742 positive game cases. The actual reports establish 354 public + 288 held-out = 642. Raw review is preserved unchanged.",
+  "scope": "Independent text-only review after automatic deterministic gates; current checkout integration evidence is recorded separately."
+}

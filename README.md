@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 10 |
-| C++ implementations | 10 |
-| Implementations with current emulator corpus evidence | 10 |
-| Input cases across those functions (excluding repeat runs) | 3,516 |
+| Functions in the recovery registry | 13 |
+| C++ implementations | 13 |
+| Implementations with current emulator corpus evidence | 13 |
+| Input cases across those functions (excluding repeat runs) | 4,158 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -34,6 +34,11 @@ all 32,850 extracted files passed installer checksum verification. The reference
 execution host is undecided. Symbolic proofs and a full game executable loader
 remain planned. The synthetic example below is separate infrastructure testing.
 
+Recovery now runs as an [ongoing workflow](docs/continuous-recovery.md), with a
+[durable queue](analysis/recovery-queue.json). Implementation/review agent pairs
+use automatic deterministic checks before independent review and integration;
+failed or blocked work stays recorded rather than counting as accepted progress.
+
 ## Validate the recovered functions
 
 After building and installing the dependencies below, with the original game at
@@ -42,6 +47,8 @@ After building and installing the dependencies below, with the original game at
 ```sh
 .venv/bin/python validation/validate_leaves.py --suite all --jobs 4
 .venv/bin/python validation/validate_leaves.py --expect-mismatch
+.venv/bin/python validation/validate_memory.py --suite all --jobs 3
+.venv/bin/python validation/validate_memory.py --expect-mismatch
 ```
 
 The runner verifies binary/slice hashes and executes the registered arithmetic and
@@ -56,6 +63,12 @@ for these isolated checks; game initialization and scenario tests still need one
 Use `--function NAME` to select a function, `--suite heldout` for the pilot's
 withheld cases, or `--report-dir PATH` to retain a separate run. Parallel validation
 uses independent processes; it does not launch model workers.
+
+The memory runner additionally checks complete 128-byte guest allocations,
+normalized pointer returns, unaligned accesses, and overlapping source/destination
+ranges. Reads and writes outside the declared footprint fail. Its negative control
+uses an intentionally wrong snapshot copy that loses sequential overlap effects.
+See the [memory recovery record](analysis/memory-001.md).
 
 ## Run the demonstration
 

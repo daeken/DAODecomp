@@ -1,0 +1,17 @@
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40",
+  "inputs": {
+    "arena": "bytes",
+    "base": "u32",
+    "enabled": "u32",
+    "index": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 128
+  },
+  "preconditions": "A 128-byte allocation mapped at guest 0x02000000; input pointer offsets refer to this shared allocation. Private valid stack, DF clear, normal return only; no calls/globals/relocations or stack writes. Nonvolatile registers must be preserved; flags and other volatile registers are unobserved. All 128 bytes are observed after return, including untouched bytes. Stack arguments are allocation base + base, index, enabled in that order. base + 4*(index>>5) + 4 must be at most 128 without wrapping. Only that four-byte word may be read or written. All 32 bits of index/enabled are supplied. Return observes all EAX bits; callee pops twelve argument bytes.",
+  "return_type": "u32",
+  "schema_version": 1
+}

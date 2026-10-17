@@ -308,6 +308,102 @@
         4941056
       ],
       "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
+      "name": "fn_00061fa0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401312,
+      "size": 35,
+      "code_sha256": "d44cfc8fcce98a60b07dfef8cb85b3c8f0cf00ea80479325b4d3aa60a7c356ed",
+      "abi": {
+        "ecx": "arena + destination",
+        "stack_arguments": [
+          "arena + source"
+        ],
+        "stack_cleanup": 4,
+        "return": "EAX guest pointer normalized to allocation offset"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061fa0.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        411827,
+        1915512,
+        1616712,
+        1616750,
+        1616810,
+        1616848
+      ],
+      "backend": "memory-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013af20",
+      "name": "fn_0013af20",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 1290016,
+      "size": 47,
+      "code_sha256": "414495476845faf08bec43d60f3cada3549b695133e08339520b9099cc9b2cf1",
+      "abi": {
+        "ecx": "arena + destination",
+        "stack_arguments": [
+          "arena + source"
+        ],
+        "stack_cleanup": 4,
+        "return": "EAX guest pointer normalized to allocation offset"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_0013af20.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        1292681,
+        1292755,
+        1419370,
+        1419437
+      ],
+      "backend": "memory-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40",
+      "name": "fn_0035bc40",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3521600,
+      "size": 44,
+      "code_sha256": "964bb570c2b84e30014a0fbb1f73b73f64ccd57585b5f3c821b1e2be801d4286",
+      "abi": {
+        "stack_arguments": [
+          "arena + base",
+          "index",
+          "enabled"
+        ],
+        "stack_cleanup": 12,
+        "return": "EAX u32"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_0035bc40.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        3537824
+      ],
+      "backend": "memory-001"
     }
   ]
 }

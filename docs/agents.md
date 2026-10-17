@@ -12,6 +12,14 @@ for one retry. The pilot retains failures and escalates an unresolved function t
 Sol. Treat those results as evidence for a small scalar implementation task, not as
 a whole-game acceptance rate.
 
+The user has since authorized [continuous recovery](continuous-recovery.md) and
+requested paired workers to keep the coordinator out of routine validation loops.
+The [paired pipeline](paired-recovery.md) builds and checks an isolated candidate
+automatically, allows bounded repairs on public failures, then runs held-out and
+negative-control checks. Only a deterministic pass goes to an independent reviewer.
+Contract/oracle reviews are separate from candidate reviews. The coordinator owns
+integration and unresolved evidence gaps, rather than relaying every test result.
+
 ## Proposed division of work
 
 | Role | Initial model | Work |

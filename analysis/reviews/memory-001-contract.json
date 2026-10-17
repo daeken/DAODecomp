@@ -1,0 +1,125 @@
+{
+  "candidate_approved": false,
+  "checks": [
+    {
+      "command": ".venv/bin/python -m unittest tests.test_memory -v",
+      "result": "9 passed; no skips"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "57 tests, 20 optional Unicorn skips, remaining passed"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "result": "57 passed; no skips"
+    },
+    {
+      "command": "build/guest_memory_tests",
+      "result": "exit 0; existing build executable, no rebuild performed in this read-only review"
+    },
+    {
+      "description": "Rehashed every path in frozen.json and compared generated cases with all six saved public/heldout fixtures",
+      "result": "all equal"
+    },
+    {
+      "description": "Pinned module/slice loading via load_slice; comparison with LLVM decoded slices and direct call opcode context",
+      "result": "identities and ABI agree"
+    },
+    {
+      "description": "Original-only guard/return checks for every overlap delta from -size through +size, fixed source=40 and arena[i]=(73*i+19)%256",
+      "result": {
+        "fn_00061fa0": {
+          "cases": 33,
+          "snapshot_negative_memory_differences": 15
+        },
+        "fn_0013af20": {
+          "cases": 49,
+          "snapshot_negative_memory_differences": 23
+        }
+      }
+    },
+    {
+      "description": "Original-only bit check: base in (0,3,124), every index in range(((128-base)//4)*32), enabled=0x100, arena[i]=(73*i+19)%256; assert EAX=index>>5 and only designated bit clears; guarded footprint/stack/nonvolatiles checked",
+      "result": "2048 passed"
+    },
+    {
+      "description": "compare() on frozen public-0017 for fn_00061fa0, original memory_runner versus existing build/dao_memory_mutant, repeats=2",
+      "result": "mismatch only at $.memory.arena; original/original and mutant/mutant repeat agreement; no runner error"
+    }
+  ],
+  "decision": "approved_for_current_bounded_domain",
+  "findings": [],
+  "frozen_baseline_sha256": "82f46eb83d6512468730bbbe8d3033db9be5ce10c7a92692f545e429ad8e27bf",
+  "frozen_mismatches": [],
+  "host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "unicorn": "2.1.4"
+  },
+  "native_windows_validated": false,
+  "proof": false,
+  "reference": {
+    "module": "DAOrigins.exe",
+    "rvas": [
+      "00061fa0",
+      "0013af20",
+      "0035bc40"
+    ],
+    "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+    "slice_hashes_verified": true
+  },
+  "review_conclusions": [
+    "Original bytes show all source reads, destination writes, returns, and ret-immediate stack cleanup described in the contracts. Only argument/return stack slots and the single allocation are needed.",
+    "Shared arena preserves equality, interior pointers and partial overlap. The complete 128-byte observation includes all untouched canaries; pointer returns are normalized to one allocation offset.",
+    "Nonwrapping offset preconditions in Python and widened native-runner checks keep accesses inside 128 bytes; original effective-address arithmetic does not wrap within this domain.",
+    "GuestMemory byte access uses defined unsigned shifts and checked bounds in this domain, without host pointer aliasing or alignment assumptions.",
+    "Oracle hooks and exact comparator reject illegal footprint access, stack writes, escaped execution, incomplete budgets, stack imbalance, nonvolatile corruption, DF set, crashes, malformed observations and nondeterminism.",
+    "Static slices have no external calls, globals, relocations or FP instructions. Their argument registers/stack words are overwritten/read explicitly, so seeded unrelated volatile state does not supply hidden inputs."
+  ],
+  "review_kind": "independent acceptance contract and oracle review",
+  "reviewed_artifacts_sha256": {
+    "analysis/functions.json": "8f65054ae13c0bfaddd7c9c5d7cc935226374dcb0c27e447e3c916e05a322f0f",
+    "contracts/functions/fn_00061fa0.json": "46deb773f53463f2204f8b8347a2208cd34d811fed0af28d7aeff7282435f053",
+    "contracts/functions/fn_0013af20.json": "3572041810771ec77340f508a885d96f2891095c659913dacd5826f7a6bae78b",
+    "contracts/functions/fn_0035bc40.json": "1f653623f54c0c6563546d914518011834311c2ac8ab2631e2f841197083fb89",
+    "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+    "tests/guest_memory.cpp": "dd71409308ed9bf4e488955f402bce52e5f6dbd59bdb233c88627db475821cfe",
+    "tests/test_memory.py": "2b02974df3f567409990e366939b5140e9ae276dbfbb09d83f9a38d50a1c9585",
+    "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+    "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+    "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+    "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+    "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906"
+  },
+  "reviewer": "memory_contract_review",
+  "schema_version": 1,
+  "scope_limits": [
+    "Approval concerns the fixed acceptance contracts/oracle, not the candidate implementation, subsequent candidate revisions, or game behavior.",
+    "Only single-threaded ordinary readable/writable RAM in one 128-byte allocation, separate private stack, DF clear, nonwrapping offsets, normal return and declared ABI are covered. Null/faulting pointers, MMIO/volatile objects, concurrent observation, other arena sizes, wrapping addresses and exception behavior are outside this domain.",
+    "Unicorn evidence has not been corroborated on native Windows x86; corpus and finite extra checks are not universal equivalence proof or integration evidence.",
+    "The separate pipeline must continue checking frozen.json before acceptance: validate_memory.py hashes its current inputs but does not itself enforce the pilot frozen baseline.",
+    "Compiled candidate side effects and use of the prescribed GuestMemory-only interface require the separately gated source review; this harness does not sandbox a hostile native process.",
+    "Existing C++ helper executable was executed; no CMake rebuild or synthetic demo commands were performed by this read-only reviewer. Pipeline owner must perform required build/demo checks."
+  ],
+  "suite_counts": {
+    "fn_00061fa0": {
+      "heldout": 80,
+      "public": 37
+    },
+    "fn_0013af20": {
+      "heldout": 80,
+      "public": 53
+    },
+    "fn_0035bc40": {
+      "heldout": 128,
+      "public": 264
+    }
+  },
+  "timestamp_utc": "2026-10-17T17:14:55.543552+00:00",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reviewer_reasoning_effort": "high",
+  "local_report_sha256": "d460c6dacb760c67260798df65cee76e58cd4aa42e83105c839f0e1e6451fdf5",
+  "date": "2026-10-17"
+}
