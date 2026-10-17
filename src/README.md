@@ -15,8 +15,11 @@ Its checked `GuestMemory` interface preserves byte alignment, aliasing and exact
 write footprints without host pointer casts. See `analysis/memory-001.md` for the
 bounded fixture, independent contract review and paired implementation workflow.
 
+`object_counters.cpp` contains the recovered D0/D4/D8 field operations, with
+explicit guest object offsets and full return-bit observations. Their fixture
+layout does not establish the identity or complete layout of an original class.
+
 Add modules based on the observed call graph and ownership boundaries, rather than
 guessing the game's subsystem layout. Keep ABI bridges separate from portable
 behavior. The native C++ has corpus agreement with emulated original instructions;
 native Windows checks and whole-game integration remain outstanding.
-

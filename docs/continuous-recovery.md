@@ -48,11 +48,16 @@ For each coherent group:
    decision/failure requiring their attention, not unchanged polling.
 
 The memory-001 group adds two fixed-size copies with aliasing and a bit mutation
-routine, extending validation to exact guest-memory observations. The next group
-has independently characterized object-field counters and indexed stores; its
-counter functions need a separate larger-arena adapter before paired recovery.
-Follow the queue's current checkpoint and blockers. Grow toward dependent
-functions and subsystems, not merely maximize tiny leaf counts.
+routine. Object counters extend exact memory observations to 512-byte allocations
+and distinct sentinel behavior. The next indexed-store functions need reviewed
+byte/word stores and explicit incoming-register observations. Follow the queue's
+current checkpoint and blockers. Grow toward dependent functions and subsystems,
+not merely maximize tiny leaf counts.
+
+The queue also tracks reviewed infrastructure handoffs. Evidence reuse currently
+has approval only for a non-counting shadow audit; existing evidence rules and
+full checkpoint checks remain in force. Review-prompt deduplication may consolidate
+repeated provenance but must preserve every binding and acceptance requirement.
 
 After integrating an accepted package, run one checkpoint command on the current
 Linux/macOS host, choosing new output and record paths each time:
@@ -63,8 +68,8 @@ Linux/macOS host, choosing new output and record paths each time:
   --record analysis/validation/memory-001.json --jobs 4
 ```
 
-It builds, runs tooling/CTest/synthetic controls, checks all registered scalar and
-memory functions and their negative controls, verifies report/input hashes, then
+It builds, runs tooling/CTest/synthetic controls, checks all registered scalar,
+memory and object-counter functions and their negative controls, verifies report/input hashes, then
 publishes compact evidence and refreshes README progress. A failed step stops
 publication and leaves logs plus `checkpoint.json`. It does not stage, commit or
 push. Windows full checkpoints are currently rejected because the game validators

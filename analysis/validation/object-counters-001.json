@@ -1,0 +1,1122 @@
+{
+  "date": "2026-10-17",
+  "evidence_level": "emulator_corpus_agreement",
+  "native_windows_validated": false,
+  "proof": false,
+  "records": [
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/byte_swap_u32.json": "170f3e289f0d88e9f5a62bc6ddff29e0800371843f7046267060223e8d558122",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/byte_swap_u32-all-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "603739ce9c9bf9dc548f6eb478605eb80af31e0aef504b7beee7080f8a6a1c2a",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "elapsed_seconds": 43.9,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0004a3f0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/byte_swap_u32-all.json",
+      "report_sha256": "a09c1ee038d128f732a04fee3477a9f74393b125338e950a2300a841acf0fcb4",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/bit_mask_or_all-all-cases.json": "aab8842047559b737158313ff365859bfff8d3b6f2a0a2d87376960af91be52b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 170
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "211cd808b3a19901e967657b9fd72d7f5d5b3bc3442ce73be77b40bd1d29dea1",
+      "elapsed_seconds": 43.883,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/bit_mask_or_all-all.json",
+      "report_sha256": "519ad41837d158d385b4371006a2d407525496de375a9d10b0f6275ced9fde91",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_00184920.json": "7dd64109be3cdbdc282fc7d7bc81887ee50948dadcb311108a97fe23155b813b",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_00184920-all-cases.json": "42e82d0764d32aa704150cb085a0084e6c1b6e41462d3fe0e9cf460e445c6162",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "65b03f32cec46b4dc5d211dddfe5bf08fd400a9ac16311bfb36f124c79ec5de6",
+      "corpus_canonical_sha256": "44d9b1c209690b79a15c256756cac9a41af11ab4dccbd283e8a75dacea40f727",
+      "elapsed_seconds": 56.367,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_00184920-all.json",
+      "report_sha256": "7a2918efa4b7fc154f1ed48054c7559a7d9428bd2b39b8a399e35bc7a959a7a9",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_0052aad0.json": "50c0dc95b47c7199769b4e29bfc69fc1fc5c448e80d469e7ad30f8507a89837e",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_0052aad0-all-cases.json": "0a32c517af2c7fa34fd5fd1df4233ccd4c798d630eb1ee84ba3df143fff0b822",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "733de798163e438e58d4f1ef93a31a1cc974558757f101353cceeadc296a0242",
+      "corpus_canonical_sha256": "0e1fa2a9c9ad841c8b02dd2a0d59f91a9ddab793aa362b612774108d1ac28b36",
+      "elapsed_seconds": 56.581,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aad0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_0052aad0-all.json",
+      "report_sha256": "f38f7dd36d606d3113059fe05fbec61b128378f9b37484388608d54ca7fd3577",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_005851a0.json": "5065c79dc02d9ca743c9a95b6b09844d8cf757a93ab6414679e490c350423c1d",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_005851a0-all-cases.json": "e31be1356cf59993b5aa9c7257c36f2e94929967d6991b88e5834b11044f2bd6",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "8a8808dd40cbdbd54852d07ff90200068ddacc865b25006026be714312fbc553",
+      "corpus_canonical_sha256": "07a54cbbce8a477a1a35fad41e3aedfc7a87a2a7e88d2ff0ed5add9515a257a9",
+      "elapsed_seconds": 56.359,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005851a0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_005851a0-all.json",
+      "report_sha256": "56fee3ae5affc95882e6d9761ffa74a1058721771b0ec487adb6cd1a00ce1efa",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_005c0c00.json": "d9a18d1ab76beb596a14474fed91dc5fee3a53b7d5264d5539a33b8f445826bd",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_005c0c00-all-cases.json": "51bddb960e0f73cda3ca2e695b383430a8f24a788946a1b3a4abcae91b9c223e",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 218
+      },
+      "contract_canonical_sha256": "7d5e9b4b38767f7979941491544e3c8448b70c2d59f0d57bd0901e6201e0df41",
+      "corpus_canonical_sha256": "53f95f16f719aa9d9d8a63b82ba1924ac190b6eb82b85b669b5a1619438a5f6e",
+      "elapsed_seconds": 56.403,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-005c0c00",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_005c0c00-all.json",
+      "report_sha256": "f30fcb22b3ec337ce029e501bd850674b27e731960a82c9a7e8c2280d8e5f021",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 85,
+        "public": 133
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004d79c0.json": "eb59c2f781a68f57c56e46a8bfe551a1f68b4648de2d847f583f78985ff791a0",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_004d79c0-all-cases.json": "49da26d78431d40e5e2391f980ad4bc50e63e20344cbb84276745b77e92d1564",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "08d5372fa701fe054a5f6acc359a297b50d382e5f557920145bdb4145f5d7455",
+      "corpus_canonical_sha256": "98235eef4fe281a4b0e0c2618032ee3256015619649abc43fd32373f3498f749",
+      "elapsed_seconds": 150.784,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_004d79c0-all.json",
+      "report_sha256": "89fd72a8ec4f9405ece094361f457c4d9f4cd958f68c53cc923fc4d3a0ca81e4",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b6e70.json": "8accf9841ad678067251afa095e65df7c2c99d2d963f3127617faf635f27e31a",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_004b6e70-all-cases.json": "aba6e4935f0761779374f94bce1ef7510e8afcc28888014436fb321445426f4b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "4b6ba9b75b3bd7f22b3e714821050e9b83853bfc03694e4f8cc01be0ecd75449",
+      "corpus_canonical_sha256": "354bcd7a9542682d2ad8a964fc966f56d21c5721f06e727a3e5666b7a0d5230f",
+      "elapsed_seconds": 150.904,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_004b6e70-all.json",
+      "report_sha256": "0e0fc8bb26f6616c59b35d2dd99ce527d868acaaff35d7a433c752989b518482",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b65b0.json": "6db8c5b99781bd636105f52a595da1140ec8786e843a943ef4b613f5bc75e27b",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_004b65b0-all-cases.json": "32035f585005b1c56bc1b4cc1dc68b43aa0cfcd1dc2ef3ca77454d2dd64fa63b",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "00e115dab190476d4a3e7959d42812fac73bdbb5127591a00769e8151bb65370",
+      "corpus_canonical_sha256": "3ac835e7139fdc82a676aba9e6bfb1f6a56a3331c4c5cd2bd9c4554b682e7651",
+      "elapsed_seconds": 151.501,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_004b65b0-all.json",
+      "report_sha256": "f65e1f1f9ca041b318deed626dfb6958356dd8b3c36b6b8c0ee8f8c3e2250570",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_runner": "0dda253422613ced3a27a28b5bf9c6358790da32175eb90f8cd61c2b7482502a",
+        "contracts/functions/fn_004b64d0.json": "f5164741a009259319758d26eee8e248b7086b58210b709465e44e416e227d91",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/fn_004b64d0-all-cases.json": "e15d353d882b29afed3a063d659e14b9ca9ccef1855f2fde3ae4cbb8b413e894",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 576
+      },
+      "contract_canonical_sha256": "7a9b1ef66d0b73cf55f1bfe5a542eed13c57d54363b6d71b28c7ff214067de0f",
+      "corpus_canonical_sha256": "8ba1cd28904e8f93b3a9b8c0d1029b232e4ed796adad66d210f90559bf41a0dd",
+      "elapsed_seconds": 151.962,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/fn_004b64d0-all.json",
+      "report_sha256": "8bf7c32acf2401146c0444167536646f4c9b8c8411fc1835829d6002f17a8533",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 320,
+        "public": 256
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_memory_runner": "21a3fc9e96cb48f7729cc1925af7ba179bd872d860109a8e7dfbe0fd53a578ad",
+        "contracts/functions/fn_00061fa0.json": "46deb773f53463f2204f8b8347a2208cd34d811fed0af28d7aeff7282435f053",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/memory/fn_00061fa0-all-cases.json": "f6e97632297f67bdf382ffd65438ab69fc43f9b972659f8fc86a63a65f98d967",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+        "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+        "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+        "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 117
+      },
+      "contract_canonical_sha256": "8e7425197ca9a0361e39b4b5875da5c3e82fabfb9a062ec071c8186bd1a27fd8",
+      "corpus_canonical_sha256": "3f6b07554e23dedccc0e4bcdfef47e0b9afb89f82c0d5e60f505771108aae6b5",
+      "elapsed_seconds": 30.738,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/memory/fn_00061fa0-all.json",
+      "report_sha256": "6b02abb239f0e0e78b72a69f05021d53b3fe53ec50320a8efc2a5b7e88e72298",
+      "scope": "Guarded Unicorn x86 slice versus native C++; full arena and normalized return; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 80,
+        "public": 37
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_memory_runner": "21a3fc9e96cb48f7729cc1925af7ba179bd872d860109a8e7dfbe0fd53a578ad",
+        "contracts/functions/fn_0013af20.json": "3572041810771ec77340f508a885d96f2891095c659913dacd5826f7a6bae78b",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/memory/fn_0013af20-all-cases.json": "62c41fdc9679f1acced31b0ab00fa301a9d60c69cf990738c8f04616c8a762e5",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+        "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+        "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+        "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 133
+      },
+      "contract_canonical_sha256": "69fbba38266d7aaca7a56f7cd3666977b1eab55fe7ec70809d968a71e6b73562",
+      "corpus_canonical_sha256": "0789d1f266c5ca165387b0355e9374a170df30f06cae31d2df240fa392ca3bed",
+      "elapsed_seconds": 34.933,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013af20",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/memory/fn_0013af20-all.json",
+      "report_sha256": "a2a16cee2b229978a200ec18f8993d1d30384bd18bce8593215d4e7a418090b3",
+      "scope": "Guarded Unicorn x86 slice versus native C++; full arena and normalized return; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 80,
+        "public": 53
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_memory_runner": "21a3fc9e96cb48f7729cc1925af7ba179bd872d860109a8e7dfbe0fd53a578ad",
+        "contracts/functions/fn_0035bc40.json": "1f653623f54c0c6563546d914518011834311c2ac8ab2631e2f841197083fb89",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/memory/fn_0035bc40-all-cases.json": "2929c1593b2f3f2bd457bcb03012b597fda90a977da81fa51970b83e3ebe4495",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+        "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+        "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+        "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 392
+      },
+      "contract_canonical_sha256": "10e367a184118447bd91591e667b441d4022cd8aca263354a53fb6485b2a7748",
+      "corpus_canonical_sha256": "430a3fe8113e903120cd5a27d4ef35dd5f38fa23f016ca956acc709cc2f8f9ff",
+      "elapsed_seconds": 103.765,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/memory/fn_0035bc40-all.json",
+      "report_sha256": "ffe2e2f8eeffa63518475e1c57cfc7e522366e7cb4852b3e6b419c944735d599",
+      "scope": "Guarded Unicorn x86 slice versus native C++; full arena and normalized return; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 128,
+        "public": 264
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_object_counter_runner": "249a94e1488309517cab6649b4a68ddf01bb0ec130a40f214cab42e9f518b782",
+        "contracts/functions/fn_00061f40.json": "d86cc3fc47522ecfad494ed3fe802feba4d6aa22dbb67de6cc309969538af74a",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f40-all-cases.json": "55578e70b8b508595874bc25dcb0b008527858420381285f901402a0a1e3908c",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+        "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+        "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+        "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 468
+      },
+      "contract_canonical_sha256": "8d67011ae7bef4be0adb179efe9afa658d4fb586aa7d851de3a22a536036bdeb",
+      "corpus_canonical_sha256": "9a3e1b169cba842b010903e929e150b41fde16799098a461356bd21148a863f4",
+      "elapsed_seconds": 123.094,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f40-all.json",
+      "report_sha256": "30af9f17fdbb355d18bcc9e51bf3fdc6b12ce61fe6d249b1a4f80dc2435dfc92",
+      "scope": "Guarded original x86 slice versus native C++; one exact dword footprint and complete 512-byte arena; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 128,
+        "public": 340
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_object_counter_runner": "249a94e1488309517cab6649b4a68ddf01bb0ec130a40f214cab42e9f518b782",
+        "contracts/functions/fn_00061f60.json": "62defb4ec5e6dcd7ba581731910058f26cc816ef083e830f4f4313f415f5a6b6",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f60-all-cases.json": "73fce543a70f2a7764a294cd846b15b3e206bcc99c40dd668d5226cac7db3408",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+        "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+        "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+        "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 468
+      },
+      "contract_canonical_sha256": "2fd6411dbf12fe3c91d0340a3918faf25bc78a11c097bb355f30be71e953f901",
+      "corpus_canonical_sha256": "0cc004b2d8c87499d19fa6c4df8838b77e0da0d84900165d5704fa2977d726a6",
+      "elapsed_seconds": 123.213,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f60",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f60-all.json",
+      "report_sha256": "d9d3fabf5964a86c8376157829f33235b495cdeff2ed4d5eb69c9c74d91a4350",
+      "scope": "Guarded original x86 slice versus native C++; one exact dword footprint and complete 512-byte arena; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 128,
+        "public": 340
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_object_counter_runner": "249a94e1488309517cab6649b4a68ddf01bb0ec130a40f214cab42e9f518b782",
+        "contracts/functions/fn_00061f80.json": "07adbde76496592789ad0538af05aa927c4c6bd8e7e104ceabb0c4456bc31f8e",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f80-all-cases.json": "25245b4c7d6d83796debc25da1ecec44e093f8fb165fdc36e5dc5d2cb710289c",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+        "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+        "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+        "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 468
+      },
+      "contract_canonical_sha256": "955c7c324aa077a17da3ad1f48eedba567b50497623acb4539f2a25d3beb27c8",
+      "corpus_canonical_sha256": "5184c577d7dbb7022be6cbe592835f5b4b8e5d77eaa6c37943f5a2a6332e3a8a",
+      "elapsed_seconds": 123.104,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": false,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f80-all.json",
+      "report_sha256": "cc2ddb08f7fd9cdc5fa006efaebfc2ff633b8d36dceb5f860015733c7fe16aed",
+      "scope": "Guarded original x86 slice versus native C++; one exact dword footprint and complete 512-byte arena; corpus evidence only",
+      "status": "corpus_pass",
+      "suite_case_counts": {
+        "heldout": 128,
+        "public": 340
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_leaf_mutant": "7d3ddf7f6a43c74b0f9b269cc542727700c47e972d92613c1c14a73b0baeb8ec",
+        "contracts/functions/bit_mask_or_all.json": "93e1944b9b51fa9d7a926278ecce4e5177f46715e932a2d57552e9136086bb4c",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/scalar/bit_mask_or_all-mutant-cases.json": "3b01a21043c13f6bb9b6c5213f215ae958d6d82dd6b624070e4fe655654d707f",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+        "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+        "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+        "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 3,
+        "mismatch": 1
+      },
+      "contract_canonical_sha256": "e82de2bc89d5884be3c6031faf4da63e3eb28c64ef6448dce6f80964e0fd8c30",
+      "corpus_canonical_sha256": "a3bce07ac0790de0efe0748f8aff03566e04451002e49990bc63d7214ff34805",
+      "elapsed_seconds": 1.052,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000518a0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": true,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/scalar/bit_mask_or_all-mutant.json",
+      "report_sha256": "897e6c6a63ecac3fd650ed9c3f084543941a55699ebc5c1e78f5bebdc2af9f9b",
+      "scope": "Unicorn x86 original slice versus native compiled C++; corpus evidence only",
+      "status": "failed",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 0
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_memory_mutant": "4385eaec7ad5ef2f8fec93509391f39b3ee4fd059081a57e13f55e4e07dee0dc",
+        "contracts/functions/fn_00061fa0.json": "46deb773f53463f2204f8b8347a2208cd34d811fed0af28d7aeff7282435f053",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/memory/fn_00061fa0-mutant-cases.json": "04cec4bbbde2ad5383b0569773420a57944149b89ae0ee7e034e918a2ec06293",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+        "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+        "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+        "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 25,
+        "mismatch": 12
+      },
+      "contract_canonical_sha256": "8e7425197ca9a0361e39b4b5875da5c3e82fabfb9a062ec071c8186bd1a27fd8",
+      "corpus_canonical_sha256": "ca0a2ae134186d3be14d4f373beb36e616869e8932ed55f9c0c6f35982f8a8cd",
+      "elapsed_seconds": 9.809,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": true,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/memory/fn_00061fa0-mutant.json",
+      "report_sha256": "0f85956457b9d9e3dc8a073e7fcd455ded5e12224f1a319e7efce5bbbff2aae7",
+      "scope": "Guarded Unicorn x86 slice versus native C++; full arena and normalized return; corpus evidence only",
+      "status": "failed",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 37
+      }
+    },
+    {
+      "artifacts_sha256": {
+        "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+        "analysis/functions.json": "68898360578c0910ac57288caf1dc227ca5b95e4a19764539f4cb71298d03c24",
+        "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+        "build/CMakeCache.txt": "f06916d681eefc76200c1b1d21baa09755f1c85851944aeb71894efe450b6f8b",
+        "build/compile_commands.json": "118057aa50825f57f3a1ab70bdbb984ebb91bc3d1b5bba3459baf5be9f4f53a2",
+        "build/dao_object_counter_mutant": "3658602188a3990cf1f4157b00fab9df6aee1bd7c2eeb778c0500925cc5aae9f",
+        "contracts/functions/fn_00061f40.json": "d86cc3fc47522ecfad494ed3fe802feba4d6aa22dbb67de6cc309969538af74a",
+        "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+        "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+        "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+        "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+        "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+        "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+        "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+        "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f40-mutant-cases.json": "6f1dd5d1638d03af1add063f473c7eb422766e2a38daa98129c6f147bbac306e",
+        "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+        "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+        "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+        "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+        "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+        "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+        "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+        "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+        "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+        "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+        "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+        "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+        "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+        "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+      },
+      "artifacts_unchanged": true,
+      "backend_versions": {
+        "python": "3.14.7",
+        "unicorn": "2.1.4"
+      },
+      "case_counts": {
+        "corpus_pass": 335,
+        "mismatch": 5
+      },
+      "contract_canonical_sha256": "8d67011ae7bef4be0adb179efe9afa658d4fb586aa7d851de3a22a536036bdeb",
+      "corpus_canonical_sha256": "c029b042d22209d6981726bb3c63ef7647e609d055b6c873df3038619e97c391",
+      "elapsed_seconds": 90.223,
+      "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
+      "host": {
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.14.7"
+      },
+      "negative_control": true,
+      "repeats_per_side": 2,
+      "report": "reports/checkpoint-object-counters-001/reports/object-counters/fn_00061f40-mutant.json",
+      "report_sha256": "823cddd4ae26a05a4484feff7b2abc16f271d3e6ee226ccbfde931ab5a94417d",
+      "scope": "Guarded original x86 slice versus native C++; one exact dword footprint and complete 512-byte arena; corpus evidence only",
+      "status": "failed",
+      "suite_case_counts": {
+        "heldout": 0,
+        "public": 340
+      }
+    }
+  ],
+  "schema_version": 1
+}

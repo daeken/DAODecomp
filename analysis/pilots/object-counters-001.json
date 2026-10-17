@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "status": "integrated-validated",
+  "candidate_target": "src/object_counters.cpp",
+  "source": "local/pairs/object-counters-001-freeze-1-run/accepted/candidate.cpp",
+  "source_sha256": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+  "manifest": "local/pairs/object-counters-001-freeze-1-run/manifest.json",
+  "manifest_canonical_json_sha256": "954dcdbe35465a67e9cac1abe0d4695dfda14450ad67fd0f88c87fb19ce4f37f",
+  "manifest_raw_file_sha256": "c43765b0338e6c629ac04b4c6abf08abaff73fa004736cd544cd12a0a74dc0a8",
+  "acceptance_review": "local/pilots/object-counters-001-review/acceptance-review.json",
+  "candidate_review": "local/pairs/object-counters-001-freeze-1-run/review-response.json",
+  "candidate_review_decision": "approve",
+  "candidate_review_raw_sha256": "60ff27fafbbc26eb6c4629b749d9b4d96dcad8ec1656367e859298ea048c8427",
+  "status_path": "local/pairs/object-counters-001-freeze-1-run/status.json",
+  "frozen_registry": "local/pairs/object-counters-001-freeze-1-run/frozen/analysis/functions.json",
+  "frozen_registry_raw_sha256": "1a250368969fc94c719c54dc87224f5a57e3d0a5f2d93a7e4b21c0d58a301769",
+  "pipeline_request_count": 3,
+  "maximum_pipeline_requests": 4,
+  "requests": [
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-1/model/request/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-1/model/request/response.json",
+        "-"
+      ],
+      "elapsed_seconds": 8.115,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "implementation",
+      "outer": {
+        "argv": [
+          "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/frozen/tools/run_model_packet.py",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-1/model/prompt.txt",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-1/model/request",
+          "--model",
+          "gpt-6-luna",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp",
+        "elapsed_seconds": 8.196,
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 195
+      },
+      "output_exists": true,
+      "packet_sha256": "e53f52119ade5c9898d3fcb35254f91800eb60cb316655c6de1287fe7b905074",
+      "prompt_sha256": "e53f52119ade5c9898d3fcb35254f91800eb60cb316655c6de1287fe7b905074",
+      "reasoning_effort": "medium",
+      "requested_model": "gpt-6-luna",
+      "reused": false,
+      "schema_version": 1,
+      "timed_out": false,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 23246,
+          "output_tokens": 635,
+          "reasoning_output_tokens": 0
+        }
+      ]
+    },
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-2/model/request/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-2/model/request/response.json",
+        "-"
+      ],
+      "elapsed_seconds": 8.451,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "implementation",
+      "outer": {
+        "argv": [
+          "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/frozen/tools/run_model_packet.py",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-2/model/prompt.txt",
+          "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/attempt-2/model/request",
+          "--model",
+          "gpt-6-luna",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp",
+        "elapsed_seconds": 8.51,
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 195
+      },
+      "output_exists": true,
+      "packet_sha256": "23e8ab793b7648818301c96f1d4d567a8bcac2d55493288b2f61ac20912dd83d",
+      "prompt_sha256": "23e8ab793b7648818301c96f1d4d567a8bcac2d55493288b2f61ac20912dd83d",
+      "reasoning_effort": "medium",
+      "requested_model": "gpt-6-luna",
+      "reused": false,
+      "schema_version": 1,
+      "timed_out": false,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 31585,
+          "output_tokens": 736,
+          "reasoning_output_tokens": 117
+        }
+      ]
+    },
+    {
+      "argv": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6.1-sol",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--skip-git-repo-check",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/review/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/review/response.json",
+        "-"
+      ],
+      "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/object-counters-001-freeze-1-run/review/empty-workspace",
+      "elapsed_seconds": 19.431,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "review",
+      "prompt_sha256": "2da528444c9b9df3bd00e7defed85a8a648d2158057faf28078bcdad11195cc0",
+      "requested_model": "gpt-6.1-sol",
+      "reused": false,
+      "timed_out": false,
+      "timeout_seconds": 180,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 76093,
+          "output_tokens": 796,
+          "reasoning_output_tokens": 144
+        }
+      ]
+    }
+  ],
+  "reported_usage_sum": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 130924,
+    "output_tokens": 2167,
+    "reasoning_output_tokens": 261
+  },
+  "model_request_elapsed_seconds_sum": 35.997,
+  "pipeline_elapsed_seconds": 382.738,
+  "infrastructure_assignments": {
+    "count": 5,
+    "agent_count": 3,
+    "usage": null,
+    "usage_status": "unavailable; not estimated",
+    "scope": "Infrastructure assignments include adapter/checkpoint, acceptance review, packet preparation, ignored dependency design, and independent ignored design review."
+  },
+  "accounting_note": "Pipeline CLI-reported worker usage only. Infrastructure-agent and coordinator usage/account charges are unavailable and not estimated. Cache/reasoning fields retain CLI semantics and are not additive billing totals.",
+  "accepted_game_case_counts": {
+    "public": {
+      "fn_00061f40": {
+        "corpus_pass": 340
+      },
+      "fn_00061f60": {
+        "corpus_pass": 340
+      },
+      "fn_00061f80": {
+        "corpus_pass": 340
+      }
+    },
+    "heldout": {
+      "fn_00061f40": {
+        "corpus_pass": 128
+      },
+      "fn_00061f60": {
+        "corpus_pass": 128
+      },
+      "fn_00061f80": {
+        "corpus_pass": 128
+      }
+    },
+    "negative": {
+      "fn_00061f40": {
+        "corpus_pass": 335,
+        "mismatch": 5
+      }
+    }
+  },
+  "positive_game_case_count": 1404,
+  "failed_proposals": [
+    {
+      "attempt": 1,
+      "public_counts": {
+        "fn_00061f40": {
+          "corpus_pass": 335,
+          "mismatch": 5
+        },
+        "fn_00061f60": {
+          "corpus_pass": 340
+        },
+        "fn_00061f80": {
+          "corpus_pass": 340
+        }
+      },
+      "failure": "D0 sentinel stored1 incorrectly returned1 instead of original full EAX FFFFFFFF; automatic public-only repair."
+    }
+  ],
+  "integration_plan": {
+    "expected_registry_changes": {
+      "fn_00061f40": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      },
+      "fn_00061f60": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      },
+      "fn_00061f80": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      }
+    },
+    "all_other_contract_abi_identity_fields": "unchanged",
+    "owner": "root coordinator; not applied by this worker"
+  },
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "orchestrator_startup_sha256": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+  "preparation_helper_raw_sha256": "ddc4b114ebb77adfef8b7c6a7657af34992daadd0813858b0cdd84f12fd28ab2",
+  "scope": "Frozen ordinary initialized 512-byte arena; object0..128; full EAX and all arena bytes; C++ source mapping only, no x86 ABI bridge.",
+  "native_windows_validated": false,
+  "proof": false,
+  "coordinator_integration": {
+    "status": "reported integrated exact source and three status-only registry promotions; full checkpoint running",
+    "transition_record": "local/pairs/object-counters-001-freeze-1-run/integration-transition.json",
+    "transition_record_raw_sha256": "12de1ea55fc649e78f2a4d934b0ac45317c386395bc78779882e054cd69623da",
+    "checkpoint_directory": "reports/checkpoint-object-counters-001",
+    "validation_record_target": "analysis/validation/object-counters-001.json",
+    "checkpoint_result": "pending coordinator"
+  },
+  "model_requests_closed": true,
+  "local_summary_sha256": "df2a2d0c1c743f23f6ba51440d90c96d4dad0f6dcbc8ae9652f22b97a8a1c35d",
+  "integration_evidence": "analysis/validation/object-counters-001.json",
+  "checkpoint": {
+    "path": "reports/checkpoint-object-counters-001/checkpoint.json",
+    "sha256": "4fcfb346d031aeb4bcd5a72d19f5f8d573793b83c9b3c38e2d780d0a994f866e",
+    "status": "passed",
+    "functions": 16,
+    "game_input_cases": 5562,
+    "tooling_tests": 95,
+    "elapsed_seconds": 608.017,
+    "proof": false,
+    "native_windows_validated": false
+  }
+}

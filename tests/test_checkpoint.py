@@ -25,6 +25,9 @@ class CheckpointTests(unittest.TestCase):
             {"name": "bit_mask_or_all", "status": "implemented", "backend": "scalar"},
             {"name": "scalar_other", "status": "implemented", "backend": "scalar"},
             {"name": "fn_00061fa0", "status": "implemented", "backend": "memory-001"},
+            {"name": "fn_00061f40", "status": "implemented", "backend": "object-counters-001"},
+            {"name": "fn_00061f60", "status": "implemented", "backend": "object-counters-001"},
+            {"name": "fn_00061f80", "status": "implemented", "backend": "object-counters-001"},
         ]
         (self.root / "analysis/functions.json").write_text(json.dumps({"functions": functions}))
         self.patcher = patch.object(checkpoint, "ROOT", self.root)
@@ -62,11 +65,32 @@ class CheckpointTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported validation backend.*future_impl"):
             checkpoint.publication_paths(self.output)
 
+    def test_object_counter_backend_has_full_and_negative_checkpoint_paths(self):
+        positives, negatives = checkpoint.publication_paths(self.output)
+        self.assertEqual([path.name for path in positives if "object-counters" in str(path)], [
+            "fn_00061f40-all.json", "fn_00061f60-all.json", "fn_00061f80-all.json"])
+        self.assertIn("fn_00061f40-mutant.json", [path.name for path in negatives])
+
+    def test_contracted_object_counter_functions_do_not_require_publication_yet(self):
+        path = self.root / "analysis/functions.json"
+        registry = json.loads(path.read_text())
+        for function in registry["functions"]:
+            if function.get("backend") == "object-counters-001":
+                function["status"] = "contracted"
+        path.write_text(json.dumps(registry))
+        positives, negatives = checkpoint.publication_paths(self.output)
+        self.assertFalse(any("object-counters" in str(report) for report in positives))
+        self.assertEqual(len(negatives), 2)
+
     def test_argv_construction_caps_parallelism_and_rejects_windows(self):
         steps = checkpoint.build_commands(self.root / "build", self.output, 3, windows=False)
         by_name = {name: argv for name, argv, _ in steps}
         self.assertIsInstance(by_name["scalar_all"], list)
         self.assertEqual(by_name["scalar_all"][by_name["scalar_all"].index("--jobs") + 1], "3")
+        self.assertIn("object_counters_all", by_name)
+        self.assertIn("object_counters_negative", by_name)
+        self.assertIn("--suite", by_name["object_counters_all"])
+        self.assertEqual(by_name["object_counters_all"][by_name["object_counters_all"].index("--suite") + 1], "all")
         with self.assertRaisesRegex(ValueError, "unavailable on Windows"):
             checkpoint.build_commands(self.root / "build", self.output, 2, windows=True)
 

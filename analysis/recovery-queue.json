@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "memory-001 integrated and full automatic checkpoint passed: 13 functions, 4158 emulator cases, tooling/build/synthetic checks and both game negative controls. Evidence: analysis/validation/memory-001.json.",
+  "checkpoint": "Object counters integrated and full automatic checkpoint passed: 16 functions, 5562 emulator cases, 95 tooling tests, build/CTest/synthetic checks and three game negative controls. Evidence: analysis/validation/object-counters-001.json.",
   "active_group": "object-fields-001",
   "groups": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "id": "object-fields-001",
-      "status": "characterized_pending_backend",
+      "status": "counters_integrated_indexed_pending",
       "rvas": [
         "0x00061f40",
         "0x00061f60",
@@ -32,15 +32,29 @@
         "0x00347d50"
       ],
       "scope": "Conditional object-field counters and indexed stores",
-      "next_action": "Start with the three counter functions using the independently prepared handoff and proposed packet. Build/review a separate larger-arena adapter without changing memory-001 contracts. Then use paired automatic implementation and review gates.",
+      "next_action": "Prepare/review exact byte/word GuestMemory stores and a separate indexed-store adapter using the characterized fixtures. Preserve full incoming-EAX return relation and explicitly justify/check caller-dependent ECX mapping. Freeze acceptance before paired implementation; keep counter/memory-001 contracts unchanged.",
       "handoff": "local/pilots/object-fields-001/handoff.md",
       "proposed_packets": "local/pilots/object-fields-001/proposed-packets.json",
       "characterization": "local/pilots/object-fields-001/characterization.json",
       "observations": "4268 original-only states plus 41 register probes; no candidate accepted.",
       "backend_gaps": [
-        "Counter fields need an arena larger than 128 bytes.",
-        "Indexed setters need byte/word writes and an explicit incoming-EAX relation if full return bits are retained; callers reuse ECX."
-      ]
+        "Indexed setters need exact byte/word writes and an explicit incoming-EAX relation if full return bits are retained; callers reuse ECX."
+      ],
+      "counter_backend": "object-counters-001",
+      "counter_review": "analysis/reviews/object-counters-001-contract.json",
+      "counter_pipeline": "local/pairs/object-counters-001-freeze-1-run/status.json",
+      "counter_source_review": "analysis/reviews/object-counters-001-source.json",
+      "counter_worker_measurements": "analysis/pilots/object-counters-001.json",
+      "completed_rvas": [
+        "0x00061f40",
+        "0x00061f60",
+        "0x00061f80"
+      ],
+      "remaining_rvas": [
+        "0x00347d10",
+        "0x00347d50"
+      ],
+      "counter_validation_record": "analysis/validation/object-counters-001.json"
     },
     {
       "id": "linked-structures-001",
@@ -56,9 +70,20 @@
   "infrastructure_backlog": [
     {
       "id": "evidence-dependency-scope",
-      "status": "queued",
+      "status": "audit_only_design_reviewed",
       "reason": "Whole-registry/CMake/all-source hashes currently invalidate all prior corpus records on every addition; complete checkpoint reruns will become expensive as recovery grows.",
-      "next_action": "Design per-function build and acceptance dependency manifests with strict invalidation tests, preserving hashes of every input that can affect compiled behavior; do not merely omit dependencies to keep counts high."
+      "next_action": "Implement a non-counting object-counter shadow audit first, preserving all v1 hashes/counts and forbidding backfill. Narrow reuse is not approved: address complete name/pilot/dispatch registry projection, tracked build closure, runtime package resolution, and absent/search/input-set dependencies, with adversarial staged-snapshot tests.",
+      "design": "local/pilots/evidence-dependencies-001/design.md",
+      "structured_design": "local/pilots/evidence-dependencies-001/design.json",
+      "design_sha256": "95127a9945670bec3f3606a08f599bd817dd5f0c1359262cfe15a565f1104791",
+      "design_review": "local/pilots/evidence-dependencies-001/review.json"
+    },
+    {
+      "id": "paired-prompt-deduplication",
+      "status": "measured_pending_implementation_review",
+      "evidence": "local/pairs/object-counters-001-prompt-sizes.json",
+      "reason": "Counter reviewer prompt contains 188273 bytes; repeated per-report artifact maps contribute 39903 bytes. Repair also resends execution provenance unrelated to candidate source repair.",
+      "next_action": "Deduplicate identical provenance with explicit references while retaining every binding/hash domain, compiler/ABI evidence and full durable reports. Keep repair feedback public-only, complete counterexamples and pass/fail identities; make passing-function preservation generic. Test that no evidence or negative-gate requirement is lost. This is a presentation optimization, not permission to narrow acceptance."
     }
   ],
   "blockers": []

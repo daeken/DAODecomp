@@ -404,6 +404,89 @@
         3537824
       ],
       "backend": "memory-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
+      "name": "fn_00061f40",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401216,
+      "size": 32,
+      "code_sha256": "fb22ba1157fd14fd4d4f2250729944c077da4092d0fbbd8a4b815478859a5db4",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f40.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        414075,
+        414919
+      ],
+      "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f60",
+      "name": "fn_00061f60",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401248,
+      "size": 26,
+      "code_sha256": "789b6ea8256ea177d4f13dc70e374e290fc68632370097b07e0a52d07619f311",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f60.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        4069209,
+        4080284
+      ],
+      "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
+      "name": "fn_00061f80",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401280,
+      "size": 26,
+      "code_sha256": "89c51ca7ed65c7bbaea742aa1b96ac85033b34744c5c20a82e4cdf71ebb58147",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f80.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        402284
+      ],
+      "backend": "object-counters-001"
     }
   ]
 }

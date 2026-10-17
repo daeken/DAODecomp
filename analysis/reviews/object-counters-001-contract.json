@@ -1,0 +1,221 @@
+{
+  "adapter_and_fixture_findings": [
+    "Python fixture rejects offsets outside0..128, booleans, wrong keys, wrong length/case/nonhex data and unknown functions. Native adapter validates the same domain before constructing one exact MemoryRange.",
+    "No pointer normalization discards return bits: results remain u32 EAX. Complete512-byte serialization includes all surrounding canaries and neighboring fields. GuestMemory retains unaligned little-endian access with checked defined unsigned operations.",
+    "Actual original adapter maps ECX to guest arena+object, supplies no stack arguments and requires cleanup0 through the existing strict guarded executor. Errors/budgets/illegal access remain failures.",
+    "The six generated340public/128held-out suites exactly equal the independently characterized saved inputs. They cover five object offsets, sentinel/wrap/sign/bit boundaries and deterministic changing canaries; they are finite corpus coverage.",
+    "D0 negative uses exactly the full340public corpus. Mutation preserves candidate memory and replaces only the oldFFFFFFFF return with1. The five public sentinel cases have observed original EAXFFFFFFFF and stored1, so that mutation is detectable at return alone. This is supported by original/software-observation probes; compiled candidate/mutant gate execution remains future work.",
+    "Validator records original binary/executable/generated corpus/contracts/registry/CMake/cache/compile metadata/backend/helper/PE/header/source dependencies, exact repeated comparisons, host and backend versions. Public/heldout/all/mutant output names match the reviewed preparation declarations.",
+    "Checkpoint extension enumerates all three implemented counter positives and the D0 negative, keeps contracted entries unpublished, and still rejects unsupported implemented backends. Whole checkpoint cannot pass with unresolved placeholder definitions, as expected.",
+    "Preparation helper checks reviewed hashes before freezing, verifies original identities and exact source fixtures, and preserves separate public/heldout paths. Its implementation packet supplies only public register probes; full held-out cases are reserved for deterministic gates. No freeze/model request was executed by this reviewer.",
+    "Final preparation-only evidence additions expose the frozen case generator and comparator to the separate candidate reviewer; implementation packet still excludes held-out cases. Final helper hash rechecked after those additions."
+  ],
+  "candidate_accepted": false,
+  "candidate_executed": false,
+  "candidate_reviewed": false,
+  "compiled_negative_control_executed": false,
+  "decision": "approved_for_current_bounded_domain",
+  "domain": {
+    "arena_size": 512,
+    "control": "normal return only, no calls/globals/relocations/stack writes",
+    "initial_field_value": "any u32",
+    "memory": "initialized ordinary single-threaded RAM; any byte alignment; separate private stack; DF clear",
+    "object_max": 128,
+    "object_min": 0,
+    "observation": "full EAX plus every arena byte; exact field footprint; stack/nonvolatile/DF obligations"
+  },
+  "executed_checks": [
+    {
+      "command": ".venv/bin/python local/pilots/object-counters-001-review/original_probe.py",
+      "result": "3870 original-only states: all129object offsets x10listed initial words x3functions, plus36repeat executions; full EAX/wholearena and exact guarded footprints agree with instruction-derived behavior"
+    },
+    {
+      "command": ".venv/bin/python local/pilots/object-counters-001-review/protocol_probe.py",
+      "result": "45selected public cases through actual original protocol adapter, twice each in90fresh processes; all stable; five D0 software return mutations differ only at $.return"
+    },
+    {
+      "command": "c++ -std=c++20 -Wall -Wextra -Wpedantic -Werror -Iinclude -fsyntax-only validation/object_counter_native_runner.cpp",
+      "result": "passed"
+    },
+    {
+      "command": "c++ -std=c++20 -Wall -Wextra -Wpedantic -Werror -DDAO_OBJECT_COUNTER_MUTANT=1 -Iinclude -fsyntax-only validation/object_counter_native_runner.cpp",
+      "result": "passed"
+    },
+    {
+      "command": ".venv/bin/python -m unittest tests.test_object_counters tests.test_checkpoint -v",
+      "result": "20passed; no skips"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "result": "95passed; no skips"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "95ran,20optional Unicorn skips; all remaining passed"
+    }
+  ],
+  "findings": [],
+  "functions": [
+    {
+      "argument": "ECX=arena_base+object; no stack arguments",
+      "code_sha256": "fb22ba1157fd14fd4d4f2250729944c077da4092d0fbbd8a4b815478859a5db4",
+      "corpora": {
+        "heldout": {
+          "canonical_json_sha256": "151e09dc74446d1dbc967a1e62f5b4f6202e427667a29468b6aeda18f9425cd2",
+          "count": 128,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f40-heldout-proposed.json"
+        },
+        "public": {
+          "canonical_json_sha256": "c029b042d22209d6981726bb3c63ef7647e609d055b6c873df3038619e97c391",
+          "count": 340,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f40-public-proposed.json"
+        }
+      },
+      "field_offset": 208,
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
+      "memory_observation": "all512bytes",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_00061f40",
+      "precise_readable_writable": "one four-byte word at object+field_offset",
+      "return_observation": "all EAX bits",
+      "rva": 401216,
+      "size": 32,
+      "stack_cleanup": 0
+    },
+    {
+      "argument": "ECX=arena_base+object; no stack arguments",
+      "code_sha256": "789b6ea8256ea177d4f13dc70e374e290fc68632370097b07e0a52d07619f311",
+      "corpora": {
+        "heldout": {
+          "canonical_json_sha256": "19d7cf0485a1a99e6e8232cef84c4325f942bb6ede43cfe355e8f45dc65d18b9",
+          "count": 128,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f60-heldout-proposed.json"
+        },
+        "public": {
+          "canonical_json_sha256": "4c7b743ca6348d16bf7f92eb95e57647f3ec40c433a17d5e34a8bb2152b11eb7",
+          "count": 340,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f60-public-proposed.json"
+        }
+      },
+      "field_offset": 212,
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f60",
+      "memory_observation": "all512bytes",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_00061f60",
+      "precise_readable_writable": "one four-byte word at object+field_offset",
+      "return_observation": "all EAX bits",
+      "rva": 401248,
+      "size": 26,
+      "stack_cleanup": 0
+    },
+    {
+      "argument": "ECX=arena_base+object; no stack arguments",
+      "code_sha256": "89c51ca7ed65c7bbaea742aa1b96ac85033b34744c5c20a82e4cdf71ebb58147",
+      "corpora": {
+        "heldout": {
+          "canonical_json_sha256": "01a4fb629b8a6fa5f3c526c994b94dab33582390246b729e00be8ecf74c4bdf2",
+          "count": 128,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f80-heldout-proposed.json"
+        },
+        "public": {
+          "canonical_json_sha256": "31cfdda87169c96aafee76cdf9e28f00bdbafa56b8b58d96bd813d18cdde4a39",
+          "count": 340,
+          "reviewed_raw_fixture_path": "local/pilots/object-fields-001/fn_00061f80-public-proposed.json"
+        }
+      },
+      "field_offset": 216,
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
+      "memory_observation": "all512bytes",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_00061f80",
+      "precise_readable_writable": "one four-byte word at object+field_offset",
+      "return_observation": "all EAX bits",
+      "rva": 401280,
+      "size": 26,
+      "stack_cleanup": 0
+    }
+  ],
+  "group": "object-counters-001",
+  "host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "unicorn": "2.1.4"
+  },
+  "native_windows_validated": false,
+  "original_instruction_findings": [
+    "Pinned module hash, contiguous32/26/26byte slices and code hashes reverified directly from original PE. Fresh Capstone covers all bytes and LLVM output bytes exactly agree. No overlapping PE base relocations.",
+    "All five inventory direct-call opcodes independently rechecked against actual original bytes. Both D0 callsites unwind and return immediately after the call without overwriting EAX; their owning function identities remain unknown in the inventory.",
+    "D0 compares old with unsigned FFFFFFFF before adding. At old=FFFFFFFF it writes1 and leaves EAX=FFFFFFFF; at old=FFFFFFFE it writes/returnsFFFFFFFF.",
+    "D4/D8 add1 modulo2^32, then replace resultingFFFFFFFF with1. Thus old=FFFFFFFE writes/returns1 and old=FFFFFFFF writes/returns0.",
+    "Instructions need only ECX input and one ordinary four-byte field. Other entry volatile registers/flags do not influence the declared result; nonvolatile registers and DF remain obligations."
+  ],
+  "proof": false,
+  "resolved_findings": [
+    {
+      "evidence": "Independent c++ -fsyntax-only compile failed with unused-variable old at draft line54.",
+      "issue": "The in-progress normal native adapter had an unconditional old-field variable used only under the mutant macro, which failed -Werror unused-variable independently of the expected absent candidate symbols.",
+      "location": "validation/object_counter_native_runner.cpp (mutant pre-read)",
+      "resolution": "Helper and old-value pre-read are now guarded by DAO_OBJECT_COUNTER_MUTANT; both final macro configurations pass strict C++20 syntax checks.",
+      "severity": "P2"
+    }
+  ],
+  "review_kind": "independent pre-dispatch acceptance-system review",
+  "reviewed_artifacts_sha256": {
+    "CMakeLists.txt": "56df1f028c2c4feffc7e2820b1fb4c5472628dfbfd2a4e2ed4273777995a4586",
+    "analysis/functions.json": "1a250368969fc94c719c54dc87224f5a57e3d0a5f2d93a7e4b21c0d58a301769",
+    "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+    "contracts/functions/fn_00061f40.json": "d86cc3fc47522ecfad494ed3fe802feba4d6aa22dbb67de6cc309969538af74a",
+    "contracts/functions/fn_00061f60.json": "62defb4ec5e6dcd7ba581731910058f26cc816ef083e830f4f4313f415f5a6b6",
+    "contracts/functions/fn_00061f80.json": "07adbde76496592789ad0538af05aa927c4c6bd8e7e104ceabb0c4456bc31f8e",
+    "include/dao/guest_memory.hpp": "f0aaf05c97449be2973f9124038c36a77eeee2c373066f5d9e6acf9dd9c3fb4b",
+    "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+    "local/pairs/object-counters-001-prepare.py": "ddc4b114ebb77adfef8b7c6a7657af34992daadd0813858b0cdd84f12fd28ab2",
+    "local/pilots/object-fields-001/characterization.json": "dd03ddad08e6d9fa60bda7d21fe09dc42e55b13b249ea2fa6786f410fa015c4c",
+    "local/pilots/object-fields-001/fn_00061f40-heldout-proposed.json": "974f24047e364014b4f8a31e2c73827c8bdea8003e6f74e7c88fa7fed2b4314c",
+    "local/pilots/object-fields-001/fn_00061f40-llvm.txt": "b5b847959494fec91654bcc337d8a58967f36e079de863b4e616f10796ecb146",
+    "local/pilots/object-fields-001/fn_00061f40-public-proposed.json": "6f1dd5d1638d03af1add063f473c7eb422766e2a38daa98129c6f147bbac306e",
+    "local/pilots/object-fields-001/fn_00061f60-heldout-proposed.json": "e7132d179071a5f4397e685b73844c5845dc9f57a0e42779d5b363016967ff37",
+    "local/pilots/object-fields-001/fn_00061f60-llvm.txt": "f73c9399b2b2787ec992721fb0836894711d55bfa91ecefe29a5a382dc508015",
+    "local/pilots/object-fields-001/fn_00061f60-public-proposed.json": "d46e439cd7a460325005cad6970e4af6cbc51f9a11752df7611e3274075b839a",
+    "local/pilots/object-fields-001/fn_00061f80-heldout-proposed.json": "0a30f7c0b2ee13ad29d30421a573622342e7d8fc043a79bd06acc4e413da88ac",
+    "local/pilots/object-fields-001/fn_00061f80-llvm.txt": "8cc628779cb901337739d5f7df2278fba0589e59f71dc2d508bdf65300bce367",
+    "local/pilots/object-fields-001/fn_00061f80-public-proposed.json": "8e0047ac2872b9dd8877794b2223e2ab28560acfe95c552d8fcd91a4a2383aba",
+    "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+    "tests/test_checkpoint.py": "91602c23feaacf8bf61a59ede66aeedcfada63100f81901ea9f74f8fe455df3c",
+    "tests/test_object_counters.py": "d6483f7b599dc4ab63ce5373b2abc0bab490b605ac9cafd9b55d00e7552372f0",
+    "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "tools/daodecomp/memory.py": "639e4903a062f2db5ba00e82847eff13a92315ba8e303f52a93f6820ed8cb15e",
+    "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+    "tools/run_model_packet.py": "996146000ac97a4dfd842bc42bcb21e89125f83cf2dd4eb8bed6a74396ec14ce",
+    "tools/run_recovery_pair.py": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+    "tools/validate_checkpoint.py": "e28bf0c44d85e5f17053c1f96ec5ea9a66bdcdf8df8b44aaf66dede619aca640",
+    "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+    "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+    "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+    "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+  },
+  "reviewer": "memory_contract_review",
+  "schema_version": 1,
+  "scope_limits": [
+    "Approval is for these exact acceptance artifacts and the stated bounded ordinary-memory domain, not a candidate implementation, complete domain equivalence, recovered class definition or game integration.",
+    "Measurements actually ran on macOS ARM64 using Unicorn for original x86 slices. No native Windows reference execution or full Windows checkpoint result is claimed.",
+    "Candidate source is deliberately an empty placeholder and is excluded from reviewed artifact hashes. No candidate link/build/run, actual compiled game negative-control run, or implementation/source approval occurred here.",
+    "After freezing, implementation must pass the automatic build/public/heldout/full-public-negative gates before a separate pipeline model reviews source. Required actual CMake/synthetic/complete checkpoint execution remains part of those later gates.",
+    "Only normal returns, defined ordinary RAM, no wrapping guest addresses and the specified arena/object range are included. Concurrent/MMIO/faulting/null/exception states and future binary ABI bridge register relations remain excluded.",
+    "A later acceptance-file change requires a new or refreshed independent review. Fixture copy paths generated by preparation are allowed only when raw bytes match the reviewed source fixture hashes."
+  ],
+  "supplementary_local_evidence_sha256": {
+    "local/pilots/object-counters-001-review/original-probes.json": "3a130b23e12479d47d5564f37453a3f8582a5e6e7ca195502f3f44fd1a47642d",
+    "local/pilots/object-counters-001-review/original_probe.py": "471783d8b8822a00cb4c9e163172aa174dc83526572a7e027ce4d53b6478dfb6",
+    "local/pilots/object-counters-001-review/protocol-probes.json": "f7b3428b01dd33091b51360188c352e749a525fe9262bf6170431d04b354999c",
+    "local/pilots/object-counters-001-review/protocol_probe.py": "f4563c86d04f7f81d9f4dacebcc89efc81ee3587eefb9032fb6d5343bddb0595"
+  },
+  "timestamp_utc": "2026-10-17T17:46:41.665289+00:00",
+  "local_report_sha256": "41f57fcf82f861a6c3dc227ec732199cc6b22981152c7770ddd121bda6b7cfea",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reviewer_reasoning_effort": "high"
+}

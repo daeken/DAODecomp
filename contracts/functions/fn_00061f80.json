@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
+  "inputs": {
+    "arena": "bytes",
+    "object": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512
+  },
+  "calls": [],
+  "preconditions": "A 512-byte initialized ordinary RAM allocation mapped at guest 0x02000000; object is an offset in [0,128], with any byte alignment. ECX = allocation base + object. No stack arguments and callee cleanup is zero. Only the four bytes at object+0xd8 may be read or written; all 512 bytes are observed afterward. Any u32 initial field value is allowed. Observe all EAX bits, including any difference between stored value and return. Private valid stack, DF clear, normal return only; nonvolatile registers must be preserved. No calls, globals, relocations, stack writes, concurrency, MMIO, exceptions or faulting/null objects. Other flags and volatile registers are excluded by this high-level function boundary; a future binary ABI bridge must separately preserve any caller-dependent register relation. This arena and offset are an explicit fixture domain, not a recovered complete class layout."
+}

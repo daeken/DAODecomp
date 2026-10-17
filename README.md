@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 13 |
-| C++ implementations | 13 |
-| Implementations with current emulator corpus evidence | 13 |
-| Input cases across those functions (excluding repeat runs) | 4,158 |
+| Functions in the recovery registry | 16 |
+| C++ implementations | 16 |
+| Implementations with current emulator corpus evidence | 16 |
+| Input cases across those functions (excluding repeat runs) | 5,562 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -49,6 +49,8 @@ After building and installing the dependencies below, with the original game at
 .venv/bin/python validation/validate_leaves.py --expect-mismatch
 .venv/bin/python validation/validate_memory.py --suite all --jobs 3
 .venv/bin/python validation/validate_memory.py --expect-mismatch
+.venv/bin/python validation/validate_object_counters.py --suite all --jobs 3
+.venv/bin/python validation/validate_object_counters.py --expect-mismatch
 ```
 
 The runner verifies binary/slice hashes and executes the registered arithmetic and
@@ -69,6 +71,10 @@ normalized pointer returns, unaligned accesses, and overlapping source/destinati
 ranges. Reads and writes outside the declared footprint fail. Its negative control
 uses an intentionally wrong snapshot copy that loses sequential overlap effects.
 See the [memory recovery record](analysis/memory-001.md).
+
+The object-counter adapter uses separate 512-byte allocations and checks exact
+field footprints, wraparound and sentinel return values. See the
+[object-counter recovery record](analysis/object-counters-001.md).
 
 ## Run the demonstration
 
