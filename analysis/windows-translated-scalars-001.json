@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "status": "reviewed-private-proposal-protocol-integration-pending",
+  "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+  "baseline_commit": "14be457c918da7ddcd39be9080dbb3364215312d",
+  "function_count": 10,
+  "positive_case_count": 3516,
+  "repeats": 2,
+  "original_process_count": 7032,
+  "candidate_process_count": 7032,
+  "elapsed_seconds": 394.753,
+  "architecture": {
+    "os": "Windows11ARM64",
+    "original_process_machine": "0x014c",
+    "native_os_machine": "0xaa64",
+    "candidate_machine": "0x8664",
+    "execution": "Windows ARM64 translation; no native x86 hardware"
+  },
+  "compiler": "MSVC 19.44.35229.0; Hostarm64/x86; /O2 /MT /std:c++20 /EHsc /Zi; linker /MACHINE:X86 /NXCOMPAT /DYNAMICBASE",
+  "source_hashes": {
+    "bridge.cpp": "4e3dbc27cc2134df09ba25c02d857353b5753ff531df8f0cdba59b8d03aa49a4",
+    "manifest.hpp": "4fb7b774ca07a104c346528cb73638fbb6365bc9172b82b378e5a4ec99874f40",
+    "manifest.json": "9e51f627430f814b105ff21f433ac165214e67b66903015e1b4a7aa1e9722e45",
+    "prepare.py": "1e4e87a8c7d5a5574e2a028c47fbe4867e92ea6dacf3d30d5514038451f3c374",
+    "run.py": "131338e75dc954a4999915d5280c2e9f80b1578950f541bb504fbe9db9eb83a9",
+    "extras.py": "42e99d297f0d3c8136a90bfed4445c7b0000a65139caa3873f154064a9216577",
+    "setup.ps1": "e6d0630c08a9e8e3c193fad8cfa08bedc4d1031606ca8edb5a7f2822ca3d8d59",
+    "start.ps1": "f26ef709de5c0b9ddb5e6a76b609a30223c5515bb2d0722f89f87e2d053737ed",
+    "checkpoint.ps1": "3494a05c9f61a0f5b53e39f4a9eb6a95b2b49922d4ee5cce162a5c1322da239e",
+    "vm.py": "b53af1988aadf402a849d215cf8afc8e0ad83d96a36eff753911d1db3d97b874",
+    "collect.py": "1a0af816a5f1308eaf3b86f678dd73a955c253fdc99fc19785678f7994f80e1c"
+  },
+  "bridge_sha256": "98a1a37e670bc041a4695ad88e19580a9ec965e3d87599378b17fc6177248012",
+  "report_sha256": "d4e59c15576d9e823f4bff27b22182713d0daef5cea7653c4b13ca7766a8bd2b",
+  "controls": {
+    "rejection_controls_passed": 8,
+    "behavioral_mutation_mismatches": 4,
+    "details": "guest-captures/controls.json; guest-captures/extra-provenance.json"
+  },
+  "isolated_windows_checkpoint": {
+    "host": "Windows 11 ARM64 guest; newly built Win32 baseline C++ executables under x86 translation",
+    "unit_tests": "120 tests OK, 2 skipped for absent default-location private fixtures",
+    "cmake_configure_exit": 0,
+    "cmake_build_exit": 0,
+    "ctest": "2/2 passed",
+    "synthetic_positive": {
+      "corpus_pass": 59,
+      "exit": 0
+    },
+    "synthetic_negative": {
+      "corpus_pass": 53,
+      "mismatch": 6,
+      "exit": 0
+    }
+  },
+  "review": "analysis/reviews/windows-translated-scalars-001.json",
+  "review_sha256": "f0df9b95070b066b1bac9fd98c84461b57d7405faefcf3529063cdc34c92bf68",
+  "private_handoff": "local/windows-native-proposal/handoff.json",
+  "private_handoff_sha256": "c0a930ec4cdb0a797e767d60372d6bbad99effbe0dcc799a95bfaee2aa660fac",
+  "worker_assignments": {
+    "preparation": {
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "count": 1,
+      "usage": null
+    },
+    "independent_review": {
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "count": 1,
+      "usage": null
+    }
+  },
+  "limitations": [
+    "No native x86 hardware observation.",
+    "No universal function-equivalence or whole-game proof.",
+    "No full corpus replay by reviewer.",
+    "Guest checkpoint results inspected from hash-bound retained logs, not independently rerun.",
+    "Initial guest probing had session/quoting and SYSTEM git-ownership failures; direct current-user probe succeeded. An earlier probe executed the same ten samples/controls before failing its final git query; only the successful retained probe is counted above."
+  ],
+  "next_step": "Integrate reviewed bridge with existing runner protocol, correct disclosed comments and validate that integrated path before treating it as an accepted project backend. No registry/evidence-counter promotion from this informational record.",
+  "native_windows_validated": false,
+  "native_x86_hardware_validated": false,
+  "proof": false
+}

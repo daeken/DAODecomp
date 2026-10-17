@@ -3,6 +3,85 @@
   "reference_build": "analysis/reference-build.json",
   "functions": [
     {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018390",
+      "name": "fn_00018390",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 99216,
+      "size": 56,
+      "code_sha256": "528e8e396ba20bbb32ab884c2993f6608d6e1a9c0e992d07d719f6d5003f122e",
+      "abi": {
+        "ecx": "arena + list; preserved at original boundary",
+        "stack_arguments": [
+          "arena + node"
+        ],
+        "stack_cleanup": 4,
+        "return": "full EAX raw guest32 address; zero is null"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t list, uint32_t node)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00018390.json",
+      "source": "src/linked_structures.cpp",
+      "evidence": "analysis/linked-structures-001.md",
+      "observed_direct_callsite_rvas": [
+        99464
+      ],
+      "backend": "linked-structures-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000183d0",
+      "name": "fn_000183d0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 99280,
+      "size": 44,
+      "code_sha256": "10db45fe78c4dfbabcbbed205dd8f0283673e2227fdfcf090f4bbc443de98844",
+      "abi": {
+        "ecx": "arena + list; preserved at original boundary",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "full EAX raw guest32 address; zero is null"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t list)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_000183d0.json",
+      "source": "src/linked_structures.cpp",
+      "evidence": "analysis/linked-structures-001.md",
+      "observed_direct_callsite_rvas": [
+        99658,
+        99706,
+        99735
+      ],
+      "backend": "linked-structures-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018400",
+      "name": "fn_00018400",
+      "original_name": null,
+      "subsystem": "linked structures",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 99328,
+      "size": 78,
+      "code_sha256": "c5eeb9077a1596efc91e13f4cd9218ff0e93fed2e4aa349a87b31578edd18754",
+      "calling_convention": "x86 thiscall",
+      "signature": "uint32_t(uint32_t list_guest_va, uint32_t target_guest_va)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00018400.json",
+      "source": "src/linked_unlink_placeholder.cpp",
+      "evidence": "analysis/reviews/linked-unlink-001-original.json",
+      "backend": "linked-structures-001",
+      "observed_direct_callsite_rvas": [
+        99581
+      ]
+    },
+    {
       "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0004a3f0",
       "name": "byte_swap_u32",
       "original_name": null,
@@ -46,6 +125,155 @@
       ]
     },
     {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
+      "name": "fn_00061f40",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401216,
+      "size": 32,
+      "code_sha256": "fb22ba1157fd14fd4d4f2250729944c077da4092d0fbbd8a4b815478859a5db4",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f40.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        414075,
+        414919
+      ],
+      "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f60",
+      "name": "fn_00061f60",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401248,
+      "size": 26,
+      "code_sha256": "789b6ea8256ea177d4f13dc70e374e290fc68632370097b07e0a52d07619f311",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f60.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        4069209,
+        4080284
+      ],
+      "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
+      "name": "fn_00061f80",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401280,
+      "size": 26,
+      "code_sha256": "89c51ca7ed65c7bbaea742aa1b96ac85033b34744c5c20a82e4cdf71ebb58147",
+      "abi": {
+        "ecx": "arena + object",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061f80.json",
+      "source": "src/object_counters.cpp",
+      "evidence": "analysis/object-counters-001.md",
+      "observed_direct_callsite_rvas": [
+        402284
+      ],
+      "backend": "object-counters-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
+      "name": "fn_00061fa0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 401312,
+      "size": 35,
+      "code_sha256": "d44cfc8fcce98a60b07dfef8cb85b3c8f0cf00ea80479325b4d3aa60a7c356ed",
+      "abi": {
+        "ecx": "arena + destination",
+        "stack_arguments": [
+          "arena + source"
+        ],
+        "stack_cleanup": 4,
+        "return": "EAX guest pointer normalized to allocation offset"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00061fa0.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        411827,
+        1915512,
+        1616712,
+        1616750,
+        1616810,
+        1616848
+      ],
+      "backend": "memory-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013af20",
+      "name": "fn_0013af20",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 1290016,
+      "size": 47,
+      "code_sha256": "414495476845faf08bec43d60f3cada3549b695133e08339520b9099cc9b2cf1",
+      "abi": {
+        "ecx": "arena + destination",
+        "stack_arguments": [
+          "arena + source"
+        ],
+        "stack_cleanup": 4,
+        "return": "EAX guest pointer normalized to allocation offset"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_0013af20.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        1292681,
+        1292755,
+        1419370,
+        1419437
+      ],
+      "backend": "memory-001"
+    },
+    {
       "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00184920",
       "name": "fn_00184920",
       "original_name": null,
@@ -83,6 +311,234 @@
         1596892,
         1592722,
         1593251
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d10",
+      "name": "fn_00347d10",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439888,
+      "size": 27,
+      "code_sha256": "acd0dc3dd8dbbe128d55e7ac25bdcde85ac685c4222b24797dcf890666728ba1",
+      "abi": {
+        "eax": "entry_eax",
+        "ecx": "arena + object; preserved at original boundary",
+        "stack_arguments": [
+          "index",
+          "value"
+        ],
+        "stack_cleanup": 8,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d10.json",
+      "source": "src/indexed_stores.cpp",
+      "evidence": "analysis/indexed-stores-001.md",
+      "observed_direct_callsite_rvas": [
+        3441242,
+        3444220,
+        3450655,
+        4146372,
+        4146404,
+        4146436,
+        2773224,
+        3443168,
+        3564468
+      ],
+      "backend": "indexed-stores-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50",
+      "name": "fn_00347d50",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439952,
+      "size": 25,
+      "code_sha256": "51ae9670e9f0b5766f3e931e1e55901979ec857014b0fb5c7b03caaff3fb7bf7",
+      "abi": {
+        "eax": "entry_eax",
+        "ecx": "arena + object; preserved at original boundary",
+        "stack_arguments": [
+          "index",
+          "value"
+        ],
+        "stack_cleanup": 8,
+        "return": "EAX u32 bit pattern"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d50.json",
+      "source": "src/indexed_stores.cpp",
+      "evidence": "analysis/indexed-stores-001.md",
+      "observed_direct_callsite_rvas": [
+        3441253,
+        3444231,
+        3450670,
+        4146388,
+        4146420,
+        4146452,
+        2773242,
+        3443179,
+        3564484
+      ],
+      "backend": "indexed-stores-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40",
+      "name": "fn_0035bc40",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3521600,
+      "size": 44,
+      "code_sha256": "964bb570c2b84e30014a0fbb1f73b73f64ccd57585b5f3c821b1e2be801d4286",
+      "abi": {
+        "stack_arguments": [
+          "arena + base",
+          "index",
+          "enabled"
+        ],
+        "stack_cleanup": 12,
+        "return": "EAX u32"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_0035bc40.json",
+      "source": "src/memory_primitives.cpp",
+      "evidence": "analysis/memory-001.md",
+      "observed_direct_callsite_rvas": [
+        3537824
+      ],
+      "backend": "memory-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
+      "name": "fn_004b64d0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4941008,
+      "size": 30,
+      "code_sha256": "f82255a0f261c499ad75c1d6f2af63eab884d9669a3293499a0641753f53845a",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b64d0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4941155,
+        4941056
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
+      "name": "fn_004b65b0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4941232,
+      "size": 33,
+      "code_sha256": "0ba5f8ee0ceaf4eb2036a3926a38ec699adc32108720cb3782b4e01e3a91d246",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b65b0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4941425,
+        4941443
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
+      "name": "fn_004b6e70",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 4943472,
+      "size": 13,
+      "code_sha256": "3248f4a2e32989853efd78bf42a3653b4d9e9f7cf46e588222fa5cad2a3d25e3",
+      "abi": {
+        "argument": "ecx",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004b6e70.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        4943508,
+        4943562
+      ],
+      "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
+      "name": "fn_004d79c0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 5077440,
+      "size": 13,
+      "code_sha256": "da4006bf3e30a0ad9490649b1b02b2db4561bd5879be6d868317e9335edf90b4",
+      "abi": {
+        "argument": "eax",
+        "return_bits": 8,
+        "stack_cleanup": 0
+      },
+      "calling_convention": "reviewed scalar ABI; see abi fields",
+      "signature": "uint32_t(uint32_t) bit-pattern interface",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_004d79c0.json",
+      "source": "src/scalar_byte.cpp",
+      "evidence": "analysis/pilots/luna-001.md",
+      "observed_direct_callsite_rvas": [
+        5078887,
+        5079762,
+        5077601,
+        5077648,
+        5077692,
+        5077736,
+        5078033,
+        5078080,
+        5077474,
+        5077519,
+        5077845
       ],
       "pilot": "luna-001"
     },
@@ -188,441 +644,6 @@
         6039837
       ],
       "pilot": "luna-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004d79c0",
-      "name": "fn_004d79c0",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 5077440,
-      "size": 13,
-      "code_sha256": "da4006bf3e30a0ad9490649b1b02b2db4561bd5879be6d868317e9335edf90b4",
-      "abi": {
-        "argument": "eax",
-        "return_bits": 8,
-        "stack_cleanup": 0
-      },
-      "calling_convention": "reviewed scalar ABI; see abi fields",
-      "signature": "uint32_t(uint32_t) bit-pattern interface",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_004d79c0.json",
-      "source": "src/scalar_byte.cpp",
-      "evidence": "analysis/pilots/luna-001.md",
-      "observed_direct_callsite_rvas": [
-        5078887,
-        5079762,
-        5077601,
-        5077648,
-        5077692,
-        5077736,
-        5078033,
-        5078080,
-        5077474,
-        5077519,
-        5077845
-      ],
-      "pilot": "luna-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b6e70",
-      "name": "fn_004b6e70",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 4943472,
-      "size": 13,
-      "code_sha256": "3248f4a2e32989853efd78bf42a3653b4d9e9f7cf46e588222fa5cad2a3d25e3",
-      "abi": {
-        "argument": "ecx",
-        "return_bits": 8,
-        "stack_cleanup": 0
-      },
-      "calling_convention": "reviewed scalar ABI; see abi fields",
-      "signature": "uint32_t(uint32_t) bit-pattern interface",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_004b6e70.json",
-      "source": "src/scalar_byte.cpp",
-      "evidence": "analysis/pilots/luna-001.md",
-      "observed_direct_callsite_rvas": [
-        4943508,
-        4943562
-      ],
-      "pilot": "luna-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b65b0",
-      "name": "fn_004b65b0",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 4941232,
-      "size": 33,
-      "code_sha256": "0ba5f8ee0ceaf4eb2036a3926a38ec699adc32108720cb3782b4e01e3a91d246",
-      "abi": {
-        "argument": "ecx",
-        "return_bits": 8,
-        "stack_cleanup": 0
-      },
-      "calling_convention": "reviewed scalar ABI; see abi fields",
-      "signature": "uint32_t(uint32_t) bit-pattern interface",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_004b65b0.json",
-      "source": "src/scalar_byte.cpp",
-      "evidence": "analysis/pilots/luna-001.md",
-      "observed_direct_callsite_rvas": [
-        4941425,
-        4941443
-      ],
-      "pilot": "luna-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004b64d0",
-      "name": "fn_004b64d0",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 4941008,
-      "size": 30,
-      "code_sha256": "f82255a0f261c499ad75c1d6f2af63eab884d9669a3293499a0641753f53845a",
-      "abi": {
-        "argument": "ecx",
-        "return_bits": 8,
-        "stack_cleanup": 0,
-        "preserved_registers": [
-          "ecx"
-        ]
-      },
-      "calling_convention": "reviewed scalar ABI; see abi fields",
-      "signature": "uint32_t(uint32_t) bit-pattern interface",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_004b64d0.json",
-      "source": "src/scalar_byte.cpp",
-      "evidence": "analysis/pilots/luna-001.md",
-      "observed_direct_callsite_rvas": [
-        4941155,
-        4941056
-      ],
-      "pilot": "luna-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061fa0",
-      "name": "fn_00061fa0",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 401312,
-      "size": 35,
-      "code_sha256": "d44cfc8fcce98a60b07dfef8cb85b3c8f0cf00ea80479325b4d3aa60a7c356ed",
-      "abi": {
-        "ecx": "arena + destination",
-        "stack_arguments": [
-          "arena + source"
-        ],
-        "stack_cleanup": 4,
-        "return": "EAX guest pointer normalized to allocation offset"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00061fa0.json",
-      "source": "src/memory_primitives.cpp",
-      "evidence": "analysis/memory-001.md",
-      "observed_direct_callsite_rvas": [
-        411827,
-        1915512,
-        1616712,
-        1616750,
-        1616810,
-        1616848
-      ],
-      "backend": "memory-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013af20",
-      "name": "fn_0013af20",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 1290016,
-      "size": 47,
-      "code_sha256": "414495476845faf08bec43d60f3cada3549b695133e08339520b9099cc9b2cf1",
-      "abi": {
-        "ecx": "arena + destination",
-        "stack_arguments": [
-          "arena + source"
-        ],
-        "stack_cleanup": 4,
-        "return": "EAX guest pointer normalized to allocation offset"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_0013af20.json",
-      "source": "src/memory_primitives.cpp",
-      "evidence": "analysis/memory-001.md",
-      "observed_direct_callsite_rvas": [
-        1292681,
-        1292755,
-        1419370,
-        1419437
-      ],
-      "backend": "memory-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0035bc40",
-      "name": "fn_0035bc40",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 3521600,
-      "size": 44,
-      "code_sha256": "964bb570c2b84e30014a0fbb1f73b73f64ccd57585b5f3c821b1e2be801d4286",
-      "abi": {
-        "stack_arguments": [
-          "arena + base",
-          "index",
-          "enabled"
-        ],
-        "stack_cleanup": 12,
-        "return": "EAX u32"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t offsets/arguments...)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_0035bc40.json",
-      "source": "src/memory_primitives.cpp",
-      "evidence": "analysis/memory-001.md",
-      "observed_direct_callsite_rvas": [
-        3537824
-      ],
-      "backend": "memory-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f40",
-      "name": "fn_00061f40",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 401216,
-      "size": 32,
-      "code_sha256": "fb22ba1157fd14fd4d4f2250729944c077da4092d0fbbd8a4b815478859a5db4",
-      "abi": {
-        "ecx": "arena + object",
-        "stack_arguments": [],
-        "stack_cleanup": 0,
-        "return": "EAX u32 bit pattern"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t object)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00061f40.json",
-      "source": "src/object_counters.cpp",
-      "evidence": "analysis/object-counters-001.md",
-      "observed_direct_callsite_rvas": [
-        414075,
-        414919
-      ],
-      "backend": "object-counters-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f60",
-      "name": "fn_00061f60",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 401248,
-      "size": 26,
-      "code_sha256": "789b6ea8256ea177d4f13dc70e374e290fc68632370097b07e0a52d07619f311",
-      "abi": {
-        "ecx": "arena + object",
-        "stack_arguments": [],
-        "stack_cleanup": 0,
-        "return": "EAX u32 bit pattern"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t object)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00061f60.json",
-      "source": "src/object_counters.cpp",
-      "evidence": "analysis/object-counters-001.md",
-      "observed_direct_callsite_rvas": [
-        4069209,
-        4080284
-      ],
-      "backend": "object-counters-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00061f80",
-      "name": "fn_00061f80",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 401280,
-      "size": 26,
-      "code_sha256": "89c51ca7ed65c7bbaea742aa1b96ac85033b34744c5c20a82e4cdf71ebb58147",
-      "abi": {
-        "ecx": "arena + object",
-        "stack_arguments": [],
-        "stack_cleanup": 0,
-        "return": "EAX u32 bit pattern"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t object)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00061f80.json",
-      "source": "src/object_counters.cpp",
-      "evidence": "analysis/object-counters-001.md",
-      "observed_direct_callsite_rvas": [
-        402284
-      ],
-      "backend": "object-counters-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d10",
-      "name": "fn_00347d10",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 3439888,
-      "size": 27,
-      "code_sha256": "acd0dc3dd8dbbe128d55e7ac25bdcde85ac685c4222b24797dcf890666728ba1",
-      "abi": {
-        "eax": "entry_eax",
-        "ecx": "arena + object; preserved at original boundary",
-        "stack_arguments": [
-          "index",
-          "value"
-        ],
-        "stack_cleanup": 8,
-        "return": "EAX u32 bit pattern"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00347d10.json",
-      "source": "src/indexed_stores.cpp",
-      "evidence": "analysis/indexed-stores-001.md",
-      "observed_direct_callsite_rvas": [
-        3441242,
-        3444220,
-        3450655,
-        4146372,
-        4146404,
-        4146436,
-        2773224,
-        3443168,
-        3564468
-      ],
-      "backend": "indexed-stores-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d50",
-      "name": "fn_00347d50",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 3439952,
-      "size": 25,
-      "code_sha256": "51ae9670e9f0b5766f3e931e1e55901979ec857014b0fb5c7b03caaff3fb7bf7",
-      "abi": {
-        "eax": "entry_eax",
-        "ecx": "arena + object; preserved at original boundary",
-        "stack_arguments": [
-          "index",
-          "value"
-        ],
-        "stack_cleanup": 8,
-        "return": "EAX u32 bit pattern"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t object, uint32_t index, uint32_t value, uint32_t entry_eax)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00347d50.json",
-      "source": "src/indexed_stores.cpp",
-      "evidence": "analysis/indexed-stores-001.md",
-      "observed_direct_callsite_rvas": [
-        3441253,
-        3444231,
-        3450670,
-        4146388,
-        4146420,
-        4146452,
-        2773242,
-        3443179,
-        3564484
-      ],
-      "backend": "indexed-stores-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018390",
-      "name": "fn_00018390",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 99216,
-      "size": 56,
-      "code_sha256": "528e8e396ba20bbb32ab884c2993f6608d6e1a9c0e992d07d719f6d5003f122e",
-      "abi": {
-        "ecx": "arena + list; preserved at original boundary",
-        "stack_arguments": [
-          "arena + node"
-        ],
-        "stack_cleanup": 4,
-        "return": "full EAX raw guest32 address; zero is null"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t list, uint32_t node)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_00018390.json",
-      "source": "src/linked_structures.cpp",
-      "evidence": "analysis/linked-structures-001.md",
-      "observed_direct_callsite_rvas": [
-        99464
-      ],
-      "backend": "linked-structures-001"
-    },
-    {
-      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000183d0",
-      "name": "fn_000183d0",
-      "original_name": null,
-      "subsystem": null,
-      "module": "DAOrigins.exe",
-      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-      "rva": 99280,
-      "size": 44,
-      "code_sha256": "10db45fe78c4dfbabcbbed205dd8f0283673e2227fdfcf090f4bbc443de98844",
-      "abi": {
-        "ecx": "arena + list; preserved at original boundary",
-        "stack_arguments": [],
-        "stack_cleanup": 0,
-        "return": "full EAX raw guest32 address; zero is null"
-      },
-      "calling_convention": "reviewed memory ABI; see abi fields",
-      "signature": "uint32_t(GuestMemory, uint32_t list)",
-      "status": "implemented",
-      "contract": "contracts/functions/fn_000183d0.json",
-      "source": "src/linked_structures.cpp",
-      "evidence": "analysis/linked-structures-001.md",
-      "observed_direct_callsite_rvas": [
-        99658,
-        99706,
-        99735
-      ],
-      "backend": "linked-structures-001"
     }
   ]
 }

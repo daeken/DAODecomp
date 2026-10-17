@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "group": "linked-unlink-001",
+  "review_role": "independent substantive acceptance preparation",
+  "model": "gpt-6.1-sol",
+  "raw_review_path": "local/pilots/linked-unlink-001-backend-review/v2/review.json",
+  "raw_review_sha256": "c47cd6294c0c869fd1baf15cfc3d5a817faa575ede468547383057148cacf642",
+  "review": {
+    "schema_version": 1,
+    "decision": "approved_for_current_bounded_domain",
+    "reviewer_model": "gpt-6.1-sol",
+    "scope": "Single focused v2 re-review of v1 blocker corrections and helper bindings; no candidate or model work.",
+    "base_commit": "d8fb5a8821aa1f01b648c270891a3a0b860c4b09",
+    "v1_patch_sha256": "00c8d3bcb24c971dc596976555bbed0281687c8d07aa3b57803acb02ab1afd5f",
+    "v2_incremental_patch_sha256": "f1b2aee6ad028c78d69a59ef67acd6c6d39fbc4494dcdf4febf79bad2f602136",
+    "reviewed_artifacts_sha256": {
+      "validation/linked_structure_cases.py": "1863a7c079f0352350ca821c297bb2e39413c68d3002bb49a16e78444c7264dd",
+      "CMakeLists.txt": "1c0dad0d1aad656ed78bb2366da66d121245699a5a53870044177a28bae999a6",
+      "validation/linked_structure_native_runner.cpp": "9e16f7419145c9090c26d8dc64a09f30a15f3c15cca6a5e2f8e2a2a9516c91d5",
+      "analysis/functions.json": "074561bdf13ebc62269b932c4b4159c2948ed7665f0ae8e79c56cc7ee064ec52",
+      "validation/linked_unlink_mutant.hpp": "31e2603d56dbe2ea059d13df87d899efdbebd346c4a07b34a60ca222c8f3e3be",
+      "tests/linked_unlink_mutant.cpp": "a4ecfe2f40f577596620aa5b0545a8975ed0996a809ff34211171e1a8cbe961f",
+      "include/dao/linked_structures.hpp": "7789f171fbce86d3c727e9fb50edb79bbc5810375c4e0b62e225aa25749ab364",
+      "validation/linked_structure_runner.py": "62d9d0076fb03db6cfaa833ba2f69d2c1c27220b940c623c351c81066ac78334",
+      "tests/test_linked_unlink_backend.py": "92fcf0ca5685180464f0242bdbe6b36ea9d484b1977a4a4d2975d932736f717c",
+      "tools/daodecomp/memory.py": "d211fd6a395b8608433f4f4afb6ca339f50400260890a768c131dcc498bd3fac",
+      "contracts/functions/fn_00018400.json": "b5e63558410e8bbc3f09108c115b41b61cf1b61aab0a985b2f5427fcbeb57a86",
+      "tests/test_checkpoint.py": "e180db750156cb4edc723d66a9504a7aab5467c99cd9e4c4e31a2586bfef862b",
+      "validation/validate_linked_structures.py": "a9cbc82d6700eef56fad798f4cfdba443a53983bc55c3c78611c14294aac2329",
+      "tools/validate_checkpoint.py": "70b1012f9d1b7899a1a739b42ab713465773b69867ddb0c48443c9f3a016a0ea",
+      "src/linked_unlink_placeholder.cpp": "615e7e4916d06387579fd3c3eec6f01ba74d11274d95a125e627db181aec4631",
+      "tools/run_recovery_pair.py": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4",
+      "tools/run_model_packet.py": "996146000ac97a4dfd842bc42bcb21e89125f83cf2dd4eb8bed6a74396ec14ce",
+      "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+      "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+      "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+      "include/dao/guest_memory.hpp": "7f526eb54986f73eaaabdb51d9ce39fcfc923293f38e5dbcfa0ec3d33ee193c5",
+      "local/pairs/linked-unlink-001-v2-prepare.py": "fa88299b4b2551d73e2d6672547a4c705361575b6842a04c7893e71f6331f1c2",
+      "local/pairs/test_linked_unlink_v2_prepare.py": "4d4f237079a2f5a8e423eb20db5ac77974c35eed3729e1776ecefa00e41ac2c1",
+      "local/pilots/linked-unlink-001-backend/v2/proposal.patch": "f1b2aee6ad028c78d69a59ef67acd6c6d39fbc4494dcdf4febf79bad2f602136",
+      "local/pilots/linked-unlink-001-backend/v2/base-hashes.json": "8b2d8237519db895ab53977c03c68e7e66d684218ffb2df24a1dc9071d6e8251",
+      "local/pilots/linked-unlink-001-backend/v2/handoff.json": "0a8df8d718b3c0a911180a5595edb14fd8a1c97b7d1ff344ef6bc6948c675424",
+      "local/pilots/linked-unlink-001-backend/proposal.patch": "00c8d3bcb24c971dc596976555bbed0281687c8d07aa3b57803acb02ab1afd5f",
+      "local/pilots/linked-unlink-001-backend/base-hashes.json": "2be37b4285194c3de58be5bd5de1777d595382096ae2726e7ae0cd90f171ee61",
+      "local/pilots/linked-unlink-001-backend/handoff.json": "3b978c7006262ef2d3799fbf792a42aef332752a27ab57d82a915870cf23f845",
+      "analysis/reviews/linked-unlink-001-original.json": "815624e4164b6ab877a47625b10d9f33fb4c9692622e88a26ce19f9c303f77fb",
+      "local/pilots/linked-unlink-001/characterization.json": "35d7ee1d58e321b73024be72950b178e5e725515d6657928831f818ecd5f143a",
+      "local/pilots/linked-unlink-001/handoff.json": "c866270ebc679f3f2a389f3b26ae05bdc47d788c7ae7269c28d1d0a4276d091c",
+      "local/pilots/linked-unlink-001-review/independent-review.json": "1d7223a3672f2cb0cc92c1233c25d2511fc931b65b4b3d7ea658e93a9d8f413a",
+      "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3"
+    },
+    "findings": [],
+    "v1_blocker_resolution": {
+      "unlink_ecx_native_control": "Correct native mutant now sets ECX_exit to entry list VA and preserves arena/EAX; existing real negative stage uses the mutant executable. Standalone CTest confirms helper arithmetic only. Real native/parser/comparator mismatch is pending future candidate gate, not claimed measured while placeholder throws.",
+      "checkpoint_third_control": "Correct per-implemented-linked-function count; focused tests cover three reports and helper status-only projection passes while real placeholder stays contracted.",
+      "capture_hash_wording": "Correct78-byte contiguous capture hash and75-byte body length wording.",
+      "reached_heldout": "Four constructed unlink prestates are checked against preceding actual-original unlink outputs and included in128 heldout states.",
+      "helper_flat_slice_field": "Corrected and verify_original passed.",
+      "helper_contracted_publication": "Corrected with status-only projection; readiness passed.",
+      "freeze_header_omission": "Resolved during this focused review by exactly one required_files inclusion. Removing that line reproduces the previously reviewed helper250c454... hash; actual membership and readiness checks now pass. Final helperfa88299... and updated test4d4f237... are hash-bound."
+    },
+    "tests": {
+      "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "tooling": "125 tests run; OK,1 optional ignored-characterization skip",
+      "cmake": "RelWithDebInfo configure/build passed; macOS ARM64 AppleClang21",
+      "ctest": "3/3 passed",
+      "synthetic_good": "59 corpus_pass",
+      "synthetic_mutant": "53 corpus_pass,6 mismatch; expected-mismatch succeeded",
+      "replay_counts": {
+        "public": 1040,
+        "heldout": 128,
+        "backend_original_executions": 2336,
+        "independent_original_executions": 1168,
+        "total_original_executions": 3504,
+        "unlink_sequence_reached_snapshots": 4
+      },
+      "replay_report_sha256": "074a85fcd353cda08cc3cfda81d6a953f5d07c59b9d527d2ad48b14df045614a",
+      "helper_checks": {
+        "original_identity_check": "passed",
+        "contracted_placeholder_retained": true,
+        "public_heldout_counts": [
+          1040,
+          128
+        ],
+        "projected_publication_readiness": "passed",
+        "missing_required_build_header": false,
+        "helper_sha256": "fa88299b4b2551d73e2d6672547a4c705361575b6842a04c7893e71f6331f1c2"
+      },
+      "full_game_checkpoint": "not rerun"
+    },
+    "limits": [
+      "No candidate implementation or acceptance; placeholder still throws.",
+      "ECX mutation is now wired but future candidate full-public negative gate must produce at least one mismatch and no runner/schema errors before acceptance.",
+      "No native Windows, tested x86 bridge, allocator/lifetime, synchronization, concurrent or whole-game claim.",
+      "Original execution results are finite bounded corpus evidence, not universal proof."
+    ],
+    "candidate_accepted": false,
+    "native_windows_validated": false,
+    "proof": false,
+    "approval_scope": "Approve bounded contract/original backend/corpora, native ECX mutant wiring, checkpoint selector and exact helper for pre-candidate freeze. No candidate, negative-gate mismatch result, full checkpoint or implementation acceptance is approved by this report.",
+    "next_required_acceptance_gates": [
+      "Use the exact frozen public1040 and heldout128 corpora with fresh-process repeats and unchanged artifacts.",
+      "Future candidate public/heldout gates must pass; the full-public native ECX negative gate must show at least one mismatch and zero runner/schema failures.",
+      "Independent candidate source review and normal final checkpoint publication remain required."
+    ]
+  },
+  "coordinator_integration_note": "Applied reviewed raw patchf1b2aee... and verified every reviewed final artifact hash. Despite stale incremental labels/3907... in producer handoff, the reviewed patch itself is cumulative against14be457. Its unrelated recovery-queue hunk was excluded; coordinator queue state is not a frozen acceptance input. V1 failure history remains preserved. No candidate implemented."
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018400",
+  "inputs": {
+    "arena": "bytes",
+    "list": "u32",
+    "nodes": "bytes",
+    "node": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512,
+    "ecx_exit": 4
+  },
+  "calls": [],
+  "preconditions": "Pinned DAOrigins.exe SHA-256 2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3; RVA 0x18400. The registry code_sha256 c5eeb9077a1596efc91e13f4cd9218ff0e93fed2e4aa349a87b31578edd18754 hashes the contiguous 78-byte capture, including the unreachable 3-byte alignment gap at RVA 0x1840d..0x1840f; 75 decoded body bytes execute. Input is a 512-byte initialized ordinary RAM arena at 0x02000000. list is offset 0..480; nodes is four distinct little-endian offsets 0..500 naming complete 12-byte nodes; node is one of those offsets. The 32-byte list and all node intervals are pairwise disjoint; arbitrary byte alignment. Arena endpoints and links use raw guest32 pointers; raw zero is null and node offset zero means non-null 0x02000000. Active graph is canonical finite reciprocal list, length 0..4, both endpoints zero iff empty; inactive links/payload/bystanders arbitrary. Target may be any pool node, active or inactive. No aliases, malformed graphs, cycles, invalid addresses, faults, MMIO or concurrency. Entry ECX is guest base+list, stack arg is guest base+node, RET 4. Preserve EBX/ESI/EDI/EBP; observed ECX is not claimed preserved. Full EAX is serialized as observation.return. Observed ECX exit is serialized little-endian as observation.memory.ecx_exit (4 bytes), while full arena is observation.memory.arena. For a found target with nonzero successor, ECX_exit is raw old prev; otherwise it is entry list VA. One found-target predecessor-nonzero branch performs exactly one PUSH ESI/POP ESI, one write then one read of the same four bytes at entryESP-4; this allowance is unlink-specific. All arena accesses are exactly four bytes and ordered as instruction observations; exact ranges are covered per branch by the adapter. Empty: read L+0x18 only, no writes, EAX=0, ECX=L. Miss: read L+0x18 then visited next links, no writes, EAX=0, ECX=L. Found: search reads head and predecessor next fields; then read T+8, and branch-specific T+4 / neighbor / endpoint reads and writes per pinned instruction slice. EAX is raw T.next if nonzero else zero; ECX is raw T.prev only when T.next is nonzero, else L. Every arena byte is observed. This is an offset-level C++ observation mapping, not a tested x86 bridge, native Windows run, whole-game contract, or proof."
+}

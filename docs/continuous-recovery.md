@@ -16,12 +16,14 @@ checkout. Do not duplicate a running worker or overwrite user edits. The
 coordinator handles integration, disagreements and missing evidence, while routine
 build/test/counterexample handling belongs to the pipeline.
 
-The user's latest priority (2026-10-17) is lower coordinator and expensive-model
-overhead. Use Luna for characterization, packet preparation, implementation and
-repairs, plus a separate Luna reviewer for routine source batches on established
-backends. Invoke the pair with `--reviewer-model gpt-6-luna`. Reserve Sol for a
-concrete failed cheap attempt, ambiguous contract, or substantive acceptance-system
-change. Keep all deterministic gates and independent review requirements.
+The user's latest model preference (2026-10-17) is GPT-6.1 Sol with medium
+reasoning for characterization, packet preparation, implementation, repairs and
+a separate independent source reviewer. This supersedes the Luna-first policy.
+The pair and single-packet launcher default to `gpt-6.1-sol`; reviewer requests
+also use medium reasoning. Let active frozen jobs finish with their recorded
+settings. Keep coordinator overhead low, every deterministic gate and independent
+review requirement. DeepSeek is a deferred option, not configured or authorized
+for new service setup.
 
 Aim for batches of 8–16 related functions where existing evidence and types permit;
 do not invent contracts to fill a batch. Review once per batch. The coordinator
@@ -42,9 +44,9 @@ For each coherent group:
 2. Build a strict original adapter and independent deterministic public/held-out
    corpus. Include negative controls and invalid-footprint checks when extending
    the backend. Freeze these inputs before giving a worker its packet.
-3. Prefer GPT-6 Luna at medium effort for settled contracts. Allow at most two
-   attempts per packet, with a concrete counterexample for the repair; then allow
-   one GPT-6.1 Sol escalation. Run at most two implementation workers at once and
+3. Default to GPT-6.1 Sol at medium effort. Preserve the existing ceiling of
+   three implementation attempts per packet; each repair needs a concrete public
+   counterexample or separately resolved evidence gap. Run at most two implementation workers at once and
    twelve worker requests per activation, including preparation and independent
    reviewers. This is a ceiling, not a target. Use existing CLI login, not a new paid
    service. The 180-second request timeout is not a hard token or spend limit.
@@ -52,10 +54,9 @@ For each coherent group:
    to the implementation worker within its retry budget. Then run held-out cases
    and negative controls. Held-out failures stop the packet without revealing
    those cases to a repair worker. Only after all deterministic gates pass, send
-   the batch to a separate Luna reviewer for ABI, memory, arithmetic,
+   the batch to a separate Sol reviewer for ABI, memory, arithmetic,
    contract and evidence review. Rejection or missing evidence cannot be accepted.
-   Use Sol for substantive new acceptance-system or contract ambiguity reviews;
-   do not repeat those audits for unchanged backend machinery.
+   Do not repeat acceptance-system or contract audits for unchanged backend machinery.
    Preserve failed attempts. Record actual usage/latency;
    distinguish worker estimates from coordinator cost and account charges.
 5. Refresh affected regression evidence, run required tooling/build/synthetic

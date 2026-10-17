@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("packet", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--model", default="gpt-6-luna")
+    parser.add_argument("--model", default="gpt-6.1-sol")
     parser.add_argument("--timeout", type=int, default=180)
     args = parser.parse_args()
     if args.timeout <= 0:

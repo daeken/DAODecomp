@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 20 |
-| C++ implementations | 20 |
-| Implementations with current emulator corpus evidence | 20 |
-| Input cases across those functions (excluding repeat runs) | 9,198 |
+| Functions in the recovery registry | 21 |
+| C++ implementations | 21 |
+| Implementations with current emulator corpus evidence | 21 |
+| Input cases across those functions (excluding repeat runs) | 10,366 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -30,9 +30,10 @@ Sources: [function registry](analysis/functions.json),
 <!-- progress:end -->
 
 The GOG Windows installer labeled `1.05 (a) (10692)` is unpacked in `gamedata/`;
-all 32,850 extracted files passed installer checksum verification. The reference
-execution host is undecided. Symbolic proofs and a full game executable loader
-remain planned. The synthetic example below is separate infrastructure testing.
+all 32,850 extracted files passed installer checksum verification. A Windows 11
+ARM64 VM is available for translated reference experiments; native x86 hardware
+corroboration remains unavailable. Symbolic proofs and a full game executable
+loader remain planned. The synthetic example below is separate infrastructure testing.
 
 Recovery now runs as an [ongoing workflow](docs/continuous-recovery.md), with a
 [durable queue](analysis/recovery-queue.json). Implementation/review agent pairs
@@ -87,8 +88,10 @@ See the [indexed-store recovery record](analysis/indexed-stores-001.md).
 
 The linked-structure adapter validates disjoint list/node graphs, raw guest
 pointers (including a valid node at arena offset zero), exact branch footprints
-and every arena byte. Its two controls corrupt append's return and pop's retained
-link. See the [linked-structure evidence](analysis/linked-structures-001.md).
+and every arena byte. Its three controls corrupt append's return, pop's retained
+link, and unlink's observed ECX. See the
+[linked-structure evidence](analysis/linked-structures-001.md) and
+[unlink evidence](analysis/linked-unlink-001.md).
 
 ## Run the demonstration
 

@@ -20,15 +20,15 @@ negative-control checks. Only a deterministic pass goes to an independent review
 Contract/oracle reviews are separate from candidate reviews. The coordinator owns
 integration and unresolved evidence gaps, rather than relaying every test result.
 
-The user's 2026-10-17 scaling correction supersedes the initial model-routing
-proposal below: default to Luna for preparation and routine independent source
-review as well as implementation. Use one review per batch, aim for 8–16 related
-functions when their evidence permits, and reserve Sol for specific ambiguity,
-failed cheap attempts and substantive acceptance-system changes. Preserve every
+The user's latest 2026-10-17 preference supersedes the Luna-first policy and the
+initial proposal below: use GPT-6.1 Sol with medium reasoning for preparation,
+characterization, implementation, repairs and separate independent source review.
+Use one review per batch and aim for 8–16 related functions when evidence permits.
+DeepSeek is deferred; no external service is configured. Preserve every
 deterministic gate and review independence. Keep nonblocking infrastructure work
 deferred; see [current operating rules](continuous-recovery.md).
 
-## Proposed division of work
+## Initial division of work (historical)
 
 | Role | Initial model | Work |
 | --- | --- | --- |
@@ -69,8 +69,8 @@ or a promised project total. Availability and limits depend on the account.
 6. Coordinator integrates the patch, reruns callers and scenario regressions, then
    updates the inventory. Store accepted evidence keyed to the exact build/corpus.
 
-Start with at most two cheap attempts, then one Sol escalation; unresolved issues
-become a concrete evidence request. Set per-packet token/time limits and a batch
+Use at most three Sol medium implementation attempts; unresolved issues become
+a concrete evidence request. Set per-packet token/time limits and a batch
 spend limit before unattended runs. Retries must use counterexamples and new
 information, not repeat the same prompt. Rate-limit worker dispatch and oracle
 execution separately. One writer owns shared types and registry changes.
@@ -88,20 +88,20 @@ structured output, JSON events and a chosen working directory. After a baseline
 commit and a dedicated worktree exist, an example invocation is:
 
 ```sh
-codex exec --model gpt-6.1-sol --sandbox workspace-write \
+codex exec --model gpt-6.1-sol -c 'model_reasoning_effort="medium"' --sandbox workspace-write \
   --cd /absolute/path/to/function-worktree --json \
   --output-last-message /absolute/path/to/local/function-result.txt \
   - < /absolute/path/to/local/function-prompt.txt
 ```
 
-Choose `gpt-6-luna` for the measured cheap lane. Retain normal permissions and
+Default to `gpt-6.1-sol` at medium reasoning. Retain normal permissions and
 capture usage/events; do not bypass approval or sandbox policies for throughput.
 The command shape was checked against local `codex-cli 0.163.0-alpha.10.2` help;
 no worker or paid API run was launched during setup. There is no unattended
 dispatcher, queue locking, hard budget enforcement or auto-merge implementation yet.
 
-`tools/run_model_packet.py PACKET OUTPUT_DIR --model gpt-6-luna` is the explicit
-single-packet launcher used by the later pilot. It runs a read-only, ephemeral CLI
+`tools/run_model_packet.py PACKET OUTPUT_DIR` defaults to `gpt-6.1-sol` with
+medium reasoning. Historical pilots selected Luna explicitly. It runs a read-only, ephemeral CLI
 worker through existing login, captures structured source and usage events, and
 enforces a 180-second default timeout. It neither applies the source nor retries.
 The output directory must be new. On POSIX the timeout kills the process group;

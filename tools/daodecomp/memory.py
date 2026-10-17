@@ -9,7 +9,8 @@ ARENA_BASE = 0x02000000
 
 
 def execute_memory(address, code, arena, *, registers, stack_arguments, readable,
-                   writable, stack_cleanup, instruction_budget=1000, preserved_registers=()):
+                   writable, stack_cleanup, instruction_budget=1000, preserved_registers=(),
+                   balanced_stack_save=None, return_registers=(), return_trace=False):
     from unicorn import (Uc, UC_ARCH_X86, UC_MODE_32, UC_PROT_READ, UC_PROT_WRITE,
                          UC_PROT_EXEC, UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE)
     from unicorn.x86_const import (UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX,
@@ -30,6 +31,10 @@ def execute_memory(address, code, arena, *, registers, stack_arguments, readable
             or any(type(name) is not str or name not in registers for name in preserved_registers)
             or len(set(preserved_registers)) != len(preserved_registers)):
         raise ValueError("preserved registers must be distinct explicit entry registers")
+    if (balanced_stack_save not in (None, "esi")
+            or type(return_registers) not in (tuple, list)
+            or any(name not in {"eax", "ecx", "edx"} for name in return_registers)):
+        raise ValueError("unsupported private stack save or exit-register observation")
     for offset, size in [*readable, *writable]:
         if type(offset) is not int or type(size) is not int or not 0 <= offset < offset + size <= len(arena):
             raise ValueError("invalid memory footprint")
@@ -65,15 +70,34 @@ def execute_memory(address, code, arena, *, registers, stack_arguments, readable
         if not address <= pc or pc + size > address + len(code):
             raise RuntimeError("execution escaped reviewed function slice")
 
+    stack_save = {"writes": 0, "reads": 0, "value": None}
+    access_trace = []
+
     def on_read(uc, access, location, size, contents, _):
+        if balanced_stack_save == "esi" and location == sp - 4 and size == 4:
+            if stack_save["writes"] != 1 or stack_save["reads"] != 0:
+                raise RuntimeError("private stack save read is unbalanced or reordered")
+            value = bytes(machine.mem_read(location, size))
+            if value != stack_save["value"]:
+                raise RuntimeError("private stack save restore value changed")
+            stack_save["reads"] += 1
+            return
         if sp <= location and location + size <= sp + 4 * (1 + len(stack_arguments)):
             return
         if not in_ranges(location, size, readable):
             raise RuntimeError("read outside declared footprint")
+        access_trace.append(("read", location - ARENA_BASE, size))
 
     def on_write(uc, access, location, size, contents, _):
+        if balanced_stack_save == "esi" and location == sp - 4 and size == 4:
+            if stack_save["writes"] != 0:
+                raise RuntimeError("multiple private stack-save writes")
+            stack_save["writes"] += 1
+            stack_save["value"] = int(contents).to_bytes(size, "little")
+            return
         if not in_ranges(location, size, writable):
             raise RuntimeError("write outside declared footprint")
+        access_trace.append(("write", location - ARENA_BASE, size))
 
     machine.hook_add(UC_HOOK_CODE, on_code)
     machine.hook_add(UC_HOOK_MEM_READ, on_read)
@@ -81,10 +105,17 @@ def execute_memory(address, code, arena, *, registers, stack_arguments, readable
     machine.emu_start(address, stop, count=instruction_budget)
     if machine.reg_read(UC_X86_REG_EIP) != stop or machine.reg_read(UC_X86_REG_ESP) != sp + 4 + stack_cleanup:
         raise RuntimeError("leaf did not return with declared stack balance within budget")
+    if balanced_stack_save == "esi" and (stack_save["writes"], stack_save["reads"]) not in ((0, 0), (1, 1)):
+        raise RuntimeError("private ESI stack save/restore was unbalanced")
     if any(machine.reg_read(reg) != value for reg, value in saved.items()):
         raise RuntimeError("leaf clobbered a nonvolatile register")
     if any(machine.reg_read(reg_ids[name]) != registers[name] for name in preserved_registers):
         raise RuntimeError("leaf clobbered an explicitly preserved register")
     if machine.reg_read(UC_X86_REG_EFLAGS) & 0x400:
         raise RuntimeError("leaf returned with direction flag set")
-    return machine.reg_read(UC_X86_REG_EAX), bytes(machine.mem_read(ARENA_BASE, len(arena)))
+    result = (machine.reg_read(UC_X86_REG_EAX), bytes(machine.mem_read(ARENA_BASE, len(arena))))
+    if return_registers:
+        result = (*result, {name: machine.reg_read(reg_ids[name]) for name in return_registers})
+    if return_trace:
+        return (*result, access_trace)
+    return result

@@ -7,8 +7,9 @@ contracts, shared headers, the oracle, comparator, corpus, registry, evidence
 records, queue or Git. Corpus agreement and reviewer approval remain scoped
 evidence, not a proof of the game or native Windows validation.
 
-The implementation schedule is at most two `gpt-6-luna` attempts followed by one
-`gpt-6.1-sol` attempt, at medium effort. An existing first response can occupy the
+The implementation schedule is at most three `gpt-6.1-sol` attempts, all at
+medium effort, following the user's latest default preference. Historical Luna
+runs retain their original model identities and results. An existing first response can occupy the
 first slot without a new request. Public failures supply the next attempt with
 the previous source and a concrete public counterexample. Every already-passing
 function is explicitly preserved in the repair prompt. Held-out and negative-control
@@ -35,9 +36,9 @@ Each attempt runs, in order:
 4. Run the declared negative controls; a normal pass does not satisfy them.
 5. Request one independent review only after every deterministic gate passes.
 
-The tool's legacy reviewer default is `gpt-6.1-sol`; the current continuous workflow
-explicitly passes `--reviewer-model gpt-6-luna` for routine batches on established
-backends. Use Sol for substantive acceptance changes or concrete escalations.
+The reviewer defaults to a separate `gpt-6.1-sol` request at medium reasoning.
+The current continuous workflow uses that default for routine batches and
+substantive acceptance reviews. Explicit reviewer overrides remain available.
 Its separate
 prompt and JSON schema require `approve`, `reject` or `needs-evidence`, specific
 issues and limitations. It receives the frozen manifest, instruction/ABI/contract
@@ -125,7 +126,7 @@ attempts, identities, host, elapsed time, request metrics and acceptance. A fail
 model request is retained in its metrics/logs and included in the final request
 count. Reused-request metrics are labeled separately from newly spent requests.
 The reused proposal's actual model is retained separately from its attempt-slot
-model; a reused Sol result is not mislabeled as a new Luna response.
+model; a reused result is not mislabeled as a new request or as its attempt-slot model.
 Recorded tokens are CLI-reported worker usage, not coordinator usage or measured
 account charges. Each model request is capped at 180 seconds; the implementation
 launcher has a 195-second outer guard. Time limits are not token/spend limits.

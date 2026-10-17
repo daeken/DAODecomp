@@ -32,6 +32,7 @@ class CheckpointTests(unittest.TestCase):
             {"name": "fn_00347d50", "status": "implemented", "backend": "indexed-stores-001"},
             {"name": "fn_00018390", "status": "implemented", "backend": "linked-structures-001"},
             {"name": "fn_000183d0", "status": "implemented", "backend": "linked-structures-001"},
+            {"name": "fn_00018400", "status": "implemented", "backend": "linked-structures-001"},
         ]
         (self.root / "analysis/functions.json").write_text(json.dumps({"functions": functions}))
         self.patcher = patch.object(checkpoint, "ROOT", self.root)
@@ -78,10 +79,11 @@ class CheckpointTests(unittest.TestCase):
             "fn_00347d10-all.json", "fn_00347d50-all.json"])
         self.assertIn("fn_00347d10-mutant.json", [path.name for path in negatives])
         self.assertEqual([path.name for path in positives if "linked-structures" in str(path)], [
-            "fn_00018390-all.json", "fn_000183d0-all.json"])
+            "fn_00018390-all.json", "fn_000183d0-all.json", "fn_00018400-all.json"])
         self.assertIn("fn_00018390-mutant.json", [path.name for path in negatives])
         self.assertIn("fn_000183d0-mutant.json", [path.name for path in negatives])
-        self.assertEqual(len(negatives), 6)
+        self.assertIn("fn_00018400-mutant.json", [path.name for path in negatives])
+        self.assertEqual(len(negatives), 7)
 
     def test_contracted_object_counter_functions_do_not_require_publication_yet(self):
         path = self.root / "analysis/functions.json"

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "Pushed code checkpoint77fce1c:20functions/9198positivecases,6negativecontrols,120toolingtests. Full local macOS ARM64 checkpoint passed; matching-head Linux/macOS/Windows infrastructureCI passed. No native Windows game evidence.",
-  "active_group": "linked-unlink-001",
+  "checkpoint": "Full macOS ARM64 checkpoint passed:21functions/10366positivecases,7negativecontrols,125tooling tests, CTest and both synthetic demos. Source integration and Sol-medium defaults ready for publication; see ignored publication receipt for commit/push/CI result. Windows translated scalar proposal independently reviewed, protocol integration pending.",
+  "active_group": "windows-translated-scalar protocol integration / next memory batch",
   "groups": [
     {
       "id": "memory-001",
@@ -67,7 +67,7 @@
         "0x000183d0"
       ],
       "scope": "Event-node queue append/pop; original callers use Windows events, requiring separate synchronization and lifetime contracts",
-      "next_action": "Retain regression coverage. Use reviewed original unlink evidence and Luna-led related batch preparation; Windows callers remain blocked by existing event/lifetime/synchronization gaps.",
+      "next_action": "Retain regression coverage. Use reviewed original unlink evidence and Sol-medium-led related batch preparation; Windows callers remain blocked by existing event/lifetime/synchronization gaps.",
       "handoff": "local/pilots/linked-structures-001/handoff.json",
       "independent_review": "local/pilots/linked-structures-001/independent-review.json",
       "independent_review_raw_sha256": "94d1744c100896c6569157d61b1c16722a128c68d1499aebeb8b984d408e5982",
@@ -81,14 +81,14 @@
     },
     {
       "id": "linked-unlink-001",
-      "status": "luna_acceptance_proposal_running",
+      "status": "integrated_checkpoint_passed",
       "rvas": [
         "0x00018400"
       ],
       "scope": "Adjacent queue unlink operation and original-only dependency composition",
       "handoff": "local/pilots/linked-unlink-001/handoff.json",
       "observations": "Producer60states replayed exactly; independent1040states and32original-only sequences. Corrected unsupported producer node-at-end claim with measured node500. Scope remains bounded original execution.",
-      "next_action": "Luna prepares one unlink packet using existing linked backend plus strict balanced ESI stack-save allowance and conditionalECX mapping. Independent Sol review only of substantive acceptance changes, then Luna implementation and separate Luna source review after automatic gates. No new infrastructure projects.",
+      "next_action": "Retain regression evidence; original Windows caller allocation/event/lifetime/concurrency blockers remain explicit.",
       "independent_review": "analysis/reviews/linked-unlink-001-original.json",
       "batch_preparation": {
         "path": "local/pilots/memory-batch-002/handoff.json",
@@ -101,13 +101,29 @@
         "ready_candidates": 1,
         "scope": "Existing reviewed unlink evidence assembled for focused acceptance extension; related Windows dependencies remain blocked."
       },
-      "active_worker": {
-        "task": "/root/next_memory_batch",
-        "model": "gpt-6-luna",
-        "owned_directory": "local/pilots/linked-unlink-001-backend",
-        "scope": "Ignored patch only; minimal linked backend extension, candidate placeholder, original-only replay and tooling tests. No shared writes or extra agents.",
-        "next_action": "Inspect worker/proposal status before dispatching anything; no duplicate. When proposal ready, one independent Sol review of substantive acceptance change, then coordinator integration and Luna pair only if approved."
-      }
+      "backend_proposal": "local/pilots/linked-unlink-001-backend/v2/proposal.patch",
+      "backend_proposal_sha256": "f1b2aee6ad028c78d69a59ef67acd6c6d39fbc4494dcdf4febf79bad2f602136",
+      "backend_v1_findings": [
+        "Unlink needs actual ECX native negative control exercised through comparator",
+        "Checkpoint hardcoded2linked controls cannot publish third",
+        "Contract must label78byte contiguous capture hash accurately",
+        "Heldout unlink composition prestates missing while freeze helper requires them",
+        "Freeze helper used wrong public slice field and publication selector excludes contracted row"
+      ],
+      "contract_review": "analysis/reviews/linked-unlink-001-contract.json",
+      "pipeline": "local/pairs/linked-unlink-001-adjudication-run/status.json",
+      "manifest": "local/pairs/linked-unlink-001-adjudication-manifest.json",
+      "preparation_failure": {
+        "freeze-1": "Stopped before model dispatch: reviewed helper omitted existing reviewed backend handoff from snapshot despite listing it as review evidence. Failed files preserved.",
+        "freeze-2": "Coordinator wrapper only adds that already-reviewed evidence file and its own provenance; all frozen acceptance artifacts unchanged, check_manifest passed.",
+        "wrapper": "local/pairs/linked-unlink-001-freeze.py",
+        "wrapper_sha256": "d3fea58a973a71f31a84571e371379a1cfef748ea02b264fcc817182c8597b1d",
+        "freeze-3": "Public gate failed before comparisons: missing tests/test_linked_structures.py in snapshot. One Luna proposal built; preserved and reused unchanged in freeze-4."
+      },
+      "worker_measurements": "analysis/pilots/linked-unlink-001.json",
+      "source_review": "analysis/reviews/linked-unlink-001-source.json",
+      "record": "analysis/linked-unlink-001.md",
+      "validation_record": "analysis/validation/linked-unlink-001.json"
     }
   ],
   "infrastructure_backlog": [
@@ -172,13 +188,15 @@
   ],
   "operating_priority": {
     "updated": "2026-10-17",
-    "default_models": "Luna preparation/implementation/repair and separate independent routine source review; explicit --reviewer-model gpt-6-luna",
-    "sol_scope": "Concrete escalation, ambiguous contract or substantive acceptance-system change",
+    "default_models": "GPT-6.1 Sol (gpt-6.1-sol) with medium reasoning for preparation, characterization, implementation, repairs and independent source review; latest user preference supersedes Luna-first policy.",
+    "sol_scope": "Default model for all new preparation, implementation, repair and independent review work, with medium reasoning; preserve independent roles.",
     "batch_target": "8-16 related functions on established backends when evidence permits; never guessed filler",
     "coordinator_scope": "Compact accepted package/status, integration and genuine disagreements",
     "infrastructure": "Nonblocking proposals deferred; avoid multi-agent audit/repair chains",
-    "windows_reference": "User starting Windows VM; connection/architecture/toolchain not established, no native game validation yet",
-    "windows_handoff": "docs/windows-reference.md"
+    "windows_reference": "Parallels Windows11 ARM64 setup authorized and active; inspect durable handoff before more VM work.",
+    "windows_handoff": "docs/windows-reference.md",
+    "implementation_attempt_limit": 3,
+    "deepseek": "Deferred by user; no configuration or calls yet."
   },
   "completed_activation": {
     "started_utc": "2026-10-17T18:56:59Z",
@@ -193,36 +211,114 @@
     "model_requests_closed": true
   },
   "activation": {
-    "started_utc": "2026-10-17T19:56:59Z",
-    "group": "linked-unlink-001",
-    "infrastructure_assignments": 2,
+    "started_utc": "2026-10-17T23:27:03Z",
+    "group": "linked-unlink-001 checkpoint / windows scalar review",
+    "infrastructure_assignments": 1,
+    "worker_requests_used": 1,
     "pipeline_requests_used": 0,
-    "worker_requests_used": 2,
     "total_worker_request_limit": 12,
-    "coordinator": "Checkpoint published; one Luna worker preparing ignored unlink acceptance proposal. No other workers.",
-    "notes": "One focused Luna preparation followed by one Luna acceptance-backend proposal assignment. No shared acceptance edits or candidate requests.",
-    "model_requests_closed": false
+    "coordinator": "Current thread",
+    "notes": "Existing full checkpoint finishing last negative gate. One independent Sol medium review of completed translated-Windows original scalar proposal; no duplicate VM work or implementation requests."
   },
   "last_checkpoint": {
-    "pid": null,
-    "exec_session_id": 3627,
-    "command": ".venv/bin/python tools/validate_checkpoint.py --output-dir reports/checkpoint-linked-structures-001 --record analysis/validation/linked-structures-001.json --jobs 4",
-    "state_path": "reports/checkpoint-linked-structures-001/checkpoint.json",
-    "record_path": "analysis/validation/linked-structures-001.json",
-    "source_sha256": "4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5",
-    "expected_functions": 20,
-    "expected_positive_cases": 9198,
-    "expected_negative_reports": 6,
-    "system_tooling_tests": {
-      "count": 120,
-      "passed": true,
-      "optional_skips": 24,
-      "log": "local/pilots/linked-structures-001-system-tests.log"
-    },
-    "remaining": "None",
-    "status": "published_ci_passed",
-    "commit": "77fce1c4fd45014af126e7d81838728482e0bb57",
-    "ci_url": "https://github.com/daeken/DAODecomp/actions/runs/39064700692",
-    "ci_conclusion": "success"
+    "group": "linked-unlink-001",
+    "status": "passed",
+    "record": "analysis/validation/linked-unlink-001.json",
+    "functions": 21,
+    "positive_cases": 10366,
+    "negative_controls": 7,
+    "elapsed_seconds": 2090.237,
+    "publication_receipt": "local/pairs/linked-unlink-001-publication.json"
+  },
+  "previous_activation": {
+    "started_utc": "2026-10-17T22:57:03Z",
+    "group": "linked-unlink-001",
+    "infrastructure_assignments": 1,
+    "worker_requests_used": 1,
+    "pipeline_requests_used": 0,
+    "total_worker_request_limit": 12,
+    "coordinator": "Current thread; integration and full checkpoint only so far",
+    "notes": "Accepted unchanged Sol source after deterministic gates and independent Sol adjudication; previous failed candidates and Luna rejection retained. Sol-medium launcher defaults applied and tooling tests passed. Windows setup worker continues from prior activation. One Sol medium preparation assignment now builds an isolated Windows x86 original-slice reference proposal; no shared acceptance changes.",
+    "status": "closed"
+  },
+  "pending_pair": null,
+  "pending_preparation": null,
+  "windows_reference": {
+    "status": "baseline_passed_original_scalar_proposal_reviewed",
+    "agent": "/root/windows_vm_sol_resume",
+    "model": "gpt-6.1-sol",
+    "user_authorization": "User confirms Parallels VM ready and authorizes autonomous use for automated testing.",
+    "handoff": "docs/windows-reference.md",
+    "private_outputs": "local/windows-reference/",
+    "scope": "Reproducible Windows infrastructure smoke on committed baseline; no native game evidence until a real native adapter runs.",
+    "next_action": "Preserve completed baseline; inspect native proposal worker handoff before creating any duplicate runner or installer.",
+    "access": "prlctl exec Windows 11 --current-user",
+    "guest_architecture": "ARM64 OS and ARM64-based PC; x86 code uses Windows translation",
+    "native_x86_hardware_validated": false,
+    "guest_os": "Microsoft Windows 11 Pro 10.0.26300 build26300 ARM64",
+    "baseline_commit": "14be457c918da7ddcd39be9080dbb3364215312d",
+    "guest_workspace": "C:\\Users\\daeken\\DAODecompWindows",
+    "notes": "Clean baseline14be457 on Windows11ARM64: MSVC19.44Hostarm64/x64 build passed; CTest2/2 with120tooling tests and2private-data skips; synthetic59passes and negative53passes/6expected mismatches. Python3.12.10/Unicorn2.1.4 and candidates are x64 under Windows translation. No original game execution in baseline.",
+    "reasoning_effort": "medium",
+    "baseline_result": {
+      "tooling_tests": 120,
+      "tooling_skips": 2,
+      "ctest_passed": 2,
+      "synthetic_passes": 59,
+      "negative_control_passes": 53,
+      "negative_control_mismatches": 6,
+      "original_game_executed": false,
+      "record": "docs/windows-reference.md",
+      "private_logs": "local/windows-reference/"
+    }
+  },
+  "model_default_update": {
+    "status": "applied_and_tooling_tests_passed",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "changes": "local/pairs/sol-defaults-changes.json",
+    "automatic_applier": "local/pairs/apply-sol-defaults-when-idle.py",
+    "exec_session_id": 89070,
+    "result": "local/pairs/sol-defaults-applied.json",
+    "tests": "local/pairs/sol-defaults-tests.log",
+    "next_action": "Model defaults already Sol medium; include changed launchers/docs/tests in current full checkpoint commit. Historical frozen run remains bound to its old startup hashes.",
+    "during_transition": "Use explicit gpt-6.1-sol medium for new workers. Do not launch default-routed source pairs until applier has finished, or generate explicit Sol proposal and supply it as initial response."
+  },
+  "pending_checkpoint": {
+    "status": "passed",
+    "pid": 10357,
+    "exec_session_id": 97863,
+    "status_path": "reports/checkpoint-linked-unlink-001/checkpoint.json",
+    "output_dir": "reports/checkpoint-linked-unlink-001",
+    "record": "analysis/validation/linked-unlink-001.json",
+    "command": ".venv/bin/python tools/validate_checkpoint.py --output-dir reports/checkpoint-linked-unlink-001 --record analysis/validation/linked-unlink-001.json --jobs 4",
+    "expected_functions": 21,
+    "expected_positive_cases": 10366,
+    "expected_negative_controls": 7,
+    "next_action": "Check publication receipt and GitHub exact commit CI; avoid rerunning already-passed full checkpoint without a changed validation input. Continue native proposal protocol integration or next independent memory batch.",
+    "elapsed_seconds": 2090.237,
+    "actual_functions": 21,
+    "actual_positive_cases": 10366,
+    "actual_negative_controls": 7,
+    "tooling_tests": 125,
+    "publication_receipt": "local/pairs/linked-unlink-001-publication.json"
+  },
+  "windows_native_proposal": {
+    "status": "bounded_proposal_reviewed_integration_pending",
+    "agent": "/root/windows_original_runner_proposal",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "assignment_count": 1,
+    "usage": null,
+    "path": "local/windows-native-proposal/",
+    "scope": "Existing call-free scalar group, exact original instructions in Win32 process under Windows ARM64 x86 translation; existing contracts/corpus unchanged. Proposal only, independent acceptance review required.",
+    "next_action": "Integrate reviewed bridge with existing runner protocol, correct disclosed comments and validate that integrated path before treating it as an accepted project backend. No registry/evidence-counter promotion from this informational record.",
+    "handoff": "local/windows-native-proposal/handoff.json",
+    "review_agent": "/root/windows_original_acceptance_review",
+    "review_path": "local/windows-native-review/",
+    "case_count": 3516,
+    "function_count": 10,
+    "review": "analysis/reviews/windows-translated-scalars-001.json",
+    "record": "analysis/windows-translated-scalars-001.json"
   }
 }

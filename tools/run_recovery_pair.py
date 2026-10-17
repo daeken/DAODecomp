@@ -21,7 +21,7 @@ import tempfile
 import time
 
 
-MODELS = ("gpt-6-luna", "gpt-6-luna", "gpt-6.1-sol")
+MODELS = ("gpt-6.1-sol", "gpt-6.1-sol", "gpt-6.1-sol")
 TOOL_TYPES = {"command_execution", "file_change", "mcp_tool_call", "web_search",
               "image_generation", "collab_tool_call"}
 REVIEW_SCHEMA = {"type": "object", "properties": {

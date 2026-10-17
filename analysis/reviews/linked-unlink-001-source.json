@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "source_sha256": "9916d667a9ed2a35a129ca8accbedc5248b8e926040c2f686b0b9cc869e10e96",
+  "review_raw_file_sha256": "397ebb2ea2215d14235062227580a0634c2a326c3fcdd456a4f933424a97704b",
+  "review": {
+    "decision": "approve",
+    "issues": [
+      {
+        "detail": "The previous rejection misdecoded RVA 0x18445: bytes 8b5208 load EDX from [EDX+8], leaving EAX zero after the successor test. Bytes 89511c then store EDX to list.tail. The current candidate correctly returns zero for a found tail. The historical 528 candidate mismatches belong to source ef64a41e..., whereas the current source is 9916d667.... Current negative-control mismatches are expected.",
+        "function": "fn_00018400",
+        "severity": "note"
+      },
+      {
+        "detail": "Independent source inspection against the supplied bytes supports the scoped mapping: raw-address search, empty/miss returns, predecessor/head repair, repeated target.next read, successor/tail repair, full 32-bit EAX and conditional ECX all agree. Arena read/write order matches at the GuestMemory operation level. No target fields are read on a miss; target bytes and unrelated arena bytes remain unchanged within the disjoint canonical domain.",
+        "function": "fn_00018400",
+        "severity": "note"
+      },
+      {
+        "detail": "Guest addresses remain unsigned integers rather than host pointers. Contract bounds keep address translation and field accesses within the arena; unsigned arithmetic has defined semantics. GuestMemory uses checked bytewise little-endian accesses with unsigned shifts of at most 24 bits, permitting unaligned objects without alignment or effective-type violations. Overlap, malformed graphs and address wrap remain excluded.",
+        "function": "fn_00018400",
+        "severity": "note"
+      },
+      {
+        "detail": "Identity is consistently bound to DAOrigins.exe SHA-256 2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3, RVA 0x18400, and capture SHA-256 c5eeb9077a1596efc91e13f4cd9218ff0e93fed2e4aa349a87b31578edd18754, including the unreachable alignment gap. Supplied verified bindings connect the current source, frozen contract/corpora, reference and executables. Raw-file and canonical-JSON digest domains are explicitly distinguished. Current reports record 1040 public passes, 128 heldout passes and 528 expected ECX-mutant mismatches without reported errors.",
+        "function": "fn_00018400",
+        "severity": "note"
+      }
+    ],
+    "limitations": [
+      "Review used only supplied material; no tools or independent hash recomputation. Detailed original traces and backend implementation were represented partly by hash-bound review reports.",
+      "The C++ API models full EAX and observed ECX. Original RET 4, preserved registers and conditional balanced ESI stack save are documented original-side behavior; this package does not establish a working x86 thiscall bridge or reproduce guest private-stack writes.",
+      "Recorded candidate execution used macOS ARM64 AppleClang 21 C++20 against Unicorn 2.1.4 original execution. Corpus agreement and synthetic controls are bounded evidence, not native Windows validation or universal proof.",
+      "Approval covers only the initialized 512-byte arena, four-node canonical disjoint domain. It excludes aliases/overlap, malformed graphs, faults/MMIO, concurrency, allocator/lifetime, Windows synchronization and whole-game behavior.",
+      "No registry integration or replacement executable is approved."
+    ],
+    "summary": "Approve only the scoped source package with candidate SHA-256 9916d667a9ed2a35a129ca8accbedc5248b8e926040c2f686b0b9cc869e10e96. Instruction-level inspection supports the implementation within the frozen contract; the previous tail-return objection is contradicted by the supplied instruction bytes."
+  },
+  "manifest_canonical_json_sha256": "8852b725d37da96ff83219f7d2071b3a2d65a19ab9add0f3e546c9c81dabf4f4",
+  "package_raw_file_sha256": "6bda87388bd8b9fffa3e751ba5e9acea837c99b73ec789d3c37c8404ea5e5fdb",
+  "integration_transition": {
+    "schema_version": 1,
+    "before_registry_raw_sha256": "074561bdf13ebc62269b932c4b4159c2948ed7665f0ae8e79c56cc7ee064ec52",
+    "after_registry_raw_sha256": "a7fe6e4a5ae03527240e7380351728ae4e0b8ca2523bee4751d08f79bf5f38e1",
+    "source_sha256": "9916d667a9ed2a35a129ca8accbedc5248b8e926040c2f686b0b9cc869e10e96",
+    "change": "Exact accepted source, plus only fn_00018400 contracted to implemented. All other registry fields unchanged.",
+    "frozen_acceptance_artifacts_verified": true,
+    "post_run_routing_only_changes": [
+      "docs/paired-recovery.md",
+      "tools/run_model_packet.py",
+      "tools/run_recovery_pair.py"
+    ],
+    "routing_change_record": "local/pairs/sol-defaults-applied.json",
+    "routing_change_record_sha256": "f716431e1bfc1893d873f6157b9e69b135fca6f52ff753fd2204c947a7168b59",
+    "all_other_frozen_artifacts_match": true
+  },
+  "prior_rejected_review_preserved": "analysis/pilots/linked-unlink-001.json",
+  "scope": "Independent source review after full deterministic gates. Full checkout regression evidence pending.",
+  "proof": false,
+  "native_windows_validated": false
+}

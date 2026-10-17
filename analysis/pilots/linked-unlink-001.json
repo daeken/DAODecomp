@@ -1,0 +1,1306 @@
+{
+  "schema_version": 1,
+  "status": "integrated-full-checkpoint-passed",
+  "group": "linked-unlink-001",
+  "original_module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+  "rva": "0x00018400",
+  "contract_review": "analysis/reviews/linked-unlink-001-contract.json",
+  "infrastructure_assignments_since_previous_checkpoint": {
+    "count": 6,
+    "usage": null,
+    "scope": "Luna batch preparation/backend proposal, Sol v1 review, Luna helper preparation/v2 correction, Sol focused v2 review. Earlier original characterization/review recorded with linked-structures-001. Token usage unavailable, not estimated."
+  },
+  "failed_runs": [
+    {
+      "path": "local/pairs/linked-unlink-001-freeze-2-run",
+      "status": "implementation-exhausted",
+      "status_sha256": "27430dcca4ace95536aaf187b580eb2291c6a4d1703e00f1bd81f192c744c86c",
+      "reason": "Preparation error: packet omitted C++ function name/signature/headers; all3proposals rejected by function-set gate before build. No behavioral comparison or review occurred.",
+      "requests": [
+        {
+          "command": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6-luna",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request/response.json",
+            "-"
+          ],
+          "elapsed_seconds": 9.203,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "implementation",
+          "outer": {
+            "argv": [
+              "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/prompt.txt",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request",
+              "--model",
+              "gpt-6-luna",
+              "--timeout",
+              "180"
+            ],
+            "cwd": "/Users/daeken/projects/DAODecomp",
+            "elapsed_seconds": 9.268,
+            "exit_code": 0,
+            "timed_out": false,
+            "timeout_seconds": 195
+          },
+          "output_exists": true,
+          "packet_sha256": "f3fc400ba2f39a8b66393411652429c84c6de5f7bb104b7131a741aa4c1a5de5",
+          "prompt_sha256": "f3fc400ba2f39a8b66393411652429c84c6de5f7bb104b7131a741aa4c1a5de5",
+          "reasoning_effort": "medium",
+          "requested_model": "gpt-6-luna",
+          "reused": false,
+          "schema_version": 1,
+          "timed_out": false,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 0,
+              "input_tokens": 21714,
+              "output_tokens": 807,
+              "reasoning_output_tokens": 0
+            }
+          ]
+        },
+        {
+          "command": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6-luna",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request/response.json",
+            "-"
+          ],
+          "elapsed_seconds": 15.042,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "implementation",
+          "outer": {
+            "argv": [
+              "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/prompt.txt",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request",
+              "--model",
+              "gpt-6-luna",
+              "--timeout",
+              "180"
+            ],
+            "cwd": "/Users/daeken/projects/DAODecomp",
+            "elapsed_seconds": 15.158,
+            "exit_code": 0,
+            "timed_out": false,
+            "timeout_seconds": 195
+          },
+          "output_exists": true,
+          "packet_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+          "prompt_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+          "reasoning_effort": "medium",
+          "requested_model": "gpt-6-luna",
+          "reused": false,
+          "schema_version": 1,
+          "timed_out": false,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 0,
+              "input_tokens": 21734,
+              "output_tokens": 1523,
+              "reasoning_output_tokens": 808
+            }
+          ]
+        },
+        {
+          "command": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6.1-sol",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request/response.json",
+            "-"
+          ],
+          "elapsed_seconds": 25.69,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "implementation",
+          "outer": {
+            "argv": [
+              "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/prompt.txt",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request",
+              "--model",
+              "gpt-6.1-sol",
+              "--timeout",
+              "180"
+            ],
+            "cwd": "/Users/daeken/projects/DAODecomp",
+            "elapsed_seconds": 25.759,
+            "exit_code": 0,
+            "timed_out": false,
+            "timeout_seconds": 195
+          },
+          "output_exists": true,
+          "packet_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+          "prompt_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+          "reasoning_effort": "medium",
+          "requested_model": "gpt-6.1-sol",
+          "reused": false,
+          "schema_version": 1,
+          "timed_out": false,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 0,
+              "input_tokens": 18511,
+              "output_tokens": 1370,
+              "reasoning_output_tokens": 356
+            }
+          ]
+        }
+      ],
+      "attempts": [
+        {
+          "error": "proposal function set differs from packet",
+          "gates": [],
+          "model": "gpt-6-luna",
+          "number": 1,
+          "status": "invalid-proposal"
+        },
+        {
+          "error": "proposal function set differs from packet",
+          "gates": [],
+          "model": "gpt-6-luna",
+          "number": 2,
+          "status": "invalid-proposal"
+        },
+        {
+          "error": "proposal function set differs from packet",
+          "gates": [],
+          "model": "gpt-6.1-sol",
+          "number": 3,
+          "status": "invalid-proposal"
+        }
+      ],
+      "reported_usage_sum": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 61959,
+        "output_tokens": 3700,
+        "reasoning_output_tokens": 1164
+      },
+      "elapsed_seconds": 51.049
+    },
+    {
+      "path": "local/pairs/linked-unlink-001-freeze-3-run",
+      "status": "needs-evidence",
+      "status_sha256": "681ec5519b3ab5c1ba44e15ddfb60f8c2098f2f7654a3e1fa6143249bd16fd82",
+      "reason": "Candidate built and both synthetic checks passed. Public validator stopped before comparisons because unchanged tests/test_linked_structures.py was omitted from snapshot. No source-level failure established; no source review requested.",
+      "requests": [
+        {
+          "command": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6-luna",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response.json",
+            "-"
+          ],
+          "elapsed_seconds": 13.189,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "implementation",
+          "outer": {
+            "argv": [
+              "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/frozen/tools/run_model_packet.py",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/prompt.txt",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request",
+              "--model",
+              "gpt-6-luna",
+              "--timeout",
+              "180"
+            ],
+            "cwd": "/Users/daeken/projects/DAODecomp",
+            "elapsed_seconds": 13.259,
+            "exit_code": 0,
+            "timed_out": false,
+            "timeout_seconds": 195
+          },
+          "output_exists": true,
+          "packet_sha256": "35de1d6ee2ac0e37be86618b9390881e5eed8ddab71d1537e6e73c507f9090f7",
+          "prompt_sha256": "35de1d6ee2ac0e37be86618b9390881e5eed8ddab71d1537e6e73c507f9090f7",
+          "reasoning_effort": "medium",
+          "requested_model": "gpt-6-luna",
+          "reused": false,
+          "schema_version": 1,
+          "timed_out": false,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 12672,
+              "input_tokens": 18880,
+              "output_tokens": 1021,
+              "reasoning_output_tokens": 440
+            }
+          ]
+        }
+      ],
+      "attempts": [
+        {
+          "gates": [
+            {
+              "commands": [
+                {
+                  "argv": [
+                    "cmake",
+                    "-S",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                    "-B",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/build",
+                    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+                  ],
+                  "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                  "elapsed_seconds": 0.429,
+                  "exit_code": 0,
+                  "timed_out": false,
+                  "timeout_seconds": 120
+                },
+                {
+                  "argv": [
+                    "cmake",
+                    "--build",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/build",
+                    "--parallel",
+                    "2"
+                  ],
+                  "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                  "elapsed_seconds": 3.715,
+                  "exit_code": 0,
+                  "timed_out": false,
+                  "timeout_seconds": 180
+                },
+                {
+                  "argv": [
+                    "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/examples/synthetic/demo.py",
+                    "--build-dir",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/build"
+                  ],
+                  "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                  "elapsed_seconds": 9.532,
+                  "exit_code": 0,
+                  "timed_out": false,
+                  "timeout_seconds": 120
+                },
+                {
+                  "argv": [
+                    "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/examples/synthetic/demo.py",
+                    "--build-dir",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/build",
+                    "--expect-mismatch"
+                  ],
+                  "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                  "elapsed_seconds": 9.273,
+                  "exit_code": 0,
+                  "timed_out": false,
+                  "timeout_seconds": 120
+                }
+              ],
+              "passed": true,
+              "reports": [],
+              "stage": "build"
+            },
+            {
+              "commands": [
+                {
+                  "argv": [
+                    "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/validation/validate_linked_structures.py",
+                    "--binary",
+                    "/Users/daeken/projects/DAODecomp/gamedata/bin_ship/DAOrigins.exe",
+                    "--build-dir",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7/build",
+                    "--report-dir",
+                    "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/reports",
+                    "--suite",
+                    "public",
+                    "--function",
+                    "fn_00018400",
+                    "--jobs",
+                    "1"
+                  ],
+                  "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/tree-dyvy3hp7",
+                  "elapsed_seconds": 0.147,
+                  "exit_code": 1,
+                  "timed_out": false,
+                  "timeout_seconds": 600
+                }
+              ],
+              "passed": false,
+              "reports": [
+                {
+                  "error": "missing report",
+                  "passed": false,
+                  "report": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/reports/fn_00018400-public.json"
+                }
+              ],
+              "stage": "public"
+            }
+          ],
+          "model": "gpt-6-luna",
+          "number": 1,
+          "source_sha256": "ef01eb428959d5e3eff836966f572131323c161b92996d8fb01b64ccece9d80e",
+          "status": "public-failed"
+        }
+      ],
+      "elapsed_seconds": 37.014,
+      "reported_usage_sum": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 12672,
+        "input_tokens": 18880,
+        "output_tokens": 1021,
+        "reasoning_output_tokens": 440
+      }
+    },
+    {
+      "path": "local/pairs/linked-unlink-001-freeze-4-run",
+      "status": "needs-evidence",
+      "status_sha256": "752b69418a4da27ce99ab50b580afeb9d06ea63e798a4d74cd811f6efe4ba6dd",
+      "reason": "Public comparison rejected unchanged proposal: 272 passes, 528 mismatches, 240 candidate runner errors; all original executions returned observations. No heldout/negative/review stages ran. Pipeline stopped without automatic retry.",
+      "new_model_request_count": 0,
+      "requests": [
+        {
+          "attempt_slot_model": "gpt-6-luna",
+          "kind": "implementation",
+          "original_path": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response.json",
+          "original_request_metrics": {
+            "command": [
+              "codex",
+              "exec",
+              "--model",
+              "gpt-6-luna",
+              "--sandbox",
+              "read-only",
+              "--ephemeral",
+              "-c",
+              "model_reasoning_effort=\"medium\"",
+              "--json",
+              "--output-schema",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response-schema.json",
+              "--output-last-message",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response.json",
+              "-"
+            ],
+            "elapsed_seconds": 13.189,
+            "exit_code": 0,
+            "output_exists": true,
+            "packet_sha256": "35de1d6ee2ac0e37be86618b9390881e5eed8ddab71d1537e6e73c507f9090f7",
+            "reasoning_effort": "medium",
+            "requested_model": "gpt-6-luna",
+            "schema_version": 1,
+            "timed_out": false,
+            "tool_items": [],
+            "usage": [
+              {
+                "cache_write_input_tokens": 0,
+                "cached_input_tokens": 12672,
+                "input_tokens": 18880,
+                "output_tokens": 1021,
+                "reasoning_output_tokens": 440
+              }
+            ]
+          },
+          "requested_model": "gpt-6-luna",
+          "response_sha256": "abf7299f1e603e56c0706475cb1d9cc190228f9120d47b3fa32cb44d4dc58960",
+          "reused": true
+        }
+      ],
+      "elapsed_seconds": 304.307,
+      "source_sha256": "ef01eb428959d5e3eff836966f572131323c161b92996d8fb01b64ccece9d80e",
+      "public_report": "local/pairs/linked-unlink-001-freeze-4-run/attempt-1/reports/fn_00018400-public.json",
+      "public_report_sha256": "80d03f1e80ca11af1eb3dc18a377546710e5818c966451a0aade6bf8e79c9b82"
+    },
+    {
+      "path": "local/pairs/linked-unlink-001-public-repair-run",
+      "status": "needs-evidence",
+      "status_sha256": "ccb8b11f9bc37e50227fcd32dd2b183fa20537cd027eda13538b76216f8b762e",
+      "reason": "Second valid-interface Luna proposal failed public checks:272passes,528mismatches,240candidate-only exception exits. Failed-case original and candidate repeats each stable. No heldout or independent review ran.",
+      "new_model_request_count": 1,
+      "requests": [
+        {
+          "command": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6-luna",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request/response.json",
+            "-"
+          ],
+          "elapsed_seconds": 10.5,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "implementation",
+          "outer": {
+            "argv": [
+              "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/frozen/tools/run_model_packet.py",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/prompt.txt",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request",
+              "--model",
+              "gpt-6-luna",
+              "--timeout",
+              "180"
+            ],
+            "cwd": "/Users/daeken/projects/DAODecomp",
+            "elapsed_seconds": 10.575,
+            "exit_code": 0,
+            "timed_out": false,
+            "timeout_seconds": 195
+          },
+          "output_exists": true,
+          "packet_sha256": "8b7264989bf96916a099615191a799dac66020c7d97627135dd8046ed45b2218",
+          "prompt_sha256": "8b7264989bf96916a099615191a799dac66020c7d97627135dd8046ed45b2218",
+          "reasoning_effort": "medium",
+          "requested_model": "gpt-6-luna",
+          "reused": false,
+          "schema_version": 1,
+          "timed_out": false,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 0,
+              "input_tokens": 36418,
+              "output_tokens": 702,
+              "reasoning_output_tokens": 0
+            }
+          ]
+        }
+      ],
+      "elapsed_seconds": 314.545,
+      "source_sha256": "ef64a41e0a59fe1387ad5fe65da3e190a401b84bc9c8192284e9c22d65768507"
+    },
+    {
+      "path": "local/pairs/linked-unlink-001-sol-run",
+      "status": "review-reject",
+      "status_sha256": "ca61a5389dde2fab6a149ae2b8dceb703f5092f412dabfe6f4c0980b5dacc751",
+      "reason": "All deterministic gates passed; independent Luna source reviewer rejected, referencing earlier Luna proposal mismatches and reading EDX load as EAX. Rejection retained, no integration. Separate Sol adjudication pending; coordinator disagreement is not an acceptance.",
+      "new_model_request_count": 1,
+      "requests": [
+        {
+          "attempt_slot_model": "gpt-6-luna",
+          "kind": "implementation",
+          "original_path": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response.json",
+          "original_request_metrics": {
+            "command": [
+              "codex",
+              "exec",
+              "--model",
+              "gpt-6.1-sol",
+              "--sandbox",
+              "read-only",
+              "--ephemeral",
+              "-c",
+              "model_reasoning_effort=\"medium\"",
+              "--json",
+              "--output-schema",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response-schema.json",
+              "--output-last-message",
+              "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response.json",
+              "-"
+            ],
+            "elapsed_seconds": 15.161,
+            "exit_code": 0,
+            "output_exists": true,
+            "packet_sha256": "53dbb70f9f0b966e64c486793749a3aaedf889371c8b0c56e172c83cad294203",
+            "reasoning_effort": "medium",
+            "requested_model": "gpt-6.1-sol",
+            "schema_version": 1,
+            "timed_out": false,
+            "tool_items": [],
+            "usage": [
+              {
+                "cache_write_input_tokens": 0,
+                "cached_input_tokens": 0,
+                "input_tokens": 33144,
+                "output_tokens": 730,
+                "reasoning_output_tokens": 93
+              }
+            ]
+          },
+          "requested_model": "gpt-6.1-sol",
+          "response_sha256": "633c4c040af1d7692e9247088a05fd949dcf9f2abc82c5098d941d2b33e920c6",
+          "reused": true
+        },
+        {
+          "argv": [
+            "codex",
+            "exec",
+            "--model",
+            "gpt-6-luna",
+            "--sandbox",
+            "read-only",
+            "--ephemeral",
+            "--ignore-user-config",
+            "--skip-git-repo-check",
+            "-c",
+            "model_reasoning_effort=\"medium\"",
+            "--json",
+            "--output-schema",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/response-schema.json",
+            "--output-last-message",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/response.json",
+            "-"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/empty-workspace",
+          "elapsed_seconds": 6.47,
+          "errors": [],
+          "exit_code": 0,
+          "kind": "review",
+          "prompt_sha256": "27613e62f4ff4e0520384dca056632568d36f738ca833854eaf427bdd6fa1b1b",
+          "requested_model": "gpt-6-luna",
+          "reused": false,
+          "timed_out": false,
+          "timeout_seconds": 180,
+          "tool_items": [],
+          "usage": [
+            {
+              "cache_write_input_tokens": 0,
+              "cached_input_tokens": 0,
+              "input_tokens": 74621,
+              "output_tokens": 431,
+              "reasoning_output_tokens": 0
+            }
+          ]
+        }
+      ],
+      "elapsed_seconds": 614.168,
+      "source_sha256": "9916d667a9ed2a35a129ca8accbedc5248b8e926040c2f686b0b9cc869e10e96",
+      "gate_results": [
+        {
+          "stage": "build",
+          "passed": true,
+          "reports": []
+        },
+        {
+          "stage": "public",
+          "passed": true,
+          "reports": [
+            {
+              "contract_raw_file_sha256": "b5e63558410e8bbc3f09108c115b41b61cf1b61aab0a985b2f5427fcbeb57a86",
+              "corpus": "public",
+              "corpus_raw_file_sha256": "48e88b3ad2f9eb659eff94d852b25a00edcdaa7b15849fa8019b3adb09b01a0b",
+              "counts": {
+                "corpus_pass": 1040
+              },
+              "function": "fn_00018400",
+              "passed": true,
+              "report": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/attempt-1/reports/fn_00018400-public.json"
+            }
+          ]
+        },
+        {
+          "stage": "heldout",
+          "passed": true,
+          "reports": [
+            {
+              "contract_raw_file_sha256": "b5e63558410e8bbc3f09108c115b41b61cf1b61aab0a985b2f5427fcbeb57a86",
+              "corpus": "heldout",
+              "corpus_raw_file_sha256": "878ed58b9af25c3ee1466a61ef5d1f5925adc8ecfeaaea1af421f9184637dbea",
+              "counts": {
+                "corpus_pass": 128
+              },
+              "function": "fn_00018400",
+              "passed": true,
+              "report": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/attempt-1/reports/fn_00018400-heldout.json"
+            }
+          ]
+        },
+        {
+          "stage": "negative",
+          "passed": true,
+          "reports": [
+            {
+              "contract_raw_file_sha256": "b5e63558410e8bbc3f09108c115b41b61cf1b61aab0a985b2f5427fcbeb57a86",
+              "corpus": "public",
+              "corpus_raw_file_sha256": "48e88b3ad2f9eb659eff94d852b25a00edcdaa7b15849fa8019b3adb09b01a0b",
+              "counts": {
+                "corpus_pass": 512,
+                "mismatch": 528
+              },
+              "function": "fn_00018400",
+              "passed": true,
+              "report": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/attempt-1/reports/fn_00018400-mutant.json"
+            }
+          ]
+        }
+      ],
+      "review": {
+        "decision": "reject",
+        "issues": [
+          {
+            "detail": "The return contract is wrong on a found tail. In the original slice, after reading target.next as zero, execution reads target.prev into EAX at 0x18445, then writes that value to list.tail at 0x18448 and returns at 0x1844b. The candidate instead returns its `eax` variable, which it set to zero from target.next, so it loses the raw predecessor return. The supplied public counterexample confirms this: oracle return is 33554464 while candidate return is 0. Preserve the full raw predecessor in this branch while keeping ECX at the entry list VA.",
+            "function": "fn_00018400",
+            "severity": "blocking"
+          },
+          {
+            "detail": "Although the implementation follows the supplied pinned slice and identifies the function by the pinned module hash, RVA, and 78-byte capture hash (75 executed bytes), its public corpus report has 528 mismatches and the counterexample above demonstrates a semantic defect. Build and synthetic infrastructure controls pass, but they do not validate this function\u2019s behavior.",
+            "function": "fn_00018400",
+            "severity": "blocking"
+          },
+          {
+            "detail": "The recorded execution is a native C++ candidate compared against an instruction emulator on macOS ARM64, with hash-bound source, contract, corpus, and binary inputs. It is bounded corpus evidence, not native Windows execution, a tested x86 ABI bridge, or proof of behavior beyond the stated four-node, disjoint canonical RAM domain.",
+            "function": "fn_00018400",
+            "severity": "note"
+          }
+        ],
+        "limitations": [
+          "Review is limited to the supplied evidence; no tools, files, commands, browsing, or agents were used.",
+          "No registry integration is approved.",
+          "The evidence does not establish Windows synchronization, allocation/lifetime, concurrency, or whole-game behavior."
+        ],
+        "summary": "Reject the scoped source package: `fn_00018400` incorrectly returns zero when unlinking a found tail instead of returning the former raw predecessor pointer. The reported public mismatches include a concrete counterexample. The implementation\u2019s stated domain and supporting emulator evidence do not resolve this defect."
+      },
+      "review_sha256": "9233357f6016f50e064ca0fb2c324f91411aae5537ca16c11125dd460c7cd3ba"
+    }
+  ],
+  "corrected_packet": "local/pairs/linked-unlink-001-freeze-3/correction.json",
+  "active_pipeline": null,
+  "corrected_invocation_limits": {
+    "implementation_attempts": 1,
+    "independent_reviewer": "gpt-6-luna",
+    "maximum_new_requests": 2
+  },
+  "accounting_note": "CLI worker usage only, separate from unavailable infrastructure/coordinator usage and account charges. All failed requests retained; no counter reset or claim that missing-interface failures measured model decompilation quality.",
+  "proof": false,
+  "native_windows_validated": false,
+  "snapshot_correction": {
+    "manifest": "local/pairs/linked-unlink-001-freeze-4-manifest.json",
+    "manifest_raw_sha256": "da8d76bdfa5765445f07801380389c647defef6932b77a89e3c75cb479e6669f",
+    "evidence": "local/pairs/linked-unlink-001-freeze-4/correction.json",
+    "effect": "Adds one existing unchanged validator artifact; all previous inputs, stage commands, packet and candidate unchanged.",
+    "new_implementation_requests": 0,
+    "maximum_new_review_requests": 1
+  },
+  "public_repair": {
+    "manifest": "local/pairs/linked-unlink-001-public-repair-manifest.json",
+    "manifest_raw_sha256": "be7dea1ab4a8e3ca685be0f2d410cd3090175a89a83f33ca4231754ed64064ae",
+    "classification": "local/pairs/linked-unlink-001-public-repair/correction.json",
+    "preparation_worker": {
+      "model": "gpt-6-luna",
+      "assignments": 1,
+      "usage": null,
+      "result": "No packet produced; unsupported explanation not included. Coordinator mechanically extracted existing public evidence; no original/candidate rerun for triage."
+    },
+    "implementation_attempt_limit": 1,
+    "reviewer_model": "gpt-6-luna",
+    "new_request_limit": 2,
+    "all_acceptance_unchanged": true
+  },
+  "sol_escalation": {
+    "manifest": "local/pairs/linked-unlink-001-sol-manifest.json",
+    "implementation": "local/pairs/linked-unlink-001-sol-escalation/implementation",
+    "reason": "Two valid-interface Luna implementations failed the same bounded public corpus; one permitted Sol escalation.",
+    "maximum_new_requests": 2,
+    "reviewer_model": "gpt-6-luna",
+    "frozen_acceptance_unchanged": true
+  },
+  "implementation_escalation_request": {
+    "path": "local/pairs/linked-unlink-001-sol-escalation/implementation/run.json",
+    "metrics": {
+      "schema_version": 1,
+      "requested_model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "packet_sha256": "53dbb70f9f0b966e64c486793749a3aaedf889371c8b0c56e172c83cad294203",
+      "command": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6.1-sol",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response.json",
+        "-"
+      ],
+      "elapsed_seconds": 15.161,
+      "exit_code": 0,
+      "timed_out": false,
+      "usage": [
+        {
+          "input_tokens": 33144,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 730,
+          "reasoning_output_tokens": 93
+        }
+      ],
+      "tool_items": [],
+      "output_exists": true
+    },
+    "count_once_note": "This is the actual new Sol implementation request. Pipeline reuses are not new requests."
+  },
+  "review_adjudication": {
+    "manifest": "local/pairs/linked-unlink-001-adjudication-manifest.json",
+    "reason": "Concrete disagreement over current source/report version and x86 destination register",
+    "reviewer_model": "gpt-6.1-sol",
+    "maximum_new_requests": 1,
+    "implementation_reused": true,
+    "acceptance_inputs_and_commands_unchanged": true,
+    "evidence": "local/pairs/linked-unlink-001-review-dispute/dispute.json"
+  },
+  "accepted_run": {
+    "path": "local/pairs/linked-unlink-001-adjudication-run",
+    "status_sha256": "39f61c04d2992f72b16211eec5c3f017b765d0556c072aa3c75612c214d120bc",
+    "elapsed_seconds": 621.827,
+    "source_sha256": "9916d667a9ed2a35a129ca8accbedc5248b8e926040c2f686b0b9cc869e10e96",
+    "package_sha256": "6bda87388bd8b9fffa3e751ba5e9acea837c99b73ec789d3c37c8404ea5e5fdb",
+    "review_sha256": "397ebb2ea2215d14235062227580a0634c2a326c3fcdd456a4f933424a97704b",
+    "review_model": "gpt-6.1-sol",
+    "positive_cases": 1168,
+    "public_cases": 1040,
+    "heldout_cases": 128,
+    "negative_control": {
+      "corpus_pass": 512,
+      "mismatch": 528,
+      "errors": 0
+    },
+    "checkpoint_status": "passed",
+    "checkpoint": {
+      "path": "reports/checkpoint-linked-unlink-001/checkpoint.json",
+      "raw_sha256": "83811c0f6855f00b947010b30bbc07914105ae24a9d5aa6a3759b944fc7552d2",
+      "elapsed_seconds": 2090.237,
+      "functions": 21,
+      "positive_cases": 10366,
+      "negative_controls": 7,
+      "tooling_tests": 125,
+      "record": "analysis/validation/linked-unlink-001.json",
+      "record_sha256": "1156f3bbfd3f9adf22a5d99d30513c3589f385712018db10600ff04c43254292"
+    }
+  },
+  "unique_cli_requests": {
+    "count": 8,
+    "per_model": {
+      "gpt-6-luna": {
+        "requests": 5,
+        "elapsed_seconds_sum": 54.404,
+        "reported_usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 12672,
+          "input_tokens": 173367,
+          "output_tokens": 4484,
+          "reasoning_output_tokens": 1248
+        }
+      },
+      "gpt-6.1-sol": {
+        "requests": 3,
+        "elapsed_seconds_sum": 61.525,
+        "reported_usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 124510,
+          "output_tokens": 3099,
+          "reasoning_output_tokens": 619
+        }
+      }
+    },
+    "requests": [
+      {
+        "origin": "local/pairs/linked-unlink-001-freeze-2-run/status.json",
+        "index": 0,
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6-luna",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 9.203,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "implementation",
+        "outer": {
+          "argv": [
+            "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/prompt.txt",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-1/model/request",
+            "--model",
+            "gpt-6-luna",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp",
+          "elapsed_seconds": 9.268,
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": 195
+        },
+        "output_exists": true,
+        "packet_sha256": "f3fc400ba2f39a8b66393411652429c84c6de5f7bb104b7131a741aa4c1a5de5",
+        "prompt_sha256": "f3fc400ba2f39a8b66393411652429c84c6de5f7bb104b7131a741aa4c1a5de5",
+        "reasoning_effort": "medium",
+        "requested_model": "gpt-6-luna",
+        "reused": false,
+        "schema_version": 1,
+        "timed_out": false,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 21714,
+            "output_tokens": 807,
+            "reasoning_output_tokens": 0
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-freeze-2-run/status.json",
+        "index": 1,
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6-luna",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 15.042,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "implementation",
+        "outer": {
+          "argv": [
+            "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/prompt.txt",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-2/model/request",
+            "--model",
+            "gpt-6-luna",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp",
+          "elapsed_seconds": 15.158,
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": 195
+        },
+        "output_exists": true,
+        "packet_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+        "prompt_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+        "reasoning_effort": "medium",
+        "requested_model": "gpt-6-luna",
+        "reused": false,
+        "schema_version": 1,
+        "timed_out": false,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 21734,
+            "output_tokens": 1523,
+            "reasoning_output_tokens": 808
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-freeze-2-run/status.json",
+        "index": 2,
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6.1-sol",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 25.69,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "implementation",
+        "outer": {
+          "argv": [
+            "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/frozen/tools/run_model_packet.py",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/prompt.txt",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-2-run/attempt-3/model/request",
+            "--model",
+            "gpt-6.1-sol",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp",
+          "elapsed_seconds": 25.759,
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": 195
+        },
+        "output_exists": true,
+        "packet_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+        "prompt_sha256": "867f40cf9beab89c14582dfea1f57122ff3c0216dc83fc1fb4d4278e41d42c4f",
+        "reasoning_effort": "medium",
+        "requested_model": "gpt-6.1-sol",
+        "reused": false,
+        "schema_version": 1,
+        "timed_out": false,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 18511,
+            "output_tokens": 1370,
+            "reasoning_output_tokens": 356
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-freeze-3-run/status.json",
+        "index": 0,
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6-luna",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 13.189,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "implementation",
+        "outer": {
+          "argv": [
+            "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/frozen/tools/run_model_packet.py",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/prompt.txt",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-freeze-3-run/attempt-1/model/request",
+            "--model",
+            "gpt-6-luna",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp",
+          "elapsed_seconds": 13.259,
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": 195
+        },
+        "output_exists": true,
+        "packet_sha256": "35de1d6ee2ac0e37be86618b9390881e5eed8ddab71d1537e6e73c507f9090f7",
+        "prompt_sha256": "35de1d6ee2ac0e37be86618b9390881e5eed8ddab71d1537e6e73c507f9090f7",
+        "reasoning_effort": "medium",
+        "requested_model": "gpt-6-luna",
+        "reused": false,
+        "schema_version": 1,
+        "timed_out": false,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 12672,
+            "input_tokens": 18880,
+            "output_tokens": 1021,
+            "reasoning_output_tokens": 440
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-public-repair-run/status.json",
+        "index": 0,
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6-luna",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 10.5,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "implementation",
+        "outer": {
+          "argv": [
+            "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/frozen/tools/run_model_packet.py",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/prompt.txt",
+            "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-public-repair-run/attempt-1/model/request",
+            "--model",
+            "gpt-6-luna",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/daeken/projects/DAODecomp",
+          "elapsed_seconds": 10.575,
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": 195
+        },
+        "output_exists": true,
+        "packet_sha256": "8b7264989bf96916a099615191a799dac66020c7d97627135dd8046ed45b2218",
+        "prompt_sha256": "8b7264989bf96916a099615191a799dac66020c7d97627135dd8046ed45b2218",
+        "reasoning_effort": "medium",
+        "requested_model": "gpt-6-luna",
+        "reused": false,
+        "schema_version": 1,
+        "timed_out": false,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 36418,
+            "output_tokens": 702,
+            "reasoning_output_tokens": 0
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-sol-run/status.json",
+        "index": 1,
+        "argv": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6-luna",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "--ignore-user-config",
+          "--skip-git-repo-check",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/response.json",
+          "-"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-run/review/empty-workspace",
+        "elapsed_seconds": 6.47,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "review",
+        "prompt_sha256": "27613e62f4ff4e0520384dca056632568d36f738ca833854eaf427bdd6fa1b1b",
+        "requested_model": "gpt-6-luna",
+        "reused": false,
+        "timed_out": false,
+        "timeout_seconds": 180,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 74621,
+            "output_tokens": 431,
+            "reasoning_output_tokens": 0
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-adjudication-run/status.json",
+        "index": 1,
+        "argv": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6.1-sol",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "--ignore-user-config",
+          "--skip-git-repo-check",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-adjudication-run/review/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-adjudication-run/review/response.json",
+          "-"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-adjudication-run/review/empty-workspace",
+        "elapsed_seconds": 20.674,
+        "errors": [],
+        "exit_code": 0,
+        "kind": "review",
+        "prompt_sha256": "fee4cbbcf50690470182742c43dd85d25bf7a5590f4a2dbd97586cca96896287",
+        "requested_model": "gpt-6.1-sol",
+        "reused": false,
+        "timed_out": false,
+        "timeout_seconds": 180,
+        "tool_items": [],
+        "usage": [
+          {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 72855,
+            "output_tokens": 999,
+            "reasoning_output_tokens": 170
+          }
+        ]
+      },
+      {
+        "origin": "local/pairs/linked-unlink-001-sol-escalation/implementation/run.json",
+        "kind": "implementation",
+        "reused": false,
+        "schema_version": 1,
+        "requested_model": "gpt-6.1-sol",
+        "reasoning_effort": "medium",
+        "packet_sha256": "53dbb70f9f0b966e64c486793749a3aaedf889371c8b0c56e172c83cad294203",
+        "command": [
+          "codex",
+          "exec",
+          "--model",
+          "gpt-6.1-sol",
+          "--sandbox",
+          "read-only",
+          "--ephemeral",
+          "-c",
+          "model_reasoning_effort=\"medium\"",
+          "--json",
+          "--output-schema",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response-schema.json",
+          "--output-last-message",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-unlink-001-sol-escalation/implementation/response.json",
+          "-"
+        ],
+        "elapsed_seconds": 15.161,
+        "exit_code": 0,
+        "timed_out": false,
+        "usage": [
+          {
+            "input_tokens": 33144,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 730,
+            "reasoning_output_tokens": 93
+          }
+        ],
+        "tool_items": [],
+        "output_exists": true
+      }
+    ],
+    "reused_responses_counted_again": false,
+    "coordinator_usage": null,
+    "account_quota_attribution": null
+  },
+  "preparation_assignments_total": {
+    "count": 7,
+    "previous_recorded": 6,
+    "additional_public_repair_packet_attempt": 1,
+    "usage": null,
+    "scope": "Excludes earlier original characterization already accounted with linked-structures-001, and independent Windows environment setup."
+  }
+}

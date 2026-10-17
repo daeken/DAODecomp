@@ -9,7 +9,7 @@ LIST_SIZE = 32
 NODE_SIZE = 12
 LIST_LIMIT = ARENA_SIZE - LIST_SIZE
 NODE_LIMIT = ARENA_SIZE - NODE_SIZE
-FUNCTIONS = {"fn_00018390": "append", "fn_000183d0": "pop"}
+FUNCTIONS = {"fn_00018390": "append", "fn_000183d0": "pop", "fn_00018400": "unlink"}
 
 # Four deliberately different layouts: unaligned objects, a list ending exactly
 # at byte 512, node offset zero, an end-of-arena node, and nonmonotonic pool order.
@@ -86,7 +86,7 @@ def active_chain(arena, list_offset, node_offsets):
 def fixture(name, inputs):
     if name not in FUNCTIONS:
         raise ValueError("unknown linked-structure function")
-    expected = {"arena", "list", "nodes"} | ({"node"} if name == "fn_00018390" else set())
+    expected = {"arena", "list", "nodes"} | ({"node"} if name in ("fn_00018390", "fn_00018400") else set())
     if type(inputs) is not dict or set(inputs) != expected:
         raise ValueError("input keys differ from linked-structure function contract")
     arena_hex = inputs["arena"]
@@ -102,6 +102,7 @@ def fixture(name, inputs):
     _check_intervals(list_offset, node_offsets)
     arena = bytes.fromhex(arena_hex)
     chain = active_chain(arena, list_offset, node_offsets)
+    writable = []
     if name == "fn_00018390":
         node = inputs["node"]
         if type(node) is not int or node not in node_offsets:
@@ -116,7 +117,7 @@ def fixture(name, inputs):
         else:
             writable.append((list_offset + 0x18, 4))
         readable = [(list_offset + 0x1C, 4)]
-    else:
+    elif name == "fn_000183d0":
         if len(chain) > 4:
             raise ValueError("pop input exceeds pool capacity")
         readable = [(list_offset + 0x18, 4)]
@@ -127,6 +128,31 @@ def fixture(name, inputs):
                 writable = [(list_offset + 0x18, 4), (list_offset + 0x1C, 4)]
             else:
                 writable = [(list_offset + 0x18, 4), (chain[1] + 8, 4)]
+    else:
+        node = inputs["node"]
+        if type(node) is not int or node not in node_offsets:
+            raise ValueError("unlink target must be a pool offset")
+        readable = [(list_offset + 0x18, 4)]
+        current = _u32(arena, list_offset + 0x18)
+        while current:
+            current_offset = current - ARENA_BASE
+            readable.append((current_offset + 4, 4))
+            if current == ARENA_BASE + node:
+                readable.extend([(node + 8, 4), (node + 4, 4)])
+                if _u32(arena, node + 8):
+                    writable.append((node_offsets[next(i for i, off in enumerate(node_offsets)
+                                                       if ARENA_BASE + off == _u32(arena, node + 8))] + 4, 4))
+                else:
+                    writable.append((list_offset + 0x18, 4))
+                if _u32(arena, node + 4):
+                    readable.append((node + 8, 4))
+                    successor = _u32(arena, node + 4) - ARENA_BASE
+                    writable.append((successor + 8, 4))
+                else:
+                    readable.append((node + 8, 4))
+                    writable.append((list_offset + 0x1C, 4))
+                break
+            current = _u32(arena, current_offset + 4)
     return arena, readable, writable, chain, node_offsets
 
 
@@ -139,7 +165,7 @@ def _arena_seed(name, suite, index):
 def _inputs(name, arena, list_offset, node_offsets, node=None):
     inputs = {"arena": bytes(arena).hex(), "list": list_offset,
               "nodes": struct.pack("<4I", *node_offsets).hex()}
-    if name == "fn_00018390":
+    if name in ("fn_00018390", "fn_00018400"):
         inputs["node"] = node
     return inputs
 
@@ -169,6 +195,22 @@ def _model_step(name, inputs):
             _put_u32(after, list_offset + 0x18, _ptr(offset))
         _put_u32(after, list_offset + 0x1C, _ptr(offset))
         return _ptr(offset), bytes(after)
+    if name == "fn_00018400":
+        target = inputs["node"]
+        if target not in chain:
+            return 0, bytes(after)
+        index = chain.index(target)
+        previous = chain[index - 1] if index else None
+        following = chain[index + 1] if index + 1 < len(chain) else None
+        if previous is None:
+            _put_u32(after, list_offset + 0x18, _ptr(following) if following is not None else 0)
+        else:
+            _put_u32(after, previous + 4, _ptr(following) if following is not None else 0)
+        if following is None:
+            _put_u32(after, list_offset + 0x1C, _ptr(previous) if previous is not None else 0)
+        else:
+            _put_u32(after, following + 8, _ptr(previous) if previous is not None else 0)
+        return _ptr(following) if following is not None else 0, bytes(after)
     if not chain:
         return 0, bytes(after)
     old = chain[0]
@@ -206,6 +248,16 @@ def composition_snapshots(name):
     """Return pre-state inputs from deterministic append/drain/reappend sequences."""
     if name not in FUNCTIONS:
         raise ValueError("unknown linked-structure function")
+    if name == "fn_00018400":
+        reached = []
+        for list_offset, node_offsets in LAYOUTS:
+            arena = bytearray(_arena_seed("unlink-composition", "heldout", list_offset))
+            _with_chain(arena, list_offset, node_offsets, (1, 3, 0))
+            first = _inputs(name, arena, list_offset, node_offsets, node_offsets[3])
+            _, after = _model_step(name, first)
+            second = _inputs(name, after, list_offset, node_offsets, node_offsets[1])
+            reached.append(second)
+        return reached
     return [inputs for function, inputs in composition_plan() if function == name]
 
 
@@ -223,10 +275,14 @@ def _heldout_inputs(name, index):
         active = identities[:length]
         inactive = identities[length:]
         node = inactive[(index // 4) % len(inactive)]
-    else:
+    elif name == "fn_000183d0":
         length = index % 5
         active = identities[:length]
         node = None
+    else:
+        length = index % 5
+        active = identities[:length]
+        node = identities[(index // 5) % 4]
     _with_chain(arena, list_offset, node_offsets, active)
     return _inputs(name, bytes(arena), list_offset, node_offsets,
                    node_offsets[node] if node is not None else None)
@@ -249,12 +305,20 @@ def cases(name, suite="public"):
                             _with_chain(arena, list_offset, node_offsets, order)
                             inputs_list.append(_inputs(name, arena, list_offset, node_offsets,
                                                        node_offsets[node_identity]))
-            else:
+            elif name == "fn_000183d0":
                 for length in range(5):
                     for order in itertools.permutations(range(4), length):
                         arena = bytearray(arena_seed)
                         _with_chain(arena, list_offset, node_offsets, order)
                         inputs_list.append(_inputs(name, arena, list_offset, node_offsets))
+            else:
+                for length in range(5):
+                    for order in itertools.permutations(range(4), length):
+                        for node_identity in range(4):
+                            arena = bytearray(arena_seed)
+                            _with_chain(arena, list_offset, node_offsets, order)
+                            inputs_list.append(_inputs(name, arena, list_offset, node_offsets,
+                                                       node_offsets[node_identity]))
     else:
         inputs_list = composition_snapshots(name)
         # Keep the sequence-reached snapshots explicit in heldout, then fill to
@@ -267,7 +331,7 @@ def cases(name, suite="public"):
             if repr(item) not in seen:
                 seen.add(repr(item))
                 inputs_list.append(item)
-    expected_count = 256 if name == "fn_00018390" and suite == "public" else 260 if suite == "public" else 128
+    expected_count = (256 if name == "fn_00018390" else 260 if name == "fn_000183d0" else 1040) if suite == "public" else 128
     if len(inputs_list) != expected_count:
         raise AssertionError(f"unexpected {suite} corpus size for {name}: {len(inputs_list)}")
     result = []

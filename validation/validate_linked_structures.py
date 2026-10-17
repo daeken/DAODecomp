@@ -50,7 +50,7 @@ def validate_function(function, *, binary, executable, build_dir, report_dir, su
                                      for key in ("public", "heldout")},
                   backend_versions={"unicorn": version("unicorn"), "python": platform.python_version()},
                   native_windows_validated=False,
-                  scope="Guarded original x86 leaf versus native C++; exact conditional dword footprints, raw full EAX and complete 512-byte arena; bounded corpus evidence only")
+                  scope="Guarded original x86 leaf versus native C++; exact conditional dword footprints, raw full EAX, conditional ECX observation and complete 512-byte arena; bounded corpus evidence only")
     destination = report_dir / (name + suffix + ".json")
     write_json(destination, report)
     counts = {state: sum(row["status"] == state for row in report["cases"])

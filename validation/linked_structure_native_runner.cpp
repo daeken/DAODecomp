@@ -1,4 +1,5 @@
 #include "dao/linked_structures.hpp"
+#include "linked_unlink_mutant.hpp"
 
 #include <algorithm>
 #include <array>
@@ -117,32 +118,34 @@ int main(int argc, char** argv) {
     if (argc != 2) return 2;
     const std::string_view name{argv[1]};
     const bool append = name == "fn_00018390";
-    if (!append && name != "fn_000183d0") return 2;
+    const bool pop = name == "fn_000183d0";
+    const bool unlink = name == "fn_00018400";
+    if (!append && !pop && !unlink) return 2;
     std::string arena_hex, node_hex, extra;
     std::uint64_t raw_list = 0, raw_node = 0;
     if (!(std::cin >> arena_hex >> raw_list >> node_hex)) return 2;
-    if (append && !(std::cin >> raw_node)) return 2;
-    if (std::cin >> extra || raw_list > kListLimit || (append && raw_node > kNodeLimit)) return 2;
+    if ((append || unlink) && !(std::cin >> raw_node)) return 2;
+    if (std::cin >> extra || raw_list > kListLimit || ((append || unlink) && raw_node > kNodeLimit)) return 2;
     std::array<std::uint8_t, kArenaSize> bytes{};
     if (!decode_hex(arena_hex, bytes)) return 2;
     const auto list = static_cast<std::uint32_t>(raw_list);
     Graph graph;
     try {
         graph = validate_graph(bytes, list, node_hex);
-        if (append) {
+        if (append || unlink) {
             const auto node = static_cast<std::uint32_t>(raw_node);
             if (std::find(graph.nodes.begin(), graph.nodes.end(), node) == graph.nodes.end()
-                    || std::find(graph.active.begin(), graph.active.begin() + static_cast<std::ptrdiff_t>(graph.active_count), node)
-                       != graph.active.begin() + static_cast<std::ptrdiff_t>(graph.active_count)
-                    || graph.active_count > 3)
-                throw std::runtime_error("append node is not an inactive pool member");
+                    || (append && std::find(graph.active.begin(), graph.active.begin() + static_cast<std::ptrdiff_t>(graph.active_count), node)
+                       != graph.active.begin() + static_cast<std::ptrdiff_t>(graph.active_count))
+                    || (append && graph.active_count > 3))
+                throw std::runtime_error("target is outside the allowed pool/domain");
         }
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 2;
     }
 
-    std::array<dao::MemoryRange, 2> readable{};
+    std::array<dao::MemoryRange, 16> readable{};
     std::size_t readable_count = 0;
     std::array<dao::MemoryRange, 5> writable{};
     std::size_t writable_count = 0;
@@ -154,7 +157,7 @@ int main(int argc, char** argv) {
         writable[writable_count++] = {list + 0x1c, 4};
         if (graph.active_count == 0) writable[writable_count++] = {list + 0x18, 4};
         else writable[writable_count++] = {graph.active[graph.active_count - 1] + 4, 4};
-    } else {
+    } else if (pop) {
         readable[readable_count++] = {list + 0x18, 4};
         if (graph.active_count != 0) {
             readable[readable_count++] = {graph.active[0] + 4, 4};
@@ -166,17 +169,42 @@ int main(int argc, char** argv) {
                 writable[writable_count++] = {graph.active[1] + 8, 4};
             }
         }
+    } else {
+        readable[readable_count++] = {list + 0x18, 4};
+        for (std::size_t i = 0; i < graph.active_count; ++i) {
+            const auto current = graph.active[i];
+            if (current != static_cast<std::uint32_t>(raw_node))
+                readable[readable_count++] = {current + 4, 4};
+            else {
+                readable[readable_count++] = {current + 8, 4};
+                readable[readable_count++] = {current + 4, 4};
+                const auto prev = read_u32(bytes, current + 8);
+                const auto next = read_u32(bytes, current + 4);
+                if (next) readable[readable_count++] = {current + 8, 4};
+                if (prev) writable[writable_count++] = {prev - dao::kLinkedArenaBase + 4, 4};
+                else writable[writable_count++] = {list + 0x18, 4};
+                if (next) writable[writable_count++] = {next - dao::kLinkedArenaBase + 8, 4};
+                else writable[writable_count++] = {list + 0x1c, 4};
+                break;
+            }
+        }
     }
     dao::GuestMemory memory{bytes,
         std::span<const dao::MemoryRange>{readable.data(), readable_count},
         std::span<const dao::MemoryRange>{writable.data(), writable_count}};
     std::uint32_t result = 0;
+    std::uint32_t ecx_exit = 0;
 #ifdef DAO_LINKED_STRUCTURE_MUTANT
     const auto initial_head = graph.head;
 #endif
     try {
-        result = append ? dao::fn_00018390(memory, list, static_cast<std::uint32_t>(raw_node))
-                        : dao::fn_000183d0(memory, list);
+        if (append) result = dao::fn_00018390(memory, list, static_cast<std::uint32_t>(raw_node));
+        else if (pop) result = dao::fn_000183d0(memory, list);
+        else {
+            const auto observation = dao::fn_00018400(memory, list, static_cast<std::uint32_t>(raw_node));
+            result = observation.eax;
+            ecx_exit = observation.ecx_exit;
+        }
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 3;
@@ -184,6 +212,8 @@ int main(int argc, char** argv) {
 #ifdef DAO_LINKED_STRUCTURE_MUTANT
     if (append) {
         result = 0;
+    } else if (unlink) {
+        ecx_exit = dao::linked_unlink_mutant_ecx(list, ecx_exit);
     } else if (initial_head != 0) {
         const auto old_offset = initial_head - dao::kLinkedArenaBase;
         // Deliberately clear the popped node's forward link after the correct
@@ -195,4 +225,5 @@ int main(int argc, char** argv) {
     for (const auto byte : bytes)
         std::cout << kHexDigits[byte >> 4] << kHexDigits[byte & 0x0f];
     std::cout << '\n';
+    if (unlink) std::cout << ecx_exit << '\n';
 }

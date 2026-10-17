@@ -123,7 +123,7 @@ class RecoveryPairTests(unittest.TestCase):
         self.mode("public", "fail")
         result = self.run_pair()
         self.assertEqual(result["status"], "implementation-exhausted")
-        self.assertEqual([c[2] for c in self.calls], ["gpt-6-luna", "gpt-6-luna", "gpt-6.1-sol"])
+        self.assertEqual([c[2] for c in self.calls], ["gpt-6.1-sol", "gpt-6.1-sol", "gpt-6.1-sol"])
         self.assertNotIn("review", [c[0] for c in self.calls])
         self.assertIn('"return":1', self.calls[1][1])
         self.assertFalse((self.output / "accepted").exists())
@@ -221,13 +221,13 @@ class RecoveryPairTests(unittest.TestCase):
         self.assertTrue(result["model_requests"][0]["reused"])
         self.assertEqual(result["new_model_request_count"], 1)
 
-    def test_reused_source_preserves_actual_sol_origin_and_luna_slot_separately(self):
+    def test_reused_source_preserves_actual_luna_origin_and_sol_slot_separately(self):
         response = self.root / "response.json"
         write(response, self.proposal())
-        write(self.root / "run.json", {"requested_model": "gpt-6.1-sol", "tool_items": []})
+        write(self.root / "run.json", {"requested_model": "gpt-6-luna", "tool_items": []})
         result = self.run_pair(initial_response=response)
-        self.assertEqual(result["model_requests"][0]["requested_model"], "gpt-6.1-sol")
-        self.assertEqual(result["model_requests"][0]["attempt_slot_model"], "gpt-6-luna")
+        self.assertEqual(result["model_requests"][0]["requested_model"], "gpt-6-luna")
+        self.assertEqual(result["model_requests"][0]["attempt_slot_model"], "gpt-6.1-sol")
 
     def test_wrong_contract_and_source_schema_fail_closed(self):
         with self.assertRaises(PairError):

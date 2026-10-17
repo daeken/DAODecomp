@@ -53,7 +53,7 @@ def publication_paths(output_dir):
     positives, negatives = [], []
     active_object_counters = False
     active_indexed_stores = False
-    active_linked_structures = False
+    active_linked_structures = 0
     for function in registry["functions"]:
         status = function.get("status")
         if status not in {"implemented", "corpus_pass", "reviewed", "integrated"}:
@@ -78,12 +78,12 @@ def publication_paths(output_dir):
             if function["name"] == "fn_00347d10":
                 negatives.append(output_dir / "reports/indexed-stores/fn_00347d10-mutant.json")
         elif backend == "linked-structures-001":
-            active_linked_structures = True
+            active_linked_structures += 1
             positives.append(output_dir / "reports/linked-structures" / (function["name"] + "-all.json"))
             negatives.append(output_dir / "reports/linked-structures" / (function["name"] + "-mutant.json"))
         else:
             raise ValueError(f"unsupported validation backend for implemented function {function['name']}: {backend}")
-    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + 2 * int(active_linked_structures)
+    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + active_linked_structures
     if not positives or len(negatives) != expected_negative_controls:
         raise ValueError("registry lacks an expected scalar, memory, or active backend negative-control function")
     return positives, negatives
