@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "Linked structures integrated and full macOS ARM64 checkpoint passed:20functions,9198positivecases,6negativecontrols,120toolingtests,CTest and bothsyntheticdemos. Commit/push and matching-headCI pending.",
+  "checkpoint": "Pushed code checkpoint77fce1c:20functions/9198positivecases,6negativecontrols,120toolingtests. Full local macOS ARM64 checkpoint passed; matching-head Linux/macOS/Windows infrastructureCI passed. No native Windows game evidence.",
   "active_group": "linked-unlink-001",
   "groups": [
     {
@@ -88,8 +88,19 @@
       "scope": "Adjacent queue unlink operation and original-only dependency composition",
       "handoff": "local/pilots/linked-unlink-001/handoff.json",
       "observations": "Producer60states replayed exactly; independent1040states and32original-only sequences. Corrected unsupported producer node-at-end claim with measured node500. Scope remains bounded original execution.",
-      "next_action": "Luna preparation: extend established linked backend with strict balanced ESI stack-save allowance and explicit conditionalECX mapping; independent acceptance review for these substantive changes only. Prefer grouping additional related functions once characterized. No candidate accepted.",
-      "independent_review": "analysis/reviews/linked-unlink-001-original.json"
+      "next_action": "Luna prepares one unlink packet using existing linked backend plus strict balanced ESI stack-save allowance and conditionalECX mapping. Independent Sol review only of substantive acceptance changes, then Luna implementation and separate Luna source review after automatic gates. No new infrastructure projects.",
+      "independent_review": "analysis/reviews/linked-unlink-001-original.json",
+      "batch_preparation": {
+        "path": "local/pilots/memory-batch-002/handoff.json",
+        "sha256": "1c87b785348bb8b3ff84accd7459c99e8023f1ae78f896361639586aa2c662aa",
+        "model": "gpt-6-luna",
+        "requests": 1,
+        "usage": null,
+        "usage_status": "collaboration worker usage unavailable; not estimated",
+        "new_original_executions": 0,
+        "ready_candidates": 1,
+        "scope": "Existing reviewed unlink evidence assembled for focused acceptance extension; related Windows dependencies remain blocked."
+      }
     }
   ],
   "infrastructure_backlog": [
@@ -176,13 +187,14 @@
   },
   "activation": {
     "started_utc": "2026-10-17T19:56:59Z",
-    "group": "checkpoint-publication",
-    "infrastructure_assignments": 0,
+    "group": "linked-unlink-001",
+    "infrastructure_assignments": 1,
     "pipeline_requests_used": 0,
-    "worker_requests_used": 0,
+    "worker_requests_used": 1,
     "total_worker_request_limit": 12,
-    "coordinator": "current thread; publish completed checkpoint first",
-    "notes": "No new validation or model work needed for already passing checkpoint."
+    "coordinator": "No active model workers; checkpoint published, next preparation handoff saved.",
+    "notes": "One fresh Luna preparation request. Existing reviewed evidence supports only unlink in this dependency family; no larger batch claimed. No probes rerun, no shared backend edits, no candidate models.",
+    "model_requests_closed": true
   },
   "last_checkpoint": {
     "pid": null,
@@ -200,7 +212,10 @@
       "optional_skips": 24,
       "log": "local/pilots/linked-structures-001-system-tests.log"
     },
-    "remaining": "Commit/push and matching-head CI.",
-    "status": "passed"
+    "remaining": "None",
+    "status": "published_ci_passed",
+    "commit": "77fce1c4fd45014af126e7d81838728482e0bb57",
+    "ci_url": "https://github.com/daeken/DAODecomp/actions/runs/39064700692",
+    "ci_conclusion": "success"
   }
 }
