@@ -20,6 +20,14 @@ negative-control checks. Only a deterministic pass goes to an independent review
 Contract/oracle reviews are separate from candidate reviews. The coordinator owns
 integration and unresolved evidence gaps, rather than relaying every test result.
 
+The user's 2026-10-17 scaling correction supersedes the initial model-routing
+proposal below: default to Luna for preparation and routine independent source
+review as well as implementation. Use one review per batch, aim for 8–16 related
+functions when their evidence permits, and reserve Sol for specific ambiguity,
+failed cheap attempts and substantive acceptance-system changes. Preserve every
+deterministic gate and review independence. Keep nonblocking infrastructure work
+deferred; see [current operating rules](continuous-recovery.md).
+
 ## Proposed division of work
 
 | Role | Initial model | Work |

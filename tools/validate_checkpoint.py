@@ -42,6 +42,8 @@ def build_commands(build_dir, output_dir, jobs, windows=None):
         ("object_counters_negative", [py, str(ROOT / "validation/validate_object_counters.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/object-counters"), *common], ROOT),
         ("indexed_stores_all", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
         ("indexed_stores_negative", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
+        ("linked_structures_all", [py, str(ROOT / "validation/validate_linked_structures.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/linked-structures"), *common], ROOT),
+        ("linked_structures_negative", [py, str(ROOT / "validation/validate_linked_structures.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/linked-structures"), *common], ROOT),
     ]
 
 
@@ -51,6 +53,7 @@ def publication_paths(output_dir):
     positives, negatives = [], []
     active_object_counters = False
     active_indexed_stores = False
+    active_linked_structures = False
     for function in registry["functions"]:
         status = function.get("status")
         if status not in {"implemented", "corpus_pass", "reviewed", "integrated"}:
@@ -74,9 +77,13 @@ def publication_paths(output_dir):
             positives.append(output_dir / "reports/indexed-stores" / (function["name"] + "-all.json"))
             if function["name"] == "fn_00347d10":
                 negatives.append(output_dir / "reports/indexed-stores/fn_00347d10-mutant.json")
+        elif backend == "linked-structures-001":
+            active_linked_structures = True
+            positives.append(output_dir / "reports/linked-structures" / (function["name"] + "-all.json"))
+            negatives.append(output_dir / "reports/linked-structures" / (function["name"] + "-mutant.json"))
         else:
             raise ValueError(f"unsupported validation backend for implemented function {function['name']}: {backend}")
-    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores)
+    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + 2 * int(active_linked_structures)
     if not positives or len(negatives) != expected_negative_controls:
         raise ValueError("registry lacks an expected scalar, memory, or active backend negative-control function")
     return positives, negatives

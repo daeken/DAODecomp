@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "status": "integrated-validated",
+  "candidate_target": "src/linked_structures.cpp",
+  "source": "local/pairs/linked-structures-001-freeze-1-run/accepted/candidate.cpp",
+  "source_sha256": "4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5",
+  "manifest": "local/pairs/linked-structures-001-freeze-1-run/manifest.json",
+  "manifest_canonical_json_sha256": "fed1d793feb7cc8e5061dfb167aa967410ce55eebaca45468a836751d60229c3",
+  "manifest_raw_file_sha256": "78f4e9b70cd66ca3a1525a600c37c968a8d868dcbfe5fee9cc6f6bb9f91cf9a0",
+  "acceptance_review": "local/pilots/linked-structures-001-review/acceptance-review.json",
+  "acceptance_review_raw_sha256": "d9db4c10681c15a9cd8cf9b3e7e0368221202802bb877ce1bbac036c17343f40",
+  "candidate_review": "local/pairs/linked-structures-001-freeze-1-run/review-response.json",
+  "candidate_review_decision": "approve",
+  "candidate_review_raw_sha256": "8b1eeecbdcf2f17293d58108c385f7fef0c1bcef1b66e3af0ad70123e1631fc0",
+  "status_path": "local/pairs/linked-structures-001-freeze-1-run/status.json",
+  "status_raw_sha256": "c84f6ff73015235f040081f38bbad04b475728af0aac645ccabf573bb4ca338d",
+  "handoff": "local/pairs/linked-structures-001-handoff.json",
+  "handoff_raw_file_sha256": "b704f2aee0b7415a9f560168d3f4ce87ea2d4d051cfc1dd76db45933554a962e",
+  "frozen_registry": "local/pairs/linked-structures-001-freeze-1-run/frozen/analysis/functions.json",
+  "frozen_registry_raw_sha256": "02a0bd428bd84d3ac877910d2408a075090b8642c8170d90a868b47c0fcb2c6b",
+  "frozen_snapshot_live_check_count": 66,
+  "acceptance_review_live_check_count": 69,
+  "preintegration_snapshot_live_hash_mismatches": [],
+  "postintegration_snapshot_expected_mismatch": [
+    "analysis/functions.json"
+  ],
+  "postintegration_acceptance_mismatches": [
+    "analysis/functions.json",
+    "analysis/linked-structures-001.md"
+  ],
+  "integration_transition_mechanically_verified": true,
+  "pipeline_request_count": 2,
+  "maximum_pipeline_requests": 4,
+  "requests": [
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6-luna",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/attempt-1/model/request/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/attempt-1/model/request/response.json",
+        "-"
+      ],
+      "elapsed_seconds": 8.98,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "implementation",
+      "outer": {
+        "argv": [
+          "/Users/daeken/projects/DAODecomp/.venv/bin/python",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/frozen/tools/run_model_packet.py",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/attempt-1/model/prompt.txt",
+          "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/attempt-1/model/request",
+          "--model",
+          "gpt-6-luna",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/daeken/projects/DAODecomp",
+        "elapsed_seconds": 9.042,
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 195
+      },
+      "output_exists": true,
+      "packet_sha256": "bef20c372a9d913b62120af462c6485ad2f21c7d33f295183b0d12bb95c632d0",
+      "prompt_sha256": "bef20c372a9d913b62120af462c6485ad2f21c7d33f295183b0d12bb95c632d0",
+      "reasoning_effort": "medium",
+      "requested_model": "gpt-6-luna",
+      "reused": false,
+      "schema_version": 1,
+      "timed_out": false,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 19313,
+          "output_tokens": 696,
+          "reasoning_output_tokens": 0
+        }
+      ]
+    },
+    {
+      "argv": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6.1-sol",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--skip-git-repo-check",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/review/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/review/response.json",
+        "-"
+      ],
+      "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/linked-structures-001-freeze-1-run/review/empty-workspace",
+      "elapsed_seconds": 15.555,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "review",
+      "prompt_sha256": "5ee94365eee833ca5969db9584dfc7efffa4fb99b39907c478e89e062b53a241",
+      "requested_model": "gpt-6.1-sol",
+      "reused": false,
+      "timed_out": false,
+      "timeout_seconds": 180,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 95335,
+          "output_tokens": 606,
+          "reasoning_output_tokens": 65
+        }
+      ]
+    }
+  ],
+  "reported_usage_sum": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 114648,
+    "output_tokens": 1302,
+    "reasoning_output_tokens": 65
+  },
+  "model_request_elapsed_seconds_sum": 24.535,
+  "pipeline_elapsed_seconds": 211.051,
+  "infrastructure_assignments": {
+    "count": 8,
+    "agent_count": 3,
+    "usage": null,
+    "usage_status": "unavailable; not estimated",
+    "count_provisional": false,
+    "scope": "Linked backend, acceptance audit, pair preparation, scheduling proposal/review, unlink characterization/review, and scheduling repair halted before edits/tests at user cost-priority correction."
+  },
+  "accounting_note": "Pipeline CLI-reported worker usage only. Infrastructure-agent/coordinator usage and account charges unavailable, not estimated. Cache/reasoning fields retain CLI semantics and are not additive billing totals.",
+  "accepted_game_case_counts": {
+    "public": {
+      "fn_00018390": {
+        "corpus_pass": 256
+      },
+      "fn_000183d0": {
+        "corpus_pass": 260
+      }
+    },
+    "heldout": {
+      "fn_00018390": {
+        "corpus_pass": 128
+      },
+      "fn_000183d0": {
+        "corpus_pass": 128
+      }
+    },
+    "negative": {
+      "fn_00018390": {
+        "mismatch": 256
+      },
+      "fn_000183d0": {
+        "corpus_pass": 20,
+        "mismatch": 240
+      }
+    }
+  },
+  "positive_game_case_count": 772,
+  "synthetic_case_counts": {
+    "synthetic.json": {
+      "corpus_pass": 59
+    },
+    "synthetic-mutant.json": {
+      "corpus_pass": 53,
+      "mismatch": 6
+    }
+  },
+  "failed_candidate_runs": [],
+  "implementation_attempt_count": 1,
+  "attempt_summaries": [
+    {
+      "number": 1,
+      "model": "gpt-6-luna",
+      "status": "deterministic-gates-passed",
+      "gates": [
+        {
+          "stage": "build",
+          "passed": true
+        },
+        {
+          "stage": "public",
+          "passed": true
+        },
+        {
+          "stage": "heldout",
+          "passed": true
+        },
+        {
+          "stage": "negative",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "preparation_readiness": {
+    "selftests": "6/6 pass",
+    "repository_venv_tests": "120/120 pass",
+    "models_used_for_preparation": 0,
+    "log": "local/pairs/linked-structures-001-preparation-tests.log",
+    "initial_selftest_issue": "The absent-snapshot monkeypatch initially also changed fixture generation; test setup corrected to cache unchanged fixtures. No model requests or acceptance changes."
+  },
+  "integration_plan": {
+    "expected_registry_changes": {
+      "fn_00018390": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      },
+      "fn_000183d0": {
+        "status_from": "contracted",
+        "status_to": "implemented"
+      }
+    },
+    "all_other_contract_abi_identity_fields": "mechanically unchanged",
+    "owner": "root coordinator; no shared edits by worker"
+  },
+  "coordinator_integration": {
+    "status": "Exact source integrated with two status-only registry promotions; full checkpoint passed",
+    "transition_record": "local/pairs/linked-structures-001-freeze-1-run/integration-transition.json",
+    "transition_record_raw_sha256": "d3c6866e5082afa3d25818ccc2dce9e3fedbbdeb0d7b6488afb68fbaca9860d0",
+    "checkpoint_directory": "reports/checkpoint-linked-structures-001",
+    "checkpoint_result": "passed"
+  },
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "orchestrator_startup_sha256": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4",
+  "preparation_helper_raw_sha256": "8e60231772ff99a4135249826c5d4f54f5c8d9f7b2a9187ddc56c937d95d4963",
+  "composition_scope": "Heldout128perfunction contains8append/16pop reached prestates across4layouts. Original-only24operation sequence test feeds actual after-arenas and checks snapshots/graph closure. Differential candidate checks are separate captured-prestate comparisons; live candidate/native Windows composition remains unvalidated.",
+  "scope": "Frozen ordinary initialized512byte arena, disjoint32byte list and four12byte nodes, canonical finite chain, any alignment and node0 address distinct from null; raw full EAX/exact dword footprints/entire arena. Malformed graphs, overlap, concurrency, allocation/event/sync/class semantics excluded.",
+  "native_windows_validated": false,
+  "proof": false,
+  "model_requests_closed": true,
+  "local_summary_sha256": "d6fb5f236bbb15595b878f6e0f0b28c82625e547285d23bd85be106c199d7555",
+  "activation_total_worker_requests": 10,
+  "integration_evidence": "analysis/validation/linked-structures-001.json",
+  "checkpoint": {
+    "path": "reports/checkpoint-linked-structures-001/checkpoint.json",
+    "sha256": "cf7a37b1ef6a79e382e23a278f33f48d0e36dc2d3de015ed5057e059ddcfe630",
+    "status": "passed",
+    "functions": 20,
+    "game_input_cases": 9198,
+    "negative_controls": 6,
+    "tooling_tests": 120,
+    "elapsed_seconds": 1539.654,
+    "proof": false,
+    "native_windows_validated": false
+  }
+}

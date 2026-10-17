@@ -35,7 +35,10 @@ Each attempt runs, in order:
 4. Run the declared negative controls; a normal pass does not satisfy them.
 5. Request one independent review only after every deterministic gate passes.
 
-The reviewer defaults to `gpt-6.1-sol` (optionally `gpt-6-luna`). Its separate
+The tool's legacy reviewer default is `gpt-6.1-sol`; the current continuous workflow
+explicitly passes `--reviewer-model gpt-6-luna` for routine batches on established
+backends. Use Sol for substantive acceptance changes or concrete escalations.
+Its separate
 prompt and JSON schema require `approve`, `reject` or `needs-evidence`, specific
 issues and limitations. It receives the frozen manifest, instruction/ABI/contract
 evidence, tested source and executable hashes, host/compiler/build information,

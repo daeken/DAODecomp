@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "source_sha256": "4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5",
+  "review_raw_file_sha256": "8b1eeecbdcf2f17293d58108c385f7fef0c1bcef1b66e3af0ad70123e1631fc0",
+  "review": {
+    "decision": "approve",
+    "issues": [
+      {
+        "detail": "The candidate matches the recorded 56-byte append slice: tail reload occurs after writing node.prev; empty append sets both endpoints to the appended address; full raw EAX is preserved, including a node at offset zero.",
+        "function": "fn_00018390",
+        "severity": "note"
+      },
+      {
+        "detail": "The candidate matches the recorded 44-byte pop slice: successor reload, branch-specific writes and raw initial-head return are preserved. Removed-node bytes remain unchanged under the disjoint-object preconditions.",
+        "function": "fn_000183d0",
+        "severity": "note"
+      },
+      {
+        "detail": "Unsigned address arithmetic is defined and bounded by the contracts. GuestMemory uses bounded little-endian byte accesses with shifts of 0, 8, 16 and 24, avoiding host alignment and pointer-aliasing assumptions. Supplied module/RVA/slice identities and verified source/contract/reference bindings support this scoped review; raw and canonical hash domains are appropriately distinguished.",
+        "function": "*",
+        "severity": "note"
+      }
+    ],
+    "limitations": [
+      "Approval covers only src/linked_structures.cpp with raw SHA-256 4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5 under the frozen bounded contracts; registry integration is not approved.",
+      "Original ECX preservation, nonvolatile registers and ret4/ret0 behavior are supported by instruction evidence and emulator checks. The C++ offset API is not a tested x86 ABI bridge.",
+      "Reported validation ran native arm64 C++ against Unicorn-executed x86 slices on macOS using AppleClang 21. All 772 positive cases passed; negative controls produced the expected 256 append and 240 pop mismatches. This is finite corpus evidence, not native Windows reference validation or proof of universal equivalence.",
+      "Overlap, malformed graphs, reinsertion, wrapping addresses, alternate bases, faults, MMIO, concurrency, allocation, event handling and whole-game behavior remain excluded. Sequence evidence covers captured prestates rather than live candidate composition.",
+      "Review used only the supplied material; hashes and executions were not independently recomputed."
+    ],
+    "summary": "Approve the scoped source package. Instruction-level review finds no discrepancy in control flow, full return bits, memory footprints, access order or defined C++ semantics within the frozen contracts."
+  },
+  "integration_transition": {
+    "schema_version": 1,
+    "before_registry_raw_sha256": "02a0bd428bd84d3ac877910d2408a075090b8642c8170d90a868b47c0fcb2c6b",
+    "after_registry_raw_sha256": "fed9ddca11c8719aab8cd64dd3c2f5b57757c8bb9d4ae4ce5e305a2038502fc3",
+    "change": "Only the two package function statuses change from contracted to implemented. All identity, ABI, source, contract and backend fields remain identical.",
+    "functions": [
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018390",
+      "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000183d0"
+    ],
+    "source_sha256": "4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5",
+    "frozen_acceptance_artifacts_match_before_promotion": true
+  },
+  "scope": "Independent text-only source review after automatic deterministic gates. Final checkout validation is recorded separately."
+}

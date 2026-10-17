@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 18 |
-| C++ implementations | 18 |
-| Implementations with current emulator corpus evidence | 18 |
-| Input cases across those functions (excluding repeat runs) | 8,426 |
+| Functions in the recovery registry | 20 |
+| C++ implementations | 20 |
+| Implementations with current emulator corpus evidence | 20 |
+| Input cases across those functions (excluding repeat runs) | 9,198 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -53,6 +53,8 @@ After building and installing the dependencies below, with the original game at
 .venv/bin/python validation/validate_object_counters.py --expect-mismatch
 .venv/bin/python validation/validate_indexed_stores.py --suite all --jobs 2
 .venv/bin/python validation/validate_indexed_stores.py --expect-mismatch
+.venv/bin/python validation/validate_linked_structures.py --suite all --jobs 2
+.venv/bin/python validation/validate_linked_structures.py --expect-mismatch
 ```
 
 The runner verifies binary/slice hashes and executes the registered arithmetic and
@@ -82,6 +84,11 @@ The indexed-store adapter checks conditional byte/word writes, truncation, all
 incoming EAX bits on rejected indexes, and preserved ECX in the original slice.
 Its negative control incorrectly clears the upper return bits on rejected indexes.
 See the [indexed-store recovery record](analysis/indexed-stores-001.md).
+
+The linked-structure adapter validates disjoint list/node graphs, raw guest
+pointers (including a valid node at arena offset zero), exact branch footprints
+and every arena byte. Its two controls corrupt append's return and pop's retained
+link. See the [linked-structure evidence](analysis/linked-structures-001.md).
 
 ## Run the demonstration
 

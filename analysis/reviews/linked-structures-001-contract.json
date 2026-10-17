@@ -1,0 +1,418 @@
+{
+  "schema_version": 1,
+  "group": "linked-structures-001",
+  "review_role": "independent acceptance preparation",
+  "model": "gpt-6.1-sol",
+  "raw_review_path": "local/pilots/linked-structures-001-review/acceptance-review.json",
+  "raw_review_sha256": "d9db4c10681c15a9cd8cf9b3e7e0368221202802bb877ce1bbac036c17343f40",
+  "review": {
+    "schema_version": 1,
+    "decision": "approved_for_current_bounded_domain",
+    "group": "linked-structures-001",
+    "reviewed_at_utc": "2026-10-17 19:07:35 UTC",
+    "reviewed_artifacts_sha256": {
+      "CMakeLists.txt": "92b2a74c2e5bb67454df3262dd2f7a6ad9a321679e39e0f9d44747d68e50e224",
+      "analysis/functions.json": "02a0bd428bd84d3ac877910d2408a075090b8642c8170d90a868b47c0fcb2c6b",
+      "analysis/linked-structures-001.md": "efc03c40c87fb3c396ca7273352b412b1459e26dff539e0dca7b292fd31488d6",
+      "analysis/reference-build.json": "7a0c2278830e98e567ae99710ff5490e43e2884b35f4ab6ad68163c5eb2b32f3",
+      "contracts/functions/fn_00018390.json": "83323d961a1c2dc14a939326a5f59378606b9925de33c5cfcf85eac8f4676949",
+      "contracts/functions/fn_000183d0.json": "82bf33cd5ee575f7657edb227359542b18774a53a6b9f4df4585af6638229cc1",
+      "docs/paired-recovery.md": "fcc9d52f670a875d841d9e73a3f5dc6e71684ec38e05843cec16a9abb599e846",
+      "examples/synthetic/candidate.cpp": "3a5f2152ecf304c661dfeb76630e61bb31f9692e6c757009181c78934890203e",
+      "examples/synthetic/contract.json": "0e12004ef45bf6a315c220ab73dac2d71fbc1544b5afc909a7ac229f454cac47",
+      "examples/synthetic/demo.py": "3b49988501cd522f53445bb2ac39cdd08a2d9d4bff8ccfbb2119d04ab9fd9ba7",
+      "examples/synthetic/original_x86.py": "60e6a61290eb105e7ece433cd6cf82e451b8695ad2bc6b5247e3a66b9ff9ca97",
+      "examples/synthetic/runner.py": "f3bf70993d0892a8d23d99bc5c6a511740ed4dea8588d156bff22e1c48971574",
+      "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "include/dao/guest.hpp": "317f8650f2f81a20825e029657e15d985c2d31ce9c7af1d5a1894a61e997b8e8",
+      "include/dao/guest_memory.hpp": "7f526eb54986f73eaaabdb51d9ce39fcfc923293f38e5dbcfa0ec3d33ee193c5",
+      "include/dao/indexed_stores.hpp": "2cc76b7064222e96e9a126437643a6e8140c694e09c2281fffda9ecd02bfa5d8",
+      "include/dao/linked_structures.hpp": "4d4079d0cd3d84a7b2484499312155babc23329f0bceabf53bad8cea4b652b99",
+      "include/dao/memory_primitives.hpp": "94274ab047a3ca80e825b13b9f8135c7a975000233723f96f0b055528d695bc0",
+      "include/dao/object_counters.hpp": "74977030f8d6b0222d3fe10606ba6d68c5410e4ddc3513c4a23cacc651129f3f",
+      "include/dao/primitives.hpp": "2c976884656254961c11005e58b0d64f589db14ae0a9edcc2cf7f4fabaf6af40",
+      "include/dao/scalar_pilot.hpp": "f5dc6a9a0a84503620dd5536605934e0d6437cce386232b236ad5b9d020ca339",
+      "local/analysis/functions.json": "3eec75966d23372e90dab28c07800cb8420057e7b226cd00477f472ce78feb99",
+      "local/pairs/linked-structures-001-preparation-tests.py": "b8aa0032f3c0165b93233137e5b3f18f39ddae37c938e2fd242f68c136cab0d7",
+      "local/pairs/linked-structures-001-prepare.py": "8e60231772ff99a4135249826c5d4f54f5c8d9f7b2a9187ddc56c937d95d4963",
+      "local/pilots/linked-structures-001/characterize.py": "e80402404fb0cf4ff562a0ce0b94d6d8af103f226c190d5acc6d2d68284a557e",
+      "local/pilots/linked-structures-001/handoff.json": "1f8b662c26ca1d276478dccb375d312c2debd8d5143c3bbe2bfdde30481599a6",
+      "local/pilots/linked-structures-001/independent-review.json": "94d1744c100896c6569157d61b1c16722a128c68d1499aebeb8b984d408e5982",
+      "local/pilots/linked-structures-001/independent-review.md": "e1d66f72ba08cae195df726fa907c05cc3058d84d953d976f4e1a51eaed1d7ca",
+      "requirements-validation.txt": "ec4566cf41d8b380904d725764cf88dba351ea42763ac86c80d184f28bd26d23",
+      "src/indexed_stores.cpp": "5b1278d9f1ba51156844e1f6578f71a56c0bc94eaa0b354efec1350aa325c311",
+      "src/memory_primitives.cpp": "91ba11c8c3c8ac16985f757358ef78e6b90a6f2e41a4abd48313efef901f6f31",
+      "src/object_counters.cpp": "55b74b818c63d012ca5632770fb2b8168d12ba5b075152964be1768ba91a6942",
+      "src/primitives.cpp": "def342418f52a1f07706fe043d82995e1f31b5bca14e60c1f2d8f15caadf9d29",
+      "src/scalar_byte.cpp": "fcc8b96d6e2f7b41795f337798b92eed5d1a38d920d38c409a79a200b76c132f",
+      "src/scalar_integer.cpp": "5c3f73e1cd96ef61bbab984c9fbaabe93b812e45c1d51691e25db102d966d504",
+      "tests/guest_memory.cpp": "fbe5f4b14ba2a7cd6d649643a99728a3488ea61a0af442f2972e467969688ca1",
+      "tests/test_checkpoint.py": "89bdace92b22f7b6e77b44c7fab790e543288831c91f39e5d53a8e7de2d084c9",
+      "tests/test_linked_structures.py": "9364474ca66a8c59aaab289eb70fd33fa021b777117111715ff81fe200c60567",
+      "tests/test_prompt_dedup.py": "46bccd88d74e8230318bf90da1e373e0a85911fc80eadb8bbf2353edd058c5af",
+      "tests/test_recovery_pair.py": "b3f2abf3f2abab67d1cb27900d307e4b8e8064e8d2a37eee2041c1d5c92ff500",
+      "tools/daodecomp/__init__.py": "c0b4b5208326159d19b1ce6a8fe1f70e1b97f36c670e144f21df8c5cf2ff673a",
+      "tools/daodecomp/__main__.py": "4b7d997e2008fdfc6e89865a5c84e86be8cbcd9effd3e44ba671f23069ca150a",
+      "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+      "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+      "tools/daodecomp/memory.py": "7ba86168d8c39c7207de1da61913d3682161ea0a37de65b62b504941286d860c",
+      "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+      "tools/run_model_packet.py": "996146000ac97a4dfd842bc42bcb21e89125f83cf2dd4eb8bed6a74396ec14ce",
+      "tools/run_recovery_pair.py": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4",
+      "tools/validate_checkpoint.py": "44956a9996e44bf7eff13b6e3e33cdff478e585ead71c58e40ceed47da4bd016",
+      "validation/indexed_store_cases.py": "1e925fa87c7ae8996bb0b0c0d26266c91c5ba21ff995f8c2574707c35884d727",
+      "validation/indexed_store_native_runner.cpp": "936294ecf7383b64c8f12583cff6d7534159d453728760a78ad435cb9eb3cf82",
+      "validation/indexed_store_runner.py": "949b760de90d7c3716c144d238a22f60146786a05238e817d4d12ab3a309cb84",
+      "validation/leaf_runner.py": "8a4ae6432fe4e5190688aa2998769704d4afbf37ee7d87e29966b0ba544a1047",
+      "validation/linked_structure_cases.py": "4ab12e9f15d1477ac4851067b788d7a16618d10f94b80256aedcdcb82d49ee93",
+      "validation/linked_structure_native_runner.cpp": "44dd6da10c8a479f33177adf61178e966821455ab1119fa98d8771bc626384e1",
+      "validation/linked_structure_runner.py": "944a68d396b4feccd0b0fad0bff17d416d76f941a81c62c912ee56f79cf67290",
+      "validation/memory_cases.py": "4008ab052cce984df6ac04bf2261ccc223ae3bd169cc57c4fe348b1dacaa690c",
+      "validation/memory_native_runner.cpp": "75f4b38317d3e115ec4763c5a41a7e143ebd11fe891c7a8a1cdef922f95dacf4",
+      "validation/memory_runner.py": "319e4806410206a10df17c150ff6f1f61d98d12ad1866d85187631470a9300f5",
+      "validation/native_runner.cpp": "c50e0bab876c06352d9f38090897bf2ca2d9e207fed10bafb66695362a1db7af",
+      "validation/object_counter_cases.py": "522881d9251036bce0b783f52188c060884ed65ca7ac7a09d858e3abc8470a01",
+      "validation/object_counter_native_runner.cpp": "4d60f221ab195cd584e6282aaff49c18fd572114df01f5f78c784eaef7b9b078",
+      "validation/object_counter_runner.py": "89ce0a203804f3e486be9f76eaa1e3b3ed7598b9efff237848c70ad510affe33",
+      "validation/scalar_cases.py": "0f4bde02534760096d98725f1b2d96ab785d772288a6991d794024921718e15d",
+      "validation/validate_indexed_stores.py": "261a403228bb9f2c78249cf401c97909872c67e648499d4c88652a3ab43487c8",
+      "validation/validate_leaves.py": "6641635f80086a06e27ec56e16e70b8d9633b00d352992ad9294445cba5a5da9",
+      "validation/validate_linked_structures.py": "d519ef7b14b174b49ba5ac5dd5b48bf9b5ebe5a4b1c887a5940dd1fa7d740baf",
+      "validation/validate_memory.py": "4347abedc20aedfd854bf27f02d2a23c20263336f355b43f763caf4366772906",
+      "validation/validate_object_counters.py": "9e7b537b635a50068dfc6c7430f77111def634f1581c660dfd48fdcf3661d69e"
+    },
+    "audit_evidence_sha256": {
+      "local/pilots/linked-structures-001-review/binary-evidence.json": "8315090be48f7ba67ef73da9300fc08144aea9a945587307176b5093d7a13454",
+      "local/pilots/linked-structures-001-review/domain_audit.py": "dd58b32392646c648595dc253e4b19b4c10d26f175e4c98a99cacff8b6a2b110",
+      "local/pilots/linked-structures-001-review/run_corpus_audit.py": "f23c23edd40da2804b2465b3a1328626f3be14be1a100cf919c897eb9471df2b",
+      "local/pilots/linked-structures-001-review/run_input_audit.py": "02d21297436c19c2c47505d15d2af5e3575b6b31dba11a9fea33dc209d0e3589",
+      "local/pilots/linked-structures-001-review/original-corpus-audit.json": "651a1b5fff4c3346749dd3e2342b131cd37d3b36a609c5ed281a49b3df33e965",
+      "local/pilots/linked-structures-001-review/input-validation-audit.json": "a8e75bcc347b1fe635075669dbf455d5ac0d0d70ee32347fbe021f5af43023b0",
+      "local/pilots/linked-structures-001-review/system-tests.log": "0cc3ab78ab748c4c937e12a6fb3469ea1b1bc459f0a56167d012bccd088392be",
+      "local/pilots/linked-structures-001-review/venv-tests.log": "5979d0aa7922e4fa05e99f2ea2c949b3d73185a9627edad8ed9594e150c03aa2",
+      "local/pilots/linked-structures-001-review/configure.log": "ecc92e68d208d6359b3eeea9e1e945182b0018f23158998a5e06efd5aecdcbe6",
+      "local/pilots/linked-structures-001-review/build.log": "f741e21029c74e992d1e2f02a667809e5df0d7499a54388e7cabc66487243705",
+      "local/pilots/linked-structures-001-review/guest-memory.log": "9e69b6528261e878de580f724220aa2ca0458db7261bd45e9ff51c465665450d",
+      "local/pilots/linked-structures-001-review/synthetic-good.log": "c90a47860e62620e6f073c585f220756c6927607e97125b001dabc9efa534c41",
+      "local/pilots/linked-structures-001-review/synthetic-mutant.log": "76143a89bc4872f3a311da79541bf4ab290a90f8b9ca1a46d8d0cdae1a1aba7a",
+      "local/pilots/linked-structures-001-review/fn_00018390-public.json": "970d298483e156baf83b569c86241d7918d6e398bdf7a61d6acd92cbd4490a73",
+      "local/pilots/linked-structures-001-review/fn_00018390-heldout.json": "751f940dba04c78e5239e324d3c72d1d24d6b1d7332658534384c60d922fe488",
+      "local/pilots/linked-structures-001-review/fn_000183d0-public.json": "a2fdbbe27d3dbe70c2f91f81d46b345f29a92ad274712fce5aef27e331ce6e50",
+      "local/pilots/linked-structures-001-review/fn_000183d0-heldout.json": "bbeb296e432750aa5fb9a742d54d75a52389abb11fc6f71412a1599ebb06a709"
+    },
+    "blocking_findings": [],
+    "approval_scope": "Acceptance preparation only: fixed512-byte ordinary-RAM arena, exactly four disjoint12-byte pool nodes and one disjoint32-byte list, canonical active ordered subset, raw guest pointers/full EAX and whole-arena observations. This approves the bound contracts/oracle/backend/fixtures/native adapter/validator/checkpoint and preparation helper before implementation dispatch. No candidate, x86 binary bridge, native Windows or game acceptance.",
+    "execution_host": {
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "machine": "arm64",
+      "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+      "compiler": "AppleClang21; CMake RelWithDebInfo; strict C++20 normal/mutant syntax checks"
+    },
+    "original_identity": {
+      "module": "DAOrigins.exe",
+      "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "functions": [
+        {
+          "name": "fn_00018390",
+          "rva": 99216,
+          "size": 56,
+          "code_sha256": "528e8e396ba20bbb32ab884c2993f6608d6e1a9c0e992d07d719f6d5003f122e"
+        },
+        {
+          "name": "fn_000183d0",
+          "rva": 99280,
+          "size": 44,
+          "code_sha256": "10db45fe78c4dfbabcbbed205dd8f0283673e2227fdfcf090f4bbc443de98844"
+        }
+      ],
+      "target_relocations": [],
+      "callsite_rvas": {
+        "append": [
+          99464
+        ],
+        "pop": [
+          99658,
+          99706,
+          99735
+        ]
+      },
+      "byte_evidence": "Actual pinned target/caller/helper bytes independently reverified against prior Capstone/LLVM evidence. Both leaves are call-free. Direct E8 scan does not establish exhaustive indirect callers."
+    },
+    "domain_and_mapping": {
+      "inputs": "append:arena/list/nodes/node; pop:arena/list/nodes. Arena exactly512 lowercase-hex bytes; nodes exactly16 lowercase-hex bytes containing four LEu32 byte offsets, arbitrary pool order; no node metadata is passed as an original machine/C++ function argument.",
+      "intervals": "List is32bytes at0..480; each node is12bytes at0..500. All five whole-object intervals are disjoint. Unaligned objects, listoffset0/480, nodeoffset0 and node ending at512 are covered.",
+      "graph": "Literal raw0 is null, offset0 is non-null guest address0x02000000. Endpoints and active links must address pool members or permitted null. Active chain has distinct nodes, reciprocal links, consistent endpoints, head.prev0/tail.next0. Inactive links, payloads and bystander bytes remain arbitrary.",
+      "operations": "Append0..3 active nodes requires an inactive pool node; pop0..4. Header kLinkedArenaBase equals Python/contract base0x02000000. Candidate high-level parameters are offsets; non-null active link subtraction is justified only by validated pool membership. Return is full raw EAX, without pointer normalization.",
+      "guards": "Independent domain/footprint checker agrees with all772 cases and2,400 additional valid/malformed variants (483 accepted/1,917 rejected). Original ECX preservation, nonvolatiles, DF and ret4/ret0 are enforced by the existing executor. No malformed inputs are turned into successful calls."
+    },
+    "footprint_review": {
+      "append": "Only list.tail readable. Empty: new.prev/new.next/head/tail writable. Nonempty: new.prev/oldtail.next/new.next/tail writable; head not writable. Four-byte accesses, exact GuestMemory permissions; oldtail.next/new-node fields are write-only.",
+      "pop": "Head readable; nonempty oldhead.next also readable. Empty no writable bytes. Nextzero writes head/tail; successor branch writes head/successor.prev only. Popped node is never in real writable ranges; all retained links/payload bytes observed.",
+      "native_adapter": "Graph parsing is separately bounds/membership/interval checked before indexing. Raw pointers never become host pointers. Nonvolatile/x86 obligations are checked on original side; C++ offset API is explicitly not a binary bridge. Mutant-only direct array write uses validated initial_head offset; real permissions remain unchanged."
+    },
+    "corpora": [
+      {
+        "function": "fn_00018390",
+        "suite": "public",
+        "cases": 256,
+        "canonical_corpus_sha256": "daf4e6fcf5942ef9ff3a5be0ed1456f6e5b848e043bc3fcff8384fe64322e887",
+        "active_lengths": {
+          "0": 16,
+          "1": 48,
+          "2": 96,
+          "3": 96
+        },
+        "pool_orders": [
+          [
+            0,
+            144,
+            64,
+            300
+          ],
+          [
+            131,
+            0,
+            421,
+            233
+          ],
+          [
+            131,
+            32,
+            421,
+            233
+          ],
+          [
+            335,
+            0,
+            500,
+            37
+          ]
+        ],
+        "exact_domain_and_footprint_agreement": true,
+        "original_repeat_equality": true,
+        "negative_control_mismatches": 256,
+        "negative_control_passes": 0
+      },
+      {
+        "function": "fn_00018390",
+        "suite": "heldout",
+        "cases": 128,
+        "canonical_corpus_sha256": "8707638dc24457cfda71bf9df111adf6479783d45b75b039fd8468e75be64606",
+        "active_lengths": {
+          "2": 34,
+          "0": 34,
+          "1": 30,
+          "3": 30
+        },
+        "pool_orders": [
+          [
+            0,
+            144,
+            64,
+            300
+          ],
+          [
+            131,
+            0,
+            421,
+            233
+          ],
+          [
+            131,
+            32,
+            421,
+            233
+          ],
+          [
+            335,
+            0,
+            500,
+            37
+          ]
+        ],
+        "exact_domain_and_footprint_agreement": true,
+        "original_repeat_equality": true,
+        "negative_control_mismatches": 128,
+        "negative_control_passes": 0
+      },
+      {
+        "function": "fn_000183d0",
+        "suite": "public",
+        "cases": 260,
+        "canonical_corpus_sha256": "fa9b6de72a56a700687b578b8b5c5d195fa5bfccbba274f329517bd6d80be3dd",
+        "active_lengths": {
+          "0": 4,
+          "1": 16,
+          "2": 48,
+          "3": 96,
+          "4": 96
+        },
+        "pool_orders": [
+          [
+            0,
+            144,
+            64,
+            300
+          ],
+          [
+            131,
+            0,
+            421,
+            233
+          ],
+          [
+            131,
+            32,
+            421,
+            233
+          ],
+          [
+            335,
+            0,
+            500,
+            37
+          ]
+        ],
+        "exact_domain_and_footprint_agreement": true,
+        "original_repeat_equality": true,
+        "negative_control_mismatches": 240,
+        "negative_control_passes": 20
+      },
+      {
+        "function": "fn_000183d0",
+        "suite": "heldout",
+        "cases": 128,
+        "canonical_corpus_sha256": "7d02d8f88fb25c86765fe4fdb223fec20d43e4fd40c6f710545b30598d7d3120",
+        "active_lengths": {
+          "3": 26,
+          "2": 26,
+          "1": 27,
+          "0": 27,
+          "4": 22
+        },
+        "pool_orders": [
+          [
+            0,
+            144,
+            64,
+            300
+          ],
+          [
+            131,
+            0,
+            421,
+            233
+          ],
+          [
+            131,
+            32,
+            421,
+            233
+          ],
+          [
+            335,
+            0,
+            500,
+            37
+          ]
+        ],
+        "exact_domain_and_footprint_agreement": true,
+        "original_repeat_equality": true,
+        "negative_control_mismatches": 74,
+        "negative_control_passes": 54
+      }
+    ],
+    "original_execution_evidence": {
+      "declared_cases": 772,
+      "repeats_per_case": 2,
+      "case_executions": 1544,
+      "composition_steps": 24,
+      "total_recorded_executions": 1568,
+      "original_original_equal": true,
+      "strict_independent_permissions": true,
+      "sequence_scope": "Four shared six-step append/drain-through-empty/reappend sequences. Actual original after-arenas feed each next call, every prestate equals a declared heldout input for that operation, and poststates satisfy the canonical graph.8 append+16 pop snapshots occupy part of each fixed128 heldout corpus. Candidate differential checks will evaluate each captured prestate separately; no new live/dynamic sequence pipeline stage is claimed."
+    },
+    "negative_controls": {
+      "append": {
+        "corpus": "exact full256 public cases",
+        "mutation": "force return0 after normal call",
+        "independently_predicted_and_original_observation_checked_mismatches": 256,
+        "passes": 0
+      },
+      "pop": {
+        "corpus": "exact full260 public cases",
+        "mutation": "clear initial popped node.next after normal call via mutant-only direct array write",
+        "independently_predicted_and_original_observation_checked_mismatches": 240,
+        "passes": 20
+      },
+      "limit": "These counts replay the named mutation effects on measured original outputs. Native candidate/mutant differential gates have not run because the candidate remains an empty placeholder; the paired pipeline must execute both full-public negative controls before its independent candidate reviewer."
+    },
+    "validation_runs": [
+      {
+        "command": "python3 -m unittest discover -s tests -v",
+        "tests": 120,
+        "status": "OK",
+        "optional_skips": 24
+      },
+      {
+        "command": ".venv/bin/python -m unittest discover -s tests -v",
+        "tests": 120,
+        "status": "OK",
+        "optional_skips": 0
+      },
+      {
+        "command": ".venv/bin/python local/pairs/linked-structures-001-preparation-tests.py",
+        "tests": 6,
+        "status": "OK"
+      },
+      {
+        "command": "strict C++20 -fsyntax-only linked_structure_native_runner.cpp normal and DAO_LINKED_STRUCTURE_MUTANT=1",
+        "status": "passed"
+      },
+      {
+        "command": "CMake configure/build owned infrastructure snapshot targets guest_memory_tests,synthetic_candidate,synthetic_mutant; CTest guest_memory",
+        "status": "passed",
+        "scope": "Infrastructure targets only; linked candidate is not implemented."
+      },
+      {
+        "command": "both actual synthetic demo commands in owned snapshot",
+        "normal": {
+          "corpus_pass": 59
+        },
+        "mutant": {
+          "corpus_pass": 53,
+          "mismatch": 6
+        },
+        "status": "passed",
+        "scope": "Separate infrastructure evidence, not game cases."
+      }
+    ],
+    "preparation_and_publication": {
+      "helper_sha256": "8e60231772ff99a4135249826c5d4f54f5c8d9f7b2a9187ddc56c937d95d4963",
+      "corpus_equality": "Preparation helper produces exactly the four independently checked corpus values and independently enumerates every public active-order/inactive-append combination across4 layouts. It verifies target/LLVM/callsite bytes, contracts, snapshots and both public-negative declarations.",
+      "freeze_gate": "Helper refuses nonapproval, missing coverage and any changed bound hash before freezing; candidate excluded. All CMake source dependencies are included. Compact corrected evidence preserves original/handoff raw hashes and bytes/callers while superseding old prose errors.",
+      "model_gate": "Bound build/synthetic, public, heldout and both negative reports precede one separate candidate reviewer. Only public failures can reach implementation repair. This acceptance review does not bypass those future checks.",
+      "checkpoint": "Adds linked all-corpus validation and both mutant publication paths; contracted entries are not published. Missing expected controls/unsupported backends remain fail-closed. Windows checkpoint refusal remains explicit. Current scheduling is unchanged; future scheduling proposal is outside scope."
+    },
+    "resolved_during_review": [
+      "Removed overbroad nonempty-append head-write permission in fixture; native and Python ranges now agree exactly.",
+      "Permuted pool metadata order and covered valid listoffset0 while preserving counts, offset0 nodes, unaligned/end layouts.",
+      "Optional original-only composition unit test skips cleanly without proprietary binary or Unicorn; it embeds no original instruction bytes. Full validators still require dependencies.",
+      "Analysis evidence now distinguishes historical up-to-four proposal from chosen exactly-four pool and finite snapshot composition scope."
+    ],
+    "exclusions": [
+      "No candidate source or implementation accepted; placeholder is deliberately excluded from approved artifact hashes.",
+      "No Windows event/CreateEventA/SetEvent/ResetEvent/WaitForSingleObject, allocator failures, object lifetime, synchronization/concurrent schedules or complete caller/game behavior accepted.",
+      "No malformed graphs, cycles, linked-node reinsertion, object overlap, faults, MMIO, wrapping addresses or alternate guest bases in the chosen domain.",
+      "Corpus agreement is finite emulator evidence, not universal equivalence or native Windows validation.",
+      "High-level C++ offset API is not an x86 binary calling-convention bridge."
+    ],
+    "reproduction": [
+      ".venv/bin/python local/pilots/linked-structures-001-review/run_corpus_audit.py",
+      ".venv/bin/python local/pilots/linked-structures-001-review/run_input_audit.py",
+      "python3 -m unittest discover -s tests -v",
+      ".venv/bin/python -m unittest discover -s tests -v",
+      ".venv/bin/python local/pairs/linked-structures-001-preparation-tests.py"
+    ]
+  }
+}

@@ -16,6 +16,24 @@ checkout. Do not duplicate a running worker or overwrite user edits. The
 coordinator handles integration, disagreements and missing evidence, while routine
 build/test/counterexample handling belongs to the pipeline.
 
+The user's latest priority (2026-10-17) is lower coordinator and expensive-model
+overhead. Use Luna for characterization, packet preparation, implementation and
+repairs, plus a separate Luna reviewer for routine source batches on established
+backends. Invoke the pair with `--reviewer-model gpt-6-luna`. Reserve Sol for a
+concrete failed cheap attempt, ambiguous contract, or substantive acceptance-system
+change. Keep all deterministic gates and independent review requirements.
+
+Aim for batches of 8–16 related functions where existing evidence and types permit;
+do not invent contracts to fill a batch. Review once per batch. The coordinator
+reads compact package/status summaries, integrates and handles disagreements.
+Avoid repeated full-artifact reads, routine result relays and new infrastructure
+audit/repair chains. Nonblocking tooling proposals stay in the backlog. A new
+backend gets one focused preparation assignment and one independent acceptance
+review; record exact unresolved evidence rather than expanding the assignment.
+Measure accepted functions per model request and reported tokens, including
+preparation/review overhead. Coordinator usage and weekly quota attribution remain
+unknown; do not estimate them from API prices or worker token totals.
+
 For each coherent group:
 
 1. Check function boundaries, original module/slice identities, ABI, dependencies,
@@ -27,15 +45,17 @@ For each coherent group:
 3. Prefer GPT-6 Luna at medium effort for settled contracts. Allow at most two
    attempts per packet, with a concrete counterexample for the repair; then allow
    one GPT-6.1 Sol escalation. Run at most two implementation workers at once and
-   twelve worker requests per activation, including independent reviewers. Use existing CLI login, not a new paid
+   twelve worker requests per activation, including preparation and independent
+   reviewers. This is a ceiling, not a target. Use existing CLI login, not a new paid
    service. The 180-second request timeout is not a hard token or spend limit.
 4. Run build and public checks automatically first; a concrete failure may go back
    to the implementation worker within its retry budget. Then run held-out cases
    and negative controls. Held-out failures stop the packet without revealing
    those cases to a repair worker. Only after all deterministic gates pass, send
-   the candidate to a separate GPT-6.1 Sol reviewer for ABI, memory, arithmetic,
+   the batch to a separate Luna reviewer for ABI, memory, arithmetic,
    contract and evidence review. Rejection or missing evidence cannot be accepted.
-   Delegate detailed acceptance-system audits to independent agents too.
+   Use Sol for substantive new acceptance-system or contract ambiguity reviews;
+   do not repeat those audits for unchanged backend machinery.
    Preserve failed attempts. Record actual usage/latency;
    distinguish worker estimates from coordinator cost and account charges.
 5. Refresh affected regression evidence, run required tooling/build/synthetic
@@ -69,7 +89,7 @@ Linux/macOS host, choosing new output and record paths each time:
 ```
 
 It builds, runs tooling/CTest/synthetic controls, checks all registered scalar,
-memory, object-counter and indexed-store functions and their negative controls,
+memory, object-counter, indexed-store and linked-structure functions and their negative controls,
 verifies report/input hashes, then
 publishes compact evidence and refreshes README progress. A failed step stops
 publication and leaves logs plus `checkpoint.json`. It does not stage, commit or

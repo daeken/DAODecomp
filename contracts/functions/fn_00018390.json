@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018390",
+  "inputs": {
+    "arena": "bytes",
+    "list": "u32",
+    "nodes": "bytes",
+    "node": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512
+  },
+  "calls": [],
+  "preconditions": "A 512-byte initialized single-threaded ordinary RAM arena at fixed guest base 0x02000000. list is a byte offset in [0,480] naming a complete 32-byte list object. nodes is exactly 16 lowercase-hex-encoded bytes: four little-endian u32 byte offsets in [0,500], naming distinct complete 12-byte node objects. All five whole-object intervals are pairwise disjoint; any byte alignment is allowed and pool order is arbitrary. Nodes metadata describes fixture preconditions and is not an original machine argument. Arena endpoints at list+0x18/+0x1c and node links at +4/+8 contain raw guest32 addresses. Literal raw address zero is null; offset zero is a valid non-null address 0x02000000. The active chain is a finite ordered subset of pool nodes with reciprocal links, consistent head/tail, head.prev=0 and tail.next=0; an empty chain has both endpoints zero. Inactive links, node payloads at +0, other list fields and bystander bytes may be arbitrary initialized data. No linked-node reinsertion, cycles, malformed graphs or overlapping objects. ECX=guest base+list and is preserved at original return. Observe all 512 arena bytes and full raw EAX without pointer normalization. Private valid stack, DF clear, normal return only, nonvolatile registers preserved. No calls, globals, TLS, stack writes, address wrap, faults/null objects, MMIO, exceptions or concurrency. Other volatile registers and flags are excluded. C++ parameters are offsets and guest links remain integer addresses; subtraction of kLinkedArenaBase is valid only for non-null pool-member addresses already established by these preconditions. This high-level mapping is not a tested x86 ABI bridge or a complete recovered class, allocator, event or synchronization contract. Append accepts zero through three active nodes and node is the offset of an inactive pool member. One u32 stack argument contains guest base+node; ret4 cleans it. Only list+0x1c may be read. Empty append writes node+8=0, node+4=0, list+0x18=guest(node), list+0x1c=guest(node). Nonempty append writes node+8=old tail, reloads list+0x1c, writes old tail+4=guest(node), node+4=0, list+0x1c=guest(node); head is untouched. Every field access is exactly four bytes. There is no read of old tail.next or new-node fields. Return is the raw non-null guest(node) address. All other arena bytes remain unchanged."
+}

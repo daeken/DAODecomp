@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "decision": "original_evidence_review_approved_with_documentation_correction",
+  "reference_binary_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+  "host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "unicorn": "2.1.4",
+    "capstone": "5.0.6"
+  },
+  "counts": {
+    "producer_states": 60,
+    "producer_replay_executions": 120,
+    "independent_saved_state_executions": 120,
+    "expanded_canonical_states": 1040,
+    "expanded_original_executions": 2080,
+    "composition_sequences": 32,
+    "composition_operations": 480,
+    "composition_original_executions": 960,
+    "excluded_diagnostic_executions": 2,
+    "independent_original_executions": 3162
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "status": "corrected_in_this_review",
+      "artifact": "local/pilots/linked-unlink-001/handoff.json:measured_domain.node_at_arena_end; handoff.md:first coverage paragraph",
+      "finding": "The supplied60-state pilot does not contain a node interval ending at byte512. Its greatest node start is455, so the greatest end is467. The handoff node_at_arena_end=true and matching prose overstate that evidence.",
+      "resolution": "Do not reuse this claim as a producer observation. Independent expanded states in this review do contain node offset500 (complete12bytes through511), including permutations and compositions."
+    },
+    {
+      "severity": "note",
+      "status": "confirmed",
+      "finding": "The contiguous78-byte capture includes an unreachable3-byte LEA alignment gap. Actual75-byte body ranges and raw slice hash match pinned binary, Capstone, LLVM and inventory. No relocation overlaps or calls/global accesses in the leaf."
+    },
+    {
+      "severity": "note",
+      "status": "confirmed",
+      "finding": "All60 supplied states reproduced byte-for-byte; independent ordered traces/full arenas/EAX/ECX match each saved record. Additional1040 canonical states cover every active identity order and each pool target over4layouts, arbitrary inactive-link garbage, node0 versus null, end node500, unaligned/disjoint objects and varied incoming EAX/EDX."
+    }
+  ],
+  "observed_abi": {
+    "entry_ecx": "raw guest list VA",
+    "stack_arguments": [
+      "one u32 target raw guest VA"
+    ],
+    "stack_cleanup_bytes": 4,
+    "eax": "full raw former target.next when found; zero on found tail or miss/empty",
+    "ecx": "former target.prev when found with nonzero successor (including zero for head); otherwise entry list address",
+    "preserved": [
+      "EBX",
+      "ESI",
+      "EDI",
+      "EBP"
+    ],
+    "direction_flag": "clear at return for all tested states",
+    "private_stack": "Only found target with nonzero prev executes PUSH ESI/POP ESI: exact4-byte write/read at entryESP-4, balanced before RET4. Empty path does not read argument slot.",
+    "exclusions": "Other flags/volatile machine state are not a proposed high-level API; C++ offset signature is not a tested binary thiscall bridge.",
+    "edx_static_effect_not_public_contract": "entry EDX on empty; target argument on nonempty miss or found successor; former target.prev on found tail. Volatile effect not proposed high-level return."
+  },
+  "exact_footprints": {
+    "notation": "L=list offset,T=target offset,P=raw target.prev,S=raw target.next. All arena accesses are exact4bytes. Search is by raw address equality. Every path reads return slot entryESP; nonempty path reads target argument entryESP+4.",
+    "empty": "Read L+24 only; no arena writes; EAX0, ECXentry.",
+    "nonempty_miss": "Read L+24 and each visited node.next until zero; no target-field reads and no arena writes; EAX0, ECXentry.",
+    "found_search": "Read L+24 then next of each predecessor visited before target; matching target is tested before reading its next.",
+    "found_predecessor_nonzero": "Read T+8; push ESI; read T+4; write predecessor+4=S; pop ESI; read T+4 again.",
+    "found_predecessor_zero": "Read T+8; read T+4; write L+24=S; read T+4 again.",
+    "found_successor_nonzero": "After preceding repair, read T+8 again; write successor+8=P. EAX=S and ECX=P.",
+    "found_successor_zero": "After preceding repair, read T+8 again; write L+28=P. EAX0 and ECXentry.",
+    "frame": "Within pairwise disjoint canonical domain, all12targetbytes including payload and old next/prev links remain unchanged; all bytes outside listed neighboring links/endpoints remain unchanged. No payload reads/writes. Absent target fields can be arbitrary initialized bytes."
+  },
+  "proposed_next_contract_domain": {
+    "status": "recommendation_for_separate_contract_review_only",
+    "arena": "512 ordinary initialized single-thread RAM bytes at fixed guestbase0x02000000",
+    "objects": "One complete32-byte list offset0..480; exactly four distinct complete12-byte pool nodes offset0..500; all5whole-object intervals pairwise disjoint; arbitrary pool order and any byte alignment.",
+    "graph": "Canonical reciprocal finite ordered subset, active lengths0..4, both endpoints0 iff empty, head.prev0,tail.next0. Inactive links/payload/bystanders arbitrary initialized data. Full512bytes observed.",
+    "target": "Offset of any pool member, active or inactive; map argument to guestbase+offset. Raw0null distinct from valid offset0 node address0x02000000.",
+    "return": "Full raw u32 EAX, not normalized pointer or bool/void.",
+    "abi": "Explicit conditional ECX clobber must replace any borrowed append/pop ECX-preservation assumption. Private balanced ESI stack save is required.",
+    "excluded": "Alias/overlap, malformed endpoints, duplicate active nodes, cycles, invalid encodings/null object, address wrap, faults/MMIO, allocation/free-list/event/synchronization/concurrency, external effects and whole-class/game semantics."
+  },
+  "composition_assessment": {
+    "decision": "bounded_original_RAM_composition_evidence_present",
+    "sequences": 32,
+    "operations_per_sequence": 15,
+    "operations_total": 480,
+    "repeats_per_operation": 2,
+    "coverage": "4layouts \u00d72pool orders \u00d74unlink positions. Actual original after-arena is the next call pre-state. Sequence: append all4; unlink selected head/middle/tail; unlink same inactive target; pop; reappend removed node; drain to empty plus empty pop; reappend previously popped node; singleton unlink; empty pop.",
+    "checks": "Fresh original slices per operation, full raw returns and ECX relations; exact ordered arena/stack traces; full512byte output vs decoded branch effects; all graph links/endpoints/closure; unlinked target byte retention. Raw before/after arenas and hashes privately retained in independent-observations.json.",
+    "dependency_gap": "No leaf callees exist in these3slices. This closes the absent original-only append/unlink/pop/reappend captured-state evidence gap for the stated sequential RAM domain. It does not supply WaitForSingleObject/ReleaseSemaphore/ResetEvent, allocator/free-list, synchronization, waiter ownership/handle lifetime or native Windows integration semantics.",
+    "scope": "Finite captured states/original models, no candidate composition, no native Windows, no universal proof."
+  },
+  "caller_assessment": {
+    "confirmed_direct_call_rva": 99581,
+    "argument": "PUSH EBX retained node; MOV ECX,ESI reloads list immediately before unlink.",
+    "condition": "After imported WaitForSingleObject at0x184df and sync helper RVA0x1a980, EBP holds wait return and compares it to raw0 and raw0x80. Other return values take unlink path; no Windows result semantics executed.",
+    "return_use": "Caller jumps after unlink; no EAX result use in this path before subsequent operations. This does not justify dropping observable full EAX in the isolated contract.",
+    "after": "PUSH EBX; MOV ECX,ESI before separate helper RVA0x18360 at0x1850c; ECX reload is compatible with unlink clobber. Separate prior evidence identifies reset/free-list behavior; it is outside unlink.",
+    "imports_checked_from_current_PE": {
+      "0xada1d8": "KERNEL32.dll!WaitForSingleObject",
+      "0xada17c": "KERNEL32.dll!ReleaseSemaphore"
+    },
+    "limits": "A raw E8 scan is not a complete indirect caller set, and full caller/effect/lifetime/concurrency semantics remain unexecuted."
+  },
+  "next_contract_backend_actions": [
+    "Correct producer handoff end-node coverage claim when quoting it; retain this independent correction and evidence hashes.",
+    "Separately review an unlink-specific contract with the stated4-node512B disjoint canonical domain and active/inactive pool targets; preserve full raw EAX and distinguish offset0 from raw null.",
+    "Declare conditional ECX exit behavior; do not reuse append/pop preservedECX assertion. If high-level C++ API excludes volatile registers, state that mapping explicitly while original adapter checks the measured ECX relation.",
+    "Provide a separately reviewed strict original adapter for exactly one balanced4-byte ESI stack save at entryESP-4. Current shared execute_memory forbids all private stack writes; do not weaken it globally or swallow the resulting runner failure.",
+    "Generate public fixtures over all active identity permutations/target positions including misses and arbitrary inactive garbage, plus independent heldout reached prestates; freeze corpora/ABI/slice/backend before any candidate.",
+    "Require fresh-process repeat/fullarena+rawreturn differential gates and a meaningful unlink mutant (neighbor or endpoint/return fault) before independent candidate review. Preserve snapshots of original composition as evidence without claiming live candidate/native composition.",
+    "Keep Windows imports/sync/allocator/free-list/lifetime paths outside leaf acceptance until their own dependency contracts and execution evidence exist; never stub missing behavior as zero success."
+  ],
+  "native_windows_validated": false,
+  "candidate_accepted": false,
+  "proof": false,
+  "raw_review_path": "local/pilots/linked-unlink-001-review/independent-review.json",
+  "raw_review_sha256": "1d7223a3672f2cb0cc92c1233c25d2511fc931b65b4b3d7ea658e93a9d8f413a",
+  "reviewer_model": "gpt-6.1-sol",
+  "rva": "0x00018400",
+  "slice_sha256": "c5eeb9077a1596efc91e13f4cd9218ff0e93fed2e4aa349a87b31578edd18754",
+  "reviewed_artifacts_sha256": {
+    "gamedata/bin_ship/DAOrigins.exe": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "tools/daodecomp/memory.py": "7ba86168d8c39c7207de1da61913d3682161ea0a37de65b62b504941286d860c",
+    "local/analysis/functions.json": "3eec75966d23372e90dab28c07800cb8420057e7b226cd00477f472ce78feb99",
+    "local/pilots/linked-structures-001/independent-review.json": "94d1744c100896c6569157d61b1c16722a128c68d1499aebeb8b984d408e5982",
+    "local/pilots/linked-structures-001/independent-review.md": "e1d66f72ba08cae195df726fa907c05cc3058d84d953d976f4e1a51eaed1d7ca",
+    "contracts/functions/fn_00018390.json": "83323d961a1c2dc14a939326a5f59378606b9925de33c5cfcf85eac8f4676949",
+    "contracts/functions/fn_000183d0.json": "82bf33cd5ee575f7657edb227359542b18774a53a6b9f4df4585af6638229cc1",
+    "include/dao/linked_structures.hpp": "4d4079d0cd3d84a7b2484499312155babc23329f0bceabf53bad8cea4b652b99",
+    "local/pilots/linked-unlink-001/characterize.py": "8ae8225140bb340b7da7c9f82787344f9f62e6223f710fa6715899f6dd447bda",
+    "local/pilots/linked-unlink-001/characterization.json": "35d7ee1d58e321b73024be72950b178e5e725515d6657928831f818ecd5f143a",
+    "local/pilots/linked-unlink-001/handoff.json": "c866270ebc679f3f2a389f3b26ae05bdc47d788c7ae7269c28d1d0a4276d091c",
+    "local/pilots/linked-unlink-001/handoff.md": "0ef16b952c865d766b05c669781580f21eff5590a67e87532fbdd3b39e3991d8",
+    "local/pilots/linked-unlink-001/evidence-hashes.json": "0f7bbb29d43792624feee1781c0cb1357752cd1ffdee8c73df162d2652161835",
+    "local/pilots/linked-unlink-001-review/audit.py": "d4690f8f077d27b3f1be0eaaaa0b732c08a7f553e3e742f3ae002205cd800ce5"
+  }
+}

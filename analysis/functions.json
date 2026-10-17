@@ -565,6 +565,64 @@
         3564484
       ],
       "backend": "indexed-stores-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018390",
+      "name": "fn_00018390",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 99216,
+      "size": 56,
+      "code_sha256": "528e8e396ba20bbb32ab884c2993f6608d6e1a9c0e992d07d719f6d5003f122e",
+      "abi": {
+        "ecx": "arena + list; preserved at original boundary",
+        "stack_arguments": [
+          "arena + node"
+        ],
+        "stack_cleanup": 4,
+        "return": "full EAX raw guest32 address; zero is null"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t list, uint32_t node)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00018390.json",
+      "source": "src/linked_structures.cpp",
+      "evidence": "analysis/linked-structures-001.md",
+      "observed_direct_callsite_rvas": [
+        99464
+      ],
+      "backend": "linked-structures-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000183d0",
+      "name": "fn_000183d0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 99280,
+      "size": 44,
+      "code_sha256": "10db45fe78c4dfbabcbbed205dd8f0283673e2227fdfcf090f4bbc443de98844",
+      "abi": {
+        "ecx": "arena + list; preserved at original boundary",
+        "stack_arguments": [],
+        "stack_cleanup": 0,
+        "return": "full EAX raw guest32 address; zero is null"
+      },
+      "calling_convention": "reviewed memory ABI; see abi fields",
+      "signature": "uint32_t(GuestMemory, uint32_t list)",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_000183d0.json",
+      "source": "src/linked_structures.cpp",
+      "evidence": "analysis/linked-structures-001.md",
+      "observed_direct_callsite_rvas": [
+        99658,
+        99706,
+        99735
+      ],
+      "backend": "linked-structures-001"
     }
   ]
 }

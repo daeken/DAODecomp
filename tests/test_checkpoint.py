@@ -30,6 +30,8 @@ class CheckpointTests(unittest.TestCase):
             {"name": "fn_00061f80", "status": "implemented", "backend": "object-counters-001"},
             {"name": "fn_00347d10", "status": "implemented", "backend": "indexed-stores-001"},
             {"name": "fn_00347d50", "status": "implemented", "backend": "indexed-stores-001"},
+            {"name": "fn_00018390", "status": "implemented", "backend": "linked-structures-001"},
+            {"name": "fn_000183d0", "status": "implemented", "backend": "linked-structures-001"},
         ]
         (self.root / "analysis/functions.json").write_text(json.dumps({"functions": functions}))
         self.patcher = patch.object(checkpoint, "ROOT", self.root)
@@ -75,7 +77,11 @@ class CheckpointTests(unittest.TestCase):
         self.assertEqual([path.name for path in positives if "indexed-stores" in str(path)], [
             "fn_00347d10-all.json", "fn_00347d50-all.json"])
         self.assertIn("fn_00347d10-mutant.json", [path.name for path in negatives])
-        self.assertEqual(len(negatives), 4)
+        self.assertEqual([path.name for path in positives if "linked-structures" in str(path)], [
+            "fn_00018390-all.json", "fn_000183d0-all.json"])
+        self.assertIn("fn_00018390-mutant.json", [path.name for path in negatives])
+        self.assertIn("fn_000183d0-mutant.json", [path.name for path in negatives])
+        self.assertEqual(len(negatives), 6)
 
     def test_contracted_object_counter_functions_do_not_require_publication_yet(self):
         path = self.root / "analysis/functions.json"
@@ -85,10 +91,13 @@ class CheckpointTests(unittest.TestCase):
                 function["status"] = "contracted"
             if function.get("backend") == "indexed-stores-001":
                 function["status"] = "contracted"
+            if function.get("backend") == "linked-structures-001":
+                function["status"] = "contracted"
         path.write_text(json.dumps(registry))
         positives, negatives = checkpoint.publication_paths(self.output)
         self.assertFalse(any("object-counters" in str(report) for report in positives))
         self.assertFalse(any("indexed-stores" in str(report) for report in positives))
+        self.assertFalse(any("linked-structures" in str(report) for report in positives))
         self.assertEqual(len(negatives), 2)
 
     def test_argv_construction_caps_parallelism_and_rejects_windows(self):
@@ -100,9 +109,14 @@ class CheckpointTests(unittest.TestCase):
         self.assertIn("object_counters_negative", by_name)
         self.assertIn("indexed_stores_all", by_name)
         self.assertIn("indexed_stores_negative", by_name)
+        self.assertIn("linked_structures_all", by_name)
+        self.assertIn("linked_structures_negative", by_name)
         self.assertIn("--suite", by_name["object_counters_all"])
         self.assertEqual(by_name["object_counters_all"][by_name["object_counters_all"].index("--suite") + 1], "all")
         self.assertEqual(by_name["indexed_stores_all"][by_name["indexed_stores_all"].index("--suite") + 1], "all")
+        self.assertEqual(by_name["linked_structures_all"][by_name["linked_structures_all"].index("--suite") + 1], "all")
+        self.assertEqual(by_name["linked_structures_all"][by_name["linked_structures_all"].index("--jobs") + 1], "3")
+        self.assertIn("--expect-mismatch", by_name["linked_structures_negative"])
         with self.assertRaisesRegex(ValueError, "unavailable on Windows"):
             checkpoint.build_commands(self.root / "build", self.output, 2, windows=True)
 

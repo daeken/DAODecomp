@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "Indexed setters integrated and full checkpoint passed:18 functions,8426 emulator cases,104 tooling tests,build/CTest/synthetic checks and4game negative controls; elapsed1269.977s. Evidence:analysis/validation/indexed-stores-001.json. Reviewed prompt formatting then integrated;110 tooling tests pass, current game evidence still18functions/8426cases.",
-  "active_group": "linked-structures-001",
+  "checkpoint": "Linked structures integrated and full macOS ARM64 checkpoint passed:20functions,9198positivecases,6negativecontrols,120toolingtests,CTest and bothsyntheticdemos. Commit/push and matching-headCI pending.",
+  "active_group": "linked-unlink-001",
   "groups": [
     {
       "id": "memory-001",
@@ -61,17 +61,35 @@
     },
     {
       "id": "linked-structures-001",
-      "status": "original_evidence_reviewed_contracts_pending",
+      "status": "integrated_validated",
       "rvas": [
         "0x00018390",
         "0x000183d0"
       ],
       "scope": "Event-node queue append/pop; original callers use Windows events, requiring separate synchronization and lifetime contracts",
-      "next_action": "Prepare and independently review a disjoint 512-byte graph contract/backend:32-byte list, up to4 distinct12-byte nodes, explicit null vs offset0 mapping, exact branch footprints, stale inactive links, permutation/unaligned/boundary and composition fixtures. Apply the five independent-review corrections; retain original handoff as historical. Freeze acceptance before any implementation.",
+      "next_action": "Retain regression coverage. Use reviewed original unlink evidence and Luna-led related batch preparation; Windows callers remain blocked by existing event/lifetime/synchronization gaps.",
       "handoff": "local/pilots/linked-structures-001/handoff.json",
       "independent_review": "local/pilots/linked-structures-001/independent-review.json",
       "independent_review_raw_sha256": "94d1744c100896c6569157d61b1c16722a128c68d1499aebeb8b984d408e5982",
-      "evidence": "analysis/linked-structures-001.md"
+      "evidence": "analysis/linked-structures-001.md",
+      "contract_review": "analysis/reviews/linked-structures-001-contract.json",
+      "pipeline": "local/pairs/linked-structures-001-freeze-1-run/status.json",
+      "accepted_package": "local/pairs/linked-structures-001-freeze-1-run/accepted/package.json",
+      "source_review": "analysis/reviews/linked-structures-001-source.json",
+      "worker_measurements": "analysis/pilots/linked-structures-001.json",
+      "validation_record": "analysis/validation/linked-structures-001.json"
+    },
+    {
+      "id": "linked-unlink-001",
+      "status": "original_reviewed_pending_acceptance_backend",
+      "rvas": [
+        "0x00018400"
+      ],
+      "scope": "Adjacent queue unlink operation and original-only dependency composition",
+      "handoff": "local/pilots/linked-unlink-001/handoff.json",
+      "observations": "Producer60states replayed exactly; independent1040states and32original-only sequences. Corrected unsupported producer node-at-end claim with measured node500. Scope remains bounded original execution.",
+      "next_action": "Luna preparation: extend established linked backend with strict balanced ESI stack-save allowance and explicit conditionalECX mapping; independent acceptance review for these substantive changes only. Prefer grouping additional related functions once characterized. No candidate accepted.",
+      "independent_review": "analysis/reviews/linked-unlink-001-original.json"
     }
   ],
   "infrastructure_backlog": [
@@ -107,6 +125,16 @@
       "independent_review": "analysis/reviews/paired-prompt-deduplication-001.json",
       "independent_review_raw_sha256": "e293dd33a3f897482d1ad50f4d4cf0d0f28c521c7dbfa96520f2b03ce519b5f5",
       "orchestrator_sha256": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4"
+    },
+    {
+      "id": "checkpoint-global-parallelism",
+      "status": "rejected_deferred_for_cost_priority",
+      "reason": "Full indexed checkpoint took1269.977seconds; validators currently run as serial backend groups with underused function concurrency and serial negatives. Preserve every check while scheduling independent reports under one globalcap4.",
+      "proposal_directory": "local/pilots/checkpoint-parallelism-001",
+      "next_action": "Keep current serial scheduler. Only revisit if throughput blocks recovery. Three blockers:4existing test failures, timed-out descendants outlive slots, plan errors leave status running. v2 handoff saved without edits/tests.",
+      "proposal_patch_sha256": "d801d75ecd6e0e693238991af8198fa8ce14c05a2076983aba27bd1fbebfe76b",
+      "initial_failure": "Proposal passes3new mock tests but breaks4existing checkpoint tests; not integrated. Independent selector audit confirms26tasks and exact corpus/repeat coverage. Await full review findings, repair and re-review.",
+      "independent_review": "local/pilots/checkpoint-parallelism-001-review/review.json"
     }
   ],
   "blockers": [
@@ -124,16 +152,55 @@
       ]
     }
   ],
-  "activation": {
-    "started_utc": "2026-10-17T18:09:29Z",
-    "group": "indexed-stores-001",
-    "infrastructure_assignments": 10,
+  "operating_priority": {
+    "updated": "2026-10-17",
+    "default_models": "Luna preparation/implementation/repair and separate independent routine source review; explicit --reviewer-model gpt-6-luna",
+    "sol_scope": "Concrete escalation, ambiguous contract or substantive acceptance-system change",
+    "batch_target": "8-16 related functions on established backends when evidence permits; never guessed filler",
+    "coordinator_scope": "Compact accepted package/status, integration and genuine disagreements",
+    "infrastructure": "Nonblocking proposals deferred; avoid multi-agent audit/repair chains",
+    "windows_reference": "User starting Windows VM; connection/architecture/toolchain not established, no native game validation yet",
+    "windows_handoff": "docs/windows-reference.md"
+  },
+  "completed_activation": {
+    "started_utc": "2026-10-17T18:56:59Z",
+    "group": "linked-structures-001",
+    "infrastructure_assignments": 8,
     "pipeline_request_limit": 4,
     "total_worker_request_limit": 12,
-    "coordinator": "Checkpoint complete; no active model workers. Verify clean Git and pushed HEAD CI before next dispatch; do not repeat completed indexed work.",
-    "notes": "Ten infrastructure assignments (indexed3, linked2, prompt-dedup4, ignored dependency-shadow proposal1) plus2source-pipeline CLIrequests; activation limit12 reached. No further worker requests until a later activation. Infrastructure usage unavailable.",
-    "pipeline_request_count": 2,
-    "total_worker_requests": 12,
-    "worker_requests_closed": true
+    "coordinator": "Completed model work; deterministic checkpoint finalized on next activation.",
+    "notes": "User requested lower coordination overhead. Scheduling repair stopped before edits/tests; v1 rejected and deferred. No additional model requests this activation. Finish current full checkpoint with unchanged serial scheduler.",
+    "pipeline_requests_used": 2,
+    "worker_requests_used": 10,
+    "model_requests_closed": true
+  },
+  "activation": {
+    "started_utc": "2026-10-17T19:56:59Z",
+    "group": "checkpoint-publication",
+    "infrastructure_assignments": 0,
+    "pipeline_requests_used": 0,
+    "worker_requests_used": 0,
+    "total_worker_request_limit": 12,
+    "coordinator": "current thread; publish completed checkpoint first",
+    "notes": "No new validation or model work needed for already passing checkpoint."
+  },
+  "last_checkpoint": {
+    "pid": null,
+    "exec_session_id": 3627,
+    "command": ".venv/bin/python tools/validate_checkpoint.py --output-dir reports/checkpoint-linked-structures-001 --record analysis/validation/linked-structures-001.json --jobs 4",
+    "state_path": "reports/checkpoint-linked-structures-001/checkpoint.json",
+    "record_path": "analysis/validation/linked-structures-001.json",
+    "source_sha256": "4abf407b00dae915390634bbcd079e25ab2d6ccda58a65909ea434aca475b5a5",
+    "expected_functions": 20,
+    "expected_positive_cases": 9198,
+    "expected_negative_reports": 6,
+    "system_tooling_tests": {
+      "count": 120,
+      "passed": true,
+      "optional_skips": 24,
+      "log": "local/pilots/linked-structures-001-system-tests.log"
+    },
+    "remaining": "Commit/push and matching-head CI.",
+    "status": "passed"
   }
 }
