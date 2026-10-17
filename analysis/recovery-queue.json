@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mode": "continuous",
-  "checkpoint": "Indexed setters integrated and full checkpoint passed:18 functions,8426 emulator cases,104 tooling tests,build/CTest/synthetic checks and4game negative controls; elapsed1269.977s. Evidence:analysis/validation/indexed-stores-001.json.",
+  "checkpoint": "Indexed setters integrated and full checkpoint passed:18 functions,8426 emulator cases,104 tooling tests,build/CTest/synthetic checks and4game negative controls; elapsed1269.977s. Evidence:analysis/validation/indexed-stores-001.json. Reviewed prompt formatting then integrated;110 tooling tests pass, current game evidence still18functions/8426cases.",
   "active_group": "linked-structures-001",
   "groups": [
     {
@@ -91,10 +91,10 @@
     },
     {
       "id": "paired-prompt-deduplication",
-      "status": "ignored_v2_proposal_approved_pending_integration",
+      "status": "integrated_validated",
       "evidence": "local/pairs/object-counters-001-prompt-sizes.json",
       "reason": "Counter reviewer prompt contains 188273 bytes; repeated per-report artifact maps contribute 39903 bytes. Repair also resends execution provenance unrelated to candidate source repair.",
-      "next_action": "Apply exact v2 patches only when reviewed base hash still matches (or refresh review). Run all tooling checks before future packet freeze. V2 supplied24 tests and independent adversarial checks pass; savings8.51% reviewer/2.69% repair on captured counter prompts. Preserve rejected v1; current indexed pipeline/checkpoint remains unchanged.",
+      "next_action": "Use compact provenance in future frozen packets; retain full durable reports and all gates. Exact patch integrated and110 tooling tests passed. Historical indexed/counter runs preserve their original orchestrator identities.",
       "proposal_directory": "local/pilots/paired-prompt-deduplication-001/v2",
       "proposal_patch_sha256": "6cccabcfda2e6fe256a089f04952ce3e2ab946635b644c1b08ff08568dbde3ee",
       "measurement": "local/pilots/paired-prompt-deduplication-001/v2/measurement.json",
@@ -104,8 +104,9 @@
         "repair_before": 41377,
         "repair_after": 40262
       },
-      "independent_review": "local/pilots/paired-prompt-deduplication-001/v2/independent-review.json",
-      "independent_review_raw_sha256": "e293dd33a3f897482d1ad50f4d4cf0d0f28c521c7dbfa96520f2b03ce519b5f5"
+      "independent_review": "analysis/reviews/paired-prompt-deduplication-001.json",
+      "independent_review_raw_sha256": "e293dd33a3f897482d1ad50f4d4cf0d0f28c521c7dbfa96520f2b03ce519b5f5",
+      "orchestrator_sha256": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4"
     }
   ],
   "blockers": [
@@ -129,9 +130,10 @@
     "infrastructure_assignments": 10,
     "pipeline_request_limit": 4,
     "total_worker_request_limit": 12,
-    "coordinator": "Local checkpoint complete; no active model workers. Git/CI finalization remains in current coordinator; verify status before continuing.",
+    "coordinator": "Checkpoint complete; no active model workers. Verify clean Git and pushed HEAD CI before next dispatch; do not repeat completed indexed work.",
     "notes": "Ten infrastructure assignments (indexed3, linked2, prompt-dedup4, ignored dependency-shadow proposal1) plus2source-pipeline CLIrequests; activation limit12 reached. No further worker requests until a later activation. Infrastructure usage unavailable.",
     "pipeline_request_count": 2,
-    "total_worker_requests": 12
+    "total_worker_requests": 12,
+    "worker_requests_closed": true
   }
 }

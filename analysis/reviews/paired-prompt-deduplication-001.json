@@ -1,0 +1,169 @@
+{
+  "schema_version": 2,
+  "verdict": "approved_as_scoped_future_prompt_presentation_proposal",
+  "integration_authorized": false,
+  "blocking_findings": [],
+  "checks": [
+    {
+      "case": "seeded arbitrary-key nested cases/observations/report extras plus Unicode",
+      "report_count": 40,
+      "depth": 3,
+      "modes": [
+        "reviewer",
+        "repair"
+      ],
+      "exact_roundtrip": true,
+      "original_unchanged": true,
+      "deterministic": true,
+      "unique_structural_locations": true
+    },
+    {
+      "case": "missing binding",
+      "rejected": true,
+      "exception": "KeyError"
+    },
+    {
+      "case": "missing execution",
+      "rejected": true,
+      "exception": "KeyError"
+    },
+    {
+      "case": "tampered binding path",
+      "rejected": true,
+      "exception": "AssertionError"
+    },
+    {
+      "case": "tampered execution value",
+      "rejected": true,
+      "exception": "AssertionError"
+    },
+    {
+      "case": "dangling binding ref",
+      "rejected": true,
+      "exception": "KeyError"
+    },
+    {
+      "case": "wrong map digest",
+      "rejected": true,
+      "exception": "AssertionError"
+    },
+    {
+      "case": "deleted whole sidecar association",
+      "exact_original_comparison_detects_loss": true,
+      "note": "Not a production gate: the pipeline only creates envelopes internally."
+    }
+  ],
+  "measurements": [
+    {
+      "kind": "reviewer_prompt",
+      "original_bytes": 188273,
+      "proposed_bytes": 172248,
+      "original_sha256": "2da528444c9b9df3bd00e7defed85a8a648d2158057faf28078bcdad11195cc0",
+      "proposed_sha256": "40093e38d29f993c8a9c00a8a576e90406ea732255febaa08c29fea9e568741f",
+      "exact_roundtrip": true,
+      "actual_builders_used": true,
+      "prefix_preserved_except_generic_repair_sentence": true
+    },
+    {
+      "kind": "public_repair_prompt",
+      "original_bytes": 41377,
+      "proposed_bytes": 40262,
+      "original_sha256": "23e8ab793b7648818301c96f1d4d567a8bcac2d55493288b2f61ac20912dd83d",
+      "proposed_sha256": "bcdc326f3abcc3b4cfc92d5932d7b0e4a9e3c517a68498214afc0a2def099108",
+      "exact_roundtrip": true,
+      "actual_builders_used": true,
+      "prefix_preserved_except_generic_repair_sentence": true
+    }
+  ],
+  "opaque_input_pipeline_regression": {
+    "status": "implementation-exhausted",
+    "requests": 3,
+    "accepted": false,
+    "opaque_counterexample_preserved_in_all_repairs": true
+  },
+  "existing_functions_changed": [
+    "repair_prompt",
+    "reviewer_prompt"
+  ],
+  "all_existing_module_assignments_unchanged": true,
+  "execution_host": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]"
+  },
+  "provided_tests": {
+    "count": 24,
+    "passed": 24,
+    "skipped": 0,
+    "command": "python3 -m unittest tests.test_recovery_pair tests.test_prompt_dedup_v2 -v",
+    "scope": "isolated18 baseline pipeline tests and6 proposal tests; no full repository or game validation"
+  },
+  "reviewed_artifacts_sha256": {
+    "local/pilots/paired-prompt-deduplication-001/v2/proposal.patch": "6cccabcfda2e6fe256a089f04952ce3e2ab946635b644c1b08ff08568dbde3ee",
+    "local/pilots/paired-prompt-deduplication-001/v2/test_prompt_dedup_v2.py": "46bccd88d74e8230318bf90da1e373e0a85911fc80eadb8bbf2353edd058c5af",
+    "local/pilots/paired-prompt-deduplication-001/v2/measurement.json": "9dc1cefd6fb9a37a863a04ca27f1ceef72c52d516b9781a04e09b337a9066b59",
+    "local/pilots/paired-prompt-deduplication-001/v2/README.md": "5032cd571913b5e07c137504035fdf7ed3f7923dd051b43495642f60f9f4394e",
+    "local/pilots/paired-prompt-deduplication-001/v2/measure_v2.py": "053713f780f787dd5af7b668b79df02d313dd62e93289ed61f6c94d8bcb26080",
+    "local/pilots/paired-prompt-deduplication-001/v2/review-prompt-proposed.txt": "40093e38d29f993c8a9c00a8a576e90406ea732255febaa08c29fea9e568741f",
+    "local/pilots/paired-prompt-deduplication-001/v2/repair-prompt-proposed.txt": "bcdc326f3abcc3b4cfc92d5932d7b0e4a9e3c517a68498214afc0a2def099108",
+    "local/pilots/paired-prompt-deduplication-001/v2/independent-sandbox/tools/run_recovery_pair.py": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4",
+    "local/pilots/paired-prompt-deduplication-001/v2/independent-sandbox/tests/test_prompt_dedup_v2.py": "46bccd88d74e8230318bf90da1e373e0a85911fc80eadb8bbf2353edd058c5af",
+    "tools/run_recovery_pair.py": "ea87d06fb9d489fdb4586cb811d96ef09998e1ac36dbf6e712f573ead113140d",
+    "tests/test_recovery_pair.py": "b3f2abf3f2abab67d1cb27900d307e4b8e8064e8d2a37eee2041c1d5c92ff500",
+    "docs/paired-recovery.md": "c3bbb5b7c7513d3b0d56083f48749cdbc3d025b419ddae5b7488d225a18dcab9",
+    "local/pilots/paired-prompt-deduplication-001/independent-review.json": "d9307f824305a5791df1d5fc7437fa5521a9885895827927ea30664963c81213",
+    "local/pilots/paired-prompt-deduplication-001/independent-review.md": "6ba05bb3b8f607686396b989ba88aab451a66e812837620465caf38e0b0240d4",
+    "local/pilots/paired-prompt-deduplication-001/proposal.patch": "dccbe91a668f7dea55926c333052f5ac534bf2c7b0228f6417ba598401fc4f60",
+    "local/pilots/paired-prompt-deduplication-001/tests.patch": "449cf6eb6083e89e454725bb09484d82a18e18ce5e6d18d019d35e93675f2974",
+    "local/pilots/paired-prompt-deduplication-001/measurement.json": "90304f196741f639593c596f133e5bc620621ef7f667dc90452c8b17c52f149f",
+    "local/pilots/paired-prompt-deduplication-001/README.md": "cb44ecc34cb6e1ac5a9c7df75c2072773b5726170522e1d5ea785de9c77507a1"
+  },
+  "acceptance_scope": {
+    "opaque_payloads": "Only direct metadata fields in known report positions are removed from a canonical deep copy. Cases, inputs, oracle/candidate observations, diagnostics and arbitrary report extra keys remain unchanged.40 independently generated nested arbitrary-key report payloads, Unicode values and v1 collision shapes round-trip in both modes.",
+    "structural_coordinates": "Reviewer locations are nonnegative [stage_index,report_index]; repair locations are [feedback_index]. They are generated by enumeration and unique within each mode. Sidecars live outside evidence, so arbitrary report/payload location/report_provenance/shared-table/reference-looking keys cannot overwrite them. Reconstruction mode is supplied by the known caller; it is not an external envelope-input protocol.",
+    "full_bindings": "Presence flags distinguish absent metadata from empty maps/dicts. Path+raw-file-hash binding IDs preserve same-path/different-content and distinct-path/same-content distinctions. Map/entry/execution hash domains now include the exact canonical recipe, including ensure_ascii=True. Every captured report/command/compiler/source/ABI/count/counterexample fact restores exactly.",
+    "protected_behavior": "Only preexisting repair_prompt/reviewer_prompt ASTs change, plus new formatter/constants. All existing globals, gates, snapshot/binary/report binding checks, schedules/budgets, reviewer schema/refusal, retry policy and durable status/publication logic are unchanged. The24 tests include the18 baseline synthetic pipeline checks.",
+    "public_only": "Existing public/build-only repair selection is unchanged; heldout/negative observations are excluded. The generic preservation instruction applies to all passing function implementations.",
+    "reference_integrity": "Independent reconstruction verifies each referenced binding/execution digest and map digest and rejects missing/tampered referenced entries. Exact comparison with original summaries also catches a dropped whole sidecar association. No production decoder accepting externally edited envelopes is added or reviewed."
+  },
+  "future_integration_conditions": [
+    "Future explicit integration only; this assignment authorizes no shared edits, rollout or new model requests.",
+    "Apply exactly the reviewed patch and tests to the bound baseline or re-review any rebase/content change. Run required full repository unittest discovery after future tooling integration; current review ran only the isolated24 tests plus independent probes.",
+    "Keep all old v1 refusal files, historical prompts/reports/status and current frozen manifests/corpora unchanged; record a new orchestrator identity for future runs.",
+    "Keep reconstruction layout explicit at the known reviewer/repair call boundary. This approval covers internally generated sidecars, not an untrusted serialized-envelope ingestion/verification API.",
+    "Treat measured savings as payload byte counts only. No token, cost or model-quality effect was tested, and reviewer approval still requires all unchanged deterministic gates."
+  ],
+  "limits": [
+    "macOS ARM64 Python infrastructure/synthetic tests only; no game/C++/native Windows validation.",
+    "No shared integration, model/agent calls or acceptance-criteria changes.",
+    "No universal data-compression/security claim; scoped approval concerns the known report-summary shapes emitted by the current pipeline and opaque arbitrary JSON nested beneath them.",
+    "Full repository tests remain an integration-time requirement; they were not represented as run here."
+  ],
+  "local_report_sha256": "e293dd33a3f897482d1ad50f4d4cf0d0f28c521c7dbfa96520f2b03ce519b5f5",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reviewer_reasoning_effort": "high",
+  "coordinator_integration": {
+    "status": "integrated and full tooling tests passed",
+    "baseline_commit": "c1784a44af8c560bfa0c71072bcfd78a82325f35",
+    "source": "tools/run_recovery_pair.py",
+    "source_raw_sha256": "988f860c2f60c6dd2f012724d4698b59f38e5ad248350f0b957c532755b717f4",
+    "test_target": "tests/test_prompt_dedup.py",
+    "test_raw_sha256": "46bccd88d74e8230318bf90da1e373e0a85911fc80eadb8bbf2353edd058c5af",
+    "change": "Exact approved patch plus unchanged test bytes copied under repository test name. Historical frozen inputs and reports preserved.",
+    "validation": {
+      "system_python": {
+        "tests": 110,
+        "optional_unicorn_skips": 23,
+        "status": "passed",
+        "log_sha256": "79ddca2a9e8526f210332f9d3959b07bc743603e0193694eb068225b49cf9aa8"
+      },
+      "project_venv_python": {
+        "tests": 110,
+        "skips": 0,
+        "status": "passed",
+        "log_sha256": "792082c760e81e16d34e52390b2429662e5a516fa2dd03f2c77b06db15f4df6e"
+      }
+    },
+    "host": "macOS ARM64",
+    "game_evidence_change": false
+  }
+}

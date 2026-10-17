@@ -363,6 +363,94 @@ def inspect_report(path, declaration, m, tree):
     return summary
 
 
+ARTIFACT_BINDING_HASH_DOMAIN = (
+    "SHA-256(canonical JSON bytes from json.dumps(value, ensure_ascii=True, "
+    "sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8') "
+    "for {path, raw_file_sha256}; raw_file_sha256 is SHA-256 of raw artifact bytes"
+)
+ARTIFACT_MAP_HASH_DOMAIN = (
+    "SHA-256(canonical JSON bytes from json.dumps(value, ensure_ascii=True, "
+    "sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8') "
+    "for the full path-to-raw-file-SHA256 object)"
+)
+EXECUTION_HASH_DOMAIN = (
+    "SHA-256(canonical JSON bytes from json.dumps(value, ensure_ascii=True, "
+    "sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8') "
+    "for the execution provenance object)"
+)
+
+
+def deduplicate_prompt_provenance(value, *, mode):
+    """Deduplicate direct report-summary provenance; all report payloads stay opaque."""
+    if mode not in {"reviewer", "repair"}:
+        raise PairError("unknown prompt provenance layout")
+    evidence = json.loads(canonical(value))
+    bindings, executions, reports = {}, {}, []
+
+    def pack_report(report, location):
+        if not isinstance(report, dict):
+            raise PairError("invalid report summary in prompt evidence")
+        artifacts_present = "execution_artifacts_raw_sha256" in report
+        execution_present = "execution" in report
+        if not artifacts_present and not execution_present:
+            return
+        row = {"location": location, "artifacts_present": artifacts_present,
+               "execution_present": execution_present}
+        if artifacts_present:
+            artifacts = report["execution_artifacts_raw_sha256"]
+            if not isinstance(artifacts, dict) or any(
+                    not isinstance(path, str) or not isinstance(file_hash, str)
+                    or len(file_hash) != 64
+                    or any(c not in "0123456789abcdef" for c in file_hash)
+                    for path, file_hash in artifacts.items()):
+                raise PairError("invalid execution artifact map in prompt evidence")
+            refs = []
+            for path, file_hash in sorted(artifacts.items()):
+                binding = {"path": path, "raw_file_sha256": file_hash}
+                binding_hash = digest(binding)
+                bindings[binding_hash] = binding
+                refs.append(binding_hash)
+            row["artifact_map_sha256"] = digest(artifacts)
+            row["binding_refs"] = refs
+            del report["execution_artifacts_raw_sha256"]
+        if execution_present:
+            execution = report["execution"]
+            if not isinstance(execution, dict):
+                raise PairError("invalid execution provenance in prompt evidence")
+            provenance_hash = digest(execution)
+            executions[provenance_hash] = execution
+            row["execution_sha256"] = provenance_hash
+            del report["execution"]
+        reports.append(row)
+
+    if mode == "reviewer":
+        if not isinstance(evidence, list):
+            raise PairError("reviewer evidence must be a stage list")
+        for stage_index, stage in enumerate(evidence):
+            if not isinstance(stage, dict) or not isinstance(stage.get("reports", []), list):
+                raise PairError("invalid reviewer stage summary")
+            for report_index, report in enumerate(stage.get("reports", [])):
+                pack_report(report, [stage_index, report_index])
+    else:
+        if not isinstance(evidence, list):
+            raise PairError("repair evidence must be a feedback list")
+        for feedback_index, report in enumerate(evidence):
+            if isinstance(report, dict) and "execution_artifacts_raw_sha256" in report:
+                pack_report(report, [feedback_index])
+    return {
+        "hash_domains": {"artifact_binding": ARTIFACT_BINDING_HASH_DOMAIN,
+                         "artifact_map": ARTIFACT_MAP_HASH_DOMAIN,
+                         "execution_provenance": EXECUTION_HASH_DOMAIN},
+        "shared_artifact_bindings": [
+            {"binding_sha256": key, **bindings[key]} for key in sorted(bindings)],
+        "shared_execution_provenance": [
+            {"provenance_sha256": key, "value": executions[key]}
+            for key in sorted(executions)],
+        "report_provenance": reports,
+        "evidence": evidence,
+    }
+
+
 def run_stage(stage, m, tree, attempt, python, source_hash):
     summaries, commands = [], []
     variables = {"python": python, "tree": str(tree), "build": str(tree / "build"),
@@ -404,11 +492,14 @@ def repair_prompt(packet, source, gates):
         elif gate["stage"] == "build":
             for command in gate["commands"]:
                 feedback.append({"stage": "build", "exit_code": command["exit_code"]})
+    prompt_evidence = deduplicate_prompt_provenance(feedback, mode="repair")
     return (packet + "\n\nAUTOMATED PUBLIC-ONLY REPAIR\nReturn a complete replacement source response. "
-            "Preserve the already passing copy function bodies unchanged unless the public evidence identifies "
-            "a defect in them. Do not modify headers, contracts, oracle, comparator, corpus, ABI or acceptance "
+            "Preserve every already-passing function implementation unchanged unless supplied public evidence "
+            "identifies a defect in that implementation. Do not modify headers, contracts, oracle, comparator, corpus, ABI or acceptance "
             "criteria. Do not call tools or read/edit files. Held-out data is not supplied.\n"
-            + "Previous source:\n" + source + "\nPublic gate evidence:\n" + canonical(feedback))
+            + "Previous source:\n" + source
+            + "\nPublic gate evidence with hash-bound shared provenance:\n"
+            + canonical(prompt_evidence))
 
 
 def infrastructure_failure(gate, attempt):
@@ -471,7 +562,9 @@ def reviewer_prompt(m, frozen, source, summaries, attempt):
     evidence = {name: (frozen / name).read_text(encoding="utf-8")
                 for name in dict.fromkeys([m["packet"], *m["review_evidence"],
                                           *(f["contract"] for f in m["functions"])])}
-    compact = [{"stage": g["stage"], "passed": g["passed"], "reports": g["reports"]} for g in summaries]
+    compact = deduplicate_prompt_provenance(
+        [{"stage": g["stage"], "passed": g["passed"], "reports": g["reports"]} for g in summaries],
+        mode="reviewer")
     build = next(g for g in summaries if g["stage"] == "build")
     build_evidence = {"commands": build["commands"], "stdout": [], "compile_commands": None}
     for index, _ in enumerate(build["commands"], 1):
@@ -497,7 +590,7 @@ def reviewer_prompt(m, frozen, source, summaries, attempt):
             + "Frozen acceptance manifest:\n" + canonical(m) + "\nFrozen evidence:\n" + canonical(evidence)
             + "\nCandidate source raw SHA-256:\n" + sha(attempt / "candidate.cpp")
             + "\nCandidate source:\n" + source + "\nCompiler/build evidence:\n" + canonical(build_evidence)
-            + "\nCompact deterministic summaries:\n" + canonical(compact))
+            + "\nCompact deterministic summaries with hash-bound shared provenance:\n" + canonical(compact))
 
 
 def run_pair(manifest_path, output, root, python=sys.executable, initial_response=None,

@@ -10,8 +10,8 @@ evidence, not a proof of the game or native Windows validation.
 The implementation schedule is at most two `gpt-6-luna` attempts followed by one
 `gpt-6.1-sol` attempt, at medium effort. An existing first response can occupy the
 first slot without a new request. Public failures supply the next attempt with
-the previous source and a concrete public counterexample. Passing copy bodies
-are explicitly preserved in the repair prompt. Held-out and negative-control
+the previous source and a concrete public counterexample. Every already-passing
+function is explicitly preserved in the repair prompt. Held-out and negative-control
 failures stop the invocation with `needs-evidence`; they are never supplied to
 an implementation retry. Missing CMake sources, compiler/configuration errors,
 missing build executables and build timeouts stop with `infrastructure-error`.
@@ -152,6 +152,18 @@ empty directory with user configuration disabled and a separate review schema.
 The implementation uses the existing `tools/run_model_packet.py` launcher. These
 controls are scope enforcement with event auditing, not a claim that every CLI
 capability is physically removed.
+
+Reviewer and public-repair prompts now share repeated provenance through explicit
+hash-bound tables. Structural report positions reference those tables; complete
+counterexamples and arbitrary input/observation fields remain untouched. The
+original reports, frozen evidence, hash domains and acceptance gates are unchanged.
+The [independent review](../analysis/reviews/paired-prompt-deduplication-001.json)
+checks exact reconstruction and metadata-name collision cases. The first proposal
+failed review; its corrected replacement passed all 110 repository tests after
+integration. On captured counter prompts, payload size fell 8.51% for review and
+2.69% for public repair. These are byte measurements, not measured token, cost or
+model-quality improvements. Historical runs retain their original orchestrator
+hashes and prompts; this formatting applies only to subsequent requests.
 
 ## Pipeline tests and observed overhead
 
