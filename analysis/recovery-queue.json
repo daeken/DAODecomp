@@ -81,7 +81,7 @@
     },
     {
       "id": "linked-unlink-001",
-      "status": "original_reviewed_pending_acceptance_backend",
+      "status": "luna_acceptance_proposal_running",
       "rvas": [
         "0x00018400"
       ],
@@ -100,6 +100,13 @@
         "new_original_executions": 0,
         "ready_candidates": 1,
         "scope": "Existing reviewed unlink evidence assembled for focused acceptance extension; related Windows dependencies remain blocked."
+      },
+      "active_worker": {
+        "task": "/root/next_memory_batch",
+        "model": "gpt-6-luna",
+        "owned_directory": "local/pilots/linked-unlink-001-backend",
+        "scope": "Ignored patch only; minimal linked backend extension, candidate placeholder, original-only replay and tooling tests. No shared writes or extra agents.",
+        "next_action": "Inspect worker/proposal status before dispatching anything; no duplicate. When proposal ready, one independent Sol review of substantive acceptance change, then coordinator integration and Luna pair only if approved."
       }
     }
   ],
@@ -188,13 +195,13 @@
   "activation": {
     "started_utc": "2026-10-17T19:56:59Z",
     "group": "linked-unlink-001",
-    "infrastructure_assignments": 1,
+    "infrastructure_assignments": 2,
     "pipeline_requests_used": 0,
-    "worker_requests_used": 1,
+    "worker_requests_used": 2,
     "total_worker_request_limit": 12,
-    "coordinator": "No active model workers; checkpoint published, next preparation handoff saved.",
-    "notes": "One fresh Luna preparation request. Existing reviewed evidence supports only unlink in this dependency family; no larger batch claimed. No probes rerun, no shared backend edits, no candidate models.",
-    "model_requests_closed": true
+    "coordinator": "Checkpoint published; one Luna worker preparing ignored unlink acceptance proposal. No other workers.",
+    "notes": "One focused Luna preparation followed by one Luna acceptance-backend proposal assignment. No shared acceptance edits or candidate requests.",
+    "model_requests_closed": false
   },
   "last_checkpoint": {
     "pid": null,
