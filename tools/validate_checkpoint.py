@@ -62,6 +62,12 @@ def build_commands(build_dir, output_dir, jobs, windows=None, batch_size=128):
             raise ValueError('object-bitfields-001 must be promoted as the complete reviewed batch')
         for name, extra in [('object_bitfields_all', ['--suite','all','--jobs',str(jobs)]),('object_bitfields_negative', ['--expect-mismatch'])]:
             steps.append((name,[py,str(ROOT/'validation/validate_object_bitfields.py'),*extra,'--execution','batch','--batch-size',str(batch_size),'--report-dir',str(output_dir/'reports/object-bitfields'),*common],ROOT))
+    active_direct = {f['name'] for f in registry['functions'] if f.get('backend') == 'direct-object-fields-001' and f.get('status') in {'implemented','corpus_pass','reviewed','integrated'}}
+    if active_direct:
+        from validation.direct_object_field_cases import NAMES
+        if active_direct != set(NAMES):raise ValueError('direct-object-fields-001 must be promoted as the complete reviewed batch')
+        for name, extra in [('direct_object_fields_all',['--suite','all','--jobs',str(jobs)]),('direct_object_fields_negative',['--expect-mismatch'])]:
+            steps.append((name,[py,str(ROOT/'validation/validate_direct_object_fields.py'),*extra,'--execution','batch','--batch-size',str(batch_size),'--report-dir',str(output_dir/'reports/direct-object-fields'),*common],ROOT))
     return steps
 
 
@@ -73,6 +79,7 @@ def publication_paths(output_dir):
     active_indexed_stores = False
     active_indexed_fields = set()
     active_object_bitfields = set()
+    active_direct_object_fields = set()
     active_linked_structures = 0
     for function in registry["functions"]:
         status = function.get("status")
@@ -112,6 +119,12 @@ def publication_paths(output_dir):
             active_object_bitfields.add(function['name'])
             positives.append(output_dir / 'reports/object-bitfields' / (function['name']+'-all.json'))
             negatives.append(output_dir / 'reports/object-bitfields' / (function['name']+'-mutant.json'))
+        elif backend == 'direct-object-fields-001':
+            from validation.direct_object_field_cases import NAMES
+            if function['name'] not in NAMES:raise ValueError('unknown direct object field function')
+            active_direct_object_fields.add(function['name'])
+            positives.append(output_dir/'reports/direct-object-fields'/(function['name']+'-all.json'))
+            negatives.append(output_dir/'reports/direct-object-fields'/(function['name']+'-mutant.json'))
         elif backend == "linked-structures-001":
             active_linked_structures += 1
             positives.append(output_dir / "reports/linked-structures" / (function["name"] + "-all.json"))
@@ -128,6 +141,10 @@ def publication_paths(output_dir):
         from validation.object_bitfield_cases import NAMES
         if active_object_bitfields != set(NAMES):
             raise ValueError('object-bitfields-001 must be promoted as the complete reviewed batch')
+        expected_negative_controls += len(NAMES)
+    if active_direct_object_fields:
+        from validation.direct_object_field_cases import NAMES
+        if active_direct_object_fields != set(NAMES):raise ValueError('direct-object-fields-001 must be promoted as the complete reviewed batch')
         expected_negative_controls += len(NAMES)
     if not positives or len(negatives) != expected_negative_controls:
         raise ValueError("registry lacks an expected scalar, memory, or active backend negative-control function")

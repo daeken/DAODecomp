@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 47 |
-| C++ implementations | 47 |
-| Implementations with current emulator corpus evidence | 47 |
-| Input cases across those functions (excluding repeat runs) | 33,678 |
+| Functions in the recovery registry | 69 |
+| C++ implementations | 69 |
+| Implementations with current emulator corpus evidence | 69 |
+| Input cases across those functions (excluding repeat runs) | 44,942 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -62,6 +62,8 @@ still match exactly. Individual groups can also be checked with these commands:
 .venv/bin/python validation/validate_indexed_fields.py --execution batch --expect-mismatch
 .venv/bin/python validation/validate_object_bitfields.py --suite all --jobs 4
 .venv/bin/python validation/validate_object_bitfields.py --expect-mismatch
+.venv/bin/python validation/validate_direct_object_fields.py --binary gamedata/bin_ship/DAOrigins.exe --build-dir build --report-dir reports/direct-object-fields --suite all --jobs 4 --execution batch
+.venv/bin/python validation/validate_direct_object_fields.py --binary gamedata/bin_ship/DAOrigins.exe --build-dir build --report-dir reports/direct-object-fields --expect-mismatch --execution batch
 .venv/bin/python validation/validate_linked_structures.py --suite all --jobs 2
 .venv/bin/python validation/validate_linked_structures.py --expect-mismatch
 ```
@@ -102,6 +104,10 @@ Fifteen related object functions cover flag updates, packed fields, color mergin
 sequential overlapping copies and conditional pointer traversal. Their observations
 include full return/register bits and every arena byte. See the
 [object-bitfield recovery record](analysis/object-bitfields-001.md).
+
+Twenty-two direct object-field helpers preserve narrow return bits, exact writes,
+field predicates and raw exit ECX. See the
+[direct-field recovery record](analysis/direct-object-fields-001.md).
 
 The linked-structure adapter validates disjoint list/node graphs, raw guest
 pointers (including a valid node at arena offset zero), exact branch footprints

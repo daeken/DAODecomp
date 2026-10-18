@@ -17,12 +17,13 @@ MODULES = {
     'object_counters': 'validate_object_counters', 'indexed_stores': 'validate_indexed_stores',
     'indexed_fields': 'validate_indexed_fields', 'linked_structures': 'validate_linked_structures',
     'object_bitfields': 'validate_object_bitfields',
+    'direct_object_fields': 'validate_direct_object_fields',
 }
 
 
 class DeclaredArtifactRoleTests(unittest.TestCase):
     @unittest.skipUnless(os.name == 'posix', 'declared batch validators require POSIX')
-    def test_all_seven_groups_live_positive_and_negative_declarations_have_roles(self):
+    def test_all_eight_groups_live_positive_and_negative_declarations_have_roles(self):
         registry = json.loads((ROOT/'analysis/functions.json').read_text())
         source = cache.source_manifest(ROOT)
         by_id = {f['id']: f for f in registry['functions']}
@@ -60,6 +61,8 @@ class DeclaredArtifactRoleTests(unittest.TestCase):
                     identity['data'] = {str(ROOT/'validation/object_bitfield_specs.json'): 'unit fixture',
                         **{str(ROOT/f"validation/object_bitfield_corpus/{f['name']}-{suite}.json"): 'unit fixture'
                            for f in expected_functions for suite in ('public', 'heldout')}}
+                if group == 'direct_object_fields':
+                    identity['data'] = {str(ROOT/'slices.json'):'unit fixture',**{str(ROOT/f"corpus/{f['name']}-{suite}.json"):'unit fixture' for f in expected_functions for suite in ('public','heldout')}}
                 for negative in (False, True):
                     captures = []
                     def comparison(contract, cases, oracle, candidate, **kwargs):

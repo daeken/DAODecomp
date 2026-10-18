@@ -17,6 +17,8 @@ jobs:
       - run: cmake --build build --config RelWithDebInfo --parallel 2
       - run: ctest --test-dir build -C RelWithDebInfo --output-on-failure
       - if: runner.os != 'Windows'
+        run: python -m unittest discover -s workers/tests -v
+      - if: runner.os != 'Windows'
         run: python examples/synthetic/demo.py
       - if: runner.os != 'Windows'
         run: python examples/synthetic/demo.py --expect-mismatch

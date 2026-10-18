@@ -1,0 +1,11 @@
+{
+  "decision": "approve",
+  "issues": [],
+  "limitations": [
+    "Approval covers only src/direct_object_fields.cpp with raw SHA-256 b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b under the supplied bounded observation contracts; registry integration is not approved.",
+    "Original execution used Unicorn 2.1.4; the candidate ran as native ARM64 C++20 on macOS with AppleClang 21. No native Windows validation or whole-game proof is supplied.",
+    "Invalid footprints, stack/code overlap with the arena, host output-reference aliasing with arena storage, MMIO and concurrent mutation are outside the supplied harness domain. Original signatures, class identities, ownership and lifetime remain unknown; EDX and arithmetic flags are excluded.",
+    "Review used only the supplied instruction bytes, source, reports and verified bindings. No independent execution or hash recomputation was performed."
+  ],
+  "summary": "Approve the scoped 22-function source package. The module/RVA identities and recorded slice hashes bind the instruction evidence. Source inspection matches full EAX preservation/replacement, raw exit ECX, exact memory widths and ordered compound accesses. Bytewise GuestMemory operations support unaligned guest storage without host pointer casts; unsigned masking, subtraction and fixed shifts have defined semantics. RET versus RET4 is correctly represented by the observation adapter rather than claimed as a native C++ ABI. Supplied source/contract/reference bindings, repeated public and heldout agreement, all 22 mutation controls and build checks corroborate this assessment without establishing universal equivalence."
+}

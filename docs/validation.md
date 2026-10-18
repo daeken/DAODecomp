@@ -235,7 +235,7 @@ provenance bindings. A dry-run prepares review material without approval or disp
 ## Complete incremental checkpoint composition
 
 Routine checkpoint plans select approved fresh-child batching for indexed fields
-and object bitfields, retaining all six legacy groups and their controls. Batch
+and object bitfields plus direct object fields, retaining all six legacy groups and their controls. The direct-field group requires all22 implementations and controls; complete publication requires69 positive and48 negative reports. Batch
 size, mode and effective validator argv are execution-key inputs. Cache policy
 `clean-build-local-groups-003` adds explicit normal/mutant shared-image and selected
 object-fixture/specification bindings; it never backfills earlier policy entries.

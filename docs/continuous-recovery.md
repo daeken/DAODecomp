@@ -22,8 +22,23 @@ a separate independent source reviewer. This supersedes the Luna-first policy.
 The pair and single-packet launcher default to `gpt-6.1-sol`; reviewer requests
 also use medium reasoning. Let active frozen jobs finish with their recorded
 settings. Keep coordinator overhead low, every deterministic gate and independent
-review requirement. DeepSeek is a deferred option, not configured or authorized
-for new service setup.
+review requirement. The user subsequently authorized DeepSeek with a $50/day cap.
+The reviewed [packet provider](../workers/README.md) uses the shared private ledger
+at `local/providers/deepseek-daily`, calendar days in America/Chicago, and explicit
+reservations for failed and successful requests. Its low-thinking 22-function
+benchmark passed the unchanged deterministic gates and independent Sol review;
+it adds no new recovery credit. Use this provider for suitable frozen implementation
+packets and pass its response through `run_recovery_pair --initial-response`.
+Keep Sol medium for preparation, ambiguity and independent review. Count all
+provider calls, including failed calls, in the activation's request ceiling.
+
+The latest work-selection priority is the executable's startup path toward a
+runnable replacement on Windows. Use a [dependency-directed queue](dependency-queue.md):
+breadth across independent branches, depth and coherent caller/callee context
+within each handoff. Keep RVA-based names initially and defer naming/readability
+work. A graph scheduler is still to be implemented; the queue records its next
+actions and the startup characterization proposal. Do not confuse a synthetic
+runner or the original game launching with the replacement reaching a milestone.
 
 The user now prioritizes batched execution and conservative incremental validation
 before increasing packet size. The independently reviewed fresh-child transport
@@ -114,8 +129,8 @@ env PATH="/opt/homebrew/Cellar/cmake/4.2.0/bin:$PATH" \
 ```
 
 Run these sequentially and stop on any failure. The checkpoint builds, runs
-tooling/CTest/synthetic controls, covers all seven implemented groups and their
-required negative controls, verifies report/input hashes, and publishes compact
+tooling/CTest/synthetic controls, covers all eight implemented groups and their
+required negative controls (69 positive and48 negative reports), verifies report/input hashes, and publishes compact
 evidence. The next command refreshes README progress. A failed step stops
 publication and preserves diagnostic artifacts. Neither command stages, commits
 or pushes. Exact runtime reuse currently supports macOS; the complete legacy

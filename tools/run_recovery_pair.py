@@ -355,7 +355,8 @@ def inspect_report(path, declaration, m, tree):
             raise PairError('batch report lacks complete fresh-child execution provenance')
         original_command = report.get('oracle_command', [])
         candidate_command = report.get('candidate_command', [])
-        adapter = 'object_bitfield' if m['group'] == 'object-bitfields-001' else 'indexed_field'
+        adapter = ('direct_object_field' if m['group'] == 'direct-object-fields-001' else
+                   'object_bitfield' if m['group'] == 'object-bitfields-001' else 'indexed_field')
         runner = tree / f'validation/{adapter}_batch_runner.py'
         if (len(original_command) != 4 or len(candidate_command) != 4
                 or original_command[1:3] != [str(runner), 'original']

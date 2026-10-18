@@ -1,0 +1,11 @@
+# Direct object fields
+
+Twenty-two implementations are bound to the pinned original module and RVAs in the registry. The unchanged accepted source SHA-256 is `b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b`.
+
+Observed byte, word and dword stores, constant writes, predicates and bit getters preserve exact memory widths, partial EAX updates and raw exit ECX. Compound updates retain access order. All512 arena bytes are observed; unaligned storage is supported through explicit GuestMemory operations. These operations form a memory/ABI family; no common game class or source-level signature is inferred. Class identity, ownership, lifetime, caller initialization, EDX/flags and concurrent mutation remain outside this bounded observation contract.
+
+Independent support approval and independent source approval are preserved separately in `analysis/reviews/direct-object-fields-001-support.json` and `analysis/reviews/direct-object-fields-001-source.json`. The first implementation attempt passed8,448 public and2,816 heldout cases, twice per side, followed by22 actual native candidate controls. The pair accepted the exact source in542.294seconds using2 new Sol6.1 medium CLI requests. Raw request metrics and failed pre-dispatch invocation paths are retained in `analysis/pilots/direct-object-fields-001.json`; original reports and observations remain ignored local artifacts.
+
+Integration adds an eighth checkpoint group. Complete publication requires69 positive and48 negative reports across all eight groups. The new group uses the existing production fresh-child batching and `clean-build-local-groups-003` policy. Its key includes both linked libraries, the selected contracts, exact frozen public/heldout corpora and slice/descriptor metadata. Changed, missing or unclassified inputs fail closed. No prior report is imported into a new cache entry or relabeled as current execution.
+
+The full macOS arm64 checkpoint subsequently passed all69 positive reports (44,942 cases),48 negative reports,209 tooling tests (1 skip), CTest and both synthetic controls. The publication record is analysis/validation/direct-object-fields-001.json. Registry status is implemented and current README counts bind this checkpoint. Pair corpus agreement and source review establish neither universal equivalence, native Windows behavior nor a working game.

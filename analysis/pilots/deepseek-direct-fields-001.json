@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "experiment": "deepseek-direct-fields-001",
+  "status": "benchmark_passed_all_gates_and_independent_review",
+  "accepted_new_functions": 0,
+  "benchmark_functions": 22,
+  "comparison": "Same frozen implementation packet and acceptance pipeline as Sol direct-object-fields-001; existing production candidate remains unchanged.",
+  "source_sha256": "c17a6db7b400428bb4d2f379cc1d63e712aa87909cd14fac23a7ecacc51c7f74",
+  "packet_sha256": "8d2e23872639fa53f6f3a299459d227a0256e2f494e58a5adea969a88f13a75a",
+  "manifest_raw_sha256": "64a095bee455d894506077b84ba0709fcb695f026c1c2684f646ae2db31bc213",
+  "reference_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+  "requests": [
+    {
+      "requested_model": "deepseek-flash",
+      "returned_model": "deepseek-flash",
+      "reasoning_effort": "high",
+      "system_fingerprint": "e72d3c7f663d3e1383b00b3884cb4501",
+      "elapsed_seconds": 57.497,
+      "max_tokens": 16384,
+      "schema_validation": "fail",
+      "failure": "response_validation",
+      "usage": [
+        {
+          "prompt_tokens": 20813,
+          "completion_tokens": 16384,
+          "total_tokens": 37197,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 13303
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 20813
+        }
+      ],
+      "actual_peak_price_estimate_usd": 0.025904699999999996,
+      "source_sha256": null
+    },
+    {
+      "requested_model": "deepseek-flash",
+      "returned_model": "deepseek-flash",
+      "reasoning_effort": "low",
+      "system_fingerprint": "e72d3c7f663d3e1383b00b3884cb4501",
+      "elapsed_seconds": 37.201,
+      "max_tokens": 32768,
+      "schema_validation": "pass",
+      "failure": null,
+      "usage": [
+        {
+          "prompt_tokens": 20813,
+          "completion_tokens": 10890,
+          "total_tokens": 31703,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 6362
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 20813
+        }
+      ],
+      "actual_peak_price_estimate_usd": 0.0193119,
+      "source_sha256": "c17a6db7b400428bb4d2f379cc1d63e712aa87909cd14fac23a7ecacc51c7f74"
+    }
+  ],
+  "deterministic_and_review_elapsed_seconds": 476.269,
+  "successful_generation_plus_pipeline_seconds": 513.47,
+  "including_truncated_attempt_seconds": 570.967,
+  "public_cases": 8448,
+  "heldout_cases": 2816,
+  "negative_controls": 22,
+  "gates": [
+    [
+      "build",
+      true
+    ],
+    [
+      "public",
+      true
+    ],
+    [
+      "heldout",
+      true
+    ],
+    [
+      "negative",
+      true
+    ]
+  ],
+  "review": "analysis/reviews/deepseek-direct-fields-001-source.json",
+  "review_sha256": "f94391e3b2a37488fb9233172690d668769af8313ca5196aeaaca5d9873869a6",
+  "review_model_requests": [
+    {
+      "argv": [
+        "codex",
+        "exec",
+        "--model",
+        "gpt-6.1-sol",
+        "--sandbox",
+        "read-only",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--skip-git-repo-check",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "--json",
+        "--output-schema",
+        "/Users/daeken/projects/DAODecomp/local/pilots/memory-batch-006/tree/local/pairs/deepseek-direct-fields-002/review/response-schema.json",
+        "--output-last-message",
+        "/Users/daeken/projects/DAODecomp/local/pilots/memory-batch-006/tree/local/pairs/deepseek-direct-fields-002/review/response.json",
+        "-"
+      ],
+      "cwd": "/Users/daeken/projects/DAODecomp/local/pilots/memory-batch-006/tree/local/pairs/deepseek-direct-fields-002/review/empty-workspace",
+      "elapsed_seconds": 16.85,
+      "errors": [],
+      "exit_code": 0,
+      "kind": "review",
+      "prompt_sha256": "f331969504850a072c191b819d6c34ecd49ba3fb0f4f08e70973113f516cd2ff",
+      "requested_model": "gpt-6.1-sol",
+      "reused": false,
+      "timed_out": false,
+      "timeout_seconds": 180,
+      "tool_items": [],
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 291282,
+          "output_tokens": 502,
+          "reasoning_output_tokens": 85
+        }
+      ]
+    }
+  ],
+  "pair_status_sha256": "03885ec548a1a627f1e3e76670af0bd963a37208c3d73264ca426a043babb509",
+  "pair_output": "local/pilots/memory-batch-006/tree/local/pairs/deepseek-direct-fields-002",
+  "deepseek_peak_price_total_estimate_usd": 0.0452166,
+  "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing/",
+  "cost_note": "Conservative peak-price token estimate, not measured invoice; excludes Sol/Codex and coordinator account quota. Actual off-peak charges may be lower.",
+  "limitations": [
+    "Simple bounded call-free memory helper family only; not a general model quality comparison.",
+    "Benchmark repeats existing functions, so zero new recovery credit.",
+    "No shared source integration, no native Windows validation, no universal proof."
+  ],
+  "proof": false,
+  "native_windows_validated": false
+}

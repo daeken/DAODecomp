@@ -1,0 +1,12 @@
+{
+  "decision": "approve",
+  "issues": [],
+  "limitations": [
+    "Approval covers only src/direct_object_fields.cpp with raw SHA-256 c17a6db7b400428bb4d2f379cc1d63e712aa87909cd14fac23a7ecacc51c7f74 under the frozen 512-byte ordinary-RAM contracts; registry integration is not approved.",
+    "The interface models full EAX, raw ECX and arena bytes, not original C++ signatures. Native stack cleanup and nonvolatile preservation are supported by the original instruction evidence, not implemented as an x86 calling convention by this interface. EDX and arithmetic flags are excluded.",
+    "Validation uses native ARM64 candidates against Unicorn execution of pinned x86 slices on macOS. No native Windows corroboration, exhaustive domain validation or whole-game proof is supplied.",
+    "Invalid footprints, MMIO, concurrent mutation, host output-reference aliasing with arena storage, class identity, ownership, lifetime and caller composition are outside the demonstrated scope.",
+    "Review used only supplied material; hashes and execution were not independently recomputed or rerun."
+  ],
+  "summary": "Approve the scoped source package. All 22 bodies match the supplied instruction bytes tied to module SHA-256, RVA and slice hashes. Narrow stores preserve upper EAX bits; constant setters preserve entry EAX; predicates return exact full-width 0/1; both ECX-loading predicates retain raw loaded bits. Exact-width GuestMemory operations preserve unaligned byte layout without guest-to-host pointer casts or typed aliasing assumptions. The multi-access functions preserve instruction access order, and their field footprints are disjoint within valid arena bounds. Clamp subtraction and narrowing implement modulo-256 behavior; shifts and address arithmetic use defined unsigned semantics. Supplied tested-source/reference/contract bindings, successful AppleClang ARM64 builds, repeated public/heldout comparisons and all 22 post-candidate negative controls corroborate this source analysis."
+}

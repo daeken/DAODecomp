@@ -9,15 +9,15 @@ REGISTRY=json.loads((ROOT/'analysis/functions.json').read_text())
 
 class ThroughputCompositionTests(unittest.TestCase):
     def test_complete_registry_routing_and_checkpoint_plan(self):
-        self.assertEqual(len([f for f in REGISTRY['functions'] if f['status'] in cache.ACTIVE]),47)
+        self.assertEqual(len([f for f in REGISTRY['functions'] if f['status'] in cache.ACTIVE]),69)
         selected=[f['id'] for group in cache.required_groups(REGISTRY) for f in cache.selected_entries(REGISTRY,group)]
-        self.assertEqual(len(selected),47);self.assertEqual(len(set(selected)),47)
+        self.assertEqual(len(selected),69);self.assertEqual(len(set(selected)),69)
         steps=checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2,windows=False)
         for group in cache.required_groups(REGISTRY):
             config=cache.group_execution(steps,group)
             self.assertEqual(config['mode'],'batch' if group in cache.BATCH_IMAGES else 'single')
         positives,negatives=checkpoint.publication_paths(ROOT/'reports/test-plan')
-        self.assertEqual((len(positives),len(negatives)),(47,26))
+        self.assertEqual((len(positives),len(negatives)),(69,48))
         for mutation in ('missing','unknown','wrong-group'):
             changed=copy.deepcopy(REGISTRY)
             target=next(f for f in changed['functions'] if f.get('backend')=='object-bitfields-001')
@@ -49,7 +49,7 @@ class ThroughputCompositionTests(unittest.TestCase):
 
     def test_complete_publication_and_v2_updater_reject_partial_inventory(self):
         inventory=cache.publication_inventory()
-        self.assertEqual(len(inventory),73)
+        self.assertEqual(len(inventory),117)
         records=[dict(function_id=identity,negative_control=negative,status='corpus_pass',artifacts_sha256={'historical':'retained'},report='historical/report.json',report_sha256='retained',repeats_per_side=2,artifacts_unchanged=True,case_counts={'mismatch' if negative else 'corpus_pass':1}) for identity,negative in sorted(inventory)]
         result=dict(schema_version=2,policy=cache.POLICY,status='passed',complete_checkpoint=True,usable_for_progress=True,source={},registry_sha256=cache.file_hash(ROOT/'analysis/functions.json'),groups=[dict(group='fixture',records=records,reused=False,identity_sha256='current')])
         document=cache.publication_document(result)
@@ -57,7 +57,7 @@ class ThroughputCompositionTests(unittest.TestCase):
             root=Path(temp);(root/'analysis/validation').mkdir(parents=True)
             shutil.copy2(ROOT/'analysis/functions.json',root/'analysis/functions.json')
             path=root/'analysis/validation/checkpoint.json';path.write_text(json.dumps(document))
-            self.assertEqual(len(Snapshot(root).document('analysis/validation/checkpoint.json')['records']),73)
+            self.assertEqual(len(Snapshot(root).document('analysis/validation/checkpoint.json')['records']),117)
             bad=copy.deepcopy(document);bad['records'].pop();unsigned={k:v for k,v in bad.items() if k!='attestation_sha256'};bad['attestation_sha256']=cache.digest(unsigned);path.write_text(json.dumps(bad))
             with self.assertRaises(ValueError):Snapshot(root).document('analysis/validation/checkpoint.json')
         result['groups'][0]['records'].pop()
@@ -75,6 +75,9 @@ class ThroughputCompositionTests(unittest.TestCase):
                 for f in fs:
                     p=root/f['contract'];p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(ROOT/f['contract'],p)
                 for src in cache.execution_images(build,group,{'mode':'batch'}):shutil.copy2(src,b/src.name)
+                if group=='direct_object_fields':
+                    shutil.copytree(ROOT/'corpus',root/'corpus',dirs_exist_ok=True)
+                    shutil.copy2(ROOT/'slices.json',root/'slices.json')
                 if group=='object_bitfields':
                     shutil.copytree(ROOT/'validation/object_bitfield_corpus',root/'validation/object_bitfield_corpus')
                     shutil.copy2(ROOT/'validation/object_bitfield_specs.json',root/'validation/object_bitfield_specs.json')

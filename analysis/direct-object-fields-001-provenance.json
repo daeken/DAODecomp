@@ -1,0 +1,29 @@
+{
+  "accepted_package_sha256": "617d149f169e7af6e98e9264db11b7e874fc6a14d30b00b4a74e97c9827326dc",
+  "corrected_invocation_commands": "local/pilots/memory-batch-006/run/commands.json",
+  "corrected_invocation_commands_sha256": "e8fbb1572fd1812412af380308bf7cf7a0fc3dc082f7dfc5f1b4abdc6b2f6381",
+  "existing_worker_measurements_preserved_sha256": "10c1e758bc9cdb862ddf07464bd3b4962c5aeb9cbd045c7e55f4df4f8689ad33",
+  "failed_pre_dispatch_invocations_preserved": 2,
+  "group": "direct-object-fields-001",
+  "invocation_correction": "Freezer preflight output must be outside source ROOT; pair output must be under its root/local/pairs. No production code fix was needed.",
+  "manifest_sha256": "64a095bee455d894506077b84ba0709fcb695f026c1c2684f646ae2db31bc213",
+  "native_windows_validated": false,
+  "original_characterization_sha256": "1d41412475c237c91f2792cd77b401224a9fdd12479adadf6e2d352b15e97bfa",
+  "pair_status_sha256": "0235d2e48cd8191eafa72b41dd58190ec4b9828d45b0ffe60d0ab9ca3e2f34ab",
+  "proof": false,
+  "schema_version": 1,
+  "scope": "Accepted22 exact source integrated; full69function emulator checkpoint passed on macOS arm64",
+  "source_review_sha256": "5102953bdc31b45971f4be352ce9bd73d2d3a1ac79561aab59b32129fefc7711",
+  "source_sha256": "b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b",
+  "support_review_sha256": "1127472e08a5239a14d572883cff8dab7e8c3aec9061ce3a3383a0d5e58897b8",
+  "checkpoint": {
+    "record": "analysis/validation/direct-object-fields-001.json",
+    "attestation": "reports/checkpoint-direct-object-fields-001/reuse-attestation.json",
+    "positive_reports": 69,
+    "negative_reports": 48,
+    "positive_cases": 44942,
+    "tooling_tests": 209,
+    "tooling_skips": 1,
+    "completed_observed_utc": "2026-10-18T05:52:32.318358+00:00"
+  }
+}

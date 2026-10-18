@@ -34,9 +34,10 @@ GROUPS = {
     'indexed_fields': ('indexed-fields', 'dao_indexed_field'),
     'linked_structures': ('linked-structures', 'dao_linked_structure'),
     'object_bitfields': ('object-bitfields', 'dao_object_bitfield'),
+    'direct_object_fields': ('direct-object-fields', 'dao_direct_object_field'),
 }
-LEGACY_GROUPS = tuple(g for g in GROUPS if g != 'object_bitfields')
-BATCH_IMAGES = {'indexed_fields':'dao_indexed_field_batch', 'object_bitfields':'dao_object_bitfield_batch'}
+LEGACY_GROUPS = tuple(g for g in GROUPS if g not in {'object_bitfields','direct_object_fields'})
+BATCH_IMAGES = {'indexed_fields':'dao_indexed_field_batch', 'object_bitfields':'dao_object_bitfield_batch', 'direct_object_fields':'dao_direct_object_field_batch'}
 # Exact existing report dependency from validate_linked_structures.py; no tests/* rule.
 DECLARED_VALIDATION_DEPENDENCIES = {
     'linked_structures': ('tests/test_linked_structures.py',),
@@ -83,7 +84,20 @@ def source_manifest(root):
     for name in ('src', 'include', 'tools', 'validation', 'contracts', 'examples', 'tests'):
         paths += [p for p in (root / name).rglob('*') if p.is_file()
                   and '__pycache__' not in p.parts and p.suffix != '.pyc']
-    return {str(Path(p).relative_to(root)): file_hash(p) for p in sorted(set(paths))}
+    current = {str(Path(p).relative_to(root)): file_hash(p) for p in sorted(set(paths))}
+    registry = root/'analysis/functions.json'
+    if registry.is_file():
+        direct = [f for f in json.loads(registry.read_text()).get('functions', [])
+                  if f.get('status') in ACTIVE and f.get('backend') == 'direct-object-fields-001']
+        if direct:
+            # Public deterministic fixtures/reference metadata; private packet
+            # copies, captures and original binaries remain excluded below local/.
+            selected = [root/'slices.json',
+                        *[root/f"corpus/{f['name']}-{suite}.json"
+                          for f in direct for suite in ('public','heldout')]]
+            current.update({Path(p).relative_to(root).as_posix(): value
+                            for p, value in files_manifest(selected).items()})
+    return current
 
 
 # These two variables describe the shell/tool invocation, not guest execution.
@@ -292,7 +306,8 @@ def selected_entries(registry, group):
         return {'scalar': 'scalar', 'memory-001': 'memory',
                 'object-counters-001': 'object_counters',
                 'linked-structures-001': 'linked_structures',
-                'object-bitfields-001':'object_bitfields'}.get(backend)
+                'object-bitfields-001':'object_bitfields',
+                'direct-object-fields-001':'direct_object_fields'}.get(backend)
     for function in functions:
         if function.get('status') in ACTIVE and route(function) is None:
             raise ValueError('unsupported registry routing')
@@ -301,6 +316,11 @@ def selected_entries(registry, group):
         from validation.object_bitfield_cases import NAMES
         if {f['name'] for f in object_rows} != set(NAMES) or any(f.get('recovery_group') != 'object-bitfields-001' for f in object_rows):
             raise ValueError('incomplete or unknown object-bitfield registry route')
+    direct_rows = [f for f in functions if f.get('status') in ACTIVE and route(f) == 'direct_object_fields']
+    if direct_rows:
+        from validation.direct_object_field_cases import NAMES
+        if {f['name'] for f in direct_rows} != set(NAMES) or any(f.get('recovery_group') != 'direct-object-fields-001' for f in direct_rows):
+            raise ValueError('incomplete or unknown direct-object-field registry route')
     return sorted((f for f in functions if f.get('status') in ACTIVE and route(f) == group),
                   key=lambda f: f['id'])
 
@@ -308,7 +328,7 @@ def selected_entries(registry, group):
 def required_groups(registry):
     # Legacy six groups retain their controls; the additional group is all-or-none.
     selected_entries(registry, 'scalar')
-    return (*LEGACY_GROUPS, *(['object_bitfields'] if selected_entries(registry, 'object_bitfields') else []))
+    return (*LEGACY_GROUPS, *(g for g in ('object_bitfields','direct_object_fields') if selected_entries(registry,g)))
 
 
 def group_execution(steps, group):
@@ -336,7 +356,7 @@ def group_execution(steps, group):
             index += 1
         if mode not in {'single','batch'} or (mode == 'batch' and group not in BATCH_IMAGES):
             raise ValueError('unsupported execution mode')
-        if group == 'object_bitfields' and mode != 'batch':
+        if group in {'object_bitfields','direct_object_fields'} and mode != 'batch':
             raise ValueError('object bitfields require batch execution')
         configurations.append((mode,size if size is not None else (128 if mode == 'batch' else None)))
         plan.append({'step':name,'argv':kept})
@@ -350,7 +370,7 @@ def execution_images(build, group, execution):
     if execution['mode'] == 'batch':
         if group not in BATCH_IMAGES: raise ValueError('unsupported batch group')
         return [build/('lib'+BATCH_IMAGES[group]+suffix+'.dylib') for suffix in ('','_mutant')]
-    if group == 'object_bitfields': raise ValueError('object bitfields require batch images')
+    if group in {'object_bitfields','direct_object_fields'}: raise ValueError('group requires batch images')
     _,prefix = GROUPS[group]
     return [build/(prefix+suffix) for suffix in ('_runner','_mutant')]
 
@@ -368,14 +388,14 @@ def actual_corpora(group, functions):
         module = importlib.import_module('validation.'+{
             'memory': 'memory_cases', 'object_counters': 'object_counter_cases',
             'indexed_stores': 'indexed_store_cases', 'indexed_fields': 'indexed_field_cases',
-            'linked_structures': 'linked_structure_cases', 'object_bitfields':'object_bitfield_cases'}[group])
+            'linked_structures': 'linked_structure_cases', 'object_bitfields':'object_bitfield_cases', 'direct_object_fields':'direct_object_field_cases'}[group])
         def positive(f):
             return [c for suite in ('public', 'heldout') for c in module.cases(f['name'], suite)]
         def negative(f):
             if group == 'memory':
                 return module.cases(f['name'], 'public') if f['name'] == 'fn_00061fa0' else None
             names = {'object_counters': {'fn_00061f40'}, 'indexed_stores': {'fn_00347d10'}}
-            controls = set(module.NEGATIVE_NAMES) if group in {'indexed_fields','object_bitfields'} else names.get(group)
+            controls = set(module.NEGATIVE_NAMES) if group in {'indexed_fields','object_bitfields','direct_object_fields'} else names.get(group)
             return module.negative_cases(f['name']) if controls is None or f['name'] in controls else None
     result = {}
     for function in functions:
@@ -402,6 +422,10 @@ def group_identity(root, build, group, registry, source, runtime, execution=None
     if group == 'object_bitfields':
         selected_data = [root/'validation/object_bitfield_specs.json',
                          *[root/f"validation/object_bitfield_corpus/{f['name']}-{suite}.json"
+                           for f in functions for suite in ('public','heldout')]]
+    if group == 'direct_object_fields':
+        selected_data = [root/'slices.json',
+                         *[root/f"corpus/{f['name']}-{suite}.json"
                            for f in functions for suite in ('public','heldout')]]
     return {'schema_version': VERSION, 'policy': POLICY, 'group': group,
             'functions': functions, 'source': execution_sources, 'data':files_manifest(selected_data),
@@ -576,7 +600,7 @@ def run(build, output, cache, jobs, groups=None, identity_only=False, batch_size
     build_before = build_provenance(build)
     # Settle all supported Python case-provider imports before runtime inventory.
     for module in ('validate_leaves', 'scalar_cases', 'memory_cases', 'object_counter_cases',
-                   'indexed_store_cases', 'indexed_field_cases', 'linked_structure_cases', 'object_bitfield_cases'):
+                   'indexed_store_cases', 'indexed_field_cases', 'linked_structure_cases', 'object_bitfield_cases', 'direct_object_field_cases'):
         importlib.import_module('validation.'+module)
     corpora_before = {g: actual_corpora(g, selected_entries(registry, g)) for g in groups}
     try:

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "decision": "approve",
+  "status": "focused_independent_recheck_complete",
+  "scope": "Exact v2 three-file provider proposal only; v1 blocking review retained unchanged. Approval is for provider adoption under its documented assumptions, not recovered-source acceptance or game equivalence.",
+  "bindings": {
+    "provider_patch_sha256": "27a5e4f749bb73c7b39a4912ece0080e55628306a13161b9d812717f49b05f94",
+    "handoff_sha256": "9db9faffaacda50754e20261a272e7d40d0b61c5b5472d1db8a3c9ae14be7b12",
+    "artifacts": {
+      "workers/deepseek_packet.py": "730060709990324e7d25e473b36397169ff46e011d21055b3d042353858d9282",
+      "workers/tests/test_deepseek_packet.py": "af5dc5a4283908645ccac6ba3e42a9f4beb4150bd36a66f0df457ac19652051b",
+      "workers/README.md": "402fad64a0cb2edc13b25d88ef74c73157772adf520a080d0bae1e8b1f83008e"
+    },
+    "prior_block_review_sha256": "e0cb1a5faafdaa20acf376379bfb8c6f6e5509c11233a469cdf409d246ffb24d"
+  },
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "DS-PROVIDER-001",
+      "result": "resolved",
+      "evidence": "Actual transport with synthetic nested JSON Unicode-escaped credential now returns credential_echo; run refuses source persistence and retains uncertain reservation."
+    },
+    {
+      "id": "DS-PROVIDER-002",
+      "result": "resolved",
+      "evidence": "Supplied contradictory total_tokens and duplicate cache counters now normalize to unknown usage and retain the complete reservation."
+    }
+  ],
+  "tests": {
+    "provider": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/daeken/projects/DAODecomp/local/pilots/deepseek-provider-002/review .venv/bin/python -m unittest discover -s local/pilots/deepseek-provider-002/workers/tests -v",
+      "count": 23,
+      "result": "pass"
+    },
+    "independent_regressions": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python local/pilots/deepseek-provider-002/review/test_independent_review.py",
+      "count": 25,
+      "result": "pass",
+      "includes": "All 20 original tests, 3 independent regressions previously failing on v1, plus prepared-request immutability and initial metrics-write failure retention."
+    },
+    "repository": {
+      "rerun_for_v2": false,
+      "reason": "Narrow diff reviewed; v1 independent 209-test suite passed with 1 skip. Coordinator requested no further broad repeats."
+    }
+  },
+  "reviewed_delta": [
+    "Only total/cache consistency checks, second JSON document credential scan, and three regression tests changed from v1; README bytes identical.",
+    "All v2 handoff artifact hashes independently match."
+  ],
+  "limits": [
+    "Offline fake HTTPS and synthetic credentials only; no real credential access, model or network calls.",
+    "Budget remains a conservative peak-price/tokenization estimate under documented rates, not an authoritative vendor invoice.",
+    "Documented coordinator-owned ledger/lock and shared single-ledger usage assumptions remain applicable.",
+    "Unchanged run_recovery_pair deterministic and independent acceptance gates remain required for every source proposal."
+  ],
+  "real_credential_read": false,
+  "network_or_model_calls": 0,
+  "candidate_or_shared_files_edited": false,
+  "review_artifacts": {
+    "test_independent_review.py": "1133f7abf555d83697583cbf9ee5bd8a5db3f0f8243bf9a003edf6a3e2bf6df9",
+    "independent-tests.log": "058b8e08fc1814e1cb386def5b8173d0e0244d0ac2c02ddd1ea70ae08c9fed12",
+    "provider-tests.log": "c9ec0c131ab431ed0070f303936728de93cea74b25788483b970c472f7b00d38"
+  }
+}
