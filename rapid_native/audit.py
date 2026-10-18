@@ -15,10 +15,16 @@ from reccmp.project.detect import RecCmpProject
 from reccmp.tools.asmcmp import print_match_verbose
 from reccmp.types import ImageId
 from status_rules import classify
+from operands import scope_reason,strict_operand_match,descriptors,instruction_keys
 
 
 def sha(data): return hashlib.sha256(data).hexdigest()
 
+
+
+def _mapped(image,value):
+    try:image.read(value,1);return True
+    except Exception:return False
 
 def analyze(root):
     root=Path(root); selection=json.loads((root/'selection.json').read_text()); target=RecCmpProject.from_directory(root).get('DAO')
@@ -34,7 +40,7 @@ def analyze(root):
     summary={'schema_version':1,'module_sha256':original_hash,'source_sha256':sha((root/'candidate.cpp').read_bytes()),
         'recompiled_sha256':sha((root/'candidate.dll').read_bytes()),'pdb_sha256':sha((root/'candidate.pdb').read_bytes()),
         'compiler_patch_identity':'recorded build.log and compiler hashes; exact original compiler patch unknown',
-        'evidence_kind':'reccmp_normalized_assembly_match_for_pinned_compiled_artifact','pe_machine':'I386','optional_header':'PE32','reccmp_version':reccmp.VERSION,'tool_module_sha256':{},'functions':[]}
+        'evidence_kind':'reccmp_normalized_assembly_match_for_pinned_compiled_artifact','pe_machine':'I386','optional_header':'PE32','reccmp_version':reccmp.VERSION,'operand_check':'typed-instruction-v1','operand_guard_sha256':sha(Path(__file__).with_name('operands.py').read_bytes()),'tool_module_sha256':{},'functions':[]}
     for module in ('reccmp.compare.core','reccmp.compare.functions','reccmp.compare.asm.parse','reccmp.compare.asm.instgen','reccmp.compare.report'):
         loaded=__import__(module,fromlist=['_']);summary['tool_module_sha256'][module]=sha(Path(inspect.getfile(loaded)).read_bytes())
     for expected in selection['functions']:
@@ -55,14 +61,19 @@ def analyze(root):
                 instructions=list(md.disasm(raw,start)); addresses={int(a,16) for a,_ in lines if a}
                 if sum(i.size for i in instructions)!=len(raw): unknown.append(side+'_incomplete_decode')
                 if not instructions or not {i.address for i in instructions}.issubset(addresses): unknown.append(side+'_instructions_missing_from_comparison')
+                reason=scope_reason(instructions,start,len(raw),lambda value: _mapped(compare.orig_bin,value) or _mapped(compare.recomp_bin,value))
+                if reason:unknown.append(side+'_'+reason)
                 for instruction in instructions:
                     if instruction.mnemonic in ('call','lcall'):
                         unknown.append(side+'_external_call_not_in_pilot_scope')
                     if instruction.group(CS_GRP_JUMP):
                         if not instruction.operands or instruction.operands[0].type!=CS_OP_IMM or not start<=instruction.operands[0].imm<start+len(raw): unknown.append(side+'_external_or_indirect_branch')
-                    for operand in instruction.operands:
-                        if operand.type==CS_OP_MEM and instruction.reg_name(operand.mem.base) not in ('esp','ebp'):
-                            unknown.append(side+'_nonstack_reference_not_in_pilot_scope')
+            try:
+                left=descriptors(list(md.disasm(original,va)));right=descriptors(list(md.disasm(recomp,mapping.recomp_addr)))
+                if instruction_keys(left)!=instruction_keys(right):
+                    unknown.append('typed_instruction_or_operand_mismatch')
+                    details['operand_differences']=[{'instruction_index':n,'original':left[n] if n<len(left) else None,'recompiled':right[n] if n<len(right) else None} for n in range(max(len(left),len(right))) if n>=len(left) or n>=len(right) or instruction_keys([left[n]])!=instruction_keys([right[n]])][:16]
+            except ValueError:unknown.append('unmapped_typed_branch_target')
             output=io.StringIO()
             with contextlib.redirect_stdout(output): print_match_verbose(ent,show_both_addrs=True)
             (root/f'diff-{va:08x}.txt').write_text(output.getvalue(),encoding='utf-8')

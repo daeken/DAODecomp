@@ -50,6 +50,14 @@ provenance and counts; they are not added to the historical registry above.
 The exact [pilot C++](src/native/reccmp_pilot.cpp) is retained in the repository
 and builds through the native loop, separately from the portable CMake targets.
 
+The native runner batches call-free integer and pointer-memory functions, with
+four provider lanes and up to six repairs per batch. Repairs focus on unmatched
+functions, retain the best source, and stop after repeated lack of progress.
+The default native request ceiling is 120 per half hour; the existing $50/day
+DeepSeek budget remains in force. Calls, unresolved globals and TLS remain
+outside this profile. Live counts, configuration and pause commands are available
+through the [native runner](docs/reccmp-loop.md#continuous-native-profile).
+
 The earlier [lightweight candidate factory](docs/rapid-recovery.md) retains its
 register-state C++ proposals but is paused for this native-ABI transition.
 Syntax-only proposals do not contribute to the historical progress counts above.

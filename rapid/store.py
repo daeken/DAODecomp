@@ -55,7 +55,8 @@ class Store:
         reasons=dict(self.db.execute("SELECT error,count(*) FROM batches WHERE state='pending' AND error IS NOT NULL GROUP BY error"))
         return {'paused':self.paused(),'batches':counts,'functions_proposed_unvalidated':proposed,'functions_verified':0,'waiting':reasons}
 
-def reserve_global(path,task,now=None):
+def reserve_global(path,task,now=None,ceiling=12):
+    if type(ceiling) is not int or ceiling<1: raise ValueError('invalid_request_ceiling')
     now=time.time() if now is None else now
     db=sqlite3.connect(path,timeout=30)
     try:
@@ -64,7 +65,7 @@ def reserve_global(path,task,now=None):
         if now<anchor: raise RuntimeError('clock_before_anchor')
         cycle=int((now-anchor)//1800)
         count=db.execute('SELECT count(*) FROM requests WHERE cycle=?',(cycle,)).fetchone()[0]
-        if count>=12: db.rollback(); return None,anchor+(cycle+1)*1800
+        if count>=ceiling: db.rollback(); return None,anchor+(cycle+1)*1800
         ident='rapid-provider-'+uuid.uuid4().hex
         db.execute('INSERT INTO requests VALUES(?,?,?,?,?)',(ident,cycle,task,'rapid-provider','claimed'))
         db.commit(); return ident,anchor+(cycle+1)*1800

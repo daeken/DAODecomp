@@ -1,0 +1,4 @@
+# Host-side native queue preparation and decoded operand controls.
+# These versions produced the recorded native memory smoke result.
+capstone==5.0.6
+pefile==2024.8.26

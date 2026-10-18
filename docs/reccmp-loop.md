@@ -125,53 +125,97 @@ candidate queue. Its four reccmp matches remain separate from the older registry
 
 ## Continuous native profile
 
-The native loop is attached to the existing `rapid.store.Store` queue and shared
-budget accounting. It uses its own ignored `local/rapid-native/` queue and keeps
-the previous Context queue paused. Four paid pilot matches are seeded by their
-existing source/binary hashes; they are not regenerated or charged again.
+The current native loop uses the existing `rapid.store.Store`, the same physical
+request database/anchor/history, and the unchanged $50/calendar-day Chicago
+provider ledger. The old Context queue and legacy pipeline stay paused. Native
+outputs and the separate matched index remain under ignored `local/rapid-native/`.
 
 ```sh
 /Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native prepare
-/Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native run
+/Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native continue-retained --receipt local/reccmp-scale-001/retained-continuation.json
+/Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native run --lanes 4 --request-ceiling 120 --max-repairs 6
 /Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native status
 /Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native pause
 /Users/daeken/projects/DAODecomp/.venv/bin/python -m rapid_native pause --resume
 ```
 
-Preparation leaves the queue paused. `run` acquires its single-owner lock and
-resumes it. `pause` stops new provider dispatch, including repairs, while existing
-provider/build work finishes and saves. SIGTERM/SIGINT also request a graceful
-pause. The initial supported profile selected **87 further functions in eight
-batches of 6–16 functions**. Startup breadth and shared callers establish priority;
-independent supported functions fill compact groups. Each packet is limited to
-30,000 bytes and 160 decoded instructions. Unsupported calls, external/indirect
-branches, non-stack/segmented references, potential unmapped address constants,
-large bodies, incomplete decoding and overlapping/noncontiguous boundaries are
-explicitly excluded in `preparation.json`. This first profile covers a limited
-subset; it does not silently invent support for the excluded functions.
+The production defaults are **four provider lanes**, **120 total requests per
+persisted 1800-second cycle**, **one serialized VM build lane**, and **up to six
+repairs after an initial request**. Limits are configurable on `run` and recorded
+in `runtime-config.json`, status and launch receipts. Older callers of the shared
+request reservation helper keep their default ceiling of twelve; every caller
+still contributes to the same persisted cycle count. Exhausted request cycles or
+daily budgets wait without model calls. No ledger, cycle anchor or paid request
+is reset. Preparation leaves the queue paused; `run` resumes it under a single
+owner lock. Pause and SIGTERM/SIGINT stop new dispatch while existing work saves.
 
-There are at most two provider processes and one VM build/compare phase at a time.
-Each batch gets an initial proposal and at most one repair using actual compiler
-or complete reccmp diffs. Every request reserves the same persisted global slot
-and daily budget before dispatch. Exhausted cycles or daily budgets wait without
-model calls. A repair waiting for budget retains the initial source and scores.
-A mechanical VM transport failure may retry compilation once using the same paid
-source; it never triggers an extra provider request. Malformed/partial provider
-responses and uncertain interrupted requests are retained without automatic replay.
+The expanded call-free pointer-memory profile admits observed register-relative
+and indexed object fields, arrays, buffer loops and integer loads/stores. It
+supports function bodies up to 2048 bytes/512 instructions, grouping up to sixteen
+functions with 50,000 packet bytes and normally 320 instructions (one larger
+function can occupy a packet). Startup breadth and shared callers establish
+priority; independent supported functions fill groups. Calls, external/indirect
+branches, absolute/indexed-global addresses, potential mapped address constants,
+segmented/TLS accesses, unsupported instructions, incomplete decoding, overlaps
+and noncontiguous boundaries remain explicit exclusions in `preparation.json`.
+Small inferred C++98 classes with out-of-line native `__thiscall` definitions are
+allowed inside the single C++ output; no dependency stubs or per-function fixtures
+are introduced.
 
-The coordinator records the best source and compiled comparison for every requested
-RVA in its separate `native_functions` table. An already matched function keeps
-its matched source even if a later repair is worse. Missing/wrong output identities
-or changed source/DLL/PDB bindings cannot enter that index. The historical recovery
-registry is untouched. The compact `status.json` reports `reccmp_matched`, retained
-nonmatches, request/cost/latency totals and active jobs; native
-queue costs exclude the separately retained paid pilot costs. Exhausting the
-supported queue leaves the daemon idle; expanding support requires an explicit
-profile change, rather than fabricated dependency behavior.
+Reccmp normalization is supplemented by a reusable typed-instruction comparison.
+For a match, every raw decoded instruction must also agree on mnemonic, prefixes,
+address size, and each operand's width, register, memory segment/base/index/scale/
+displacement, or immediate value. Internal branch targets are compared by decoded
+instruction identity rather than absolute image address. Unknown targets stay
+unmatched. Thus a normalized name substitution cannot conceal a field offset,
+access width, index scale or base-register difference. Full original range and
+instruction coverage, pinned source/DLL/PDB mappings, exact raw score `1.0`, and
+all previous unknown/stub exclusions are still required. Effective-register
+heuristics never upgrade a lower score. Summaries retain operand mismatches and
+the guard's source hash with the actual reccmp module identities.
 
-The launch receipt is `local/reccmp-pilot/native-continuous-launch.json`. Queue
-attachment tests use only standard-library synthetic metadata and fake results;
-no game installation, compiler, VM, API credentials or additional Python packages
-are needed to run `rapid_native/tests` in CI. They cover pause, deduplication,
-claims, budget rollover, unknown-interruption reconciliation, retained output,
-best-source preservation and rejection of wrong output identities.
+Repair requests contain only the still-unmatched functions. Matched definitions
+are never regenerated. Each remaining function receives its best retained C++
+source with the corresponding actual comparison; latest compiler diagnostics are
+also supplied. Every request gets a new numeric attempt directory and budget
+reservation. Attempts three through seven are handled explicitly, all sources and
+failure histories are retained, and an already matched source survives a worse
+later attempt. All-matched batches stop immediately; three consecutive repairs
+without improvement stop a stagnant batch before its seven-request ceiling.
+Fresh work receives two dispatch preferences for each repair preference, so long
+repair loops cannot starve new functions. A mechanical VM transport failure may
+retry compilation once with the same paid source, never a new provider request.
+Interrupted or ambiguous paid requests are not replayed.
+
+The explicit `continue-retained` action records the prior result hashes and paid
+attempt numbers before requeueing known nonmatches under the larger allowance.
+It does not reset attempt counts or reuse consumed requests. This scaling run
+continued the existing **33 nonmatches in eight batches** from their already paid
+sources. Four original pilot matches remain seeded without regeneration.
+
+Measured expansion on 2026-10-18 selected **1,259 new functions in 98 batches**,
+including **1,258 pointer-memory functions**, beyond the earlier 87-function
+profile. Its same-queue smoke used sixteen compact object/field helpers with
+ninety original instructions: **thirteen passed the full typed-operand/reccmp
+match checks**, while three remained available for bounded repair. This raised
+the separate native matched count from 58 to 71 before four-lane production.
+Reccmp match evidence applies to pinned compiled artifacts and the recorded
+static boundary hypotheses; it is not a universal C++ or whole-game proof.
+
+Scaling evidence, continuation action, smoke and production launch receipts are
+under `local/reccmp-scale-001/`. The compact `local/rapid-native/status.json`
+reports limits, matched and retained counts, source proposals, cost/reservations,
+tokens, latency and active jobs. Queue costs exclude the separately retained paid
+pilot costs. The original registry and its historical evidence stay separate.
+
+Common tests require no game, VM or compiler. Pure descriptor controls cover
+memory widths, registers, index scales, displacements, segments and prefixes;
+optional actual-decoder controls run when Capstone is installed. Queue controls
+cover attempt three, the six-repair ceiling, plateaus, source preservation,
+fresh/repair fairness, pause/reconciliation and both shared request ceilings.
+
+The host's native runtime/decoder dependencies are pinned in
+`requirements-native.txt` (Capstone 5.0.6 and pefile 2024.8.26). Linux/macOS CI
+installs those pins so the actual decoded-memory mutation controls run as well
+as the standard-library descriptor controls. The Windows reccmp environment and
+historical compiler remain their separately pinned existing setup.

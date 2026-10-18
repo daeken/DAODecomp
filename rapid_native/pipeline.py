@@ -59,7 +59,7 @@ def compare(source,output,vcvars,vm_name='Windows 11',vm_original=VM_ORIGINAL,or
     # Physical transfer is necessary: Parallels denies worktree/symlink shares.
     bridge=Path.home()/'Downloads/DAOReccmpPilotTransfer';bridge.mkdir(exist_ok=True)
     job='job-'+uuid.uuid4().hex;transfer=bridge/job;transfer.mkdir(mode=0o700)
-    (transfer/'candidate.cpp').write_text(text);atomic(transfer/'selection.json',selected);shutil.copy2(REPO/'rapid_native/audit.py',transfer/'audit.py');shutil.copy2(REPO/'rapid_native/status_rules.py',transfer/'status_rules.py')
+    (transfer/'candidate.cpp').write_text(text);atomic(transfer/'selection.json',selected);shutil.copy2(REPO/'rapid_native/audit.py',transfer/'audit.py');shutil.copy2(REPO/'rapid_native/status_rules.py',transfer/'status_rules.py');shutil.copy2(REPO/'rapid_native/operands.py',transfer/'operands.py')
     original_name=Path(str(vm_original).replace('\\','/')).name
     project={'targets':{'DAO':{'filename':original_name,'source-root':'.','hash':{'sha256':PIN},'data-sources':['sizes.csv']}}}
     guest=VM_ROOT+'\\'+job
