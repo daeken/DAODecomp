@@ -36,7 +36,9 @@ class StartupStringTests(unittest.TestCase):
    with patch.object(checkpoint,'ROOT',root):
     positives,negatives=checkpoint.publication_paths(root/'output')
     self.assertEqual((len(positives),len(negatives)),(94,73))
-    steps=checkpoint.build_commands(root/'build',root/'output',2)
+    # Inspect the supported Unix plan; the Windows full-checkpoint guard remains.
+    steps=checkpoint.build_commands(root/'build',root/'output',2,windows=False)
+    with self.assertRaises(ValueError):checkpoint.build_commands(root/'build',root/'output',2,windows=True)
     self.assertEqual({n for n,_,_ in steps if n.startswith('startup_strings_')},{'startup_strings_all','startup_strings_negative'})
  def test_original_registry_unmodified(self):
   r=load_json(ROOT/'analysis/functions.json');self.assertEqual(len({x['id'] for x in r['functions']}),len(r['functions']))
