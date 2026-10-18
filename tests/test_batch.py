@@ -8,6 +8,8 @@ import sys
 import tempfile
 import time
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 from tools.daodecomp.batch import (MAX_BATCH_CASES, MAX_TOTAL_CASES, compare_batch, fresh_call, invoke_batches)
 from tools.daodecomp.harness import canonical, compare, digest
 
@@ -18,7 +20,22 @@ CASES=[{'id':'one','inputs':{'value':1}},{'id':'two','inputs':{'value':2}}]
 
 def command(mode,*args): return [sys.executable,'-B',str(WORKER),mode,*map(str,args)]
 
-@unittest.skipUnless(os.name=='posix' and hasattr(os,'fork'),'fresh-child batching is POSIX only')
+class UnsupportedBatchTests(unittest.TestCase):
+    def test_missing_process_primitives_refuse_before_launch(self):
+        for missing in ('posix', 'fork', 'waitid', 'WNOWAIT'):
+            capabilities = {'name': 'posix', 'fork': object(), 'waitid': object(), 'WNOWAIT': 1}
+            if missing == 'posix':
+                capabilities['name'] = 'nt'
+            else:
+                del capabilities[missing]
+            with self.subTest(missing=missing), patch('tools.daodecomp.batch.os', SimpleNamespace(**capabilities)), patch('tools.daodecomp.batch.subprocess.Popen') as launch:
+                with self.assertRaisesRegex(RuntimeError, 'requires POSIX waitid/WNOWAIT'):
+                    invoke_batches(command('normal'), CASES, CONTRACT)
+                launch.assert_not_called()
+
+
+@unittest.skipUnless(os.name=='posix' and all(hasattr(os,name) for name in ('fork','waitid','WNOWAIT')),
+                     'fresh-child batching requires POSIX fork/waitid/WNOWAIT')
 class BatchTests(unittest.TestCase):
     def invoke(self,mode,cases=CASES,**options):
         options.setdefault('timeout',.15)

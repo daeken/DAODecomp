@@ -260,3 +260,9 @@ then refresh README with the ordinary progress updater. A partial `--group` or
 `--identity-only` experiment cannot publish progress. Historical comparisons stay
 immutable; a complete fresh checkpoint supplies current provenance. Local runtime
 reuse currently supports macOS only and is emulator corpus evidence, not game proof.
+
+Batched execution requires Python to expose POSIX `fork`, `waitid` and `WNOWAIT`.
+Unsupported interpreters refuse batched execution before launching a process;
+their real-process batch tests are explicitly skipped while refusal tests still
+run. Local production batch evidence used macOS ARM64 with Python 3.14.7;
+Windows CI and unsupported macOS interpreters do not establish batch support.

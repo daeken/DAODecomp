@@ -220,7 +220,7 @@
   },
   "last_checkpoint": {
     "status": "passed",
-    "record": "analysis/validation/throughput-ci-platform-001.json",
+    "record": "analysis/validation/throughput-ci-capability-001.json",
     "seed_record": "analysis/validation/throughput-001.json",
     "functions": 47,
     "positive_cases": 33678,
@@ -231,9 +231,10 @@
     "commit_pending": true,
     "commit": "9cc74775253536cfdf2fa92f4ca93a1c81574a64",
     "pushed": true,
-    "ci_status": "failed_windows_planning_test_assumption",
+    "ci_status": "capability_test_repair_pending_push",
     "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39098035196",
-    "ci_failure_log": "local/pairs/throughput-ci-39098035196-failed.log"
+    "ci_failure_log": "local/pairs/throughput-ci-39098035196-failed.log",
+    "previous_commit": "47da7c04d51ee8c3e7f342fba4b19d2e28333a9f"
   },
   "previous_activation": {
     "started_utc": "2026-10-18T00:57:03Z",
@@ -414,8 +415,8 @@
     ],
     "current_user_activation": {
       "activation": "2026-10-18T03:06:04.005Z",
-      "new_worker_requests": 11,
-      "collaboration_requests": 9,
+      "new_worker_requests": 12,
+      "collaboration_requests": 10,
       "cli_requests": 2,
       "infrastructure_review_assignments": 3,
       "implementation_assignments": 1,
@@ -432,7 +433,9 @@
       "integration_preparation_assignments": 1,
       "integration_review_assignments": 1,
       "integration_repair_assignments": 1,
-      "integration_delta_review_assignments": 1
+      "integration_delta_review_assignments": 1,
+      "ci_capability_review_assignments": 1,
+      "request_ceiling_reached": true
     },
     "batching": {
       "status": "integrated_independently_approved",
@@ -781,10 +784,18 @@
     }
   },
   "ci_platform_repair": {
-    "status": "approved_full_checkpoint_passed_pending_push_CI",
+    "status": "approved_committed_47da7c0",
     "path": "local/pilots/ci-platform-001",
     "review": "analysis/reviews/throughput-ci-platform-001.json",
     "exec_session": null,
     "record": "analysis/validation/throughput-ci-platform-001.json"
+  },
+  "ci_capability_repair": {
+    "status": "independently_approved_full47_checkpoint_passed_all7_reused_pending_CI",
+    "path": "local/pilots/ci-capability-001",
+    "failure_run": "https://github.com/daeken/DAODecomp/actions/runs/39098679047",
+    "model_requests_remaining": 0,
+    "review": "analysis/reviews/throughput-ci-capability-001.json",
+    "record": "analysis/validation/throughput-ci-capability-001.json"
   }
 }

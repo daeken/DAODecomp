@@ -1,0 +1,75 @@
+{
+  "approved_sha256": "2f1f25e1a034e7a0cc33c329f26aa49afcb3630baa9e8052eb6ec136fd317618",
+  "assessment": [
+    "BatchTests selection now requires exactly the unchanged invoke_batches guard capabilities: POSIX, fork, waitid and WNOWAIT. It does not assume every macOS/Python combination supports the backend.",
+    "All existing BatchTests methods and assertions are AST-identical apart from the class decorator. The new UnsupportedBatchTests class has no skip decorator.",
+    "For each missing capability, the new always-running test requires the existing RuntimeError and asserts subprocess.Popen was not called. Unsupported execution is refused, never reinterpreted as a successful batch result.",
+    "The production tools/daodecomp/batch.py bytes match the pinned base exactly. Existing real-process validation remains enabled whenever all required capabilities exist."
+  ],
+  "base_sha256": "686132d99d8764b54baf2cf438cf7da91cab0f19c4e429b73db5157d36530e93",
+  "decision": "approve",
+  "file": "tests/test_batch.py",
+  "independent_execution": {
+    "all_capabilities_present_selection": "batch tests enabled",
+    "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "patch_reproduction": "Exact one-file patch reproduced against pinned Git base",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "simulated_selection_and_refusal": {
+      "WNOWAIT": {
+        "always_running_refusal_test_passed": true,
+        "skipped_batch_tests": 12,
+        "tests": 13
+      },
+      "fork": {
+        "always_running_refusal_test_passed": true,
+        "skipped_batch_tests": 12,
+        "tests": 13
+      },
+      "posix": {
+        "always_running_refusal_test_passed": true,
+        "skipped_batch_tests": 12,
+        "tests": 13
+      },
+      "waitid": {
+        "always_running_refusal_test_passed": true,
+        "skipped_batch_tests": 12,
+        "tests": 13
+      }
+    },
+    "supported_real_process_tests": {
+      "result": "passed",
+      "skipped": 0,
+      "tests_run": 13
+    },
+    "unchanged_assertions": "AST comparison confirms existing batch class body unchanged"
+  },
+  "issues": [],
+  "patch_sha256": "b420ca791c28a58dfa3e73ee7da6973b2d0aaab8441b81ed069ebda142755eaa",
+  "production_binding": {
+    "tools/daodecomp/batch.py": "dc6c568875138246ad55b19dde776fc95608439071e0eccd84a8e8f11cf83dfc"
+  },
+  "recorded_evidence_inspected": {
+    "current_root": "47registry functions retained; no shared source written by reviewer.",
+    "full_root_tests": "197 passed,1skip; exact log hash verified",
+    "remote_failure": "Run39098679047 macOSPython3.12 tooling log records39errors from production capability refusal. This review does not claim a corrected remote pass."
+  },
+  "remaining_gate": "Publish/push authorized test correction and verify actual CI rerun. Local supported execution and simulated unsupported selection are not an actual remote macOSPython3.12 pass.",
+  "review_evidence_sha256": {
+    "local/pairs/throughput-ci-39098679047-failed.log": "ed0af18e5e31deb202743eb2fee0434515476e4214e5c02bc35459b3392ccb0b",
+    "local/pairs/throughput-ci-capability-tests.log": "05f33cf5b39eb32ba7ae9ff92592ec97d809a06901f85dddc39e8468c2b426e5",
+    "local/pilots/ci-capability-001/handoff.json": "d01a427d9a8fb851f9900f75de7dea477368054326ccec981ab5158cb8d83ba9",
+    "local/pilots/ci-capability-001/proposal.patch": "b420ca791c28a58dfa3e73ee7da6973b2d0aaab8441b81ed069ebda142755eaa",
+    "local/pilots/ci-capability-001/review/audit-results.json": "f3fe393a1f5e9481f3873fc75783585455a50301d84bdf9b162f04990d36b6dc",
+    "local/pilots/ci-capability-001/review/audit.py": "9d674adb6e54002140aea26a9ad9d8d174ea4e8b7cc33c40a4fdbb89e3aa5c77",
+    "local/pilots/ci-capability-001/review/supported-tests.log": "c65f8bd7cf7d11c0fca34c0dcad7c75600506de6384e5fc5351d5c965224034a",
+    "local/pilots/ci-capability-001/review/unsupported-WNOWAIT.log": "26f6edd77b9fab15a3c8826724568506794254a46f44aa9024ae5fd461aff876",
+    "local/pilots/ci-capability-001/review/unsupported-fork.log": "a02450fa4bc1bec98a57f13eec590c00f85ed6f0be6eede82785ecdb15503f81",
+    "local/pilots/ci-capability-001/review/unsupported-posix.log": "e9a688b9481ebda6126ee805b30ade5f336688e4daec9546f30e2926ef5e7c60",
+    "local/pilots/ci-capability-001/review/unsupported-waitid.log": "5a240c5ba7d3823c46389ea16cf0ef684cd054f32c3a9a9576292f3fab194095"
+  },
+  "reviewed_artifacts_sha256": {
+    "tests/test_batch.py": "2f1f25e1a034e7a0cc33c329f26aa49afcb3630baa9e8052eb6ec136fd317618"
+  },
+  "schema_version": 1,
+  "scope": "Narrow CI capability-test delta only. Prior47and69integration reviews remain unchanged; no production/oracle/runtime/cache/contract change."
+}
