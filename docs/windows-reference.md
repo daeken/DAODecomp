@@ -21,20 +21,25 @@ executables as `0x8664` (AMD64); the selected compiler executable is `0xaa64`
 (ARM64), targeting x64. Python's `platform.machine()` reports ARM64 here and does
 not establish the Python process architecture by itself.
 
-The original game has not been launched in this VM. Do not label these results
-as native x86 Windows evidence or original-game validation.
+The historical smoke run did not launch the original game. A later separately
+approved normal-loader checkpoint did launch the pinned original once and stop
+before the probable WinMain body; see the checkpoint section below. Neither
+observation is native x86 hardware evidence.
 
 ## Reference build identity
 
-The host's existing `gamedata/bin_ship/DAOrigins.exe` SHA-256 was checked without
-copying the game install into the VM:
+For the historical smoke run, the host's existing
+`gamedata/bin_ship/DAOrigins.exe` SHA-256 was checked without copying the game
+install into the VM:
 
 ```text
 2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3
 ```
 
-This matches the pinned build. The executable and assets remain in ignored local
-game data; no game files were added to the VM clone.
+This matches the pinned build. No game files were added to the smoke-test clone.
+The later checkpoint used a separate private physical copy of the 17 loader
+files; all other original asset roots were explicitly absent. The original
+install and all raw observations remain ignored.
 
 ## Isolated workspace and installed toolchain
 
@@ -119,10 +124,11 @@ The automation finished with `status.txt` equal to `complete`; every step in
 `steps.txt` has exit 0. No background smoke task remains pending. The earlier
 installer and wrapper failures remain described in the ignored session record.
 
-Original-game work still needs an invocation/capture adapter and initialized
-state, plus measurement of the original x86 process's translation path. Windows
-ARM64 observations must retain their translation caveat and need corroboration
-before being treated as authoritative native x86 reference evidence.
+The later bounded adapter now establishes one normal-loader entry-to-target
+checkpoint and records the original x86 process translation path. It does not
+establish complete initialized state, function ABI or target-body behavior.
+Windows ARM64 observations retain their translation caveat and require native
+x86 corroboration before becoming native x86 reference evidence.
 
 ## Original scalar execution proposal
 
@@ -134,9 +140,75 @@ controls and four actual behavioral mutations behaved as expected. An independen
 Sol medium review approved the bounded private proposal and its retained results.
 
 This is translated Windows x86 execution, not native x86 hardware evidence.
-The full game was not launched. The bridge still needs integration with the
-project runner protocol and validation of that integrated path; recovery registry
+That scalar proposal did not launch the full game. The bridge still needs
+integration with the project runner protocol and validation of that integrated path; recovery registry
 and native-evidence counts are unchanged. See the
 [record and artifact hashes](../analysis/windows-translated-scalars-001.json) and
 [independent review](../analysis/reviews/windows-translated-scalars-001.json).
 Private sources and observations remain under `local/windows-native-proposal/`.
+
+## Measured original normal-loader checkpoint
+
+On **2026-10-18 at 08:03 UTC**, one independently approved bounded attempt
+launched the pinned `DAOrigins.exe` through the normal Windows process loader.
+The physical copied main file and loader image handle agreed with the pinned
+SHA-256 above. Three checkpoints were observed on the same thread:
+
+| Boundary | RVA | Observation |
+| --- | --- | --- |
+| PE entry | `004e3024` | Original entry reached |
+| CRT callsite | `004e2fb6` | Checked direct CALL bytes `e8153bb3ff` |
+| Probable WinMain target | `00016ad0` | CALL single-step reached target; stack return `004e2fbb` |
+
+Capture stopped **before the target's first instruction**. The WinMain name and
+complete ABI remain hypotheses. The intervening startup instructions, imports,
+TLS, global state and external effects were not fully traced. No normal return,
+window, frame, game success or function-equivalence conclusion follows.
+
+The debugger and target reported I386 (`0x014c`) with native OS ARM64 (`0xaa64`)
+on Windows 11 Pro build 26300, Apple Silicon and Parallels 27.0.3. This is actual
+original execution under **Windows ARM64 x86 translation**, with no native x86
+hardware corroboration. It adds no accepted function or native-evidence count
+and is not a comparator protocol-v1 normal-return report.
+
+The attempt took 0.985 seconds, retained 93 records including 80 debug events,
+and wrote 11,149 capture bytes. Fixed limits were 15 seconds plus 3 seconds for
+cleanup, 4,096 events, 2 MiB capture output and a 16-process nonbreakaway Job.
+The debugger exited 0, bound artifacts remained unchanged, and forced job cleanup
+verified zero active processes. This termination was not a game exit.
+
+The derived setup copied only the 17 hash-checked `bin_ship` files, with empty
+target argv and that physical directory as CWD. All other original asset roots
+were explicitly absent; the user's host install was preserved. Legitimate signed
+bundled PhysX 9.15.0428 and official Microsoft June 2010 DirectX installers
+completed normally; installed candidates were hash-bound. This does not establish
+exhaustive dependency coverage or later asset-loading behavior.
+
+Independent review bound the exact profile, setup receipt, sources/binaries,
+dependency provenance and restored snapshot before execution. The receipt-keyed
+host marker was exclusively consumed before VM mutation; it remains permanently
+consumed, with no replay or automatic retry. Networking and sharing were disabled
+during the attempt. Evidence was exported before restoring the prepared snapshot;
+post-restore checks found zero game/debugger processes. The experiment then
+restored the pre-setup baseline and its original network/sharing configuration;
+both prepared snapshots and private host evidence remain retained.
+
+The [sanitized observation metadata](../analysis/windows-startup-checkpoint-001.json)
+binds the exact independent review/approval, setup/profile, archive, report and
+private observation hashes. It publishes no register or stack dump, physical file
+ID, guest username/path or full private manifest. Raw captures and manifests stay
+under ignored `local/startup-capture-adapter-001/`; the review is under ignored
+`local/pinned-startup-setup-review-001/`. The setup reviewer did not replay the
+original attempt. Controlled fixture/preflight/transport tests establish adapter
+checks within their stated scope, not game correctness.
+
+The next concrete startup unit is the initial application envelope at
+`00016ad0`: use the retained entry state and original bytes to specify path/current
+directory handling, named-mutex acquisition and early failure/cleanup effects.
+Static edges suggest string/runtime dependencies `000c2480`, `004e19e0`,
+`004e2d29` and `004e2da2`; their behavior is still unresolved. A separately bounded
+and independently reviewed observation can stop before the proposed allocation
+callsite `00016c00`, including every earlier failure outcome. This is the next
+contract/candidate milestone toward a replacement executable using original
+assets; it is not authorization to replay the consumed profile or invent
+successful dependency stubs. See the current [recovery queue](../analysis/recovery-queue.json).

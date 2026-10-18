@@ -9,7 +9,7 @@
     "total_worker_request_limit": 12,
     "worker_requests_used": 4
   },
-  "active_group": "direct-object-fields-001",
+  "active_group": "startup-application-envelope-001",
   "blockers": [
     {
       "function_rvas": [
@@ -25,7 +25,7 @@
       "scope": "Windows caller integration; isolated leaves can proceed"
     }
   ],
-  "checkpoint": "Full macOS ARM64 checkpoint passed:69functions/44942positivecases,48negativecontrols,209tooling tests(1skip),CTest and both synthetic demos; exact source accepted22 integrated. Publication commit/push/CI being verified; startup-first persistent controller under development.",
+  "checkpoint": "69 functions published with 44,942 positive cases and 48 negative controls; exact-head infrastructure CI passed Linux/macOS/Windows at d46588a. One bounded original normal-loader checkpoint reached RVA00016ad0 under Windows ARM64 x86 translation; no target-body/native-x86/ABI/game-success or recovered-function credit.",
   "checkpoint_failures": [
     {
       "build_dir": "build-incremental-throughput",
@@ -118,14 +118,15 @@
     "exec_session": null,
     "log": "local/dispatcher-setup-001/checkpoint-ci-001.log",
     "negative_reports": 48,
-    "next_action": "Narrow exact-head CI failure assigned to windows_ci_fixture; no duplicate checkpoint. Current evidence remains the completed69/48 record.",
+    "next_action": "Completed exact-head all-three-host CI after the deadline-test repair; no duplicate checkpoint or fixture repair for this published69 record.",
     "output_dir": "reports/checkpoint-direct-object-fields-ci-001",
     "pid": null,
     "positive_reports": 69,
     "publication_receipt": "local/dispatcher-setup-001/bootstrap-publication/receipt.json",
     "record": "analysis/validation/direct-object-fields-ci-001.json",
-    "status": "passed_committed_pushed_CI_failed",
-    "commit": "14a29a30fc33f1d156320eec5f6694657f2445de"
+    "status": "passed_published_CI_success_all3hosts",
+    "commit": "d46588ae0d2b3264f8f4aa202a5c16eeff6c4e44",
+    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39107191016"
   },
   "ci_platform_repair": {
     "exec_session": null,
@@ -244,27 +245,27 @@
   "dependency_queue": {
     "acceptance_unchanged": true,
     "design": "docs/dependency-queue.md",
-    "next_implementation": "Build resumable claim/dispatch scheduling around existing frozenpacket/provider/pairpipeline; preserve duplicateprevention,2lanes and12requests ceiling. Graphdata follows startup handoff.",
+    "next_implementation": "Recover startup-application-envelope-001 from the measured00016ad0 entry state, while compact_review_packet repairs isolated sourceaccepted24 integration support. Existing dispatcher remains stopped; no new scheduler design or automatic restart.",
     "policy": "Breadth across independent callgraph branches; bounded connected depth slices perhandoff. StableRVAnames; workingcode before annotations/readability.",
-    "status": "design_recorded_startup_frontier_characterization_running"
+    "status": "controller_implemented_scheduler_stopped_checkpoint_measured"
   },
   "direct_field_extensibility": {
     "agent": "/root/incremental_validation",
-    "integration_gate": "Deterministic tests and one independent review before adoption; do not modify running69 checkpoint inputs.",
+    "integration_gate": "Published69 is complete. Sourceaccepted24 adoption remains blocked on separately reviewed test-fixture and approval/support-evidence correction; compact_review_packet owns the isolated repair. No support approval is an integration approval.",
     "patch_sha256": "37991924ccacb7ea1e16f5dbc5c3d040fc7a661b2f6fb8c03454b8da1c3511d7",
     "path": "local/pilots/direct-field-extensibility-001",
     "reason": "Concrete blocker to adding24 new functions without repeated global validator changes. External hash map + exact frozen-domain gates; policy unchanged.",
     "review": "local/pilots/direct-field-extensibility-001/review/acceptance-review.json",
     "review_sha256": "5375c82e4cca6412f3087efaec9f2d1ae39ab5a4933cd6b71339f93d33d95062",
-    "status": "independently_approved_pending69checkpoint"
+    "status": "support_approved_sourceaccepted24_integrationblocked"
   },
   "director_mode": {
     "design": "docs/dependency-queue.md",
     "limits": "Two implementationlanes;12requests pernonoverlapping30mincontrollercycle persistedacrossrestart;50USD/Chicago calendarday DeepSeekcap; allgatesunchanged.",
-    "next_action": "Review tested Windows checkpoint adapter and compact review transport; fix exact-head CI. Preserve stopped dispatcher config/claims/budgets; use approved adoption before resuming. Do not repeat proposal-only startup dispatch.",
+    "next_action": "Advance startup-application-envelope-001 from measured entry state while compact_review_packet resolves the separately blocked24 integration. Preserve stopped runtime config/claims/budgets; no automatic dispatch resume or old approval replay.",
     "policy": "Director sets Windowsmilestones,priorities,budgets andresolves genuineexceptions. Persistentprogram owns routineclaim/dispatch/handoff/retry/gates/checkpoint/push/CI; no directorperpacketloop.",
     "requested_by_user": true,
-    "status": "exception_remedies_under_independent_review_scheduler_stopped"
+    "status": "checkpoint_measured_source24_integration_repair_scheduler_stopped"
   },
   "groups": [
     {
@@ -460,22 +461,22 @@
     }
   ],
   "last_checkpoint": {
-    "all_groups_reused": true,
+    "all_groups_reused": false,
     "ci_failure_log": "local/pairs/throughput-ci-39098035196-failed.log",
-    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39098998484",
+    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39107191016",
     "ci_status": "success_all3hosts",
-    "commit": "359c7cfa8f1d98ed97e1bb1f52cfefbdf714050e",
+    "commit": "d46588ae0d2b3264f8f4aa202a5c16eeff6c4e44",
     "commit_pending": false,
-    "functions": 47,
+    "functions": 69,
     "native_windows_validated": false,
-    "negative_controls": 26,
-    "positive_cases": 33678,
+    "negative_controls": 48,
+    "positive_cases": 44942,
     "previous_commit": "47da7c04d51ee8c3e7f342fba4b19d2e28333a9f",
     "proof": false,
     "pushed": true,
-    "record": "analysis/validation/throughput-ci-capability-001.json",
-    "seed_record": "analysis/validation/throughput-001.json",
-    "status": "passed_pushed_CI_success"
+    "record": "analysis/validation/direct-object-fields-ci-001.json",
+    "seed_record": "analysis/validation/direct-object-fields-001.json",
+    "status": "passed_published_CI_success"
   },
   "latest_user_steering": {
     "deepseek": "One bounded same-packet pilot authorized, isolated client+single request, no shared source changes; replaces prior absolute deferral for this pilot. Larger rollout depends on measured quality/cost and retained gates.",
@@ -539,7 +540,7 @@
       "v2_tests": 208
     },
     "model": "gpt-6.1-sol",
-    "next_action": "Full69+48 checkpoint complete; refresh provenance/progress, commit/push and verify exact-head CI. Dispatcher development isolated in workers/. No whole-game or native Windows claim.",
+    "next_action": "Completed published69 checkpoint and all-three-hostCI; no pending source work for these22.",
     "original_instruction_negative_controls": 22,
     "original_repeated_executions": 22528,
     "original_replay_seconds": 275.734,
@@ -564,7 +565,7 @@
     "shared_checkpoint_inputs_frozen": true,
     "shared_integrated_functions": 22,
     "source_sha256": "b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b",
-    "status": "exact22_integrated_full69_checkpoint_passed",
+    "status": "exact22_integrated_full69_published_CI_success",
     "target": "20\u201330 related evidence-supported functions; no padding"
   },
   "next_packet_preparation": {
@@ -576,18 +577,23 @@
     "group": "memory-batch-007",
     "handoff": "local/pilots/memory-batch-007/packet-v1/handoff.json",
     "heldout_cases": 3072,
-    "implementation_dispatched": false,
+    "implementation_dispatched": true,
     "manifest": "local/pilots/memory-batch-007/packet-v1/run/manifest.json",
     "new_functions": 24,
-    "next_action": "On nextactivation, use reviewed daily-budget provider for initial response then unchanged pairgates/Solreview; retain exact accepted22 prefix.12request ceiling reachedthisactivation. Prioritize startupcriticalpath and use thisreadygroup asindependent backgroundlane.",
+    "next_action": "Continue only the separately authorized isolated fixture/evidence correction with compact_review_packet; preserve accepted24 source and313 retained tested artifacts. Re-review exact integration support before ordinary checkpoint/publication. Do not replay old consumed requests or alter the old frozen plan.",
     "path": "local/pilots/memory-batch-007",
     "public_cases": 9216,
     "review": "local/pilots/memory-batch-007/packet-v1/review/acceptance-review.json",
     "review_agent": "/root/memory_batch_007_support_review",
     "review_sha256": "9c3ca09486c795915ee6a3493ed225b3b0632e89005b8ff116885d7b99219272",
     "runner_errors": 0,
-    "status": "support_approved_frozen_ready_for_implementation",
-    "target_new_functions": "20\u201330 only if supported by existing backend"
+    "status": "sourceaccepted24_integrationblocked_fixture_and_evidence_repair",
+    "target_new_functions": "20\u201330 only if supported by existing backend",
+    "integration_blocker": "Independent integration review rejected a reproduced missing validation/direct_object_field_corpus_hashes.json copy in the proposed identity-test fixture and insufficient supplied approval/support evidence. Shared adoption stopped before writes; source acceptance is not integration acceptance.",
+    "integration_owner": "/root/compact_review_packet",
+    "shared_integrated_functions": 0,
+    "source_accepted_functions": 24,
+    "stopped_record": "local/review-packet-repair-001/typed-adoption-20261018/STOPPED.md"
   },
   "operating_priority": {
     "batch_target": "8-16 related functions on established backends when evidence permits; never guessed filler",
@@ -604,10 +610,10 @@
   "pending_checkpoint": {
     "build_dir": "build-incremental-throughput",
     "cache_dir": "local/checkpoint-cache/throughput-003",
-    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39102104802",
+    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39107191016",
     "cmake_path_prefix": "/opt/homebrew/Cellar/cmake/4.2.0/bin",
-    "commit": "80634729e29b44925a346c9cd99597ee10f7ab42",
-    "current_stage": "last_observed_linked_structures_negative",
+    "commit": "d46588ae0d2b3264f8f4aa202a5c16eeff6c4e44",
+    "current_stage": "complete",
     "exec_session": null,
     "expected_negative_controls": 48,
     "expected_positive_cases": 44942,
@@ -622,14 +628,14 @@
       "tooling_tests": 209
     },
     "log": "local/pairs/checkpoint-direct-object-fields-001.log",
-    "next_action": "Full69/117 emulator record passed and published. Windows-only synthetic fixture path issue independently approved; refresh running separately; no new corpus claim.",
+    "next_action": "No checkpoint remains pending for the published69. Sourceaccepted24 is separately integrationblocked; retain its isolated fixture/evidence repair and ordinary acceptance gates.",
     "output_dir": "reports/checkpoint-direct-object-fields-001",
     "published": true,
     "record": "analysis/validation/direct-object-fields-001.json",
     "source_functions": 69,
     "source_inputs_frozen": true,
     "started_observed_utc": "2026-10-18T05:03:30.618808+00:00",
-    "status": "passed_committed_pushed_CI_fixture_failure"
+    "status": "passed_published_CI_success_all3hosts"
   },
   "pending_pair": {
     "elapsed_seconds": 542.294,
@@ -641,7 +647,7 @@
     "proof": false,
     "source": "src/direct_object_fields.cpp",
     "source_sha256": "b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b",
-    "status": "accepted_exact_source_integrated_awaiting_full_checkpoint"
+    "status": "accepted_exact_source_integrated_full69_published_CI_success"
   },
   "pending_preparation": null,
   "persistent_dispatcher": {
@@ -657,14 +663,17 @@
         "source_manifest_sha256": "e2e32c62621cf9206ba3d16c78b0da9d751959499ef8472a1c3d498d258b0262"
       },
       "receipt": "local/dispatcher-setup-001/bootstrap-publication/receipt.json",
-      "status": "publication_and_exact_head_CI_in_progress"
+      "status": "completed_all3host_CI",
+      "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39107191016",
+      "commit": "d46588ae0d2b3264f8f4aa202a5c16eeff6c4e44"
     },
     "bootstrap_publisher": {
       "exec_session": 35729,
       "pid": 76288,
       "receipt": "local/dispatcher-setup-001/bootstrap-publication/receipt.json",
       "scope": "One-time known approved fixture/controller/metadata publication after existing complete checkpoint; exact-record inspection, strict owned-path staging, commit/push/all3-host exact-headCI; no model calls.",
-      "status": "local/dispatcher-setup-001/bootstrap-publication/status.json"
+      "status": "local/dispatcher-setup-001/bootstrap-publication/status.json",
+      "publication_status": "completed_all3host_CI"
     },
     "config_sha256": "c0750409385e0c7d02092e19ef4b8193c36bf2012f358ca78a35905ae3a0bf61",
     "documentation": "workers/DISPATCHER.md",
@@ -685,7 +694,8 @@
       "review": "local/dispatcher-setup-001/runtime-final/jobs/ceb8b22282f746ea84b129b6845079fd/support-review.json",
       "smallest_next_action": "Implement bounded capture/supervisor from the retained adapter-design.md; test controlled PE fixtures in existing VM; independently review exact support before original capture. No new assignment launched.",
       "state": "exception_needs_evidence",
-      "task": "loader-capture"
+      "task": "loader-capture",
+      "historical": true
     },
     "first_provider": {
       "charged_peak_estimate_usd": 0.0218283,
@@ -718,15 +728,17 @@
       "transport_test_run": 221,
       "transport_skips": 7,
       "windows_controlled_tests_passed": 12,
-      "windows_scope": "x86 under Windows ARM64 translation; controlled fixtures only, no original launch",
+      "windows_scope": "One approved pinned-original checkpoint reached target before its body under x86-on-ARM64 translation; forced cleanup and baseline restoration verified.",
       "review_only_limit": "Two deleted execution images cannot satisfy current-artifact reuse; independent review must not waive this. Compaction may be adopted separately with ordinary gates rerun for unchanged candidate.",
       "model_accounting": "local/dispatcher-setup-001/runtime-final/request-adjustments/director-exceptions-20261018-0713.json",
       "review_decisions": {
         "transport": "approved for ordinary fresh pair gates; historical-only resume rejected",
-        "windows_capture": "bounded fixture profile approved; pinned-game setup needs review",
-        "ci_test": "approved, publishing exact test-only repair"
+        "windows_capture": "exact derived002 setup independently approved; one capture consumed, measured and closed",
+        "ci_test": "approved deadline-test repair published; all-three-host exact-headCI passed at d46588a"
       },
-      "review_evidence": "local/exception-packages-review-001/REVIEW.md"
+      "review_evidence": "local/exception-packages-review-001/REVIEW.md",
+      "current_source24_integration_status": "blocked; isolated missing-fixture and approval/support-evidence repair owned by compact_review_packet",
+      "current_startup_observation": "analysis/windows-startup-checkpoint-001.json"
     }
   },
   "previous_activation": {
@@ -886,9 +898,32 @@
     "path": "local/pilots/startup-windows-001",
     "probable_winmain_rva": "0x00016ad0",
     "queue_strategy": "Breadth for parallelism, bounded depth/coherent caller-callee context perhandoff; capture frontier as machine-readable proposal.",
-    "status": "characterization_complete_frontier_ready_for_controller",
+    "status": "original_loader_checkpoint_measured_target_body_unexecuted",
     "user_intent": "Work outward from actual executable startup toward runnable replacementWindowsmilestones; prioritize dependencygroups by startupreachability, retaining parallel independentgroups.",
-    "windows_smoke": "Existing older baseline built;CTest2/2;120Pythonchecks2skips;59positivecases;53passes+6expectednegative mismatches. WindowsARM64withAMD64translation. Current69 andactualoriginalstartup notexecuted."
+    "windows_smoke": "Historical baseline14be457 synthetic checks remain historical. Current69 is published with all3hostCI at d46588a; the separate original normal-loader checkpoint reached00016ad0 under I386-on-ARM64 translation and stopped before its body. No native x86 evidence.",
+    "next_action": {
+      "completion_criteria": "A byte-backed contract and candidate for the bounded envelope, measured original success/failure effects, explicit unresolved dependencies, and independent ordinary validation; no successful zero-return stubs.",
+      "id": "startup-application-envelope-001",
+      "inputs": "Use the retained measured target-entry state and pinned original instruction bytes; do not infer the complete ABI from one checkpoint.",
+      "module": "DAOrigins.exe",
+      "next_measurement_boundary": {
+        "purpose": "Observe path/mutex effects and all earlier failure outcomes before the proposed allocation boundary; this body has not yet executed in an approved observation.",
+        "requires": "Separate bounded profile, dependency/effect contract and independent approval; the consumed checkpoint approval cannot be replayed.",
+        "start_rva": "0x00016ad0",
+        "stop_before_callsite_rva": "0x00016c00"
+      },
+      "objective": "Recover the initial application envelope toward a replacement executable using original assets: module-path/current-directory handling, named-mutex acquisition and early failure/cleanup outcomes before window allocation.",
+      "rva": "0x00016ad0",
+      "static_dependencies_to_resolve": [
+        "0x000c2480",
+        "0x004e19e0",
+        "0x004e2d29",
+        "0x004e2da2"
+      ],
+      "status": "proposed_not_executed"
+    },
+    "observation_record": "analysis/windows-startup-checkpoint-001.json",
+    "observation_sha256": "db61c9276e1d133abd1a0771b5228041d108770e8302fecfd0e702d21800cb5e"
   },
   "throughput_priority": {
     "agent": "/root/validation_throughput_benchmark",
@@ -959,7 +994,7 @@
         "analysis/reviews/runtime-provider-links-001.json",
         "analysis/reviews/historical-artifact-roles-001.json"
       ],
-      "reuse_scope": "Exact executed images/dependencies, selected entries/contracts/corpora/runtime/argv; current full source/build attestation remains required. Full combined publication pending.",
+      "reuse_scope": "Exact execution/runtime/contract/corpus bindings remain required; the shared69 checkpoint is published and all-three-host CI passed at d46588a. No acceptance-policy change.",
       "reuse_seconds": 107,
       "seed_seconds": 204,
       "status": "adopted_full_shared_checkpoint_and_all7_reuse_passed"
@@ -973,7 +1008,7 @@
       "positive_process_launches_derived": 93792
     },
     "model": "gpt-6.1-sol",
-    "next_action": "Resume existing process, do not duplicate. After complete69+48 publication refresh README, commit/push tested69 checkpoint and verify exact-head CI. Existing47 cache entries invalidate conservatively when new support code changes; no prior reports imported. On failure preserve diagnostics and exact missing evidence; do not weaken gates.",
+    "next_action": "Published69 all3hostCI is complete at d46588a. Compact worker owns isolated sourceaccepted24 integration fixture/evidence correction; startup application-envelope recovery is the next measured vertical path.",
     "next_large_packet": {
       "agent": "/root/large_memory_packet",
       "characterization_executions": 23100,
@@ -981,14 +1016,14 @@
       "heldout_states": 1920,
       "initial_handoff": "local/pilots/memory-batch-005/handoff.json",
       "model": "gpt-6.1-sol",
-      "next_action": "Exact accepted15 source and support integrated. Full47 checkpoint running; no additional pair work needed for these functions.",
+      "next_action": "Completed; no pending47 checkpoint for these15.",
       "path": "local/pilots/memory-batch-005",
       "positive_states": 7680,
       "public_states": 5760,
       "reasoning_effort": "medium",
       "review": "local/pilots/memory-batch-005/acceptance-review/review.json",
       "review_sha256": "21bdea99f1f0e8406d6a4aeb7baa09f61572aa8f53bfe28414ddeedbe505a878",
-      "status": "exact_accepted15_source_integrated_full_checkpoint_pending",
+      "status": "exact_accepted15_integrated_and_included_in_published69",
       "target_functions": "20\u201330 if supported; no guessed padding",
       "v2_handoff": "local/pilots/memory-batch-005/v2/handoff.json"
     },
@@ -1062,7 +1097,7 @@
     "reasoning_effort": "medium",
     "scaling_plan": "docs/throughput-scaling.md",
     "scope": "User explicitly authorized batching and conservative incremental validation first, followed by larger function batches. Shared acceptance behavior stays unchanged until deterministic tests and independent review approve exact replacements.",
-    "status": "batching_and_incremental_adopted_22function_expansion_checkpoint_running",
+    "status": "69_published_all3host_CI_sourceaccepted24_integrationblocked",
     "user_target": "50\u2013100 accepted functions per hour",
     "workers": [
       {
@@ -1120,12 +1155,13 @@
     "handoff": "docs/windows-reference.md",
     "model": "gpt-6.1-sol",
     "native_x86_hardware_validated": false,
-    "next_action": "Preserve completed baseline; inspect native proposal worker handoff before creating any duplicate runner or installer.",
-    "notes": "Clean baseline14be457 on Windows11ARM64: MSVC19.44Hostarm64/x64 build passed; CTest2/2 with120tooling tests and2private-data skips; synthetic59passes and negative53passes/6expected mismatches. Python3.12.10/Unicorn2.1.4 and candidates are x64 under Windows translation. No original game execution in baseline.",
+    "next_action": "Use measured target-entry evidence for startup-application-envelope-001; VM is back at pre-setup baseline, prepared snapshots and raw capture retained privately. No approval reset or new original launch.",
+    "notes": "Historical baseline14be457 smoke remains unchanged. One original normal-loader checkpoint reached00016ad0 then forced cleanup; prepared rollback and final baseline restoration verified. All full raw evidence remains ignored local/.",
     "private_outputs": "local/windows-reference/",
     "reasoning_effort": "medium",
-    "scope": "Reproducible Windows infrastructure smoke on committed baseline; no native game evidence until a real native adapter runs.",
-    "status": "baseline_passed_original_scalar_proposal_reviewed",
-    "user_authorization": "User confirms Parallels VM ready and authorizes autonomous use for automated testing."
+    "scope": "Historical synthetic baseline plus separately approved one-attempt original loader checkpoint, both under Windows ARM64 translation; no native x86 or whole-game evidence.",
+    "status": "baseline_and_translated_original_startup_checkpoint_completed",
+    "user_authorization": "User confirms Parallels VM ready and authorizes autonomous use for automated testing.",
+    "startup_observation": "analysis/windows-startup-checkpoint-001.json"
   }
 }

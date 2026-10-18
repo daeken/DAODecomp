@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "kind": "sanitized-original-startup-checkpoint-observation",
+  "status": "measured_checkpoint_reached_target_body_not_executed",
+  "observed_utc": "2026-10-18T08:03:25.068774+00:00",
+  "identity": {
+    "module": "DAOrigins.exe",
+    "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+    "pe_machine": "0x014c",
+    "pe_optional_magic": "0x010b",
+    "identity_basis": "Host pinned binary, physical guest-copy identity, hash-checked loader image handle and restored preflight agreed."
+  },
+  "execution": {
+    "invocation": "normal Windows process loader; no target arguments; loader-only bin_ship directory as working directory",
+    "os": "Windows 11 Pro 10.0.26300 build 26300 ARM64",
+    "hardware": "Apple Silicon host; Parallels 27.0.3 guest",
+    "target_process_machine": "0x014c",
+    "debugger_process_machine": "0x014c",
+    "native_os_machine": "0xaa64",
+    "translation": "Windows ARM64 x86 translation",
+    "native_x86_hardware": false,
+    "original_attempts_requested": 1,
+    "elapsed_seconds": 0.985,
+    "capture_records": 93,
+    "debug_events": 80,
+    "capture_bytes": 11149
+  },
+  "observed_control_flow": {
+    "entry_rva": "0x004e3024",
+    "callsite_rva": "0x004e2fb6",
+    "call_instruction_hex": "e8153bb3ff",
+    "target_rva": "0x00016ad0",
+    "return_rva": "0x004e2fbb",
+    "same_thread": true,
+    "edge_measurement": "Breakpoint at checked callsite, restore original byte/EIP, single-step original CALL, verify target EIP and stack return.",
+    "stop_before_target_instruction": true,
+    "target_body_executed": false,
+    "target_name": "probable WinMain; hypothesis",
+    "abi_established": false
+  },
+  "bounds": {
+    "wall_seconds": 15,
+    "cleanup_seconds": 3,
+    "event_count": 4096,
+    "capture_bytes": 2097152,
+    "record_bytes": 8191,
+    "process_count": 16,
+    "stack_bytes": 64,
+    "image_hash_bytes": 268435456
+  },
+  "setup": {
+    "copied_loader_files": 17,
+    "copied_loader_bytes": 24581608,
+    "other_original_asset_roots": "Explicitly absent; original host assets preserved. This observation does not establish later asset loading.",
+    "dependencies": "Unmodified bundled signed NVIDIA PhysX 9.15.0428 installer and signed official Microsoft June 2010 DirectX runtime completed exit 0; installed candidates were hash-bound. This is not exhaustive dependency coverage.",
+    "network_and_shares_during_attempt": "Network disconnected; host/guest folders, shared profile, both app directions, clipboard, cloud and SmartMount disabled."
+  },
+  "termination": {
+    "mode": "forced job cleanup",
+    "normal_return_observed": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_verified": true,
+    "prepared_snapshot_restored_after_export": true,
+    "baseline_restored_after_experiment": true,
+    "post_baseline_original_process_count": 0,
+    "post_baseline_debugger_process_count": 0,
+    "original_network_and_sharing_configuration_restored": true,
+    "prepared_snapshots_retained": true,
+    "approval_permanently_consumed": true,
+    "automatic_retry_permitted": false
+  },
+  "bindings": {
+    "profile": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/code/target-profile.json",
+      "sha256": "6e712a5c9762c7849919d44f8c73c3bcba1943fa9678d29f8266884daf5e6ce1"
+    },
+    "setup_receipt": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/review/setup-receipt.json",
+      "sha256": "e4ce8599563c00bbfdd24aa857fe73f0078297228644ccdb841090f126cf6297"
+    },
+    "setup_artifact_manifest": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/review/artifact-manifest.json",
+      "sha256": "06eda38e975dfcf4aedbc74a89c7d9535f45e0f137aa31f2f1de0a47e4bf4772"
+    },
+    "independent_setup_review": {
+      "private_path": "local/pinned-startup-setup-review-001/REVIEW.md",
+      "sha256": "2ac551e90e56e487651f2ccfe5151b5b8f8ac30753d1de1ff0cf8cddd0ab5594"
+    },
+    "independent_setup_checks": {
+      "private_path": "local/pinned-startup-setup-review-001/checks.json",
+      "sha256": "1f944f11f27dddba1fe5822e02ab1fb8bfe9503158b5e6628a1df724a7b62909"
+    },
+    "independent_one_attempt_approval": {
+      "private_path": "local/pinned-startup-setup-review-001/approval.json",
+      "sha256": "5c1e7e2595872c7eee29587b45db6c7821bfdf955a9d46d80290bb0b03e6ad7d"
+    },
+    "archive": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observations/e4ce8599563c00bbfdd24aa857fe73f0078297228644ccdb841090f126cf6297/pinned-checkpoint-001/guest-capture.zip",
+      "sha256": "48475d6b1a3389a3a27dcea1210b155c57792e5e87c11f81fa06f2016d9bdef9"
+    },
+    "raw_capture": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observations/e4ce8599563c00bbfdd24aa857fe73f0078297228644ccdb841090f126cf6297/pinned-checkpoint-001/export/pinned-checkpoint-001/events.jsonl",
+      "sha256": "13466835dd93c1585cbb8fa52c5d584fc69df770a5c312618d17dc05ac34eeda"
+    },
+    "capture_report": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observations/e4ce8599563c00bbfdd24aa857fe73f0078297228644ccdb841090f126cf6297/pinned-checkpoint-001/export/pinned-checkpoint-001/report.json",
+      "sha256": "dcf0b4fc226acd789da2ca84b906b05efe56a73d54d4efdda367b8eb114bddeb"
+    },
+    "host_result": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observations/e4ce8599563c00bbfdd24aa857fe73f0078297228644ccdb841090f126cf6297/pinned-checkpoint-001/host-result.json",
+      "sha256": "cc31f3c67b277b5d8089a3984da551d3dd04a164f98dda11367f7b1fc4ef2ce0"
+    },
+    "private_observation": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observation-handoff/observation.json",
+      "sha256": "51cc0495fe20548ff36fea7f31a8e3c9a48d71991993aac962d8631aba8078b9"
+    },
+    "private_observation_artifact_manifest": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observation-handoff/artifact-manifest.json",
+      "sha256": "cb997fb2bbcbe2cad7eeb6d48935124f0695028dfd3ca751c68d81d3cc492d82"
+    },
+    "baseline_restore_verification": {
+      "private_path": "local/startup-capture-adapter-001/pinned-setup-002/observation-handoff/post-baseline-guest-facts.json",
+      "sha256": "1722cf131348ac2d4a4cf4c1a3130989396f551b6e2ebe3ca7fed39abbf2b674"
+    }
+  },
+  "acceptance": {
+    "registry_changes": false,
+    "accepted_function_count_increment": 0,
+    "native_windows_evidence_count_increment": 0,
+    "native_x86_hardware_validated": false,
+    "normal_return_comparator_v1_eligible": false,
+    "game_startup_or_playable_success": false,
+    "abi_proof": false,
+    "function_equivalence_proof": false
+  },
+  "limitations": [
+    "Only entry/callsite/target checkpoints and the single direct-call edge are measured; this is not a full instruction or effect trace.",
+    "Probable WinMain name and ABI, imports/TLS/global state, non-main module identities, external effects and scheduling remain unresolved.",
+    "No target-body, normal-return, first window/frame/quit or full asset-loading observation.",
+    "No native x86 hardware corroboration.",
+    "Setup was independently reviewed; the original attempt was author-executed, not reviewer-replayed.",
+    "Raw register/stack/context captures, physical file IDs, machine/user paths and full private manifests are not published."
+  ],
+  "next_action": {
+    "id": "startup-application-envelope-001",
+    "status": "proposed_not_executed",
+    "module": "DAOrigins.exe",
+    "rva": "0x00016ad0",
+    "objective": "Recover the initial application envelope toward a replacement executable using original assets: module-path/current-directory handling, named-mutex acquisition and early failure/cleanup outcomes before window allocation.",
+    "inputs": "Use the retained measured target-entry state and pinned original instruction bytes; do not infer the complete ABI from one checkpoint.",
+    "static_dependencies_to_resolve": [
+      "0x000c2480",
+      "0x004e19e0",
+      "0x004e2d29",
+      "0x004e2da2"
+    ],
+    "next_measurement_boundary": {
+      "start_rva": "0x00016ad0",
+      "stop_before_callsite_rva": "0x00016c00",
+      "purpose": "Observe path/mutex effects and all earlier failure outcomes before the proposed allocation boundary; this body has not yet executed in an approved observation.",
+      "requires": "Separate bounded profile, dependency/effect contract and independent approval; the consumed checkpoint approval cannot be replayed."
+    },
+    "completion_criteria": "A byte-backed contract and candidate for the bounded envelope, measured original success/failure effects, explicit unresolved dependencies, and independent ordinary validation; no successful zero-return stubs."
+  }
+}
