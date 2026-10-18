@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "decision": "approve",
+  "review_kind": "independent_read_only_acceptance",
+  "scope": "Exact frozen persistent dispatcher/config/preparer, deterministic orchestration, promotion-only Windows fixture composition and narrowly deferred named current69 checkpoint binding. Does not accept proposed game functions or certify original startup execution.",
+  "config_path": "/Users/daeken/projects/DAODecomp/local/dispatcher-setup-001/runtime-final/config.json",
+  "config_sha256": "c0750409385e0c7d02092e19ef4b8193c36bf2012f358ca78a35905ae3a0bf61",
+  "trusted_code": {
+    "tools/run_model_packet.py": "56c4fe3f3931ec9ad1a4fed7c5d4fe981800da7286489ed515ab27a9e1d699f9",
+    "tools/run_recovery_pair.py": "2525c9602b50f7fd077844eb94f1a09b5aead873bb9f557c42f0540dd2a091b0",
+    "workers/deepseek_packet.py": "730060709990324e7d25e473b36397169ff46e011d21055b3d042353858d9282",
+    "workers/prepare_dispatcher.py": "74fdca738d9956c1af76158d7616cffe9d8b05b027a21abcf32a840b888a5a0d",
+    "workers/recovery_dispatcher.py": "6da69f54a2a1788c872577d60ac92b83d160c40d30eb09041a602a69e284dac7"
+  },
+  "reviewed_files_sha256": {
+    "workers/recovery_dispatcher.py": "6da69f54a2a1788c872577d60ac92b83d160c40d30eb09041a602a69e284dac7",
+    "workers/prepare_dispatcher.py": "74fdca738d9956c1af76158d7616cffe9d8b05b027a21abcf32a840b888a5a0d",
+    "workers/tests/test_recovery_dispatcher.py": "d3a1c3c4e6b5bd17838b7958ce81eaea8304811a7d8a6375f5d05c310f456a27",
+    "workers/DISPATCHER.md": "50a3c2b16f548bb75c4a4f8ecbfd242a3b81ec17b765adb15152926286205507",
+    "tests/test_direct_field_publication_data.py": "0768d2c82ce5ec2a6a6a5ad10c0eca6559280afdc67099c26f584a8f48ce7776"
+  },
+  "review_package_raw_sha256": "9c1bb885fc3fe301773dca7480f32c426354b8f32780f6179a714fac0bffe320",
+  "input_bindings": {
+    "audit_path": "local/dispatcher-setup-001/independent-review/final-binding-audit.json",
+    "audit_sha256": "687d88a2cd8091953af6067964f95c664f8da4f0113a200af12a590f43301f6b",
+    "checked": 654,
+    "mismatches": 0
+  },
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "nested-pair-lease",
+      "evidence": [
+        "nested-lease-result.json",
+        "worker-tests-final.log"
+      ],
+      "resolution": "Controller-local pair subprocess facade propagates lease to actual reviewer/gate child; actual crash regression now passes."
+    },
+    {
+      "id": "archive-current69-ci-record",
+      "resolution": "Exact named deferred checkpoint declaration pins old registry/inventory; producer projection/current source/result semantics bind raw bytes before independent integration review and are rechecked before any shared mutation; same bytes archived."
+    },
+    {
+      "id": "deferred-failed-record-acceptance",
+      "evidence": [
+        "deferred-failed-record-result.json",
+        "deferred-failed-record-final-result.json"
+      ],
+      "resolution": "Positive/control measured outcomes and exact trusted producer-to-publication records/build projection now required."
+    }
+  ],
+  "tests": [
+    {
+      "execution": "independent",
+      "suite": "workers/tests",
+      "tests_run": 50,
+      "skipped": 0,
+      "passed": true,
+      "seconds": 2.889,
+      "log": "local/dispatcher-setup-001/independent-review/worker-tests-final.log"
+    },
+    {
+      "execution": "independent",
+      "suite": "test_direct_field_publication_data",
+      "tests_run": 3,
+      "skipped": 0,
+      "passed": true,
+      "seconds": 3.624,
+      "log": "local/dispatcher-setup-001/independent-review/fixture-tests.log"
+    },
+    {
+      "execution": "recorded_implementation_run_inspected",
+      "suite": "configured repository tooling",
+      "tests_run": 209,
+      "skipped": 1,
+      "passed": true,
+      "seconds": 34.89,
+      "log": "local/dispatcher-setup-001/repository-tests-exact-final.log"
+    },
+    {
+      "execution": "recorded_implementation_run_inspected",
+      "suite": "translated Windows fixture targeted",
+      "tests_run": 3,
+      "skipped": 1,
+      "passed": true,
+      "log": "local/dispatcher-setup-001/ci-repair/windows-after.log"
+    }
+  ],
+  "host": {
+    "os": "Darwin",
+    "machine": "arm64",
+    "python": "3.14.7"
+  },
+  "runtime_boundaries": [
+    "No new loader/capture adapter executed by syntactic/support approval.",
+    "Pending named current69 checkpoint must actually publish and satisfy exact source/inventory/producer checks before promotion review; absence waits only bounded promotion stage.",
+    "Frozen24 background still requires unchanged public, heldout and negative gates, source review, separate exact integration review, full checkpoint and exact-head CI.",
+    "Controller approval does not establish game behavior or universal equivalence."
+  ],
+  "fixture_decision": {
+    "decision": "approve",
+    "path": "tests/test_direct_field_publication_data.py",
+    "sha256": "0768d2c82ce5ec2a6a6a5ad10c0eca6559280afdc67099c26f584a8f48ce7776",
+    "scope": "Synthetic publication source-key canonicalization; proposed93 support fixture normalization is exact config-bound override only."
+  },
+  "opening_model_debit_total": 3,
+  "native_windows_function_count": 0,
+  "proof": false,
+  "models_called_by_reviewer": 0,
+  "dispatcher_started_by_reviewer": false,
+  "production_approval_authored": false
+}

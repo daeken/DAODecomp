@@ -13,7 +13,9 @@ class DirectFieldPublicationDataTests(unittest.TestCase):
   for rel in {*source,'analysis/functions.json'}:
    target=root/rel;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(ROOT/rel,target)
   records=[dict(function_id=fid,negative_control=negative,status='failed' if negative else 'corpus_pass',case_counts={'mismatch' if negative else 'corpus_pass':1},repeats_per_side=2,artifacts_unchanged=True,artifacts_sha256={'historical':'retained'},report='historical/report.json',report_sha256='retained') for fid,negative in sorted(cache.publication_inventory())]
-  result=dict(schema_version=2,policy=cache.POLICY,status='passed',complete_checkpoint=True,usable_for_progress=True,source=cache.source_manifest(root),registry_sha256=cache.file_hash(root/'analysis/functions.json'),groups=[dict(group='synthetic-complete-inventory',records=records,reused=False,identity_sha256='synthetic-no-execution')])
+  # Publication uses repository paths; the macOS-only checkpoint manifest uses host paths.
+  publication_source={Path(rel).as_posix():digest for rel,digest in cache.source_manifest(root).items()}
+  result=dict(schema_version=2,policy=cache.POLICY,status='passed',complete_checkpoint=True,usable_for_progress=True,source=publication_source,registry_sha256=cache.file_hash(root/'analysis/functions.json'),groups=[dict(group='synthetic-complete-inventory',records=records,reused=False,identity_sha256='synthetic-no-execution')])
   before=copy.deepcopy(records);document=cache.publication_document(result);self.assertEqual(records,before)
   path=root/'analysis/validation/publication-fixture.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(document));validated=update_progress.Snapshot(root).document('analysis/validation/publication-fixture.json')
   self.assertEqual(len(validated['records']),117);self.assertEqual(sum(not r['negative_control'] for r in validated['records']),69)
