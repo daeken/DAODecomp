@@ -220,7 +220,7 @@
   },
   "last_checkpoint": {
     "status": "passed",
-    "record": "analysis/validation/throughput-reuse-001.json",
+    "record": "analysis/validation/throughput-ci-platform-001.json",
     "seed_record": "analysis/validation/throughput-001.json",
     "functions": 47,
     "positive_cases": 33678,
@@ -228,7 +228,12 @@
     "all_groups_reused": true,
     "native_windows_validated": false,
     "proof": false,
-    "commit_pending": true
+    "commit_pending": true,
+    "commit": "9cc74775253536cfdf2fa92f4ca93a1c81574a64",
+    "pushed": true,
+    "ci_status": "failed_windows_planning_test_assumption",
+    "ci_run": "https://github.com/daeken/DAODecomp/actions/runs/39098035196",
+    "ci_failure_log": "local/pairs/throughput-ci-39098035196-failed.log"
   },
   "previous_activation": {
     "started_utc": "2026-10-18T00:57:03Z",
@@ -409,8 +414,8 @@
     ],
     "current_user_activation": {
       "activation": "2026-10-18T03:06:04.005Z",
-      "new_worker_requests": 9,
-      "collaboration_requests": 7,
+      "new_worker_requests": 11,
+      "collaboration_requests": 9,
       "cli_requests": 2,
       "infrastructure_review_assignments": 3,
       "implementation_assignments": 1,
@@ -425,7 +430,9 @@
       "cli_input_tokens": 331908,
       "cli_output_tokens": 4528,
       "integration_preparation_assignments": 1,
-      "integration_review_assignments": 1
+      "integration_review_assignments": 1,
+      "integration_repair_assignments": 1,
+      "integration_delta_review_assignments": 1
     },
     "batching": {
       "status": "integrated_independently_approved",
@@ -755,13 +762,29 @@
     "pilot": "analysis/pilots/direct-object-fields-001.json",
     "next_action": "After full47 checkpoint and unchanged cache hit are published, integrate exact accepted22 via reviewed complete registry/build/checkpoint coverage delta; do not overwrite current registry or weaken cache identities.",
     "integration_proposal": {
-      "status": "deterministic_gates_passed_independent_review_running",
+      "status": "v2_approved_ready_after_current_CI",
       "agent": "/root/memory_batch_006_prep",
       "path": "local/pilots/memory-batch-006/integration",
       "scope": "Exact accepted22 plus registry/build/checkpoint coverage; existing47 preserved. No shared changes while checkpoint runs; independent delta review required.",
       "review_agent": "/root/throughput_final_review",
       "review_path": "local/pilots/memory-batch-006/integration/review",
-      "patch_sha256": "986d63f3126cfc97e02c4450330c12342fdc6302f47300452df1b1209f9843a7"
+      "patch_sha256": "986d63f3126cfc97e02c4450330c12342fdc6302f47300452df1b1209f9843a7",
+      "review": "local/pilots/memory-batch-006/integration/review/review.json",
+      "blocker": "Root slices.json and selected public/heldout corpus absent from source_manifest/current publication artifacts, permitting stale progress after changes. Existing47 evidence unaffected.",
+      "next_action": "After CI repair commit passes all3hosts, apply exact approved99-file patch; launch complete69+48 checkpoint. No shared69 progress before completion.",
+      "v2_path": "local/pilots/memory-batch-006/integration-v2",
+      "v2_patch_sha256": "66321ac776887a85e7b9cc9b68f62dac33e86f66ce326401b09684455e7ed06a",
+      "v2_tests": 208,
+      "v2_skips": 2,
+      "v2_review_path": "local/pilots/memory-batch-006/integration-v2/review",
+      "v2_review": "local/pilots/memory-batch-006/integration-v2/review/review.json"
     }
+  },
+  "ci_platform_repair": {
+    "status": "approved_full_checkpoint_passed_pending_push_CI",
+    "path": "local/pilots/ci-platform-001",
+    "review": "analysis/reviews/throughput-ci-platform-001.json",
+    "exec_session": null,
+    "record": "analysis/validation/throughput-ci-platform-001.json"
   }
 }

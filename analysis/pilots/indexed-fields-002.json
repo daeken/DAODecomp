@@ -456,6 +456,6 @@
       "replacement": "reports/checkpoint-throughput-001"
     }
   ],
-  "validation_record": "analysis/validation/throughput-reuse-001.json",
+  "validation_record": "analysis/validation/throughput-ci-platform-001.json",
   "seed_validation_record": "analysis/validation/throughput-001.json"
 }

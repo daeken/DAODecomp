@@ -1,0 +1,37 @@
+{
+  "approved_sha256": "4696be6b5c480542256a82e419c0a8bbb160167ac210eb1a498818924bb2dbc2",
+  "assessment": "Exactly three pure build_commands planning calls add windows=False. AST comparison after removing only those keywords is identical to base, including every assertion. Production windows=True planning rejection and actual Windows run_checkpoint rejection remain unchanged.",
+  "base_sha256": "90aeb22187537e1e4f0bf70ddc471620717227c016bac30b9b73c835cf36713c",
+  "decision": "approve",
+  "evidence_sha256": {
+    "local/pairs/throughput-ci-platform-tests.log": "20a394aa7f8789f3c6f234dbe351b83e11ddb2588cad69d417ae65d2afdaf96b",
+    "local/pilots/ci-platform-001/handoff.json": "85d44fe99dbb8b27ecd759d1af055a7fb3e14863f5a3552b54deb4e1365db3a9",
+    "local/pilots/ci-platform-001/proposal.patch": "a4d30dfd82c94461fea3c4c285f50457fdfcf33e3b14729a159bd93406956935",
+    "local/pilots/memory-batch-006/integration-v2/review/audit_ci.py": "394096621ebfc0c202e64cce6cc2cefd3bb047b063df969a9f1cbaa4644ef33d",
+    "local/pilots/memory-batch-006/integration-v2/review/ci-platform-audit.json": "427d54ec5135a3feb3007b323ab4e0e4f4d9566abe4d9fcce3d625a90bf1bd94",
+    "local/pilots/memory-batch-006/integration-v2/review/ci-platform-tests.log": "18b0a24764e75ef73d3ece3eef2ed1257e6ac4a603ae325f33bc908c216d6dd4",
+    "reports/checkpoint-throughput-ci-platform-001/reuse-attestation.json": "05b876a9e8c8195aee5ecf638ba1a7beed844b8b32592c511b757d92d491c1e9"
+  },
+  "file": "tests/test_throughput_integration.py",
+  "independent_execution": {
+    "actual_windows_execution": false,
+    "exact_patch_reproduction": true,
+    "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "result": "passed with is_windows_platform simulated True",
+    "skipped": 0,
+    "tests": 4
+  },
+  "issues": [],
+  "patch_sha256": "a4d30dfd82c94461fea3c4c285f50457fdfcf33e3b14729a159bd93406956935",
+  "recorded_checks_inspected": {
+    "Windows_failure": "Inspected run39098035196 log:2pureplanning exceptions in tooling; no actual game failure. A real corrected Windows rerun is pending.",
+    "full47checkpoint": "passed with all7groups reused; complete/current usable flags and registry47count checked",
+    "full_tooling": "196tests passed,1skip; log hash verified"
+  },
+  "remaining_gate": "Push/publish authorized test correction and verify actual Windows CI rerun; do not describe simulated Windows checks as an actual Windows pass.",
+  "reviewed_artifacts_sha256": {
+    "tests/test_throughput_integration.py": "4696be6b5c480542256a82e419c0a8bbb160167ac210eb1a498818924bb2dbc2"
+  },
+  "schema_version": 1,
+  "scope": "Independent root47CI planning-test correction only; may be published independently from69integration. No production behavior or game validation change."
+}

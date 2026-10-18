@@ -58,6 +58,6 @@
   "source_sha256": "96e72c8606fe3bb3ad189b594e47c79215b9f724e7629e2d7d58435576a0e8da",
   "status": "integrated_full_checkpoint_passed",
   "support_review_raw_sha256": "21bdea99f1f0e8406d6a4aeb7baa09f61572aa8f53bfe28414ddeedbe505a878",
-  "validation_record": "analysis/validation/throughput-reuse-001.json",
+  "validation_record": "analysis/validation/throughput-ci-platform-001.json",
   "seed_validation_record": "analysis/validation/throughput-001.json"
 }

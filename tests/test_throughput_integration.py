@@ -12,7 +12,7 @@ class ThroughputCompositionTests(unittest.TestCase):
         self.assertEqual(len([f for f in REGISTRY['functions'] if f['status'] in cache.ACTIVE]),47)
         selected=[f['id'] for group in cache.required_groups(REGISTRY) for f in cache.selected_entries(REGISTRY,group)]
         self.assertEqual(len(selected),47);self.assertEqual(len(set(selected)),47)
-        steps=checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2)
+        steps=checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2,windows=False)
         for group in cache.required_groups(REGISTRY):
             config=cache.group_execution(steps,group)
             self.assertEqual(config['mode'],'batch' if group in cache.BATCH_IMAGES else 'single')
@@ -27,9 +27,9 @@ class ThroughputCompositionTests(unittest.TestCase):
             with self.subTest(mutation=mutation),self.assertRaises(ValueError):cache.required_groups(changed)
 
     def test_mode_size_and_complete_command_argv_are_identity(self):
-        def config(size):return cache.group_execution(checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2,batch_size=size),'indexed_fields')
+        def config(size):return cache.group_execution(checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2,windows=False,batch_size=size),'indexed_fields')
         self.assertNotEqual(config(128),config(64));self.assertEqual(config(64)['batch_size'],64)
-        steps=checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2)
+        steps=checkpoint.build_commands(ROOT/'build-incremental-combined',ROOT/'reports/test-plan',2,windows=False)
         altered=copy.deepcopy(steps)
         argv=next(argv for name,argv,_ in altered if name=='indexed_fields_all');argv[argv.index('--execution')+1]='single'
         with self.assertRaises(ValueError):cache.group_execution(altered,'indexed_fields')
