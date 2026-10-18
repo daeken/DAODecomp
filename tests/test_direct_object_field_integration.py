@@ -8,10 +8,10 @@ from validation import direct_object_field_cases as fields,validate_direct_objec
 ROOT=Path(__file__).resolve().parents[1]
 REGISTRY=json.loads((ROOT/'analysis/functions.json').read_text());ROWS=cache.selected_entries(REGISTRY,'direct_object_fields')
 class DirectObjectFieldIntegrationTests(unittest.TestCase):
- def test_exact69positive48negative_eight_group_inventory_and_incomplete_promotion(self):
-  self.assertEqual(len(ROWS),22);self.assertEqual(len(cache.required_groups(REGISTRY)),8)
-  p,n=checkpoint.publication_paths(ROOT/'reports/inventory-fixture');self.assertEqual((len(p),len(n)),(69,48))
-  self.assertEqual(len(cache.publication_inventory()),117);self.assertEqual(cache.publication_inventory(),update_progress.checkpoint_inventory(REGISTRY))
+ def test_exact93positive72negative_eight_group_inventory_and_incomplete_promotion(self):
+  self.assertEqual(len(ROWS),46);self.assertEqual(len(cache.required_groups(REGISTRY)),8)
+  p,n=checkpoint.publication_paths(ROOT/'reports/inventory-fixture');self.assertEqual((len(p),len(n)),(93,72))
+  self.assertEqual(len(cache.publication_inventory()),165);self.assertEqual(cache.publication_inventory(),update_progress.checkpoint_inventory(REGISTRY))
   for mutation in ('contracted','unknown-backend','wrong-group','duplicate'):
    changed=copy.deepcopy(REGISTRY);target=next(f for f in changed['functions'] if f['id']==ROWS[0]['id'])
    if mutation=='contracted':target['status']='contracted'
@@ -28,7 +28,7 @@ class DirectObjectFieldIntegrationTests(unittest.TestCase):
    public=fields.cases(f['name'],'public');heldout=fields.cases(f['name'],'heldout')
    self.assertEqual((len(public),len(heldout)),(384,128))
    self.assertEqual(bound[f['id']]['positive']['sha256'],digest(public+heldout));self.assertEqual(bound[f['id']]['negative']['sha256'],digest(public))
-  self.assertEqual(sum(len(v['positive']['rows']) for v in bound.values()),11264)
+  self.assertEqual(sum(len(v['positive']['rows']) for v in bound.values()),23552)
  def test_batch_mode_size_and_missing_negative_are_not_reusable(self):
   def steps(size):return checkpoint.build_commands(ROOT/'build-incremental-fixture',ROOT/'reports/inventory-fixture',2,windows=False,batch_size=size)
   a=cache.group_execution(steps(128),'direct_object_fields');b=cache.group_execution(steps(64),'direct_object_fields');self.assertEqual(a['mode'],'batch');self.assertNotEqual(a,b)
@@ -37,7 +37,7 @@ class DirectObjectFieldIntegrationTests(unittest.TestCase):
   with self.assertRaises(ValueError):cache.group_execution(changed,'direct_object_fields')
  def test_selected_metadata_both_corpora_normal_mutant_images_and_contracts_invalidate(self):
   with tempfile.TemporaryDirectory() as directory:
-   root=Path(directory);build=root/'build-incremental-fixture';build.mkdir();shutil.copytree(ROOT/'corpus',root/'corpus');shutil.copy2(ROOT/'slices.json',root/'slices.json')
+   root=Path(directory);build=root/'build-incremental-fixture';build.mkdir();shutil.copytree(ROOT/'corpus',root/'corpus');shutil.copy2(ROOT/'slices.json',root/'slices.json');(root/'validation').mkdir();shutil.copy2(ROOT/fields.HASH_MAP,root/fields.HASH_MAP)
    for f in ROWS:
     path=root/f['contract'];path.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(ROOT/f['contract'],path)
    (root/'analysis').mkdir();shutil.copy2(ROOT/'analysis/reference-build.json',root/'analysis/reference-build.json');(root/'gamedata/bin_ship').mkdir(parents=True);(root/'gamedata/bin_ship/DAOrigins.exe').write_bytes(b'identity-only module fixture')
@@ -45,13 +45,13 @@ class DirectObjectFieldIntegrationTests(unittest.TestCase):
    for i,path in enumerate(images):path.write_bytes(bytes([i,1,2,3]))
    def identity():return cache.group_identity(root,build,'direct_object_fields',REGISTRY,{}, {'provider':'macos-full-python-dyld-v1'},{'mode':'batch'},{})
    with patch.object(cache,'native_dependencies',return_value={'files':{},'bindings':{}}):
-    original=identity();self.assertEqual((len(original['data']),len(original['executables'])),(45,3))
-    targets=[*images,root/'slices.json',root/'corpus'/f"{ROWS[0]['name']}-public.json",root/'corpus'/f"{ROWS[0]['name']}-heldout.json",root/ROWS[0]['contract']]
+    original=identity();self.assertEqual((len(original['data']),len(original['executables'])),(94,3))
+    targets=[*images,root/fields.HASH_MAP,root/'slices.json',root/'corpus'/f"{ROWS[0]['name']}-public.json",root/'corpus'/f"{ROWS[0]['name']}-heldout.json",root/ROWS[0]['contract']]
     for path in targets:
      old=path.read_bytes();path.write_bytes(old+b' ');self.assertNotEqual(original,identity(),path.name);path.write_bytes(old);self.assertEqual(original,identity());path.unlink()
      with self.assertRaises(ValueError):identity()
      path.write_bytes(old)
-    for relative in ('slices.json',f"corpus/{ROWS[0]['name']}-public.json"):
+    for relative in (fields.HASH_MAP,'slices.json',f"corpus/{ROWS[0]['name']}-public.json"):
      self.assertEqual(cache.historical_role(root,root/relative,ROWS[0],root/'reports/x.json',original),'execution_selected_data');removed=copy.deepcopy(original);removed['data'].pop(str(root/relative))
      with self.assertRaises(ValueError):cache.historical_role(root,root/relative,ROWS[0],root/'reports/x.json',removed)
  def test_all_validator_both_suites_casefile_and_publication_dependencies(self):
@@ -60,6 +60,6 @@ class DirectObjectFieldIntegrationTests(unittest.TestCase):
    def compare(contract,cases,oracle,candidate,**kwargs):captured.update(kwargs);captured['cases']=cases;return {'status':'corpus_pass','artifacts_unchanged':True,'cases':[{'status':'corpus_pass'} for _ in cases]}
    with patch.object(validator,'compare_batch',side_effect=compare):self.assertTrue(validator.validate_function(ROWS[0],binary=root/'reference.exe',build_dir=root,report_dir=root/'reports',suite='all',negative=False,batch_size=64))
    self.assertEqual((captured['repeats'],captured['batch_size'],len(captured['cases'])),(2,64,512))
-   for rel in ('analysis/functions.json','analysis/reference-build.json','slices.json','validation/direct_object_field_cases.py','src/direct_object_fields.cpp'):self.assertIn(ROOT/rel,captured['artifacts'])
+   for rel in ('analysis/functions.json','analysis/reference-build.json','slices.json','validation/direct_object_field_cases.py',fields.HASH_MAP,'src/direct_object_fields.cpp'):self.assertIn(ROOT/rel,captured['artifacts'])
    casefiles=[p for p in captured['artifacts'] if p.name.endswith('-cases.json')];self.assertEqual(len(casefiles),1);self.assertEqual(json.loads(casefiles[0].read_text()),captured['cases']);report=json.loads((root/'reports'/f"{ROWS[0]['name']}-all.json").read_text());self.assertEqual(report['suite_case_counts'],{'public':384,'heldout':128})
 if __name__=='__main__':unittest.main()

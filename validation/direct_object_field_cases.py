@@ -1,17 +1,51 @@
-"""Exact independently reviewed22function corpora; no fixture regeneration."""
-import json
+"""Exact frozen descriptor-domain corpora; no fixture regeneration."""
+import json,re
 from pathlib import Path
 from tools.daodecomp.harness import file_hash,load_json
 from validation.direct_field_batch_runner import fixture
 ROOT=Path(__file__).resolve().parents[1]
-SPECS={f['name']:f for f in load_json(ROOT/'slices.json')}
+HASH_MAP = 'validation/direct_object_field_corpus_hashes.json'
+GROUP = 'direct-object-fields-001'
+ACTIVE = {'implemented','corpus_pass','reviewed','integrated'}
+
+def descriptor_domain(rows):
+ if type(rows) is not list or not rows or any(type(f) is not dict for f in rows):raise ValueError('nonempty descriptor domain required')
+ names=[f.get('name') for f in rows];identities=[f.get('id') for f in rows]
+ if any(type(n) is not str or re.fullmatch(r'fn_[0-9a-f]{8}',n) is None for n in names) or any(type(i) is not str or not i for i in identities):raise ValueError('invalid descriptor identity')
+ if len(set(names))!=len(rows) or len(set(identities))!=len(rows):raise ValueError('duplicate descriptor domain')
+ return rows
+
+def registry_domain(rows,functions):
+ descriptor_domain(rows)
+ registry=[f for f in functions if f.get('backend')==GROUP or f.get('recovery_group')==GROUP]
+ if len(registry)!=len(rows) or any(f.get('backend')!=GROUP or f.get('recovery_group')!=GROUP or f.get('status') not in ACTIVE for f in registry):raise ValueError('incomplete registry domain')
+ if len({f.get('id') for f in registry})!=len(rows) or len({f.get('name') for f in registry})!=len(rows) or {f.get('name') for f in registry}!={f['name'] for f in rows}:raise ValueError('registry/descriptor domain mismatch')
+ by_name={f['name']:f for f in registry}
+ for f in rows:
+  r=by_name[f['name']]
+  if any(r.get(k)!=f[k] for k in ('id','rva','size','code_sha256','module_sha256')) or r.get('contract')!=f"contracts/{f['name']}.json" or r.get('source')!='src/direct_object_fields.cpp':raise ValueError('registry/slice/contract binding mismatch')
+ return rows
+
+SPECS={f['name']:f for f in descriptor_domain(load_json(ROOT/'slices.json'))}
 NAMES=tuple(SPECS)
 NEGATIVE_NAMES=NAMES
-CORPUS_FILES={'fn_00319290-public.json': 'e3932abe9eccef382589bdd1a49a77359a3a94f3a649e4b5a39375902c79cf66', 'fn_00319290-heldout.json': 'c466b13c1896ebf54bd5e6bafdc9a3333811fdfbaaa607defa7b58d63681e66f', 'fn_00342080-public.json': '029e24927f312ac9ae25aab00780a9eb0e4dca8147b3f20e216e817996abf3ea', 'fn_00342080-heldout.json': 'e9a75f5ec7cd1d03a2a0958180b40cb121062312d89417c39251e348d5bf10f8', 'fn_00342090-public.json': 'aa74757148542eddbf45dda7b8fe51c8e48818bd9f98ca9ee37828fd7c054fd2', 'fn_00342090-heldout.json': 'd8cfecac61c862cee6ca2d06e8ff1d3be6b632e9b7fb1233c1f92614e2f0f74e', 'fn_00347b40-public.json': '8ba84e02d2e514880a5c71786d09c253a98e8766642af362e0048584560d6ac1', 'fn_00347b40-heldout.json': 'f557d8b7e0da650ba149ab4aee5186ce5dd512fd16538a65bd129ead27b64968', 'fn_00347b50-public.json': '389ce6ac4545aa2b3a0012813d90c9371ce9d6471719177f4fa2dc94ea3f56b0', 'fn_00347b50-heldout.json': '2948942f4909d5a602189e23bcb220fde3fddf0ceb98252287c31e5b14aae094', 'fn_00347b70-public.json': 'd3c99638c3ed13fa7fd3cbe11c77104b756702853feaf055ad09833e24c629ad', 'fn_00347b70-heldout.json': 'a0d14a59ffc983842ae5415bc1cab8c3017f7dd9bf1058c1c246a8e2192f58a0', 'fn_00347b80-public.json': '16a5cf0c2520bd949cf1a0b0025bd08027b053089249c4590e18822079695cf0', 'fn_00347b80-heldout.json': 'c21296f4ff9bca6fb0ed36cf88302205a9769f18eb2f908e148383866ba947e3', 'fn_00347b90-public.json': 'fe2b1144a4788edcd19981845ceb827f4472880c50731e4c03a28ec9dd474c48', 'fn_00347b90-heldout.json': '61602e019e802d83418676f3bc4eb736f5791bff656a19a0e66ad352d254bbae', 'fn_003480b0-public.json': '18f344a428ab59aacb902a5b4c042c6f73212d26cd568136f51d01274648e3c5', 'fn_003480b0-heldout.json': '9518c23b53695fac9a3a7f8fccf6332534e910106087a14be49a18ce0b55f02a', 'fn_003480c0-public.json': 'e00843d28383167ce32061565511d2a9d8bc997770c437f55eb06ec6ef61e1ef', 'fn_003480c0-heldout.json': '6182842e34edebf558121a431f4f044d4f3b7fc8bd4d6bc41c1753e6b7339af2', 'fn_003b51e0-public.json': 'ebb147fa1393319ab0c8185781f576425aeadd79f4990a4e19700b421adad32b', 'fn_003b51e0-heldout.json': '6b11684a9afd4401e6765b4ff48c650e1543e961660d0937e473e75b3b03127f', 'fn_003cd030-public.json': '65912d2af7ea1428538b242a41b7ea364448f0694d08ddbff5ba1cfd3a3afff7', 'fn_003cd030-heldout.json': '87adbd182757822b34c6b22abf56c6938a03a2a1122992e4d54e639079106daf', 'fn_003cd040-public.json': '332cce91bd4a0bd6607e7466b6b6ba8bf4b2013f77aad1a41a643d85a3238eba', 'fn_003cd040-heldout.json': '91341a00798f758ba25034e18a18d7adac34a23e00f2f4a1959cf63ba545bc86', 'fn_003cd0d0-public.json': 'fc9ab0e7c7edee07b8f16b7924c9deb87ccbcc523db012497718ffedb0711b3c', 'fn_003cd0d0-heldout.json': 'c9807ffb00d7a58c40589fe3ecb17bb8100ab5bfb03a6a1506c51753df22d50b', 'fn_003cd140-public.json': '7f05397800db32608a5b0e4cb4e565d62417f08a988dc9c32d4cfe0ce38a2cf4', 'fn_003cd140-heldout.json': '5099222695e5601a8a8b63ea300e0992790791dbe0f7bd5be9c57e6d6655dfbf', 'fn_003cd350-public.json': 'ad4dbb322827b045aee2c2373d9d699a497746274063ebb2b657d271b8cc9df5', 'fn_003cd350-heldout.json': '9ecdb0d5a2a2a6473d12314ee8476c39943d20baf2dbdc626ecb2152ef3df3a9', 'fn_003edbc0-public.json': 'd0476af9c47af719beda982ff3f270e3a4048fa4cd5a888814df1993618bdbc4', 'fn_003edbc0-heldout.json': '9e1fcc50898e5e2f671a392193387ded8ea9798a690f0cbea9e93838aa2ce63a', 'fn_00515af0-public.json': '3671183eb3baff7a20af7761dd52f77c828a7e9ce8cf5486610a61283ab298a6', 'fn_00515af0-heldout.json': '9a20d473370c3dbf70f049051a6c58486c538055b016c43840a69ba541e08a8d', 'fn_00515b00-public.json': 'a9671c3eb49b3e5694a97156f140e6545d19fadbfe943a0af8788b804061eb9a', 'fn_00515b00-heldout.json': '9cfe528107e185468545d7b3b58c951c02bc0fcc349549c642e982a8267ef83c', 'fn_00515b10-public.json': '64750fb543c434253433aefcf81ca4ad06dd922586c7ba9400cfc26f3c385080', 'fn_00515b10-heldout.json': '2c896d03a38d73f116f3b585f842392fb3e259b29095f605b96882cfe7d0d254', 'fn_0054f6e0-public.json': '1803f8fbabc7fa4647ab2b2de97c865a21fe17007ec95c4dcf6d5329d8506eea', 'fn_0054f6e0-heldout.json': '68cee5148d94ebacf016592b4b99ce5b5843f590859a47eedb650100e4bf3ce3', 'fn_0054fa40-public.json': '7b6933367f135d61d39a7755d0075c3ead6c0ba099db15ac1b55c5cd5a6c28ee', 'fn_0054fa40-heldout.json': '07fb516784dafc0c4c56a5744d294b0e6eb915170d217cd156b37c8e8252b213'}
+
+def corpus_hashes(path=None,names=None):
+ path=ROOT/HASH_MAP if path is None else Path(path)
+ if path.is_symlink() or not path.is_file():raise ValueError('regular direct-field corpus hash map required')
+ values=load_json(path);names=NAMES if names is None else names
+ expected={f'{name}-{suite}.json' for name in names for suite in ('public','heldout')}
+ if type(values) is not dict or set(values)!=expected or not expected:raise ValueError('corpus hash-map domain mismatch')
+ if any(type(value) is not str or re.fullmatch(r'[0-9a-f]{64}',value) is None for value in values.values()):raise ValueError('invalid corpus SHA256')
+ return values
+
+# Validate the frozen external domain on import; calls re-read it rather than
+# silently retaining stale data if the file changes within this process.
+corpus_hashes()
 def cases(name,suite='public'):
  if name not in SPECS or suite not in ('public','heldout'):raise ValueError('unknown function/suite')
  path=ROOT/'corpus'/f'{name}-{suite}.json'
- if file_hash(path)!=CORPUS_FILES[path.name]:raise ValueError('frozen direct-field corpus changed')
+ if file_hash(path)!=corpus_hashes()[path.name]:raise ValueError('frozen direct-field corpus changed')
  result=load_json(path)
  for case in result:fixture(SPECS[name],case['inputs'])
  return result

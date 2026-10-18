@@ -424,7 +424,7 @@ def group_identity(root, build, group, registry, source, runtime, execution=None
                          *[root/f"validation/object_bitfield_corpus/{f['name']}-{suite}.json"
                            for f in functions for suite in ('public','heldout')]]
     if group == 'direct_object_fields':
-        selected_data = [root/'slices.json',
+        selected_data = [root/'slices.json',root/'validation/direct_object_field_corpus_hashes.json',
                          *[root/f"corpus/{f['name']}-{suite}.json"
                            for f in functions for suite in ('public','heldout')]]
     return {'schema_version': VERSION, 'policy': POLICY, 'group': group,

@@ -1,0 +1,18 @@
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0002f940",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x74; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 116, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}

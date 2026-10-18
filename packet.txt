@@ -1,7 +1,768 @@
-Implement exactly the22 original call-free direct object-field functions below in src/direct_object_fields.cpp. No tools, models, agents, external reads or edits to frozen support. Include dao/direct_object_fields.hpp and implement its namespace dao declarations. This uniform high-level observation interface is not an original C++ signature. Class identities, ownership and pointed-to lifetime are unknown. No dependency is stubbed.
+Append exactly the24 new original functions listed below to src/direct_object_fields.cpp. Preserve the entire accepted22 source prefix byte-identically, including its final namespace close and newline. The protected baseline is evidence/accepted-direct-object-fields-prefix.txt; copy it verbatim and append a new namespace dao block for the new definitions. Existing22 are regression coverage; do not reimplement or edit them. Implement only the new24; do not edit frozen support. No model calls or agents.
 
-All integers and narrow EAX writes must use defined unsigned C++20 semantics. Guest object is a512-byte arena offset and raw ECX entry is0x02000000+object. All512bytes, full EAX and raw exitECX are observed. Never cast guest addresses to host pointers. Use exact-width GuestMemory operations; no wider speculative reads or writes. Nonvolatile preservation is established by original executor, not observable candidate internals. Only listed ordinary RAM contract is claimed.
+The interface is the declarations in include/dao/direct_object_fields.hpp and uses GuestMemory. It is a measured machine observation interface, not an inferred original source signature. object is an arena offset; raw ECX is 0x02000000+object. Observe full EAX, exitECX and all512 arena bytes. Preserve measured unsigned/narrow behavior with defined C++20; exact-width accesses only. No calls/globals/TLS/FP/OS dependencies are present in the measured bounded RAM domain. Source class, lifetime and whole-game preconditions remain unknown.
 
+For each new function, original instructions, module/RVA/code hashes, and measured contract follow. Public inputs are available through frozen corpora. Heldout inputs and original outputs are not included in this packet.
+
+{
+  "name": "fn_00018760",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018760",
+  "rva": 100192,
+  "size": 10,
+  "code_sha256": "d49dc09416edfcaa5bdba34999de4daf67864c92e9c04fad2e3707991fe36fba",
+  "instructions": [
+    "00018760: 8b4118 mov eax, dword ptr [ecx + 0x18]",
+    "00018763: c1e804 shr eax, 4",
+    "00018766: 83e001 and eax, 1",
+    "00018769: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018760",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=(u32[object+0x18]>>4)&1; ECX preserved.\", \"spec\": [\"bit\", 24, 4, 4], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00018770",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018770",
+  "rva": 100208,
+  "size": 9,
+  "code_sha256": "71cce5634748716782931f4b864fa497439edded9f7e83cc597c11f7c24901e4",
+  "instructions": [
+    "00018770: 8b4118 mov eax, dword ptr [ecx + 0x18]",
+    "00018773: d1e8 shr eax, 1",
+    "00018775: 83e001 and eax, 1",
+    "00018778: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00018770",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=(u32[object+0x18]>>1)&1; ECX preserved.\", \"spec\": [\"bit\", 24, 4, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0001cd70",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001cd70",
+  "rva": 118128,
+  "size": 10,
+  "code_sha256": "b35caac991eb0d06657c3fbba49c85de5f83e8cf4de0b07b70fa4b90cb5770fd",
+  "instructions": [
+    "0001cd70: 8b442404 mov eax, dword ptr [esp + 4]",
+    "0001cd74: 894108 mov dword ptr [ecx + 8], eax",
+    "0001cd77: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001cd70",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x8; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 8, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0001f050",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001f050",
+  "rva": 127056,
+  "size": 4,
+  "code_sha256": "74032ad0e931f3c4730df99da43479f9f5315cc898c7c8614278631cb2c16a62",
+  "instructions": [
+    "0001f050: 8b4110 mov eax, dword ptr [ecx + 0x10]",
+    "0001f053: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001f050",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x10; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 16, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0001f060",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001f060",
+  "rva": 127072,
+  "size": 4,
+  "code_sha256": "01d3abacb68aac3537badfe563d0e21d0244fb61db1d805bcef8f455407fad96",
+  "instructions": [
+    "0001f060: 8b4114 mov eax, dword ptr [ecx + 0x14]",
+    "0001f063: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0001f060",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x14; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 20, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00022c80",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00022c80",
+  "rva": 142464,
+  "size": 5,
+  "code_sha256": "c30661e8b874deef914c14cb83a5d0d6808e583505a8a011b784d3c85d02a249",
+  "instructions": [
+    "00022c80: c6413c00 mov byte ptr [ecx + 0x3c], 0",
+    "00022c84: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00022c80",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 0 as little endian 1-byte value at object+0x3c; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 60, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00023e40",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023e40",
+  "rva": 147008,
+  "size": 7,
+  "code_sha256": "a76d15a2360d222ff556781acfae2e5ba16ad17c81ab06799a82a003ebd04ec0",
+  "instructions": [
+    "00023e40: 8b8114010000 mov eax, dword ptr [ecx + 0x114]",
+    "00023e46: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023e40",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x114; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 276, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00023ed0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ed0",
+  "rva": 147152,
+  "size": 10,
+  "code_sha256": "0a5b1a6d212e0caedbf2d98dea5a75fa8dba9f19919dae6658f37365af35e72f",
+  "instructions": [
+    "00023ed0: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00023ed4: 89410c mov dword ptr [ecx + 0xc], eax",
+    "00023ed7: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ed0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0xc; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 12, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00023ee0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ee0",
+  "rva": 147168,
+  "size": 10,
+  "code_sha256": "b994e2bd1bc262c5b463fca225534224134549b75fddcc1f700f38a59510b90e",
+  "instructions": [
+    "00023ee0: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00023ee4: 894110 mov dword ptr [ecx + 0x10], eax",
+    "00023ee7: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ee0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x10; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 16, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00023ef0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ef0",
+  "rva": 147184,
+  "size": 10,
+  "code_sha256": "5940df69b60defd9e87bf6c4f1f44706b7d3bc501eab25edf30198be533ee258",
+  "instructions": [
+    "00023ef0: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00023ef4: 894114 mov dword ptr [ecx + 0x14], eax",
+    "00023ef7: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00023ef0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x14; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 20, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00024030",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024030",
+  "rva": 147504,
+  "size": 10,
+  "code_sha256": "fde7b389ab38b8362fc6d34289cc38373db36da8c3aa6b9e1a26128474e2e542",
+  "instructions": [
+    "00024030: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00024034: 894148 mov dword ptr [ecx + 0x48], eax",
+    "00024037: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024030",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x48; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 72, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00024050",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024050",
+  "rva": 147536,
+  "size": 10,
+  "code_sha256": "38532535da3629add6db8a6543b785a9ad59e061ed24583b0d47525fe56271e9",
+  "instructions": [
+    "00024050: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00024054: 89414c mov dword ptr [ecx + 0x4c], eax",
+    "00024057: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024050",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x4c; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 76, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00024060",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024060",
+  "rva": 147552,
+  "size": 4,
+  "code_sha256": "34560f51dac828d02da9eeb0e1e15a69e55eb1fbb2f1a55b4f5b7c8cee424a81",
+  "instructions": [
+    "00024060: 8b414c mov eax, dword ptr [ecx + 0x4c]",
+    "00024063: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024060",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x4c; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 76, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00024090",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024090",
+  "rva": 147600,
+  "size": 10,
+  "code_sha256": "49bb7f2f8522e1a0bd46f53380d1a613b2c47c88f89f94c70b52b59d35e889ef",
+  "instructions": [
+    "00024090: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00024094: 894154 mov dword ptr [ecx + 0x54], eax",
+    "00024097: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00024090",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x54; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 84, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0002f940",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0002f940",
+  "rva": 194880,
+  "size": 4,
+  "code_sha256": "781e9d1b95829bd154ca20411b54da49d658d05434a66cdaa8351146f3d4b3cb",
+  "instructions": [
+    "0002f940: 8b4174 mov eax, dword ptr [ecx + 0x74]",
+    "0002f943: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0002f940",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x74; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 116, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0002fa20",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0002fa20",
+  "rva": 195104,
+  "size": 7,
+  "code_sha256": "3f0376cf2d7b9c11e925d941b3713fb314f7b6436e249f976badc622aebd5877",
+  "instructions": [
+    "0002fa20: 8b81d0000000 mov eax, dword ptr [ecx + 0xd0]",
+    "0002fa26: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0002fa20",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0xd0; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 208, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_000621c0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000621c0",
+  "rva": 401856,
+  "size": 3,
+  "code_sha256": "19d200194d49b34530548575f37a1bb4203ee60f18d42f0084e86b7a8c899faa",
+  "instructions": [
+    "000621c0: 8b01 mov eax, dword ptr [ecx]",
+    "000621c2: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000621c0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x0; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 0, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00065f30",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00065f30",
+  "rva": 417584,
+  "size": 13,
+  "code_sha256": "19b3e7d342b375136719a6cef705c080f937d99e97991ee45696c9fa616d480f",
+  "instructions": [
+    "00065f30: 8b442404 mov eax, dword ptr [esp + 4]",
+    "00065f34: 898144010000 mov dword ptr [ecx + 0x144], eax",
+    "00065f3a: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00065f30",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x144; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 324, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_00065f40",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00065f40",
+  "rva": 417600,
+  "size": 7,
+  "code_sha256": "06dd9cfbd45b5dc003339a6599c6922a33f6539f325c896462e09494935213f6",
+  "instructions": [
+    "00065f40: 8b8144010000 mov eax, dword ptr [ecx + 0x144]",
+    "00065f46: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00065f40",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x144; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 324, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_000a52c0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000a52c0",
+  "rva": 676544,
+  "size": 8,
+  "code_sha256": "6fe61fa00fdac2e917c8b2cac8edf7aa2d65292bf5eed913ca24bec691b69513",
+  "instructions": [
+    "000a52c0: c6815901000001 mov byte ptr [ecx + 0x159], 1",
+    "000a52c7: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000a52c0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 1 as little endian 1-byte value at object+0x159; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 345, 1, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_000a54e0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000a54e0",
+  "rva": 677088,
+  "size": 5,
+  "code_sha256": "49c1d841051cf1a15795b0ec01013371cc672dab8e84e39b7a12ddf3e9538c7e",
+  "instructions": [
+    "000a54e0: c6412101 mov byte ptr [ecx + 0x21], 1",
+    "000a54e4: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000a54e0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 1 as little endian 1-byte value at object+0x21; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 33, 1, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_000ecf70",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000ecf70",
+  "rva": 970608,
+  "size": 4,
+  "code_sha256": "4d8bbabf4078fb522f1b7e5fa9e993af5e9c941d53117c673ecfde3a5feca5c7",
+  "instructions": [
+    "000ecf70: 8b412c mov eax, dword ptr [ecx + 0x2c]",
+    "000ecf73: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000ecf70",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x2c; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 44, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_000f25a0",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000f25a0",
+  "rva": 992672,
+  "size": 10,
+  "code_sha256": "f707ae2ccd6108f77a22f32dd3a544e8d9c1831da5491cfc20acc261d3e27db4",
+  "instructions": [
+    "000f25a0: 8b442404 mov eax, dword ptr [esp + 4]",
+    "000f25a4: 894118 mov dword ptr [ecx + 0x18], eax",
+    "000f25a7: c20400 ret 4"
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-000f25a0",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x18; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 24, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+{
+  "name": "fn_0013ba50",
+  "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013ba50",
+  "rva": 1292880,
+  "size": 8,
+  "code_sha256": "5d312b61642c8abe90bed1ad2b4afb8fb2a30585a7be5561f6aa1b9c259983cc",
+  "instructions": [
+    "0013ba50: c7413800000000 mov dword ptr [ecx + 0x38], 0",
+    "0013ba57: c3 ret "
+  ]
+}
+Contract:
+{
+  "calls": [],
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0013ba50",
+  "inputs": {
+    "arena": "bytes",
+    "entry_eax": "u32",
+    "object": "u32",
+    "value": "u32"
+  },
+  "kind": "game",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 0 as little endian 4-byte value at object+0x38; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 56, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
+  "return_type": "u32",
+  "schema_version": 1
+}
+
+
+GuestMemory API (protected):
 #pragma once
 #include <cstdint>
 #include <span>
@@ -75,7 +836,7 @@ private:
 };
 } // namespace dao
 
-
+Direct-field declarations:
 #pragma once
 #include "dao/guest_memory.hpp"
 namespace dao {
@@ -103,1178 +864,228 @@ std::uint32_t fn_00515b00(GuestMemory&, std::uint32_t object, std::uint32_t valu
 std::uint32_t fn_00515b10(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
 std::uint32_t fn_0054f6e0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
 std::uint32_t fn_0054fa40(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00018760(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00018770(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0001cd70(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0001f050(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0001f060(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00022c80(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00023e40(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00023ed0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00023ee0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00023ef0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00024030(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00024050(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00024060(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00024090(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0002f940(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0002fa20(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_000621c0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00065f30(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_00065f40(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_000a52c0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_000a54e0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_000ecf70(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_000f25a0(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
+std::uint32_t fn_0013ba50(GuestMemory&, std::uint32_t object, std::uint32_t value, std::uint32_t entry_eax, std::uint32_t& exit_ecx);
 }
 
+EXACT ACCEPTED22 SOURCE PREFIX (copy byte-identically, including final newline):
+#include "dao/direct_object_fields.hpp"
 
-Exact original bytes/disassembly and independently reviewable metadata:
+namespace dao {
 
-[
-  {
-    "code_sha256": "16cc4de0deeba2928794d8d300087d51daedb9c523599b5ec9c6880541e8791d",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00319290",
-    "instructions": [
-      "00319290: c6818600000001 mov byte ptr [ecx + 0x86], 1",
-      "00319297: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      2142785
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "c6818600000000c3",
-    "mutant_sha256": "78f9975bc9768885b42d51360a42e698decef569fd384475a68b329fc7c87f99",
-    "name": "fn_00319290",
-    "rva": 3248784,
-    "size": 8,
-    "spec": [
-      "constant",
-      134,
-      1,
-      1
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "d250bb349c74ef624aa09fd69a5bb707d6424c2e59777acda68e09a490df325e",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342080",
-    "instructions": [
-      "00342080: 668b442404 mov ax, word ptr [esp + 4]",
-      "00342085: 668901 mov word ptr [ecx], ax",
-      "00342088: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3434721,
-      3434740,
-      3428176
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "668b542404668901c20400",
-    "mutant_sha256": "be073833aa49da5c88877118670f2ccc66110bf197c0044d33e10fa9dbff80fc",
-    "name": "fn_00342080",
-    "rva": 3416192,
-    "size": 11,
-    "spec": [
-      "store",
-      0,
-      2,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "9f7b49a8a847924e0b871b83201c1cd3baa38fba97b3562e376d6705dd5c5bfd",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342090",
-    "instructions": [
-      "00342090: 8a442404 mov al, byte ptr [esp + 4]",
-      "00342094: 884102 mov byte ptr [ecx + 2], al",
-      "00342097: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3395616,
-      3427902,
-      3428135,
-      2767365,
-      2497123,
-      2497285,
-      2548472,
-      2549756,
-      2550126,
-      2550469,
-      2552283,
-      2552782,
-      2553192,
-      2553445,
-      2553933,
-      2554308,
-      2554577,
-      2554813,
-      2555238,
-      2555532,
-      2555820,
-      2556211,
-      2556744,
-      2557038,
-      2557325,
-      2569103,
-      2761356,
-      2761642,
-      2976049,
-      2976182,
-      2991161
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8a542404884102c20400",
-    "mutant_sha256": "98f89f09b9b62ac534567bde42c216aaa492eabc05e267917059af2ff0ec843e",
-    "name": "fn_00342090",
-    "rva": 3416208,
-    "size": 10,
-    "spec": [
-      "store",
-      2,
-      1,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "a833804d3b7ebaa4d2efe319bde299916643a98fa867726f6fdc05bbc92b391a",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b40",
-    "instructions": [
-      "00347b40: 668b442404 mov ax, word ptr [esp + 4]",
-      "00347b45: 6689415a mov word ptr [ecx + 0x5a], ax",
-      "00347b49: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3450414,
-      2575694,
-      3443591,
-      3451185,
-      3451242,
-      3933915
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "668b5424046689415ac20400",
-    "mutant_sha256": "93bc9065181af46d2287b20ec15bbc8c6d3a21e4abedf2b6d00231f381ecb6c2",
-    "name": "fn_00347b40",
-    "rva": 3439424,
-    "size": 12,
-    "spec": [
-      "store",
-      90,
-      2,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "5fb353a189f7326933cf3677525ccdbe388097bf348a4e123c8fe0a6a61ad528",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b50",
-    "instructions": [
-      "00347b50: 8a442404 mov al, byte ptr [esp + 4]",
-      "00347b54: 8ad0 mov dl, al",
-      "00347b56: 80ea01 sub dl, 1",
-      "00347b59: 80fa02 cmp dl, 2",
-      "00347b5c: 7706 ja 0x747b64",
-      "00347b5e: 884150 mov byte ptr [ecx + 0x50], al",
-      "00347b61: c20400 ret 4",
-      "00347b64: c6415001 mov byte ptr [ecx + 0x50], 1",
-      "00347b68: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3450424,
-      2467156,
-      2779343,
-      3443541,
-      3451290,
-      3933898
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8a4424048ad080ea0180fa027706884150c20400c6415002c20400",
-    "mutant_sha256": "204c06c08c90313400aaeec1a350a1091a28ca996524d5ac9880cf6873970406",
-    "name": "fn_00347b50",
-    "rva": 3439440,
-    "size": 27,
-    "spec": [
-      "clamp",
-      80,
-      1,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "089afa5f16a4be21c4c7333f37ece4c7999e330e1cbb877e54bdc416a9896ba9",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b70",
-    "instructions": [
-      "00347b70: 8b442404 mov eax, dword ptr [esp + 4]",
-      "00347b74: 894120 mov dword ptr [ecx + 0x20], eax",
-      "00347b77: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3444287,
-      3450471,
-      3443659,
-      3443233
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b542404894120c20400",
-    "mutant_sha256": "4dc46ce964aa70c646aa1bb8a7c28a7486c0471dc7a9a003e4bff067407a24e3",
-    "name": "fn_00347b70",
-    "rva": 3439472,
-    "size": 10,
-    "spec": [
-      "store",
-      32,
-      4,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "dd0365660bbd659360475a0067cfa46cca9271f8db3251a665b2656ee1290162",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b80",
-    "instructions": [
-      "00347b80: 8a442404 mov al, byte ptr [esp + 4]",
-      "00347b84: 884118 mov byte ptr [ecx + 0x18], al",
-      "00347b87: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3450501,
-      3443849
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8a542404884118c20400",
-    "mutant_sha256": "6215bef788774fa132c5849e0c8e0e9c990767b60b10fa51d4463c8052d8af62",
-    "name": "fn_00347b80",
-    "rva": 3439488,
-    "size": 10,
-    "spec": [
-      "store",
-      24,
-      1,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "396b31693515cb75cdf9173465c8199f0fd5acb695d04b0d980f5707d6686b6f",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b90",
-    "instructions": [
-      "00347b90: 8b442404 mov eax, dword ptr [esp + 4]",
-      "00347b94: 894130 mov dword ptr [ecx + 0x30], eax",
-      "00347b97: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3450521,
-      3443773
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b542404894130c20400",
-    "mutant_sha256": "c62a9460470cf84c2ca217b66584686b26be488f77c3a3ef68f6f7bbcab13257",
-    "name": "fn_00347b90",
-    "rva": 3439504,
-    "size": 10,
-    "spec": [
-      "store",
-      48,
-      4,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "ddaa7304dc3d12d0d8e9fe2db0ab0d1f6429a91ab947bfa04d0ff9bf9c230940",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480b0",
-    "instructions": [
-      "003480b0: 33c0 xor eax, eax",
-      "003480b2: 6683b92a01000026 cmp word ptr [ecx + 0x12a], 0x26",
-      "003480ba: 0f94c0 sete al",
-      "003480bd: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3455048
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "33c06683b92a010000260f95c0c3",
-    "mutant_sha256": "95a1aae924a4134209fca1dc319f267bf8e94d3de2f43aba3bc2e336bc4a8b4c",
-    "name": "fn_003480b0",
-    "rva": 3440816,
-    "size": 14,
-    "spec": [
-      "equal",
-      298,
-      2,
-      38
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "2c011f602c1431b0d33824f851c3c522b156e2dbb501d281bb2410db381a4d6e",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480c0",
-    "instructions": [
-      "003480c0: 33c0 xor eax, eax",
-      "003480c2: 6683b92a01000016 cmp word ptr [ecx + 0x12a], 0x16",
-      "003480ca: 0f94c0 sete al",
-      "003480cd: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      3455066
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "33c06683b92a010000160f95c0c3",
-    "mutant_sha256": "aa4cbc72bce0380e516eb48b563de4dbf1bbef15b3d9b6759f885615a20438d4",
-    "name": "fn_003480c0",
-    "rva": 3440832,
-    "size": 14,
-    "spec": [
-      "equal",
-      298,
-      2,
-      22
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "916ae10aa3fd76a4d5b25b2fb66e9df0fd04957c7ab10930268d1ed7808be689",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003b51e0",
-    "instructions": [
-      "003b51e0: 8b4108 mov eax, dword ptr [ecx + 8]",
-      "003b51e3: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      921959,
-      4477443,
-      4490381,
-      922176,
-      1388847,
-      1390847,
-      1590372,
-      2251070,
-      2596193,
-      2720266,
-      2720283,
-      3428752,
-      2720871,
-      2797260,
-      2803058,
-      3980758,
-      3431822,
-      3431860,
-      3912163,
-      4253844,
-      4253867,
-      786490,
-      2544124,
-      2990028
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b5108c3",
-    "mutant_sha256": "93621554b47891928d45aea9c2cd64b60e1231389aadd73c2c2f15038ccb1b11",
-    "name": "fn_003b51e0",
-    "rva": 3887584,
-    "size": 4,
-    "spec": [
-      "load",
-      8,
-      4,
-      0
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "d3b1cc10a74b5874db3624609dc926137d5de9c5c86ea2726c17451e171ae2e9",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd030",
-    "instructions": [
-      "003cd030: 8a442404 mov al, byte ptr [esp + 4]",
-      "003cd034: 88811d010000 mov byte ptr [ecx + 0x11d], al",
-      "003cd03a: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      4131666
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8a54240488811d010000c20400",
-    "mutant_sha256": "0bf3c66a8f57abfc5955004943f6e47e58092d67aa4b1df05f05a1b7a7bccfbf",
-    "name": "fn_003cd030",
-    "rva": 3985456,
-    "size": 13,
-    "spec": [
-      "store",
-      285,
-      1,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "b52e32407e2f6589b470d99a419f076f5d6fd81217572f4f034de7c3b323f9ed",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd040",
-    "instructions": [
-      "003cd040: 8b442404 mov eax, dword ptr [esp + 4]",
-      "003cd044: 898120010000 mov dword ptr [ecx + 0x120], eax",
-      "003cd04a: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      4131697
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b542404898120010000c20400",
-    "mutant_sha256": "c8158e8e82f56e76beb469d1226960d2bf26bb4ecb020540009c3f81b48a5511",
-    "name": "fn_003cd040",
-    "rva": 3985472,
-    "size": 13,
-    "spec": [
-      "store",
-      288,
-      4,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "3e6c83b985cbda19182f1e877284ecff08752faf24dd3eff6e344b2021a6935b",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd0d0",
-    "instructions": [
-      "003cd0d0: b802000000 mov eax, 2",
-      "003cd0d5: 088199000000 or byte ptr [ecx + 0x99], al",
-      "003cd0db: 398194000000 cmp dword ptr [ecx + 0x94], eax",
-      "003cd0e1: c6811901000000 mov byte ptr [ecx + 0x119], 0",
-      "003cd0e8: 0f94c0 sete al",
-      "003cd0eb: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      2680224,
-      2698083
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "b802000000088199000000398194000000c68119010000000f95c0c3",
-    "mutant_sha256": "641f99278ff655476ea9987bb4c4c960c013f30d67f05ee736fc41e194e86e2e",
-    "name": "fn_003cd0d0",
-    "rva": 3985616,
-    "size": 28,
-    "spec": [
-      "flag_predicate",
-      148,
-      4,
-      2
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "a2de54d51834618069d6bdcd42abaf8f0095c86ecf218b3f8bd5acb06a424832",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd140",
-    "instructions": [
-      "003cd140: 8b442404 mov eax, dword ptr [esp + 4]",
-      "003cd144: 8981c0010000 mov dword ptr [ecx + 0x1c0], eax",
-      "003cd14a: c681b901000001 mov byte ptr [ecx + 0x1b9], 1",
-      "003cd151: c20400 ret 4"
-    ],
-    "inventory_incoming_callsite_rvas": [
-      4075926
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b5424048981c0010000c681b901000001c20400",
-    "mutant_sha256": "aec267b2fa7d72b7cbfa53740d9852c69356185af9f0fde1a9330049e0d7cd2b",
-    "name": "fn_003cd140",
-    "rva": 3985728,
-    "size": 20,
-    "spec": [
-      "store_mark",
-      448,
-      4,
-      0
-    ],
-    "stack_arguments": 1
-  },
-  {
-    "code_sha256": "6f424193cb02e4666aa64df22a723e8b06eea5119c1abf3c15e56c4b0e845c87",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd350",
-    "instructions": [
-      "003cd350: c6818400000000 mov byte ptr [ecx + 0x84], 0",
-      "003cd357: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      2705179
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "c6818400000001c3",
-    "mutant_sha256": "c9c96874f9ebf8b2edf0d623e800f56cc3e3c6e8c2ebcb89eadca713faad32f9",
-    "name": "fn_003cd350",
-    "rva": 3986256,
-    "size": 8,
-    "spec": [
-      "constant",
-      132,
-      1,
-      0
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "2d0ad3b193c6b7e2751ef36020771f55ede84d562a1475303945ed3a581edd79",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003edbc0",
-    "instructions": [
-      "003edbc0: c7414400000000 mov dword ptr [ecx + 0x44], 0",
-      "003edbc7: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      4123881
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "c7414400000001c3",
-    "mutant_sha256": "72da22c831861c77380cd800e509a7a1cd069baffd6960bd088ded9c1a2fae6f",
-    "name": "fn_003edbc0",
-    "rva": 4119488,
-    "size": 8,
-    "spec": [
-      "constant",
-      68,
-      4,
-      0
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "4953034ec3e563bcb438d92bac0d1203e0064c50081dc951cbd853833cb5a12b",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515af0",
-    "instructions": [
-      "00515af0: 8b410c mov eax, dword ptr [ecx + 0xc]",
-      "00515af3: 83e001 and eax, 1",
-      "00515af6: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      5309767,
-      5647239,
-      5649118,
-      5649372,
-      5649680,
-      5652788,
-      5654281,
-      5654520,
-      5654859,
-      5313592,
-      5333468,
-      5333673,
-      5389994,
-      5600758,
-      5655247
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b410c83e000c3",
-    "mutant_sha256": "e8244908737ba780e8171552d52edc1de2a1bd14644b0c1293aaca4fe6b2f230",
-    "name": "fn_00515af0",
-    "rva": 5331696,
-    "size": 7,
-    "spec": [
-      "bit",
-      12,
-      4,
-      0
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "248e2b5e9a61c94231302d808e3608a3c989ae3fd6bdb598b75c135c6cc9c39c",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b00",
-    "instructions": [
-      "00515b00: 8b410c mov eax, dword ptr [ecx + 0xc]",
-      "00515b03: c1e804 shr eax, 4",
-      "00515b06: 83e001 and eax, 1",
-      "00515b09: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      5533927,
-      5544634,
-      5544758,
-      5544856,
-      5544974,
-      5545504,
-      5545753
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b410cc1e80483e000c3",
-    "mutant_sha256": "09a938e992231f832a5107acf89059201536fa3d024cae41e25d11bbd0b5785c",
-    "name": "fn_00515b00",
-    "rva": 5331712,
-    "size": 10,
-    "spec": [
-      "bit",
-      12,
-      4,
-      4
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "2c2587cb3fb5f298e2d50c7dd8661f96c35433cc0a523bd749beeae2be6af240",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b10",
-    "instructions": [
-      "00515b10: 8b410c mov eax, dword ptr [ecx + 0xc]",
-      "00515b13: d1e8 shr eax, 1",
-      "00515b15: 83e001 and eax, 1",
-      "00515b18: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      5455031,
-      5467190,
-      5600159
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b410cd1e883e000c3",
-    "mutant_sha256": "b708a9178a5276ccc371d846c031522274265ff9ada31349f797e4c32efef125",
-    "name": "fn_00515b10",
-    "rva": 5331728,
-    "size": 9,
-    "spec": [
-      "bit",
-      12,
-      4,
-      1
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "1b040472254ab6b6b502f92f9161c041882bbbd1357b1d969c0a9c782eecfbb9",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054f6e0",
-    "instructions": [
-      "0054f6e0: 8b4930 mov ecx, dword ptr [ecx + 0x30]",
-      "0054f6e3: 33c0 xor eax, eax",
-      "0054f6e5: 83f901 cmp ecx, 1",
-      "0054f6e8: 0f94c0 sete al",
-      "0054f6eb: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      5605273,
-      5568403
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b493033c083f9010f95c0c3",
-    "mutant_sha256": "7c880457c7dc476c347b9e04e971bfb9659dd7f75e2e7a71e6677563015c96eb",
-    "name": "fn_0054f6e0",
-    "rva": 5568224,
-    "size": 12,
-    "spec": [
-      "equal_ecx",
-      48,
-      4,
-      1
-    ],
-    "stack_arguments": 0
-  },
-  {
-    "code_sha256": "c6356da0a1a5c99d329a061bfbaecad913ea83ccf76a4d6ab52def83ef3416fa",
-    "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054fa40",
-    "instructions": [
-      "0054fa40: 8b4928 mov ecx, dword ptr [ecx + 0x28]",
-      "0054fa43: 33c0 xor eax, eax",
-      "0054fa45: 83f901 cmp ecx, 1",
-      "0054fa48: 0f94c0 sete al",
-      "0054fa4b: c3 ret "
-    ],
-    "inventory_incoming_callsite_rvas": [
-      5568703,
-      5569119
-    ],
-    "module": "DAOrigins.exe",
-    "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
-    "mutant_hex": "8b492833c083f9010f95c0c3",
-    "mutant_sha256": "ad2bbca0b0795fa024e15747bb536f84a65bd268b966e61b19d6ca670d652d21",
-    "name": "fn_0054fa40",
-    "rva": 5569088,
-    "size": 12,
-    "spec": [
-      "equal_ecx",
-      40,
-      4,
-      1
-    ],
-    "stack_arguments": 0
-  }
-]
+// Supplied instruction provenance: DAOrigins.exe
+// SHA-256: 2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3
+// Each function name identifies its original RVA.
+// Contract: only the supplied ordinary RAM observation interface is modeled.
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00319290
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00319290",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 1 as little endian 1-byte value at object+0x86; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 134, 1, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00319290(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x86U, std::uint8_t{1});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342080
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342080",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 16 bits of value at object+0x0; EAX replaces its low 16 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 0, 2, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00342080(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u16(object, static_cast<std::uint16_t>(value));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffff0000U) | (value & 0x0000ffffU);
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342090
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342090",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 8 bits of value at object+0x2; EAX replaces its low 8 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 2, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00342090(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x02U, static_cast<std::uint8_t>(value));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffffff00U) | (value & 0x000000ffU);
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b40
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b40",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 16 bits of value at object+0x5a; EAX replaces its low 16 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 90, 2, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00347b40(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u16(object + 0x5aU, static_cast<std::uint16_t>(value));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffff0000U) | (value & 0x0000ffffU);
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b50
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b50",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"AL=low8(value), other EAX entry bits preserved; store AL at object+0x50 iff (AL-1) mod256 <=2, otherwise store1. ECX preserved.\", \"spec\": [\"clamp\", 80, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00347b50(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t al = value & 0xffU;
+    const std::uint32_t dl = (al - 1U) & 0xffU;
+    memory.write_u8(object + 0x50U,
+                    static_cast<std::uint8_t>(dl <= 2U ? al : 1U));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffffff00U) | al;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b70
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b70",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x20; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 32, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00347b70(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x20U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b80
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b80",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 8 bits of value at object+0x18; EAX replaces its low 8 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 24, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00347b80(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x18U, static_cast<std::uint8_t>(value));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffffff00U) | (value & 0x000000ffU);
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b90
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b90",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x30; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 48, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00347b90(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x30U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480b0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480b0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=1 iff unsigned16 field at object+0x12a equals 0x26, otherwise0; ECX preserved.\", \"spec\": [\"equal\", 298, 2, 38], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003480b0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u16(object + 0x12aU);
+    exit_ecx = 0x02000000U + object;
+    return field == 0x26U ? 1U : 0U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480c0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480c0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=1 iff unsigned16 field at object+0x12a equals 0x16, otherwise0; ECX preserved.\", \"spec\": [\"equal\", 298, 2, 22], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003480c0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u16(object + 0x12aU);
+    exit_ecx = 0x02000000U + object;
+    return field == 0x16U ? 1U : 0U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003b51e0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003b51e0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX is little endian u32 at object+0x8; ECX preserved. No pointed-to lifetime/type is inferred.\", \"spec\": [\"load\", 8, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003b51e0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x08U);
+    exit_ecx = 0x02000000U + object;
+    return field;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd030
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd030",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 8 bits of value at object+0x11d; EAX replaces its low 8 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 285, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003cd030(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x11dU, static_cast<std::uint8_t>(value));
+    exit_ecx = 0x02000000U + object;
+    return (entry_eax & 0xffffff00U) | (value & 0x000000ffU);
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd040
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd040",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write low 32 bits of value at object+0x120; EAX replaces its low 32 bits with value and preserves the remaining entry bits; ECX is entry object pointer.\", \"spec\": [\"store\", 288, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003cd040(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x120U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd0d0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd0d0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"OR byte[object+0x99] with2; compare u32[object+0x94] with2; write byte[object+0x119]=0; EAX is equality as0/1; ECX preserved. Preserve original access order.\", \"spec\": [\"flag_predicate\", 148, 4, 2], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003cd0d0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t flags = memory.read_u8(object + 0x99U);
+    memory.write_u8(object + 0x99U,
+                    static_cast<std::uint8_t>(flags | 2U));
+    const std::uint32_t field = memory.read_u32(object + 0x94U);
+    memory.write_u8(object + 0x119U, std::uint8_t{0});
+    exit_ecx = 0x02000000U + object;
+    return field == 2U ? 1U : 0U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd140
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd140",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [\"value\"], \"stack_cleanup\": 4}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=value; write u32[object+0x1c0]=value, then byte[object+0x1b9]=1; ECX preserved.\", \"spec\": [\"store_mark\", 448, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003cd140(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x1c0U, value);
+    memory.write_u8(object + 0x1b9U, std::uint8_t{1});
+    exit_ecx = 0x02000000U + object;
+    return value;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd350
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd350",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 0 as little endian 1-byte value at object+0x84; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 132, 1, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003cd350(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x84U, std::uint8_t{0});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003edbc0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003edbc0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"Write 0 as little endian 4-byte value at object+0x44; EAX entry bits and ECX object pointer are preserved.\", \"spec\": [\"constant\", 68, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_003edbc0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x44U, std::uint32_t{0});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515af0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515af0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=(u32[object+0xc]>>0)&1; ECX preserved.\", \"spec\": [\"bit\", 12, 4, 0], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00515af0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x0cU);
+    exit_ecx = 0x02000000U + object;
+    return field & 1U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b00
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b00",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=(u32[object+0xc]>>4)&1; ECX preserved.\", \"spec\": [\"bit\", 12, 4, 4], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00515b00(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x0cU);
+    exit_ecx = 0x02000000U + object;
+    return (field >> 4U) & 1U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b10
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b10",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"EAX=(u32[object+0xc]>>1)&1; ECX preserved.\", \"spec\": [\"bit\", 12, 4, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_00515b10(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x0cU);
+    exit_ecx = 0x02000000U + object;
+    return (field >> 1U) & 1U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054f6e0
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054f6e0",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"ECX=u32[object+0x30]; EAX=1 iff that value equals1, otherwise0. ECX is serialized raw, without pointer interpretation.\", \"spec\": [\"equal_ecx\", 48, 4, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_0054f6e0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x30U);
+    exit_ecx = field;
+    return field == 1U ? 1U : 0U;
 }
 
-
-DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054fa40
-
-{
-  "calls": [],
-  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054fa40",
-  "inputs": {
-    "arena": "bytes",
-    "entry_eax": "u32",
-    "object": "u32",
-    "value": "u32"
-  },
-  "kind": "game",
-  "memory": {
-    "arena": 512,
-    "exit_ecx": 4
-  },
-  "preconditions": "{\"abi\": {\"eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observation\": \"full EAX bits, raw exitECX and all512arena bytes\", \"stack_arguments\": [], \"stack_cleanup\": 0}, \"domain\": \"Ordinary512byte bounded RAM arena; unaligned objects; exact declared byte footprints; no calls/globals/TLS/FP/OS state. Returns are machine bits; source-level void/pointer/integer types unknown. Class identity, lifetime and integration preconditions unknown. No native Windows execution.\", \"semantics\": \"ECX=u32[object+0x28]; EAX=1 iff that value equals1, otherwise0. ECX is serialized raw, without pointer interpretation.\", \"spec\": [\"equal_ecx\", 40, 4, 1], \"status\": \"DRAFT_requires_independent_acceptance\"}",
-  "return_type": "u32",
-  "schema_version": 1
+std::uint32_t fn_0054fa40(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x28U);
+    exit_ecx = field;
+    return field == 1U ? 1U : 0U;
 }
 
+} // namespace dao
 
-Do not claim that corpus agreement is game proof, native Windows validation, or universal equivalence. Return only the requested source-response schema with source, function notes and explicit uncertainties. No heldout cases are supplied.
+END ACCEPTED PREFIX
+
+Return strict JSON: {"source":"complete source with preserved prefix and appended24", "functions":[{"name":"fn_...","suggested_name":"nonempty description","explanation":"nonempty evidence-based explanation"}], "uncertainties":["explicit limits"]}. The functions array must cover ALL46 declarations exactly once, including preserved22, although only new24 are implemented in this task. No heldout inputs or output observations are supplied. Corpus agreement is not game proof or native Windows validation.

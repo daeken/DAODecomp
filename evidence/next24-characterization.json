@@ -1,0 +1,732 @@
+{
+  "artifact_hashes": {
+    "tree/contracts/fn_00018760.json": "f35f6c07e645ef5268915b99091215a5561bd6f064411de5048a8d7b46f906ff",
+    "tree/contracts/fn_00018770.json": "b147ed6bd9f373e1bcdc2efadb36e5be345c12602563461b96c58f56e6884ce9",
+    "tree/contracts/fn_0001cd70.json": "2a592e306e664e85734ca440460ce3ffe96b1b4387ef5f11c4daf6485c9e6d6a",
+    "tree/contracts/fn_0001f050.json": "36cc01e84201e0d41739127214235b743e91ec63826c15b0dcca4f6b6bae643c",
+    "tree/contracts/fn_0001f060.json": "23f1acc321637af6a9e586b1c1cbb3a90b14276b84022f064331296d20e2f56e",
+    "tree/contracts/fn_00022c80.json": "d0a45eb71dec063b108b1952bbc576adc1531f3c521d004d51fd8ffe2a29085d",
+    "tree/contracts/fn_00023e40.json": "b9b9152775da616144c4094ff60a5a6b0f76e130e01237603c3c697d6ac723a0",
+    "tree/contracts/fn_00023ed0.json": "149c9fe31afd8ab612f7f89cb532b2c8f7f0f8ce33eeddc4c3e0ac027c1a8e79",
+    "tree/contracts/fn_00023ee0.json": "3bcc19306097204aef2266892e1d55d8e294dcdb50371cd026bbf0cf669b8d81",
+    "tree/contracts/fn_00023ef0.json": "13932268f394b751c69a4fe3fe4f62e316a442f4c801f95a84688d23a395c80a",
+    "tree/contracts/fn_00024030.json": "24c2310d4ebe79fd4d2bdc71eb27464e2e9c5f7283465f63388166c324a288a2",
+    "tree/contracts/fn_00024050.json": "453068c64acaf2670e61da932c426ff0bb3d62af38af160ab1b7885db459f123",
+    "tree/contracts/fn_00024060.json": "769829d281a9400a0a0c8cac68e65ea67dacc88190e8ba1eec146dbf89906824",
+    "tree/contracts/fn_00024090.json": "427a6d84c6a2f2b654c2a30e09dbc5c0576ab5d268ca3812389f270a8736c2e1",
+    "tree/contracts/fn_0002f940.json": "8d54d5e4f25ae170c02affa76da7fefd3cc1a7e2c70f9bf1c54876e0385793c8",
+    "tree/contracts/fn_0002fa20.json": "044bea8a82bad852470a68712eca5d0bdd51e15236f263a580b6fe405dbc347f",
+    "tree/contracts/fn_000621c0.json": "1222dd1f404f5640163707bcc7bd3669b6a0a53f5b8f875c18b7f5e9314afe05",
+    "tree/contracts/fn_00065f30.json": "5c2833d5c71f948f37bc1cdcb18ad4ce0fce5d274adc0cb20bccb649af1ab23d",
+    "tree/contracts/fn_00065f40.json": "feae7c64ed7852d7acc378c24e1d4534a91ce9141d8474d76a07aaa14d00682e",
+    "tree/contracts/fn_000a52c0.json": "d3f3ebb15a8ece7d3711ecc1bdf80fb3ea2a9a3ae8006a38c8b642108b5eda99",
+    "tree/contracts/fn_000a54e0.json": "de58fd6706ae75db1a12d5b1b9004b320d426082b605311242a3f0e8d84a8306",
+    "tree/contracts/fn_000ecf70.json": "4595a48f9d7f9ff7df75227813ee733af565c0d62dc6ed8bd6c0decf37b02b16",
+    "tree/contracts/fn_000f25a0.json": "3980b6afe6e906e6e0563ae9e22362f3f9cef41dc8c00bc533feda96ba5c928e",
+    "tree/contracts/fn_0013ba50.json": "71d7587111c25a337655f057765ac039b078e2a1893f59b2045b919141971edd",
+    "tree/corpus/fn_00018760-heldout.json": "a25f7dea1e7aea1547ffe8ee11e63a5514df5e9c0277b96ddb09cd06ef506736",
+    "tree/corpus/fn_00018760-public.json": "997549168b56b35527e50bfdd79182f2c8b272554d6614c42cedb0b82466a5cb",
+    "tree/corpus/fn_00018770-heldout.json": "31965f18b70d5d62d79c6c4cbdf075f44ca1479e386b22eb8b374bf8a5593d7c",
+    "tree/corpus/fn_00018770-public.json": "a76049c56da785caf160708c4a05de17652099591024bdf4d04784f368272e04",
+    "tree/corpus/fn_0001cd70-heldout.json": "1873d86e358f877c6b663e52dde0feae569e4a28f3b262dc0b90378ccd5ba0ca",
+    "tree/corpus/fn_0001cd70-public.json": "dcc1a074c057ab6a1284b7493f08a5aef0b01a348ddd3046ab313825af26ade5",
+    "tree/corpus/fn_0001f050-heldout.json": "47e15e60f98a54c26980cd3e78745af9d68ca14f81fed4c2c0daccb7cfcd2b2a",
+    "tree/corpus/fn_0001f050-public.json": "41deb6231cbc967a627f1e3e4ef1e304159d1d4593a24a978e283bfe949f0ad0",
+    "tree/corpus/fn_0001f060-heldout.json": "d230e1078cc1ab011c9170e9ea9b12b53165a11f008475059f17cfeda64929b9",
+    "tree/corpus/fn_0001f060-public.json": "73ed5fc7a4f9369b95cbbf0ea68ac307ed5de9f8f2ad3c7d7e6060b35d6adc8b",
+    "tree/corpus/fn_00022c80-heldout.json": "7eaa803d62114373393d2102826ff5d45cb34bf01b72fd646d49e2730fe3444e",
+    "tree/corpus/fn_00022c80-public.json": "a07637300b4e83e14802dc7caa8773c311af6089b9d138823c57e364a8b78cfa",
+    "tree/corpus/fn_00023e40-heldout.json": "cdaa4dc93d657eabfb8af878834f2a2c6ea39085c11315036112d6a87a14b100",
+    "tree/corpus/fn_00023e40-public.json": "25d11dde9f84da0cb5b80fcd4244197b890ac3b516d80e409b9cf11c2b6f3072",
+    "tree/corpus/fn_00023ed0-heldout.json": "9d8631bfcb84df1a3115bf369c4f864390b58af0c1c61629365273dc063b3773",
+    "tree/corpus/fn_00023ed0-public.json": "ebde127e692be2f943111aa54924b20f18ecdf9fe88154739fa40ec072ed907d",
+    "tree/corpus/fn_00023ee0-heldout.json": "9546f3bab985651d22db9e339e3cd6bc204505ae953d82dcd56660cf1cb67864",
+    "tree/corpus/fn_00023ee0-public.json": "dbf1d0e282ff9ea41f8857ca014b4472fbb3f0768317e4929c5c37f3b2522213",
+    "tree/corpus/fn_00023ef0-heldout.json": "1296caf3bbc7f6403860ebc8d7409985193ecec16b6da51185dde14e57c571bf",
+    "tree/corpus/fn_00023ef0-public.json": "f55013e0eac04e70f9485319e7673ab5b72ddb0b9e652c4b68b7cdccbec07eee",
+    "tree/corpus/fn_00024030-heldout.json": "8f23e069b856c8c6b765af5a5b2fa540cc7ea6079b6c05a0bb740b1a86d8ddba",
+    "tree/corpus/fn_00024030-public.json": "17065e778b3797e5232089588e17d4bf466172daef8c150c03640c36acc3ca12",
+    "tree/corpus/fn_00024050-heldout.json": "eb11eadd6f776f69cf1c303f7ae9a3fb63aacb5675364a825e59029b14003fe6",
+    "tree/corpus/fn_00024050-public.json": "63801fe5f2eb4f9a586a72166a30309e3216d8643abae2aa81c86d956c31b202",
+    "tree/corpus/fn_00024060-heldout.json": "be04f15e144dab629270cca2005e1ef0ac36a09ce31e0d6dc9b08a283fd23af2",
+    "tree/corpus/fn_00024060-public.json": "c1c796fdf4d6a305c9af1e367241c37471f247230d42e4885f3923d6374f9b3b",
+    "tree/corpus/fn_00024090-heldout.json": "6901f5b0f7b0781fe74ede1ccd370bfaec2754b870dc7f3b58de9beda8d433ea",
+    "tree/corpus/fn_00024090-public.json": "024e0f50e7e71fd91efad15e7f0b81562945d0030fa2daa252975e53d42cd12f",
+    "tree/corpus/fn_0002f940-heldout.json": "3a3878dbe656dd0d4c694b35ad88c713dd1c7dbe0976f719c992bacae80e24a5",
+    "tree/corpus/fn_0002f940-public.json": "aa7e03e59658c5ab5a2e20c3846e52ec2458b51ef5ac72cdc1b1a7a926283b7f",
+    "tree/corpus/fn_0002fa20-heldout.json": "5966e36c63269f32d73be20cafea40c9e8787725a2bd83cfa57b7b0638e1b39c",
+    "tree/corpus/fn_0002fa20-public.json": "da76b00b3c336a47d942f640f49d72519f14398c3ee63d1e505974109c4bfffc",
+    "tree/corpus/fn_000621c0-heldout.json": "94be18e3fe568247c14650e3e86e547ff4fb190fcf5065e4105532510c540cb9",
+    "tree/corpus/fn_000621c0-public.json": "bdfadbe7e14a9724e6660f32df1406f3399bc386cd11c6f81f890e60278bd0aa",
+    "tree/corpus/fn_00065f30-heldout.json": "a03fcf46096222c9c095313a2714012eff1b5b23135d1e185f6260698557e5e6",
+    "tree/corpus/fn_00065f30-public.json": "bae5be629cd1a4de7cb5225cb269b3f26dd40d77b5c3cf77b99bf2bfe924a1b6",
+    "tree/corpus/fn_00065f40-heldout.json": "6c6224ed6ee3832971f369ae0174635ba1485a36fea1478ab3b71c594ff687dc",
+    "tree/corpus/fn_00065f40-public.json": "5a97507eb62d45b31e7ac11fc5f777d1b3e3e0eec5dbc174e711d8aca6443f16",
+    "tree/corpus/fn_000a52c0-heldout.json": "192e772dcd1680b98f67ffff7ca02e726a20d162477bc6d5ccbf3ea5b515a1b2",
+    "tree/corpus/fn_000a52c0-public.json": "c4092c9c1c3698151d2b4a5bc39f25870b6cd23a51bd1f48e5d0e7ec9125e371",
+    "tree/corpus/fn_000a54e0-heldout.json": "5fec20bc18726a775e489cc41387fb67853de6e1b96a9b879c37ebdc3ecf127d",
+    "tree/corpus/fn_000a54e0-public.json": "0af9d3c28c6619b6b47d057bc158009962938fa973a8de41a611b21af702e4c5",
+    "tree/corpus/fn_000ecf70-heldout.json": "0dde835464128074386d1c3a1a0dff33cc9f11f6fd4010ca8786f416b9e7236e",
+    "tree/corpus/fn_000ecf70-public.json": "f61c4d9530731b5931dc1a8a4781719013e28986125334b587d645b301c78270",
+    "tree/corpus/fn_000f25a0-heldout.json": "25ed5c6f7bbaf136c4168ca63a2756bddf8d5b09128a2282dfe5896592be6bcc",
+    "tree/corpus/fn_000f25a0-public.json": "8e0dc4e48086e8b02677ab97a5c23d3317ea0542fc9d00c0a1d951da7eaaf886",
+    "tree/corpus/fn_0013ba50-heldout.json": "878732cff73416b035141d60cdae06d19fcbf1a5f19ed9b00a50214870f543e8",
+    "tree/corpus/fn_0013ba50-public.json": "04bf4f60a0bb3ee0eb1b15cc3f6d0f024106bb0c1add6645cd6c6bfb963b2d14",
+    "tree/slices.json": "e4995190cc1091f43045e79d5b868452d49290240c988a1464c3e7f85cdd9e17",
+    "tree/tools/__init__.py": "68c7f64a6b8d8c87a4c69169642370c9c2de4d21e4c1e2427e729ba8824004c4",
+    "tree/tools/daodecomp/__init__.py": "c0b4b5208326159d19b1ce6a8fe1f70e1b97f36c670e144f21df8c5cf2ff673a",
+    "tree/tools/daodecomp/batch.py": "dc6c568875138246ad55b19dde776fc95608439071e0eccd84a8e8f11cf83dfc",
+    "tree/tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tree/tools/daodecomp/memory.py": "d211fd6a395b8608433f4f4afb6ca339f50400260890a768c131dcc498bd3fac",
+    "tree/tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+    "tree/validation/direct_field_batch_runner.py": "b489a782a7cbd42f23a61790b82733c7b0faa435455adb3db0fa0b9d047511bb",
+    "tree/validation/indexed_field_batch_runner.py": "9cd5b446d812dccbdd86dbca050594a31c381cea21f6a16d1bfb3d6441059fa2",
+    "tree/validation/indexed_field_cases.py": "7c8f50e8be247dad97188cd1cc2b74505d616bad5089a0996d87ebbd446d1cf8"
+  },
+  "artifacts_unchanged": true,
+  "candidate_executed": false,
+  "elapsed_seconds": 314.3603465000051,
+  "fresh_child_processes": 33792,
+  "functions": 24,
+  "heldout_cases": 3072,
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "instruction_mutation_controls": 24,
+  "instruction_mutation_executions": 9216,
+  "instruction_mutation_mismatches": 8579,
+  "mode": "production unchanged invoke_batches/serve; freshly constructed Unicorn per child;2 supervisor jobs;batchsize128",
+  "native_windows_executed": false,
+  "original_executions": 24576,
+  "proof": false,
+  "public_cases": 9216,
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "results": [
+    {
+      "elapsed_seconds": 26.090681416972075,
+      "first_mismatch": "fn_00018760-0006",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 148,
+      "mutation_runner_errors": 0,
+      "name": "fn_00018760",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 26.185635125031695,
+      "first_mismatch": "fn_00018770-0002",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 190,
+      "mutation_runner_errors": 0,
+      "name": "fn_00018770",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 24.3963989589829,
+      "first_mismatch": "fn_0001cd70-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_0001cd70",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 24.203933875018265,
+      "first_mismatch": "fn_0001f050-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_0001f050",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.070296749996487,
+      "first_mismatch": "fn_0001f060-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_0001f060",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.1589571670047,
+      "first_mismatch": "fn_00022c80-0000",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 384,
+      "mutation_runner_errors": 0,
+      "name": "fn_00022c80",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.24189204198774,
+      "first_mismatch": "fn_00023e40-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_00023e40",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.183858582982793,
+      "first_mismatch": "fn_00023ed0-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00023ed0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.692382875015028,
+      "first_mismatch": "fn_00023ee0-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00023ee0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 23.52834487502696,
+      "first_mismatch": "fn_00023ef0-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00023ef0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 26.70833054196555,
+      "first_mismatch": "fn_00024030-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00024030",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 26.747461416001897,
+      "first_mismatch": "fn_00024050-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00024050",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.187061249976978,
+      "first_mismatch": "fn_00024060-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_00024060",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.038820832967758,
+      "first_mismatch": "fn_00024090-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00024090",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 29.99253333301749,
+      "first_mismatch": "fn_0002f940-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_0002f940",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 29.886802625027485,
+      "first_mismatch": "fn_0002fa20-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_0002fa20",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.49084695801139,
+      "first_mismatch": "fn_000621c0-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_000621c0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.408599791990127,
+      "first_mismatch": "fn_00065f30-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_00065f30",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 30.088389415992424,
+      "first_mismatch": "fn_00065f40-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_00065f40",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 30.11064066697145,
+      "first_mismatch": "fn_000a52c0-0000",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 384,
+      "mutation_runner_errors": 0,
+      "name": "fn_000a52c0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.83598041703226,
+      "first_mismatch": "fn_000a54e0-0000",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 384,
+      "mutation_runner_errors": 0,
+      "name": "fn_000a54e0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 27.657196249987464,
+      "first_mismatch": "fn_000ecf70-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 369,
+      "mutation_runner_errors": 0,
+      "name": "fn_000ecf70",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 24.778029416978825,
+      "first_mismatch": "fn_000f25a0-0001",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 376,
+      "mutation_runner_errors": 0,
+      "name": "fn_000f25a0",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    },
+    {
+      "elapsed_seconds": 24.798285333032254,
+      "first_mismatch": "fn_0013ba50-0000",
+      "heldout_cases": 128,
+      "instruction_mutation_executions": 384,
+      "instruction_mutation_mismatches": 384,
+      "mutation_runner_errors": 0,
+      "name": "fn_0013ba50",
+      "original_executions": 1024,
+      "original_repeat_stable": true,
+      "process_provenance": [
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 512,
+          "supervisor_processes": 1
+        },
+        {
+          "case_processes": 384,
+          "supervisor_processes": 1
+        }
+      ],
+      "public_cases": 384
+    }
+  ],
+  "runner_errors": 0,
+  "status": "original_only_emulator_evidence",
+  "supervisor_processes": 72,
+  "unicorn": "2.1.4"
+}

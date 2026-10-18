@@ -1,0 +1,641 @@
+{
+  "candidate_executed": false,
+  "checks": {
+    "arg_low_bytes_enumerated": 9,
+    "corpus_schema_cases": 12288,
+    "denied_access_rejections": 48,
+    "invalid_fixture_rejections": 168,
+    "invalid_request_rejections": 72,
+    "trace_footprint_probes": 48
+  },
+  "edge_original_probes": 6,
+  "elapsed_seconds": 0.3059394999872893,
+  "native_windows_executed": false,
+  "status": "passed",
+  "traces": [
+    {
+      "case": "fn_00018760-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00018760",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          24,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00018760-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00018760",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          25,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00018770-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00018770",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          24,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00018770-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00018770",
+      "return": 1,
+      "trace": [
+        [
+          "read",
+          25,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001cd70-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0001cd70",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001cd70-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0001cd70",
+      "return": 889148094,
+      "trace": [
+        [
+          "write",
+          9,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001f050-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0001f050",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          16,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001f050-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0001f050",
+      "return": 3068872721,
+      "trace": [
+        [
+          "read",
+          17,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001f060-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0001f060",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          20,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0001f060-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0001f060",
+      "return": 4286675978,
+      "trace": [
+        [
+          "read",
+          21,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00022c80-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00022c80",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          60,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_00022c80-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00022c80",
+      "return": 1568403530,
+      "trace": [
+        [
+          "write",
+          61,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023e40-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00023e40",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          276,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023e40-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00023e40",
+      "return": 3291230305,
+      "trace": [
+        [
+          "read",
+          277,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ed0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00023ed0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          12,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ed0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00023ed0",
+      "return": 1461059790,
+      "trace": [
+        [
+          "write",
+          13,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ee0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00023ee0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          16,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ee0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00023ee0",
+      "return": 345021455,
+      "trace": [
+        [
+          "write",
+          17,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ef0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00023ef0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          20,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00023ef0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00023ef0",
+      "return": 1571088510,
+      "trace": [
+        [
+          "write",
+          21,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024030-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00024030",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          72,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024030-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00024030",
+      "return": 3362251633,
+      "trace": [
+        [
+          "write",
+          73,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024050-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00024050",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          76,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024050-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00024050",
+      "return": 3536519029,
+      "trace": [
+        [
+          "write",
+          77,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024060-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00024060",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          76,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024060-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00024060",
+      "return": 1302483568,
+      "trace": [
+        [
+          "read",
+          77,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024090-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00024090",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          84,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00024090-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00024090",
+      "return": 2293877015,
+      "trace": [
+        [
+          "write",
+          85,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0002f940-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0002f940",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          116,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0002f940-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0002f940",
+      "return": 694513951,
+      "trace": [
+        [
+          "read",
+          117,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0002fa20-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0002fa20",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          208,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0002fa20-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0002fa20",
+      "return": 3895030882,
+      "trace": [
+        [
+          "read",
+          209,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000621c0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_000621c0",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000621c0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_000621c0",
+      "return": 1527525420,
+      "trace": [
+        [
+          "read",
+          1,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00065f30-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00065f30",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          324,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00065f30-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00065f30",
+      "return": 3909786504,
+      "trace": [
+        [
+          "write",
+          325,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00065f40-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_00065f40",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          324,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_00065f40-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_00065f40",
+      "return": 3910475532,
+      "trace": [
+        [
+          "read",
+          325,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000a52c0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_000a52c0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          345,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_000a52c0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_000a52c0",
+      "return": 4289375938,
+      "trace": [
+        [
+          "write",
+          346,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_000a54e0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_000a54e0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          33,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_000a54e0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_000a54e0",
+      "return": 3122093380,
+      "trace": [
+        [
+          "write",
+          34,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "fn_000ecf70-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_000ecf70",
+      "return": 0,
+      "trace": [
+        [
+          "read",
+          44,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000ecf70-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_000ecf70",
+      "return": 857519615,
+      "trace": [
+        [
+          "read",
+          45,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000f25a0-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_000f25a0",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          24,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_000f25a0-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_000f25a0",
+      "return": 3723270911,
+      "trace": [
+        [
+          "write",
+          25,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0013ba50-0000",
+      "exit_ecx": 33554432,
+      "name": "fn_0013ba50",
+      "return": 0,
+      "trace": [
+        [
+          "write",
+          56,
+          4
+        ]
+      ]
+    },
+    {
+      "case": "fn_0013ba50-0511",
+      "exit_ecx": 33554433,
+      "name": "fn_0013ba50",
+      "return": 3325720643,
+      "trace": [
+        [
+          "write",
+          57,
+          4
+        ]
+      ]
+    }
+  ]
+}

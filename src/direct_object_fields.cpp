@@ -192,3 +192,198 @@ std::uint32_t fn_0054fa40(GuestMemory& memory, std::uint32_t object,
 }
 
 } // namespace dao
+namespace dao {
+
+std::uint32_t fn_00018760(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x18U);
+    exit_ecx = 0x02000000U + object;
+    return (field >> 4U) & 1U;
+}
+
+std::uint32_t fn_00018770(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x18U);
+    exit_ecx = 0x02000000U + object;
+    return (field >> 1U) & 1U;
+}
+
+std::uint32_t fn_0001cd70(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x08U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_0001f050(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x10U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_0001f060(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x14U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_00022c80(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x3cU, std::uint8_t{0});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
+}
+
+std::uint32_t fn_00023e40(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x114U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_00023ed0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x0cU, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00023ee0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x10U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00023ef0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x14U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00024030(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x48U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00024050(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x4cU, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00024060(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x4cU);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_00024090(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x54U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_0002f940(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x74U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_0002fa20(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0xd0U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_000621c0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_00065f30(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x144U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_00065f40(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x144U);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_000a52c0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x159U, std::uint8_t{1});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
+}
+
+std::uint32_t fn_000a54e0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u8(object + 0x21U, std::uint8_t{1});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
+}
+
+std::uint32_t fn_000ecf70(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    const std::uint32_t field = memory.read_u32(object + 0x2cU);
+    exit_ecx = 0x02000000U + object;
+    return field;
+}
+
+std::uint32_t fn_000f25a0(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t value, std::uint32_t,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x18U, value);
+    exit_ecx = 0x02000000U + object;
+    return value;
+}
+
+std::uint32_t fn_0013ba50(GuestMemory& memory, std::uint32_t object,
+                         std::uint32_t, std::uint32_t entry_eax,
+                         std::uint32_t& exit_ecx) {
+    memory.write_u32(object + 0x38U, std::uint32_t{0});
+    exit_ecx = 0x02000000U + object;
+    return entry_eax;
+}
+
+} // namespace dao

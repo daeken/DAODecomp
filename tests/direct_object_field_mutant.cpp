@@ -98,4 +98,124 @@ int main(){
  if(result!=0xa5b6c7d9u) return 1;
  for(auto byte:bytes) if(byte) return 1;
  }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00018760",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00018770",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0001cd70",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==11 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0001f050",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0001f060",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00022c80",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==63 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00023e40",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00023ed0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==15 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00023ee0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==19 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00023ef0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==23 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00024030",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==75 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00024050",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==79 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00024060",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00024090",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==87 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0002f940",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0002fa20",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_000621c0",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00065f30",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==327 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_00065f40",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_000a52c0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==348 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_000a54e0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==36 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_000ecf70",bytes,3,result);
+ if(result!=0xa5b6c7d9u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != 0u) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_000f25a0",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==27 ? 1u : 0u)) return 1;
+ }
+ {std::array<std::uint8_t,512> bytes{};std::uint32_t result=0xa5b6c7d8u;
+ direct_object_field_mutate("fn_0013ba50",bytes,3,result);
+ if(result!=0xa5b6c7d8u) return 1;
+ for(std::size_t i=0;i<bytes.size();++i) if(bytes[i] != (i==59 ? 1u : 0u)) return 1;
+ }
 return 0;}

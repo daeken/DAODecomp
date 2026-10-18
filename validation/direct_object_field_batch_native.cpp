@@ -36,6 +36,30 @@ extern "C" int dao_direct_object_field_case(const char* raw,const std::uint8_t* 
   else if(name=="fn_00515b10") *result=dao::fn_00515b10(memory,object,value,entry_eax,*exit_ecx);
   else if(name=="fn_0054f6e0") *result=dao::fn_0054f6e0(memory,object,value,entry_eax,*exit_ecx);
   else if(name=="fn_0054fa40") *result=dao::fn_0054fa40(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00018760") *result=dao::fn_00018760(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00018770") *result=dao::fn_00018770(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0001cd70") *result=dao::fn_0001cd70(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0001f050") *result=dao::fn_0001f050(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0001f060") *result=dao::fn_0001f060(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00022c80") *result=dao::fn_00022c80(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00023e40") *result=dao::fn_00023e40(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00023ed0") *result=dao::fn_00023ed0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00023ee0") *result=dao::fn_00023ee0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00023ef0") *result=dao::fn_00023ef0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00024030") *result=dao::fn_00024030(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00024050") *result=dao::fn_00024050(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00024060") *result=dao::fn_00024060(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00024090") *result=dao::fn_00024090(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0002f940") *result=dao::fn_0002f940(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0002fa20") *result=dao::fn_0002fa20(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_000621c0") *result=dao::fn_000621c0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00065f30") *result=dao::fn_00065f30(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_00065f40") *result=dao::fn_00065f40(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_000a52c0") *result=dao::fn_000a52c0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_000a54e0") *result=dao::fn_000a54e0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_000ecf70") *result=dao::fn_000ecf70(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_000f25a0") *result=dao::fn_000f25a0(memory,object,value,entry_eax,*exit_ecx);
+  else if(name=="fn_0013ba50") *result=dao::fn_0013ba50(memory,object,value,entry_eax,*exit_ecx);
   else return 2;
  } catch(const std::exception&) {return 3;}
 #ifdef DAO_DIRECT_OBJECT_FIELD_MUTANT

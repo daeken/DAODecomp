@@ -7,8 +7,8 @@ from tools import freeze_direct_object_fields_pair as freeze
 ROOT=Path(__file__).resolve().parents[1]
 ROWS=json.loads((ROOT/'slices.json').read_text())
 class DirectObjectFieldSupportTests(unittest.TestCase):
- def test_exact22domain_and_disjoint_frozen_corpora(self):
-  self.assertEqual(len(ROWS),22);self.assertEqual(len({r['id'] for r in ROWS}),22)
+ def test_exact46domain_and_disjoint_frozen_corpora(self):
+  self.assertEqual(len(ROWS),46);self.assertEqual(len({r['id'] for r in ROWS}),46)
   for f in ROWS:
    self.assertEqual(f['name'],f"fn_{f['rva']:08x}");contract=json.loads((ROOT/f"contracts/{f['name']}.json").read_text());validate_contract(contract);self.assertEqual(contract['function_id'],f['id'])
    sets=[]
@@ -26,7 +26,7 @@ class DirectObjectFieldSupportTests(unittest.TestCase):
  def test_complete_command_domains_and_build_dependencies(self):
   names=[f['name'] for f in ROWS];cmds=freeze.commands(names)
   for stage in ('public','heldout','negative'):
-   reports=[r for c in cmds[stage] for r in c['reports']];self.assertEqual({r['function'] for r in reports},set(names));self.assertEqual(len(reports),22)
+   reports=[r for c in cmds[stage] for r in c['reports']];self.assertEqual({r['function'] for r in reports},set(names));self.assertEqual(len(reports),46)
    self.assertTrue(all(r['expect']==('mismatch' if stage=='negative' else 'pass') for r in reports))
   self.assertIn('-DPython3_EXECUTABLE={python}',cmds['build'][0]['argv'])
   files=freeze.support_files()

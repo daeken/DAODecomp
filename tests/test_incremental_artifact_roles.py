@@ -62,7 +62,7 @@ class DeclaredArtifactRoleTests(unittest.TestCase):
                         **{str(ROOT/f"validation/object_bitfield_corpus/{f['name']}-{suite}.json"): 'unit fixture'
                            for f in expected_functions for suite in ('public', 'heldout')}}
                 if group == 'direct_object_fields':
-                    identity['data'] = {str(ROOT/'slices.json'):'unit fixture',**{str(ROOT/f"corpus/{f['name']}-{suite}.json"):'unit fixture' for f in expected_functions for suite in ('public','heldout')}}
+                    identity['data'] = {str(ROOT/'validation/direct_object_field_corpus_hashes.json'):'unit fixture',str(ROOT/'slices.json'):'unit fixture',**{str(ROOT/f"corpus/{f['name']}-{suite}.json"):'unit fixture' for f in expected_functions for suite in ('public','heldout')}}
                 for negative in (False, True):
                     captures = []
                     def comparison(contract, cases, oracle, candidate, **kwargs):

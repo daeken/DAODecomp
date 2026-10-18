@@ -1,0 +1,844 @@
+[
+  {
+    "callsite_rva": 3552166,
+    "function": "fn_0001cd70",
+    "instructions": [
+      "00363398: 57 push edi",
+      "00363399: ffd2 call edx",
+      "0036339b: 8b7c240c mov edi, dword ptr [esp + 0xc]",
+      "0036339f: 50 push eax",
+      "003633a0: 8d8f40040000 lea ecx, [edi + 0x440]",
+      "003633a6: e8c599cbff call 0x41cd70",
+      "003633ab: 57 push edi",
+      "003633ac: 8bce mov ecx, esi",
+      "003633ae: e84dfdffff call 0x763100",
+      "003633b3: 5f pop edi"
+    ],
+    "owner_inventory_hypothesis": 3552144,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3552208,
+    "function": "fn_0001cd70",
+    "instructions": [
+      "003633c1: 57 push edi",
+      "003633c2: 8b7c240c mov edi, dword ptr [esp + 0xc]",
+      "003633c6: 8bf1 mov esi, ecx",
+      "003633c8: 6aff push -1",
+      "003633ca: 8d8f40040000 lea ecx, [edi + 0x440]",
+      "003633d0: e89b99cbff call 0x41cd70",
+      "003633d5: 57 push edi",
+      "003633d6: 8bce mov ecx, esi",
+      "003633d8: e863feffff call 0x763240",
+      "003633dd: 5f pop edi"
+    ],
+    "owner_inventory_hypothesis": 3552192,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 6330764,
+    "function": "fn_0001f050",
+    "instructions": [
+      "00609983: 8b02 mov eax, dword ptr [edx]",
+      "00609985: 57 push edi",
+      "00609986: 8bce mov ecx, esi",
+      "00609988: ffd0 call eax",
+      "0060998a: 8bc8 mov ecx, eax",
+      "0060998c: e8bf56a1ff call 0x41f050",
+      "00609991: 8b16 mov edx, dword ptr [esi]",
+      "00609993: 8bf8 mov edi, eax",
+      "00609995: 8b4208 mov eax, dword ptr [edx + 8]",
+      "00609998: 6a00 push 0"
+    ],
+    "owner_inventory_hypothesis": 6330624,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 6331176,
+    "function": "fn_0001f050",
+    "instructions": [
+      "00609b1e: 8b16 mov edx, dword ptr [esi]",
+      "00609b20: 8b02 mov eax, dword ptr [edx]",
+      "00609b22: 8bce mov ecx, esi",
+      "00609b24: ffd0 call eax",
+      "00609b26: 8bc8 mov ecx, eax",
+      "00609b28: e82355a1ff call 0x41f050",
+      "00609b2d: 8b16 mov edx, dword ptr [esi]",
+      "00609b2f: 8bf8 mov edi, eax",
+      "00609b31: 8b4208 mov eax, dword ptr [edx + 8]",
+      "00609b34: 6a00 push 0"
+    ],
+    "owner_inventory_hypothesis": 6331024,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 6330968,
+    "function": "fn_0001f050",
+    "instructions": [
+      "00609a4f: 8b02 mov eax, dword ptr [edx]",
+      "00609a51: 53 push ebx",
+      "00609a52: 8bce mov ecx, esi",
+      "00609a54: ffd0 call eax",
+      "00609a56: 8bc8 mov ecx, eax",
+      "00609a58: e8f355a1ff call 0x41f050",
+      "00609a5d: 8b16 mov edx, dword ptr [esi]",
+      "00609a5f: 8bd8 mov ebx, eax",
+      "00609a61: 8b4208 mov eax, dword ptr [edx + 8]",
+      "00609a64: 6a00 push 0"
+    ],
+    "owner_inventory_hypothesis": 6330816,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1392502,
+    "function": "fn_0001f060",
+    "instructions": [
+      "00153f63: 83be8400000000 cmp dword ptr [esi + 0x84], 0",
+      "00153f6a: 743a je 0x553fa6",
+      "00153f6c: 8b8e80000000 mov ecx, dword ptr [esi + 0x80]",
+      "00153f72: 85c9 test ecx, ecx",
+      "00153f74: 7430 je 0x553fa6",
+      "00153f76: e8e5b0ecff call 0x41f060",
+      "00153f7b: 3bc6 cmp eax, esi",
+      "00153f7d: 7527 jne 0x553fa6",
+      "00153f7f: 8b8e80000000 mov ecx, dword ptr [esi + 0x80]",
+      "00153f85: e846582c00 call 0x8197d0"
+    ],
+    "owner_inventory_hypothesis": 1392480,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4822393,
+    "function": "fn_0001f060",
+    "instructions": [
+      "00499570: 56 push esi",
+      "00499571: 57 push edi",
+      "00499572: 8bf9 mov edi, ecx",
+      "00499574: 8d7740 lea esi, [edi + 0x40]",
+      "00499577: 8bce mov ecx, esi",
+      "00499579: e8e25ab8ff call 0x41f060",
+      "0049957e: 85c0 test eax, eax",
+      "00499580: 742f je 0x8995b1",
+      "00499582: 8bce mov ecx, esi",
+      "00499584: e867280d00 call 0x96bdf0"
+    ],
+    "owner_inventory_hypothesis": 4822384,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4823727,
+    "function": "fn_0001f060",
+    "instructions": [
+      "00499aa3: 50 push eax",
+      "00499aa4: ff1540a0ad00 call dword ptr [0xada040]",
+      "00499aaa: 8bd8 mov ebx, eax",
+      "00499aac: 53 push ebx",
+      "00499aad: 8bcf mov ecx, edi",
+      "00499aaf: e8ac55b8ff call 0x41f060",
+      "00499ab4: 8b2d3ca0ad00 mov ebp, dword ptr [0xada03c]",
+      "00499aba: 50 push eax",
+      "00499abb: ffd5 call ebp",
+      "00499abd: 53 push ebx"
+    ],
+    "owner_inventory_hypothesis": 4823536,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 5564303,
+    "function": "fn_00022c80",
+    "instructions": [
+      "0054e786: 5b pop ebx",
+      "0054e787: 5f pop edi",
+      "0054e788: 5e pop esi",
+      "0054e789: c20400 ret 4",
+      "0054e78c: 8b0c91 mov ecx, dword ptr [ecx + edx*4]",
+      "0054e78f: e8ec44adff call 0x422c80",
+      "0054e794: 5b pop ebx",
+      "0054e795: 5f pop edi",
+      "0054e796: 5e pop esi"
+    ],
+    "owner_inventory_hypothesis": 5564240,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 5855660,
+    "function": "fn_00023e40",
+    "instructions": [
+      "0059599a: 8b7710 mov esi, dword ptr [edi + 0x10]",
+      "0059599d: 897c2418 mov dword ptr [esp + 0x18], edi",
+      "005959a1: e81abeffff call 0x9917c0",
+      "005959a6: 8bcf mov ecx, edi",
+      "005959a8: 89442468 mov dword ptr [esp + 0x68], eax",
+      "005959ac: e88fe4a8ff call 0x423e40",
+      "005959b1: f6874c01000030 test byte ptr [edi + 0x14c], 0x30",
+      "005959b8: 8944246c mov dword ptr [esp + 0x6c], eax",
+      "005959bc: 7407 je 0x9959c5",
+      "005959be: 808f4e01000002 or byte ptr [edi + 0x14e], 2"
+    ],
+    "owner_inventory_hypothesis": 5855616,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 878523,
+    "function": "fn_00023ed0",
+    "instructions": [
+      "000d67aa: 8bf0 mov esi, eax",
+      "000d67ac: 8b442428 mov eax, dword ptr [esp + 0x28]",
+      "000d67b0: 50 push eax",
+      "000d67b1: 8bce mov ecx, esi",
+      "000d67b3: c7442420ffffffff mov dword ptr [esp + 0x20], 0xffffffff",
+      "000d67bb: e810d7f4ff call 0x423ed0",
+      "000d67c0: 57 push edi",
+      "000d67c1: 56 push esi",
+      "000d67c2: 8bcb mov ecx, ebx",
+      "000d67c4: e847feffff call 0x4d6610"
+    ],
+    "owner_inventory_hypothesis": 878432,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4481092,
+    "function": "fn_00023ed0",
+    "instructions": [
+      "00446032: 8b869c000000 mov eax, dword ptr [esi + 0x9c]",
+      "00446038: 50 push eax",
+      "00446039: 8d4c2428 lea ecx, [esp + 0x28]",
+      "0044603d: e87ec1c1ff call 0x4621c0",
+      "00446042: 8bc8 mov ecx, eax",
+      "00446044: e887debdff call 0x423ed0",
+      "00446049: 8d4c2424 lea ecx, [esp + 0x24]",
+      "0044604d: e86ec1c1ff call 0x4621c0",
+      "00446052: c6400800 mov byte ptr [eax + 8], 0",
+      "00446056: e9cd010000 jmp 0x846228"
+    ],
+    "owner_inventory_hypothesis": 4480384,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4477903,
+    "function": "fn_00023ed0",
+    "instructions": [
+      "004453ba: 0f8ce0feffff jl 0x8452a0",
+      "004453c0: 8b8c2498000000 mov ecx, dword ptr [esp + 0x98]",
+      "004453c7: 57 push edi",
+      "004453c8: e8f3cdc1ff call 0x4621c0",
+      "004453cd: 8bc8 mov ecx, eax",
+      "004453cf: e8fceabdff call 0x423ed0",
+      "004453d4: 5f pop edi",
+      "004453d5: 5e pop esi",
+      "004453d6: 5d pop ebp",
+      "004453d7: 5b pop ebx"
+    ],
+    "owner_inventory_hypothesis": 4477328,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4484156,
+    "function": "fn_00023ee0",
+    "instructions": [
+      "00446c2f: 7410 je 0x846c41",
+      "00446c31: 6a00 push 0",
+      "00446c33: 8bce mov ecx, esi",
+      "00446c35: e886b5c1ff call 0x4621c0",
+      "00446c3a: 8bc8 mov ecx, eax",
+      "00446c3c: e89fd2bdff call 0x423ee0",
+      "00446c41: 8b542420 mov edx, dword ptr [esp + 0x20]",
+      "00446c45: 52 push edx",
+      "00446c46: 8d4c2448 lea ecx, [esp + 0x48]",
+      "00446c4a: e861bec7ff call 0x4c2ab0"
+    ],
+    "owner_inventory_hypothesis": 4483984,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4482663,
+    "function": "fn_00023ee0",
+    "instructions": [
+      "00446656: e8e565cfff call 0x53cc40",
+      "0044665b: 8b4c2420 mov ecx, dword ptr [esp + 0x20]",
+      "0044665f: 50 push eax",
+      "00446660: e85bbbc1ff call 0x4621c0",
+      "00446665: 8bc8 mov ecx, eax",
+      "00446667: e874d8bdff call 0x423ee0",
+      "0044666c: 8b4c2410 mov ecx, dword ptr [esp + 0x10]",
+      "00446670: 64890d00000000 mov dword ptr fs:[0], ecx",
+      "00446677: 59 pop ecx",
+      "00446678: 5e pop esi"
+    ],
+    "owner_inventory_hypothesis": 4482528,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3444293,
+    "function": "fn_00023ee0",
+    "instructions": [
+      "00348e36: 8b87b8040000 mov eax, dword ptr [edi + 0x4b8]",
+      "00348e3c: 50 push eax",
+      "00348e3d: 8bce mov ecx, esi",
+      "00348e3f: e82cedffff call 0x747b70",
+      "00348e44: 52 push edx",
+      "00348e45: e896b0cdff call 0x423ee0",
+      "00348e4a: 5f pop edi",
+      "00348e4b: 5e pop esi",
+      "00348e4c: 5d pop ebp",
+      "00348e4d: 83c40c add esp, 0xc"
+    ],
+    "owner_inventory_hypothesis": 3444128,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1392605,
+    "function": "fn_00023ef0",
+    "instructions": [
+      "00153fd0: 8bc1 mov eax, ecx",
+      "00153fd2: 8b8880000000 mov ecx, dword ptr [eax + 0x80]",
+      "00153fd8: 85c9 test ecx, ecx",
+      "00153fda: 7406 je 0x553fe2",
+      "00153fdc: 50 push eax",
+      "00153fdd: e80effecff call 0x423ef0",
+      "00153fe2: c3 ret "
+    ],
+    "owner_inventory_hypothesis": 1392592,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4816876,
+    "function": "fn_00024030",
+    "instructions": [
+      "00497fdc: 688018b300 push 0xb31880",
+      "00497fe1: 8bce mov ecx, esi",
+      "00497fe3: e898270000 call 0x89a780",
+      "00497fe8: 6a07 push 7",
+      "00497fea: 8bce mov ecx, esi",
+      "00497fec: e83fc0b8ff call 0x424030",
+      "00497ff1: 6a07 push 7",
+      "00497ff3: 8bce mov ecx, esi",
+      "00497ff5: e856c0b8ff call 0x424050",
+      "00497ffa: 68d0070000 push 0x7d0"
+    ],
+    "owner_inventory_hypothesis": 4816400,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3807728,
+    "function": "fn_00024030",
+    "instructions": [
+      "003a19e5: eb03 jmp 0x7a19ea",
+      "003a19e7: 83fd01 cmp ebp, 1",
+      "003a19ea: 7509 jne 0x7a19f5",
+      "003a19ec: 8b0b mov ecx, dword ptr [ebx]",
+      "003a19ee: 6a01 push 1",
+      "003a19f0: e83b26c8ff call 0x424030",
+      "003a19f5: 8b0b mov ecx, dword ptr [ebx]",
+      "003a19f7: 51 push ecx",
+      "003a19f8: 8bcf mov ecx, edi",
+      "003a19fa: e8012f2c00 call 0xa64900"
+    ],
+    "owner_inventory_hypothesis": 3807520,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3804800,
+    "function": "fn_00024030",
+    "instructions": [
+      "003a0e74: 85db test ebx, ebx",
+      "003a0e76: 895c2414 mov dword ptr [esp + 0x14], ebx",
+      "003a0e7a: 7513 jne 0x7a0e8f",
+      "003a0e7c: 6a01 push 1",
+      "003a0e7e: 8bce mov ecx, esi",
+      "003a0e80: e8ab31c8ff call 0x424030",
+      "003a0e85: b803000000 mov eax, 3",
+      "003a0e8a: e931040000 jmp 0x7a12c0",
+      "003a0e8f: 8b0d90d0c100 mov ecx, dword ptr [0xc1d090]",
+      "003a0e95: 8d442458 lea eax, [esp + 0x58]"
+    ],
+    "owner_inventory_hypothesis": 3804720,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4816885,
+    "function": "fn_00024050",
+    "instructions": [
+      "00497fe8: 6a07 push 7",
+      "00497fea: 8bce mov ecx, esi",
+      "00497fec: e83fc0b8ff call 0x424030",
+      "00497ff1: 6a07 push 7",
+      "00497ff3: 8bce mov ecx, esi",
+      "00497ff5: e856c0b8ff call 0x424050",
+      "00497ffa: 68d0070000 push 0x7d0",
+      "00497fff: 8bce mov ecx, esi",
+      "00498001: e8ea1f0000 call 0x899ff0",
+      "00498006: 8b44242c mov eax, dword ptr [esp + 0x2c]"
+    ],
+    "owner_inventory_hypothesis": 4816400,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1030981,
+    "function": "fn_00024060",
+    "instructions": [
+      "000fbb3a: 57 push edi",
+      "000fbb3b: 7436 je 0x4fbb73",
+      "000fbb3d: 53 push ebx",
+      "000fbb3e: e87d66f6ff call 0x4621c0",
+      "000fbb43: 8bc8 mov ecx, eax",
+      "000fbb45: e81685f2ff call 0x424060",
+      "000fbb4a: 8b7c2410 mov edi, dword ptr [esp + 0x10]",
+      "000fbb4e: 8bcf mov ecx, edi",
+      "000fbb50: 8bd8 mov ebx, eax",
+      "000fbb52: e86966f6ff call 0x4621c0"
+    ],
+    "owner_inventory_hypothesis": 1030960,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1031001,
+    "function": "fn_00024060",
+    "instructions": [
+      "000fbb4a: 8b7c2410 mov edi, dword ptr [esp + 0x10]",
+      "000fbb4e: 8bcf mov ecx, edi",
+      "000fbb50: 8bd8 mov ebx, eax",
+      "000fbb52: e86966f6ff call 0x4621c0",
+      "000fbb57: 8bc8 mov ecx, eax",
+      "000fbb59: e80285f2ff call 0x424060",
+      "000fbb5e: 3bc3 cmp eax, ebx",
+      "000fbb60: 5b pop ebx",
+      "000fbb61: 7510 jne 0x4fbb73",
+      "000fbb63: 8bcf mov ecx, edi"
+    ],
+    "owner_inventory_hypothesis": 1030960,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1032320,
+    "function": "fn_00024060",
+    "instructions": [
+      "000fc071: 894c2410 mov dword ptr [esp + 0x10], ecx",
+      "000fc075: 7435 je 0x4fc0ac",
+      "000fc077: 8bce mov ecx, esi",
+      "000fc079: e84261f6ff call 0x4621c0",
+      "000fc07e: 8bc8 mov ecx, eax",
+      "000fc080: e8db7ff2ff call 0x424060",
+      "000fc085: 8bcd mov ecx, ebp",
+      "000fc087: 89442418 mov dword ptr [esp + 0x18], eax",
+      "000fc08b: e83061f6ff call 0x4621c0",
+      "000fc090: 8bc8 mov ecx, eax"
+    ],
+    "owner_inventory_hypothesis": 1032176,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3450433,
+    "function": "fn_00024090",
+    "instructions": [
+      "0034a633: 0fb65750 movzx edx, byte ptr [edi + 0x50]",
+      "0034a637: 52 push edx",
+      "0034a638: e813d5ffff call 0x747b50",
+      "0034a63d: 8b4754 mov eax, dword ptr [edi + 0x54]",
+      "0034a640: 50 push eax",
+      "0034a641: e84a9acdff call 0x424090",
+      "0034a646: 8bcf mov ecx, edi",
+      "0034a648: e8d3deffff call 0x748520",
+      "0034a64d: 51 push ecx",
+      "0034a64e: 8bce mov ecx, esi"
+    ],
+    "owner_inventory_hypothesis": 3450384,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 2784644,
+    "function": "fn_00024090",
+    "instructions": [
+      "002a7d74: e837210700 call 0x719eb0",
+      "002a7d79: 8b8fb0070000 mov ecx, dword ptr [edi + 0x7b0]",
+      "002a7d7f: 85c9 test ecx, ecx",
+      "002a7d81: 7406 je 0x6a7d89",
+      "002a7d83: 53 push ebx",
+      "002a7d84: e807c3d7ff call 0x424090",
+      "002a7d89: 5f pop edi",
+      "002a7d8a: 5e pop esi",
+      "002a7d8b: 5b pop ebx",
+      "002a7d8c: c20400 ret 4"
+    ],
+    "owner_inventory_hypothesis": 2784592,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3933876,
+    "function": "fn_00024090",
+    "instructions": [
+      "003c069e: c68424e405000003 mov byte ptr [esp + 0x5e4], 3",
+      "003c06a6: 8974241c mov dword ptr [esp + 0x1c], esi",
+      "003c06aa: ffd2 call edx",
+      "003c06ac: 57 push edi",
+      "003c06ad: 8d8c24b8000000 lea ecx, [esp + 0xb8]",
+      "003c06b4: e8d739c6ff call 0x424090",
+      "003c06b9: bb02000000 mov ebx, 2",
+      "003c06be: 2a5c2420 sub bl, byte ptr [esp + 0x20]",
+      "003c06c2: 8d8c24b4000000 lea ecx, [esp + 0xb4]",
+      "003c06c9: 53 push ebx"
+    ],
+    "owner_inventory_hypothesis": 3933312,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1002049,
+    "function": "fn_0002f940",
+    "instructions": [
+      "000f4a31: 8bce mov ecx, esi",
+      "000f4a33: e8d8fcffff call 0x4f4710",
+      "000f4a38: 8bce mov ecx, esi",
+      "000f4a3a: e881d7f6ff call 0x4621c0",
+      "000f4a3f: 8bc8 mov ecx, eax",
+      "000f4a41: e8faaef3ff call 0x42f940",
+      "000f4a46: 89470c mov dword ptr [edi + 0xc], eax",
+      "000f4a49: 8b4c2418 mov ecx, dword ptr [esp + 0x18]",
+      "000f4a4d: 64890d00000000 mov dword ptr fs:[0], ecx",
+      "000f4a54: 59 pop ecx"
+    ],
+    "owner_inventory_hypothesis": 1001904,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3166576,
+    "function": "fn_0002fa20",
+    "instructions": [
+      "00305161: 894c2430 mov dword ptr [esp + 0x30], ecx",
+      "00305165: 50 push eax",
+      "00305166: 8bce mov ecx, esi",
+      "00305168: 89542438 mov dword ptr [esp + 0x38], edx",
+      "0030516c: 897c2440 mov dword ptr [esp + 0x40], edi",
+      "00305170: e8aba8d2ff call 0x42fa20",
+      "00305175: 50 push eax",
+      "00305176: 8d4c2430 lea ecx, [esp + 0x30]",
+      "0030517a: e8e137deff call 0x4e8960",
+      "0030517f: 0fb6c3 movzx eax, bl"
+    ],
+    "owner_inventory_hypothesis": 3166048,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3170301,
+    "function": "fn_0002fa20",
+    "instructions": [
+      "00305fea: e821c5ffff call 0x702510",
+      "00305fef: 8844241f mov byte ptr [esp + 0x1f], al",
+      "00305ff3: 6a01 push 1",
+      "00305ff5: 8d8424f8000000 lea eax, [esp + 0xf8]",
+      "00305ffc: 50 push eax",
+      "00305ffd: e81e9ad2ff call 0x42fa20",
+      "00306002: 50 push eax",
+      "00306003: 8d4c2430 lea ecx, [esp + 0x30]",
+      "00306007: e85429deff call 0x4e8960",
+      "0030600c: 0fb644241f movzx eax, byte ptr [esp + 0x1f]"
+    ],
+    "owner_inventory_hypothesis": 3169936,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3167563,
+    "function": "fn_0002fa20",
+    "instructions": [
+      "0030553a: e8814bddff call 0x4da0c0",
+      "0030553f: 6a01 push 1",
+      "00305541: 8d8c24cc000000 lea ecx, [esp + 0xcc]",
+      "00305548: 51 push ecx",
+      "00305549: 8bce mov ecx, esi",
+      "0030554b: e8d0a4d2ff call 0x42fa20",
+      "00305550: 50 push eax",
+      "00305551: 8d4c2424 lea ecx, [esp + 0x24]",
+      "00305555: e80634deff call 0x4e8960",
+      "0030555a: 0fb6c3 movzx eax, bl"
+    ],
+    "owner_inventory_hypothesis": 3167184,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 565693,
+    "function": "fn_000621c0",
+    "instructions": [
+      "0008a1ad: e8ee5d0300 call 0x4bffa0",
+      "0008a1b2: 85c0 test eax, eax",
+      "0008a1b4: 7410 je 0x48a1c6",
+      "0008a1b6: e8e55d0300 call 0x4bffa0",
+      "0008a1bb: 8bc8 mov ecx, eax",
+      "0008a1bd: e8fe7ffdff call 0x4621c0",
+      "0008a1c2: 89442414 mov dword ptr [esp + 0x14], eax",
+      "0008a1c6: 8d8c2410010000 lea ecx, [esp + 0x110]",
+      "0008a1cd: 51 push ecx",
+      "0008a1ce: 8d8b3c6c0000 lea ecx, [ebx + 0x6c3c]"
+    ],
+    "owner_inventory_hypothesis": 565296,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 509046,
+    "function": "fn_000621c0",
+    "instructions": [
+      "0007c466: e8353b0400 call 0x4bffa0",
+      "0007c46b: 85c0 test eax, eax",
+      "0007c46d: 7410 je 0x47c47f",
+      "0007c46f: e82c3b0400 call 0x4bffa0",
+      "0007c474: 8bc8 mov ecx, eax",
+      "0007c476: e8455dfeff call 0x4621c0",
+      "0007c47b: 89442414 mov dword ptr [esp + 0x14], eax",
+      "0007c47f: 8d442414 lea eax, [esp + 0x14]",
+      "0007c483: 50 push eax",
+      "0007c484: 6890650000 push 0x6590"
+    ],
+    "owner_inventory_hypothesis": 508944,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 528784,
+    "function": "fn_000621c0",
+    "instructions": [
+      "00081180: e81bee0300 call 0x4bffa0",
+      "00081185: 85c0 test eax, eax",
+      "00081187: 740c je 0x481195",
+      "00081189: e812ee0300 call 0x4bffa0",
+      "0008118e: 8bc8 mov ecx, eax",
+      "00081190: e82b10feff call 0x4621c0",
+      "00081195: 8d4c2414 lea ecx, [esp + 0x14]",
+      "00081199: 51 push ecx",
+      "0008119a: 6890650000 push 0x6590",
+      "0008119f: 8d4c2420 lea ecx, [esp + 0x20]"
+    ],
+    "owner_inventory_hypothesis": 528432,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1020543,
+    "function": "fn_00065f30",
+    "instructions": [
+      "000f9274: 8bce mov ecx, esi",
+      "000f9276: ffd2 call edx",
+      "000f9278: 8b7c241c mov edi, dword ptr [esp + 0x1c]",
+      "000f927c: 50 push eax",
+      "000f927d: 8bcf mov ecx, edi",
+      "000f927f: e8acccf6ff call 0x465f30",
+      "000f9284: 83fd07 cmp ebp, 7",
+      "000f9287: 0f87cf000000 ja 0x4f935c",
+      "000f928d: ff24ad6c934f00 jmp dword ptr [ebp*4 + 0x4f936c]",
+      "000f9294: 8b442420 mov eax, dword ptr [esp + 0x20]"
+    ],
+    "owner_inventory_hypothesis": 1020496,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1018268,
+    "function": "fn_00065f40",
+    "instructions": [
+      "000f8990: 7406 je 0x4f8998",
+      "000f8992: 32c0 xor al, al",
+      "000f8994: 83c410 add esp, 0x10",
+      "000f8997: c3 ret ",
+      "000f8998: 8b4c2418 mov ecx, dword ptr [esp + 0x18]",
+      "000f899c: e89fd5f6ff call 0x465f40",
+      "000f89a1: 8b08 mov ecx, dword ptr [eax]",
+      "000f89a3: 890c24 mov dword ptr [esp], ecx",
+      "000f89a6: 8b5004 mov edx, dword ptr [eax + 4]",
+      "000f89a9: 89542404 mov dword ptr [esp + 4], edx"
+    ],
+    "owner_inventory_hypothesis": 1018224,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1017886,
+    "function": "fn_00065f40",
+    "instructions": [
+      "000f880d: e84e93f5ff call 0x451b60",
+      "000f8812: 83c40c add esp, 0xc",
+      "000f8815: 50 push eax",
+      "000f8816: e9e8fdffff jmp 0x4f8603",
+      "000f881b: 8b4d0c mov ecx, dword ptr [ebp + 0xc]",
+      "000f881e: e81dd7f6ff call 0x465f40",
+      "000f8823: 50 push eax",
+      "000f8824: 8d4c2414 lea ecx, [esp + 0x14]",
+      "000f8828: e80393f5ff call 0x451b30",
+      "000f882d: e912feffff jmp 0x4f8644"
+    ],
+    "owner_inventory_hypothesis": 1017296,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1019489,
+    "function": "fn_00065f40",
+    "instructions": [
+      "000f8e4e: 89542418 mov dword ptr [esp + 0x18], edx",
+      "000f8e52: 8b400c mov eax, dword ptr [eax + 0xc]",
+      "000f8e55: 8944241c mov dword ptr [esp + 0x1c], eax",
+      "000f8e59: e99c000000 jmp 0x4f8efa",
+      "000f8e5e: 8b4d0c mov ecx, dword ptr [ebp + 0xc]",
+      "000f8e61: e8dad0f6ff call 0x465f40",
+      "000f8e66: ebca jmp 0x4f8e32",
+      "000f8e68: 8b0dc4e8c100 mov ecx, dword ptr [0xc1e8c4]",
+      "000f8e6e: db05c4e8c100 fild dword ptr [0xc1e8c4]",
+      "000f8e74: 85c9 test ecx, ecx"
+    ],
+    "owner_inventory_hypothesis": 1019376,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 573964,
+    "function": "fn_000a52c0",
+    "instructions": [
+      "0008c1eb: 8b8e186d0000 mov ecx, dword ptr [esi + 0x6d18]",
+      "0008c1f1: e8aaae0000 call 0x4970a0",
+      "0008c1f6: 8b86186d0000 mov eax, dword ptr [esi + 0x6d18]",
+      "0008c1fc: 8d8e2c6d0000 lea ecx, [esi + 0x6d2c]",
+      "0008c202: c7802c29000032000000 mov dword ptr [eax + 0x292c], 0x32",
+      "0008c20c: e8af900100 call 0x4a52c0",
+      "0008c211: 8bce mov ecx, esi",
+      "0008c213: e8481affff call 0x47dc60",
+      "0008c218: 80be906b000000 cmp byte ptr [esi + 0x6b90], 0",
+      "0008c21f: c644241701 mov byte ptr [esp + 0x17], 1"
+    ],
+    "owner_inventory_hypothesis": 573504,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 662543,
+    "function": "fn_000a52c0",
+    "instructions": [
+      "000a1bfe: 8bc8 mov ecx, eax",
+      "000a1c00: e8fb0cf6ff call 0x402900",
+      "000a1c05: 8d882c6d0000 lea ecx, [eax + 0x6d2c]",
+      "000a1c0b: 85c9 test ecx, ecx",
+      "000a1c0d: 7405 je 0x4a1c14",
+      "000a1c0f: e8ac360000 call 0x4a52c0",
+      "000a1c14: a1ec27c300 mov eax, dword ptr [0xc327ec]",
+      "000a1c19: 85c0 test eax, eax",
+      "000a1c1b: 7413 je 0x4a1c30",
+      "000a1c1d: 8b8858010000 mov ecx, dword ptr [eax + 0x158]"
+    ],
+    "owner_inventory_hypothesis": 661712,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 686843,
+    "function": "fn_000a54e0",
+    "instructions": [
+      "000a7af0: 8b442404 mov eax, dword ptr [esp + 4]",
+      "000a7af4: 85c0 test eax, eax",
+      "000a7af6: 56 push esi",
+      "000a7af7: 8bf1 mov esi, ecx",
+      "000a7af9: 741b je 0x4a7b16",
+      "000a7afb: e8e0d9ffff call 0x4a54e0",
+      "000a7b00: 8b00 mov eax, dword ptr [eax]",
+      "000a7b02: 56 push esi",
+      "000a7b03: 50 push eax",
+      "000a7b04: e8a7f3ffff call 0x4a6eb0"
+    ],
+    "owner_inventory_hypothesis": 686832,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1025344,
+    "function": "fn_000ecf70",
+    "instructions": [
+      "000fa52b: 807e0c01 cmp byte ptr [esi + 0xc], 1",
+      "000fa52f: 0f859f000000 jne 0x4fa5d4",
+      "000fa535: 8b4c2438 mov ecx, dword ptr [esp + 0x38]",
+      "000fa539: e8827cf6ff call 0x4621c0",
+      "000fa53e: 8bc8 mov ecx, eax",
+      "000fa540: e82b2affff call 0x4ecf70",
+      "000fa545: 8d4c2414 lea ecx, [esp + 0x14]",
+      "000fa549: 8d7e14 lea edi, [esi + 0x14]",
+      "000fa54c: 51 push ecx",
+      "000fa54d: 89442418 mov dword ptr [esp + 0x18], eax"
+    ],
+    "owner_inventory_hypothesis": 1025168,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1026325,
+    "function": "fn_000ecf70",
+    "instructions": [
+      "000fa907: 8d7754 lea esi, [edi + 0x54]",
+      "000fa90a: 7422 je 0x4fa92e",
+      "000fa90c: 8bce mov ecx, esi",
+      "000fa90e: e8ad78f6ff call 0x4621c0",
+      "000fa913: 8bc8 mov ecx, eax",
+      "000fa915: e85626ffff call 0x4ecf70",
+      "000fa91a: 8bcb mov ecx, ebx",
+      "000fa91c: 8be8 mov ebp, eax",
+      "000fa91e: e89d78f6ff call 0x4621c0",
+      "000fa923: 8bc8 mov ecx, eax"
+    ],
+    "owner_inventory_hypothesis": 1026240,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1026341,
+    "function": "fn_000ecf70",
+    "instructions": [
+      "000fa915: e85626ffff call 0x4ecf70",
+      "000fa91a: 8bcb mov ecx, ebx",
+      "000fa91c: 8be8 mov ebp, eax",
+      "000fa91e: e89d78f6ff call 0x4621c0",
+      "000fa923: 8bc8 mov ecx, eax",
+      "000fa925: e84626ffff call 0x4ecf70",
+      "000fa92a: 3be8 cmp ebp, eax",
+      "000fa92c: 7417 je 0x4fa945",
+      "000fa92e: 53 push ebx",
+      "000fa92f: 8bce mov ecx, esi"
+    ],
+    "owner_inventory_hypothesis": 1026240,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 1003998,
+    "function": "fn_000f25a0",
+    "instructions": [
+      "000f51cf: 8bce mov ecx, esi",
+      "000f51d1: c644242808 mov byte ptr [esp + 0x28], 8",
+      "000f51d6: e8d5f7ffff call 0x4f49b0",
+      "000f51db: 56 push esi",
+      "000f51dc: 8bcf mov ecx, edi",
+      "000f51de: e8bdd3ffff call 0x4f25a0",
+      "000f51e3: 011d1403c300 add dword ptr [0xc30314], ebx",
+      "000f51e9: 33c0 xor eax, eax",
+      "000f51eb: 894614 mov dword ptr [esi + 0x14], eax",
+      "000f51ee: 894618 mov dword ptr [esi + 0x18], eax"
+    ],
+    "owner_inventory_hypothesis": 1003648,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 3394531,
+    "function": "fn_000f25a0",
+    "instructions": [
+      "0033cbd8: 0f98c1 sets cl",
+      "0033cbdb: 83e901 sub ecx, 1",
+      "0033cbde: 23c1 and eax, ecx",
+      "0033cbe0: 50 push eax",
+      "0033cbe1: 8bce mov ecx, esi",
+      "0033cbe3: e8b859dbff call 0x4f25a0",
+      "0033cbe8: 8b542434 mov edx, dword ptr [esp + 0x34]",
+      "0033cbec: 3bea cmp ebp, edx",
+      "0033cbee: 0f83ad000000 jae 0x73cca1",
+      "0033cbf4: 837e1800 cmp dword ptr [esi + 0x18], 0"
+    ],
+    "owner_inventory_hypothesis": 3394400,
+    "target_verified": true
+  },
+  {
+    "callsite_rva": 4420058,
+    "function": "fn_0013ba50",
+    "instructions": [
+      "004371cd: 8bce mov ecx, esi",
+      "004371cf: ffd2 call edx",
+      "004371d1: e85a4bd0ff call 0x53bd30",
+      "004371d6: 8bf8 mov edi, eax",
+      "004371d8: 8bcf mov ecx, edi",
+      "004371da: e87148d0ff call 0x53ba50",
+      "004371df: 8b06 mov eax, dword ptr [esi]",
+      "004371e1: 8b5040 mov edx, dword ptr [eax + 0x40]",
+      "004371e4: 53 push ebx",
+      "004371e5: 8bce mov ecx, esi"
+    ],
+    "owner_inventory_hypothesis": 4420000,
+    "target_verified": true
+  }
+]

@@ -26,4 +26,28 @@ inline void direct_object_field_mutate(std::string_view name,std::span<std::uint
  else if(name=="fn_00515b10") result^=1u;
  else if(name=="fn_0054f6e0") result^=1u;
  else if(name=="fn_0054fa40") result^=1u;
+ else if(name=="fn_00018760") result^=1u;
+ else if(name=="fn_00018770") result^=1u;
+ else if(name=="fn_0001cd70") after[object+8]^=1u;
+ else if(name=="fn_0001f050") result^=1u;
+ else if(name=="fn_0001f060") result^=1u;
+ else if(name=="fn_00022c80") after[object+60]^=1u;
+ else if(name=="fn_00023e40") result^=1u;
+ else if(name=="fn_00023ed0") after[object+12]^=1u;
+ else if(name=="fn_00023ee0") after[object+16]^=1u;
+ else if(name=="fn_00023ef0") after[object+20]^=1u;
+ else if(name=="fn_00024030") after[object+72]^=1u;
+ else if(name=="fn_00024050") after[object+76]^=1u;
+ else if(name=="fn_00024060") result^=1u;
+ else if(name=="fn_00024090") after[object+84]^=1u;
+ else if(name=="fn_0002f940") result^=1u;
+ else if(name=="fn_0002fa20") result^=1u;
+ else if(name=="fn_000621c0") result^=1u;
+ else if(name=="fn_00065f30") after[object+324]^=1u;
+ else if(name=="fn_00065f40") result^=1u;
+ else if(name=="fn_000a52c0") after[object+345]^=1u;
+ else if(name=="fn_000a54e0") after[object+33]^=1u;
+ else if(name=="fn_000ecf70") result^=1u;
+ else if(name=="fn_000f25a0") after[object+24]^=1u;
+ else if(name=="fn_0013ba50") after[object+56]^=1u;
 }
