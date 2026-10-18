@@ -19,14 +19,14 @@ class Next24PacketTests(unittest.TestCase):
   self.assertEqual(set(re.findall(r'uint32_t (fn_[0-9a-f]{8})\(',header)),expected)
   self.assertEqual(set(re.findall(r'name=="(fn_[0-9a-f]{8})"',native)),expected)
   self.assertEqual(set(re.findall(r'name=="(fn_[0-9a-f]{8})"',mutant)),expected)
- def test_full46_preflight_domain_and93_publication(self):
+ def test_full46_preflight_domain_and94_publication(self):
   rows=json.loads((ROOT/'slices.json').read_text());registry=json.loads((ROOT/'analysis/functions.json').read_text())
   fields.registry_domain(rows,registry['functions']);self.assertEqual(len(fields.corpus_hashes()),92)
   for stage in ('public','heldout','negative'):
    reports=[r for c in freeze.commands(fields.NAMES)[stage] for r in c['reports']]
    self.assertEqual(len(reports),46);self.assertEqual({r['function'] for r in reports},set(fields.NAMES))
   pos,neg=checkpoint.publication_paths(ROOT/'reports/packet-structure-only')
-  self.assertEqual((len(pos),len(neg)),(93,72))
+  self.assertEqual((len(pos),len(neg)),(94,73))
   for index in (0,21,22,45):
    bad=copy.deepcopy(registry['functions']);bad=[f for f in bad if f['id']!=rows[index]['id']]
    with self.assertRaises(ValueError):fields.registry_domain(rows,bad)

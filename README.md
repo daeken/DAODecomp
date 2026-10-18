@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 93 |
-| C++ implementations | 93 |
-| Implementations with current emulator corpus evidence | 93 |
-| Input cases across those functions (excluding repeat runs) | 57,230 |
+| Functions in the recovery registry | 94 |
+| C++ implementations | 94 |
+| Implementations with current emulator corpus evidence | 94 |
+| Input cases across those functions (excluding repeat runs) | 57,510 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;

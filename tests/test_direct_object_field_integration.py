@@ -8,10 +8,10 @@ from validation import direct_object_field_cases as fields,validate_direct_objec
 ROOT=Path(__file__).resolve().parents[1]
 REGISTRY=json.loads((ROOT/'analysis/functions.json').read_text());ROWS=cache.selected_entries(REGISTRY,'direct_object_fields')
 class DirectObjectFieldIntegrationTests(unittest.TestCase):
- def test_exact93positive72negative_eight_group_inventory_and_incomplete_promotion(self):
-  self.assertEqual(len(ROWS),46);self.assertEqual(len(cache.required_groups(REGISTRY)),8)
-  p,n=checkpoint.publication_paths(ROOT/'reports/inventory-fixture');self.assertEqual((len(p),len(n)),(93,72))
-  self.assertEqual(len(cache.publication_inventory()),165);self.assertEqual(cache.publication_inventory(),update_progress.checkpoint_inventory(REGISTRY))
+ def test_exact94positive73negative_nine_group_inventory_and_incomplete_promotion(self):
+  self.assertEqual(len(ROWS),46);self.assertEqual(len(cache.required_groups(REGISTRY)),9)
+  p,n=checkpoint.publication_paths(ROOT/'reports/inventory-fixture');self.assertEqual((len(p),len(n)),(94,73))
+  self.assertEqual(len(cache.publication_inventory()),167);self.assertEqual(cache.publication_inventory(),update_progress.checkpoint_inventory(REGISTRY))
   for mutation in ('contracted','unknown-backend','wrong-group','duplicate'):
    changed=copy.deepcopy(REGISTRY);target=next(f for f in changed['functions'] if f['id']==ROWS[0]['id'])
    if mutation=='contracted':target['status']='contracted'

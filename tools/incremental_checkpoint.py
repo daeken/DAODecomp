@@ -27,6 +27,7 @@ from tools.record_validation import record_report
 VERSION = 2
 POLICY = 'clean-build-local-groups-003'
 GROUPS = {
+    'startup_strings': ('startup-strings', 'dao_startup_string'),
     'scalar': ('scalar', 'dao_leaf'),
     'memory': ('memory', 'dao_memory'),
     'object_counters': ('object-counters', 'dao_object_counter'),
@@ -36,7 +37,7 @@ GROUPS = {
     'object_bitfields': ('object-bitfields', 'dao_object_bitfield'),
     'direct_object_fields': ('direct-object-fields', 'dao_direct_object_field'),
 }
-LEGACY_GROUPS = tuple(g for g in GROUPS if g not in {'object_bitfields','direct_object_fields'})
+LEGACY_GROUPS = tuple(g for g in GROUPS if g not in {'object_bitfields','direct_object_fields','startup_strings'})
 BATCH_IMAGES = {'indexed_fields':'dao_indexed_field_batch', 'object_bitfields':'dao_object_bitfield_batch', 'direct_object_fields':'dao_direct_object_field_batch'}
 # Exact existing report dependency from validate_linked_structures.py; no tests/* rule.
 DECLARED_VALIDATION_DEPENDENCIES = {
@@ -307,7 +308,7 @@ def selected_entries(registry, group):
                 'object-counters-001': 'object_counters',
                 'linked-structures-001': 'linked_structures',
                 'object-bitfields-001':'object_bitfields',
-                'direct-object-fields-001':'direct_object_fields'}.get(backend)
+                'direct-object-fields-001':'direct_object_fields','startup-string-001':'startup_strings'}.get(backend)
     for function in functions:
         if function.get('status') in ACTIVE and route(function) is None:
             raise ValueError('unsupported registry routing')
@@ -321,6 +322,11 @@ def selected_entries(registry, group):
         from validation.direct_object_field_cases import NAMES
         if {f['name'] for f in direct_rows} != set(NAMES) or any(f.get('recovery_group') != 'direct-object-fields-001' for f in direct_rows):
             raise ValueError('incomplete or unknown direct-object-field registry route')
+    startup_rows = [f for f in functions if f.get('status') in ACTIVE and route(f) == 'startup_strings']
+    if startup_rows:
+        pinned = json.loads((ROOT/'evidence/startup-string-identity.json').read_text())
+        if len(startup_rows) != 1 or any(startup_rows[0].get(k) != v for k, v in pinned.items() if k != 'status'):
+            raise ValueError('unknown or changed startup-string registry route')
     return sorted((f for f in functions if f.get('status') in ACTIVE and route(f) == group),
                   key=lambda f: f['id'])
 
@@ -328,7 +334,7 @@ def selected_entries(registry, group):
 def required_groups(registry):
     # Legacy six groups retain their controls; the additional group is all-or-none.
     selected_entries(registry, 'scalar')
-    return (*LEGACY_GROUPS, *(g for g in ('object_bitfields','direct_object_fields') if selected_entries(registry,g)))
+    return (*LEGACY_GROUPS, *(g for g in ('object_bitfields','direct_object_fields','startup_strings') if selected_entries(registry,g)))
 
 
 def group_execution(steps, group):
@@ -388,7 +394,7 @@ def actual_corpora(group, functions):
         module = importlib.import_module('validation.'+{
             'memory': 'memory_cases', 'object_counters': 'object_counter_cases',
             'indexed_stores': 'indexed_store_cases', 'indexed_fields': 'indexed_field_cases',
-            'linked_structures': 'linked_structure_cases', 'object_bitfields':'object_bitfield_cases', 'direct_object_fields':'direct_object_field_cases'}[group])
+            'linked_structures': 'linked_structure_cases', 'object_bitfields':'object_bitfield_cases', 'direct_object_fields':'direct_object_field_cases','startup_strings':'startup_string_cases'}[group])
         def positive(f):
             return [c for suite in ('public', 'heldout') for c in module.cases(f['name'], suite)]
         def negative(f):
@@ -427,6 +433,8 @@ def group_identity(root, build, group, registry, source, runtime, execution=None
         selected_data = [root/'slices.json',root/'validation/direct_object_field_corpus_hashes.json',
                          *[root/f"corpus/{f['name']}-{suite}.json"
                            for f in functions for suite in ('public','heldout')]]
+    if group == 'startup_strings':
+        selected_data = [root/'evidence/startup-string-identity.json', *[root/f"validation/startup_string_corpus/{f['name']}-{suite}.json" for f in functions for suite in ('public','heldout')]]
     return {'schema_version': VERSION, 'policy': POLICY, 'group': group,
             'functions': functions, 'source': execution_sources, 'data':files_manifest(selected_data),
             'reference_descriptor': file_hash(root/'analysis/reference-build.json'),
@@ -600,7 +608,7 @@ def run(build, output, cache, jobs, groups=None, identity_only=False, batch_size
     build_before = build_provenance(build)
     # Settle all supported Python case-provider imports before runtime inventory.
     for module in ('validate_leaves', 'scalar_cases', 'memory_cases', 'object_counter_cases',
-                   'indexed_store_cases', 'indexed_field_cases', 'linked_structure_cases', 'object_bitfield_cases', 'direct_object_field_cases'):
+                   'indexed_store_cases', 'indexed_field_cases', 'linked_structure_cases', 'object_bitfield_cases', 'direct_object_field_cases','startup_string_cases'):
         importlib.import_module('validation.'+module)
     corpora_before = {g: actual_corpora(g, selected_entries(registry, g)) for g in groups}
     try:

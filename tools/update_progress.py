@@ -31,11 +31,11 @@ def checkpoint_inventory(registry):
     active = [f for f in registry['functions'] if f.get('status') in {'implemented','corpus_pass','reviewed','integrated'}]
     negatives = {'bit_mask_or_all','fn_00061fa0','fn_00061f40','fn_00347d10',
                  'fn_00347cf0','fn_00347d70','fn_00347db0','fn_00347eb0'}
-    allowed = {'scalar','memory-001','object-counters-001','indexed-stores-001','linked-structures-001','object-bitfields-001','direct-object-fields-001'}
+    allowed = {'scalar','memory-001','object-counters-001','indexed-stores-001','linked-structures-001','object-bitfields-001','direct-object-fields-001','startup-string-001'}
     if any(f.get('backend','scalar') not in allowed for f in active):
         raise ValueError('unknown current checkpoint route')
     expected = {(f['id'],False) for f in active}
-    expected |= {(f['id'],True) for f in active if f['name'] in negatives or f.get('backend') in {'linked-structures-001','object-bitfields-001','direct-object-fields-001'}}
+    expected |= {(f['id'],True) for f in active if f['name'] in negatives or f.get('backend') in {'linked-structures-001','object-bitfields-001','direct-object-fields-001','startup-string-001'}}
     return expected
 
 

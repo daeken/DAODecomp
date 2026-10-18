@@ -13,6 +13,7 @@ from tools import incremental_checkpoint as cache
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'startup_strings': 'validate_startup_strings',
     'scalar': 'validate_leaves', 'memory': 'validate_memory',
     'object_counters': 'validate_object_counters', 'indexed_stores': 'validate_indexed_stores',
     'indexed_fields': 'validate_indexed_fields', 'linked_structures': 'validate_linked_structures',
@@ -25,6 +26,8 @@ class DeclaredArtifactRoleTests(unittest.TestCase):
     @unittest.skipUnless(os.name == 'posix', 'declared batch validators require POSIX')
     def test_all_eight_groups_live_positive_and_negative_declarations_have_roles(self):
         registry = json.loads((ROOT/'analysis/functions.json').read_text())
+        for row in registry['functions']:
+            if row.get('backend') == 'startup-string-001': row['status'] = 'implemented'
         source = cache.source_manifest(ROOT)
         by_id = {f['id']: f for f in registry['functions']}
         seen = {}
@@ -63,6 +66,10 @@ class DeclaredArtifactRoleTests(unittest.TestCase):
                            for f in expected_functions for suite in ('public', 'heldout')}}
                 if group == 'direct_object_fields':
                     identity['data'] = {str(ROOT/'validation/direct_object_field_corpus_hashes.json'):'unit fixture',str(ROOT/'slices.json'):'unit fixture',**{str(ROOT/f"corpus/{f['name']}-{suite}.json"):'unit fixture' for f in expected_functions for suite in ('public','heldout')}}
+                if group == 'startup_strings':
+                    identity['data'] = {str(ROOT/'evidence/startup-string-identity.json'): 'unit fixture',
+                        **{str(ROOT/f"validation/startup_string_corpus/{f['name']}-{suite}.json"): 'unit fixture'
+                           for f in expected_functions for suite in ('public', 'heldout')}}
                 for negative in (False, True):
                     captures = []
                     def comparison(contract, cases, oracle, candidate, **kwargs):
@@ -99,7 +106,7 @@ class DeclaredArtifactRoleTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'unknown historical artifact role'):
                     cache.historical_role(ROOT, ROOT/'tests/test_memory.py', expected_functions[0],
                                           build/'unknown.json', identity)
-        self.assertEqual({g for g, negative in seen}, set(cache.GROUPS))
+        self.assertEqual({g for g, negative in seen}, set(cache.required_groups(registry)))
         self.assertEqual(sum(n for (g, negative), n in seen.items() if not negative),
                          len([f for f in registry['functions'] if f['status'] in cache.ACTIVE]))
 

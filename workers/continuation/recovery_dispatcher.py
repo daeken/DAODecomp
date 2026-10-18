@@ -681,6 +681,9 @@ def review_promotion(config, claim, accepted, directory, store):
     require('promotion' in task, 'accepted packet retained; exact integration proposal not prepared')
     plan = task['promotion']
     root = Path(config['root'])
+    evidence = module(Path(__file__).with_name('integration_evidence.py'), 'integration_evidence')
+    material = evidence.assemble(config, plan, accepted)
+    plan = material['effective_plan']
     pending = await_deferred_checkpoint(config, task, directory, store, claim['job'])
     package = load(bound(Path(accepted['pair']) / 'accepted/package.json', accepted['package_sha256']))
     artifacts = []
@@ -726,7 +729,7 @@ def review_promotion(config, claim, accepted, directory, store):
               'with the exact separately approved support. Missing evidence must refuse. This is '
               'emulator corpus agreement, not whole-game/native Windows proof. Deterministic stages '
               'and separate source review have already completed; full shared checkpoint still follows '
-              'adoption.\nARTIFACTS:\n' + json.dumps(artifacts) + '\nPLAN:\n' + json.dumps(plan) +
+              'adoption.\nCOMPLETE BOUND INTEGRATION EVIDENCE:\n' + json.dumps(material) + '\nARTIFACTS:\n' + json.dumps(artifacts) + '\nPLAN:\n' + json.dumps(plan) +
               '\nPAIR PACKAGE:\n' + json.dumps(package) + '\nSTATUS:\n' + json.dumps(compact_status) +
               '\nEXACT EXISTING CHECKPOINT BINDING (raw bytes retained in local review-input snapshot):\n' + json.dumps(pending))
     review, metrics = store.request(claim['requests'][2], lambda: pair.request_model(

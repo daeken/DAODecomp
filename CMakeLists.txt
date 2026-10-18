@@ -122,3 +122,19 @@ add_test(NAME direct_object_field_mutant COMMAND test_direct_object_field_mutant
 if(EXISTS "${CMAKE_SOURCE_DIR}/src/direct_object_fields.cpp")
  target_sources(dao_recovered PRIVATE src/direct_object_fields.cpp)
 endif()
+
+# Independent startup string packet; candidate is supplied only after contract approval.
+add_library(startup_string_wrapper_compile OBJECT validation/startup_string_native_runner.cpp)
+target_link_libraries(startup_string_wrapper_compile PRIVATE dao_options)
+if(EXISTS "${CMAKE_SOURCE_DIR}/src/startup_string.cpp")
+ target_sources(dao_recovered PRIVATE src/startup_string.cpp)
+ add_executable(dao_startup_string_runner validation/startup_string_native_runner.cpp)
+ target_link_libraries(dao_startup_string_runner PRIVATE dao_recovered)
+ add_executable(dao_startup_string_mutant validation/startup_string_native_runner.cpp)
+ target_compile_definitions(dao_startup_string_mutant PRIVATE DAO_STARTUP_STRING_MUTANT=1)
+ target_link_libraries(dao_startup_string_mutant PRIVATE dao_recovered)
+endif()
+
+add_executable(startup_string_negative_probe validation/startup_string_native_runner.cpp)
+target_compile_definitions(startup_string_negative_probe PRIVATE DAO_STARTUP_STRING_CONTROL_ONLY=1)
+target_link_libraries(startup_string_negative_probe PRIVATE dao_options)

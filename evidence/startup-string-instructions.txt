@@ -1,0 +1,21 @@
+004e2d29 8b442404 mov eax, dword ptr [esp + 4]
+004e2d2d 8bd0 mov edx, eax
+004e2d2f 668b08 mov cx, word ptr [eax]
+004e2d32 40 inc eax
+004e2d33 40 inc eax
+004e2d34 6685c9 test cx, cx
+004e2d37 75f6 jne 0x4e2d2f
+004e2d39 668b4c2408 mov cx, word ptr [esp + 8]
+004e2d3e 48 dec eax
+004e2d3f 48 dec eax
+004e2d40 3bc2 cmp eax, edx
+004e2d42 7405 je 0x4e2d49
+004e2d44 663908 cmp word ptr [eax], cx
+004e2d47 75f5 jne 0x4e2d3e
+004e2d49 668b10 mov dx, word ptr [eax]
+004e2d4c 662bd1 sub dx, cx
+004e2d4f 66f7da neg dx
+004e2d52 1bd2 sbb edx, edx
+004e2d54 f7d2 not edx
+004e2d56 23c2 and eax, edx
+004e2d58 c3 ret 

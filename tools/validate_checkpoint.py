@@ -68,6 +68,11 @@ def build_commands(build_dir, output_dir, jobs, windows=None, batch_size=128):
         if active_direct != set(NAMES):raise ValueError('direct-object-fields-001 must be promoted as the complete reviewed batch')
         for name, extra in [('direct_object_fields_all',['--suite','all','--jobs',str(jobs)]),('direct_object_fields_negative',['--expect-mismatch'])]:
             steps.append((name,[py,str(ROOT/'validation/validate_direct_object_fields.py'),*extra,'--execution','batch','--batch-size',str(batch_size),'--report-dir',str(output_dir/'reports/direct-object-fields'),*common],ROOT))
+    startup = [f for f in registry['functions'] if f.get('backend') == 'startup-string-001' and f.get('status') in {'implemented','corpus_pass','reviewed','integrated'}]
+    if startup:
+        if [f['name'] for f in startup] != ['fn_004e2d29']:raise ValueError('unknown startup string domain')
+        for name,extra in [('startup_strings_all',['--suite','all']),('startup_strings_negative',['--expect-mismatch'])]:
+            steps.append((name,[py,str(ROOT/'validation/validate_startup_strings.py'),*extra,'--report-dir',str(output_dir/'reports/startup-strings'),*common],ROOT))
     return steps
 
 
@@ -81,6 +86,7 @@ def publication_paths(output_dir):
     active_object_bitfields = set()
     active_direct_object_fields = set()
     active_linked_structures = 0
+    active_startup_strings = 0
     for function in registry["functions"]:
         status = function.get("status")
         if status not in {"implemented", "corpus_pass", "reviewed", "integrated"}:
@@ -125,13 +131,18 @@ def publication_paths(output_dir):
             active_direct_object_fields.add(function['name'])
             positives.append(output_dir/'reports/direct-object-fields'/(function['name']+'-all.json'))
             negatives.append(output_dir/'reports/direct-object-fields'/(function['name']+'-mutant.json'))
+        elif backend == 'startup-string-001':
+            if function['name'] != 'fn_004e2d29':raise ValueError('unknown startup string')
+            active_startup_strings += 1
+            positives.append(output_dir/'reports/startup-strings'/(function['name']+'-all.json'))
+            negatives.append(output_dir/'reports/startup-strings'/(function['name']+'-mutant.json'))
         elif backend == "linked-structures-001":
             active_linked_structures += 1
             positives.append(output_dir / "reports/linked-structures" / (function["name"] + "-all.json"))
             negatives.append(output_dir / "reports/linked-structures" / (function["name"] + "-mutant.json"))
         else:
             raise ValueError(f"unsupported validation backend for implemented function {function['name']}: {backend}")
-    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + active_linked_structures
+    expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + active_linked_structures + active_startup_strings
     if active_indexed_fields:
         from validation.indexed_field_cases import FIELD_SPECS, NEGATIVE_NAMES
         if active_indexed_fields != set(FIELD_SPECS):

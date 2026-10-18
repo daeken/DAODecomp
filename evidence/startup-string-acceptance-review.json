@@ -1,0 +1,96 @@
+{
+  "adoption_accepted": false,
+  "author_evidence_inspected": {
+    "full_tooling": "225 tests,1optional skip in author-tooling-after-publication-fix.log; run before final corpus boundary/count-only changes",
+    "prior_build_ctest_demo": "post-review receipt exact common support; build7CTest and59pass/demo negative53pass6mismatch. Not independently rerun unchanged fullsuite."
+  },
+  "blocking_issues": [],
+  "decision": "approve",
+  "host": {
+    "execution": "direct host functions.exec; no nested CLI",
+    "machine": "arm64",
+    "platform": "macOS27.0.1",
+    "python": "3.14.7",
+    "unicorn": "2.1.4"
+  },
+  "implementation_accepted": false,
+  "independent_tests": {
+    "artifact_role_tests": {
+      "passed": 2
+    },
+    "original_characterization": {
+      "cases": 280,
+      "guardrails_failed_closed": 5,
+      "repeats": 2,
+      "report": "original-characterization-280.json"
+    },
+    "startup_tests": {
+      "passed": 9
+    },
+    "synthetic_adoption_tests": {
+      "passed": 4
+    },
+    "wrong_zero_support_probe": {
+      "artifacts_unchanged": true,
+      "cases": 184,
+      "corpus_pass": 98,
+      "mismatch": 86,
+      "repeats": 2,
+      "report": "negative-probe-184.json",
+      "runner_errors": 0
+    }
+  },
+  "limitations": [
+    "Finite isolated Unicorn corpus evidence only; no universal function/game proof, Windows/native original execution, caller-body execution or caller/native ABI acceptance.",
+    "No implementation/source approval; no generated manifest/promotion/config/adoption approval until phase2 exact review.",
+    "Candidate read order is excluded only for stable ordinary RAM without MMIO, volatile state or concurrent mutation.",
+    "Filesystem code retirement precedes database commit; an interruption/failure in that interval fails closed and may require manual recovery. No availability guarantee or automatic retry authorization.",
+    "Earlier independent nested CLI SIGILL failure and needs-evidence decision remain historical evidence; direct host success does not establish its cause or a transport fix."
+  ],
+  "native_windows_validated": false,
+  "proof": false,
+  "request_id": "a192dfff819a4cde964202dd64774dd0",
+  "review_findings": [
+    "Instruction listing and pinned bytes identify forward scan through first16bit zero, then reverse search including terminator, low16search and full raw guest-address return or zero. Stable ordinary RAM permits candidate read ordering exclusion; fullarena/no-write observation and original ordered trace are enforced.",
+    "Original backend independently checked for stack cleanup, nonvolatile registers, DF, declared accesses, escape and finite instruction budget; missing semantics cannot pass. No calls or successful dropped paths are introduced.",
+    "Public184 and heldout96 are disjoint; boundary additions include full128unit even and127unit odd scans, last repeated match, missing match, zero terminator and high16ignored. These were frozen before any candidate exists.",
+    "Checkpoint registry route pins complete identity fields; selecteddata contains exact corpora/identity, updater accounts for startup positive and negative. Status is contracted in support tree and implementation remains absent.",
+    "Finalizer requires actual approving independent review and exact complete changed map; it does not approve promotion itself. New current93 archival and checkpointbarrier composition require exact phase2 inspection.",
+    "Adoption code preserves failed historical rows, anchor and ledger; exact positive stoppedPID, both leases, zero runningjobs, clean HEAD and reviewed input hashes are required before retirement/adoption. Runtime diff is additive marker support; no Store/config was constructed during this review."
+  ],
+  "review_kind": "phase1-independent-direct-host-support-contract-acceptance-only",
+  "reviewed_artifacts_sha256": {
+    "CMakeLists.txt": "dc9524ca206bb5cc351c906f66cbf06fe16146a7c5066341972147c3433357bb",
+    "analysis/functions.json": "3aba2bc2b78cd905ed15e410c556c028557ede2ebec08fc2a0406610bc891222",
+    "contracts/fn_004e2d29.json": "c27fe51611dfa3fe393b29732f9127aeee3bbcb8110dcf7788cc7d303299b5f4",
+    "evidence/startup-string-characterization.json": "29ec5f0d00c7e2909c453e0811c7492a98328e4aa74b68aa0e62781ed1e6273d",
+    "evidence/startup-string-identity.json": "72781cc102d6e79c070eddcd668155bb190ed8c589d98654e43c7bf36d144f59",
+    "evidence/startup-string-instructions.txt": "621e6ed28238434b72c61e7a619dfdcabd7365a788786814a88135445b9c3a95",
+    "include/dao/startup_string.hpp": "cd3ea9d4a4ea979dce00f5506f607e7980025cbf5c68afcde231188f875f5cf0",
+    "packet.txt": "83921f07de6f54366526df824cceb95d711182547fe92eb16be467b96fffa93a",
+    "tests/test_incremental_artifact_roles.py": "683d9efbaa23e62c2b9a04106945701413ba6ff7824b3592c4b63f41017102b7",
+    "tests/test_startup_string.py": "acd200398d9893e6ebd1d24657129777c300d5d81a4d5c1bb540b36b88d87d4e",
+    "tools/incremental_checkpoint.py": "7da493a2433c8995570cf811272a306f649ea97f3aef12fbeb22b16546f88f69",
+    "tools/update_progress.py": "b27784372fb14e030aeecb4c7944236742504ee1daadf03235bd19edb5719c10",
+    "tools/validate_checkpoint.py": "1b43acfce500404b9b6ca9b05188dc8c171574cecc0167c49f08b32576360c71",
+    "validation/characterize_startup_string.py": "da28c6c974fc0a729b64fc88a5fcdbd6b9167a7bd160c6fa9ff36e5027067b02",
+    "validation/startup_string_cases.py": "5c776572c0939678866290090c619d1784be14180c3425f9ee5a4483c21ef035",
+    "validation/startup_string_corpus/fn_004e2d29-heldout.json": "dc532203e243f0b1b4098bcf529ec173c41cdea155a844367bae85bef4779c95",
+    "validation/startup_string_corpus/fn_004e2d29-public.json": "98cba46e4b77b4bb23262ff78e71b685dfe640ceb33d730b1848fc2cda786c56",
+    "validation/startup_string_native_runner.cpp": "c661c417fec3f09534f8365d862e1e1d0fade100ca1f18c92944d2a895be4bc8",
+    "validation/startup_string_runner.py": "f5519a7315fc2d0cc1affbdcd1f8565685b751e0c7f95e8eb445004dfad83a73",
+    "validation/validate_startup_strings.py": "968c236a3f842e2efa1373d85fd2ea08ffea88ff9a1c9157023547b4b60d2c0e"
+  },
+  "reviewed_package_code_sha256": {
+    "adopt.py": "64633c6806af17ebf3d1f6f722e607800b8146b309869b7c405cd650c7cc3e36",
+    "finalize_packet.py": "b3efde455450f545067ea3564b5e57258ae70f685db86d8cd18f0d3479c5ae0e",
+    "prepare_adoption.py": "1f9f89eed4702c8b324b95893c3605769d932733d82da03ff9f3bd7f599c2d05",
+    "runtime-code/continuation.py": "5c984144c95202141921308e1fb204accfd6ebf33b21e776ebca5bdeb8b14274",
+    "runtime-code/recovery_dispatcher.py": "f086041fe5682aed52c95f472358b050e95e64aa8cf3dd987f4d07482f09ca44",
+    "runtime-code/run_recovery_pair.py": "88112f75ea5fb472b9a0dc767ab225cb1cb08f7a0c6cf8c89609e9f4c06fb96a",
+    "tests/test_adoption.py": "2362b45402c7018f8c72c26db583aa1ffefbc1a8450af9f46c81b37db5d5512c"
+  },
+  "reviewer": "/root/startup_dependency_packet/startup_final_review",
+  "schema_version": 1,
+  "scope": "Pinned48byte fn_004e2d29 bounded stable ordinary RAM contract, oracle/adapters, preimplementation frozen corpora, checkpoint routing and finalizer/adoption proposal code; phase1 support approval only"
+}

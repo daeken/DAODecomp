@@ -16,7 +16,7 @@ class DirectFieldPublicationDataTests(unittest.TestCase):
   result=dict(schema_version=2,policy=cache.POLICY,status='passed',complete_checkpoint=True,usable_for_progress=True,source={Path(rel).as_posix():digest for rel,digest in cache.source_manifest(root).items()},registry_sha256=cache.file_hash(root/'analysis/functions.json'),groups=[dict(group='synthetic-complete-inventory',records=records,reused=False,identity_sha256='synthetic-no-execution')])
   before=copy.deepcopy(records);document=cache.publication_document(result);self.assertEqual(records,before)
   path=root/'analysis/validation/publication-fixture.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(document));validated=update_progress.Snapshot(root).document('analysis/validation/publication-fixture.json')
-  self.assertEqual(len(validated['records']),165);self.assertEqual(sum(not r['negative_control'] for r in validated['records']),93)
+  self.assertEqual(len(validated['records']),167);self.assertEqual(sum(not r['negative_control'] for r in validated['records']),94)
   record=next(r for r in validated['records'] if r['function_id']==FUNCTIONS[0]['id'] and not r['negative_control'])
   self.assertTrue(update_progress.evidence_matches(update_progress.Snapshot(root),FUNCTIONS[0],record))
   self.assertEqual({rel:record['artifacts_sha256'][rel] for rel in SELECTED},{rel:cache.file_hash(root/rel) for rel in SELECTED})
@@ -38,7 +38,7 @@ class DirectFieldPublicationDataTests(unittest.TestCase):
      self.assertFalse(update_progress.evidence_matches(update_progress.Snapshot(root),FUNCTIONS[0],record))
     path.write_bytes(before)
    self.assertEqual(cache.source_manifest(root),original_source);self.assertTrue(update_progress.evidence_matches(update_progress.Snapshot(root),FUNCTIONS[0],record))
-   # Complete93+72 inventory remains mandatory, even for a synthetically generated document.
+   # Complete94+73 inventory remains mandatory, even for a synthetically generated document.
    result['groups'][0]['records'].pop()
    with self.assertRaises(ValueError):cache.publication_document(result)
    document['records'].pop();document.pop('attestation_sha256');document['attestation_sha256']=cache.digest(document);(root/'analysis/validation/publication-fixture.json').write_text(json.dumps(document))

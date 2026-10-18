@@ -1891,6 +1891,28 @@
       "source": "src/direct_object_fields.cpp",
       "status": "implemented",
       "symbol": "fn_0013ba50"
+    },
+    {
+      "abi": {
+        "stack_cleanup": 0
+      },
+      "backend": "startup-string-001",
+      "code_sha256": "5b09059c9761d9c8082daa1b91da9b7e9338aba8bf03752cc6422b9ef1e43d64",
+      "contract": "contracts/fn_004e2d29.json",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-004e2d29",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "name": "fn_004e2d29",
+      "provenance": {
+        "caller_rva": "00016b63",
+        "native_windows_validated": false,
+        "static_only_caller": true
+      },
+      "recovery_group": "startup-string-001",
+      "rva": 5123369,
+      "size": 48,
+      "source": "src/startup_string.cpp",
+      "status": "implemented"
     }
   ],
   "reference_build": "analysis/reference-build.json",
