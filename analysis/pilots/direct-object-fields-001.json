@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "group": "direct-object-fields-001",
+  "status": "pair_accepted_pending_shared_integration",
+  "functions": [
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00319290",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342080",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00342090",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b40",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b50",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b70",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b80",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347b90",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480b0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003480c0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003b51e0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd030",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd040",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd0d0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd140",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003cd350",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-003edbc0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515af0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b00",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00515b10",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054f6e0",
+    "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0054fa40"
+  ],
+  "source_sha256": "b61f4d589718bfbad4c8604215d88611339581e59234dc7a773bb28ecb28936b",
+  "pair_elapsed_seconds": 542.294,
+  "pair_stage_functions_per_hour": 146.046,
+  "public_cases": 8448,
+  "heldout_cases": 2816,
+  "negative_controls": 22,
+  "repetitions_per_side": 2,
+  "requests": [
+    {
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "elapsed_seconds": 59.589,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 40624,
+          "output_tokens": 4087,
+          "reasoning_output_tokens": 154
+        }
+      ],
+      "exit_code": 0
+    },
+    {
+      "kind": "review",
+      "requested_model": "gpt-6.1-sol",
+      "reasoning_effort": null,
+      "elapsed_seconds": 15.426,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 291284,
+          "output_tokens": 441,
+          "reasoning_output_tokens": 91
+        }
+      ],
+      "exit_code": 0
+    }
+  ],
+  "new_model_request_count": 2,
+  "repairs": 0,
+  "collaboration_preparation_and_support_review_assignments": 2,
+  "collaboration_token_usage": null,
+  "coordinator_usage": null,
+  "account_quota_attribution": null,
+  "pair_status_sha256": "0235d2e48cd8191eafa72b41dd58190ec4b9828d45b0ffe60d0ab9ca3e2f34ab",
+  "manifest_sha256": "0eed535c7eb6e7a5ceba4e82f063f1848e10443270b3862b4d0e3c47676e71dd",
+  "support_review": "local/pilots/memory-batch-006/acceptance-review/review.json",
+  "pair_output": "local/pilots/memory-batch-006/tree/local/pairs/direct-object-fields-001-run-1",
+  "proof": false,
+  "native_windows_validated": false,
+  "limitations": [
+    "Pair-stage rate excludes characterization, support preparation, integration and final shared checkpoint; not sustained end-to-end throughput.",
+    "No shared registry credit until reviewed integration and complete current checkpoint."
+  ],
+  "pre_dispatch_invocation_failures": 2
+}

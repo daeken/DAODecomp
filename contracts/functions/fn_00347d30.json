@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d30",
+  "inputs": {
+    "arena": "bytes",
+    "object": "u32",
+    "index": "u32",
+    "entry_eax": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512
+  },
+  "calls": [],
+  "preconditions": "Initialized 512-byte ordinary RAM allocation at guest 0x02000000. Object offset integer 0..64 inclusive, arbitrary byte alignment; ECX = arena base + object, preserved by original. Full u32 index stack slot(s), RET 4. Let k=index & 0xff; accepted iff k<7. Read exactly 1 byte(s) at object+0x138+1*k, little-endian, return the zero-extended field bits, and write nothing. Rejected index returns (entry_eax & 0xffffff00) | 0xff and permits no arena access. Compare all 32 EAX bits and all 512 arena bytes. Private valid stack, DF clear, nonvolatile registers preserved; only normal return, no calls, globals, relocations, private stack writes, concurrency, MMIO, exceptions, address wrap or faulting/null object. Stack and arena disjoint. No second data pointer or inter-allocation aliasing in this isolated boundary. Native C++ object parameter is passed by value; no native x86 ABI bridge tested. Other volatile registers/flags excluded; future caller composition must establish their separate relations. Domain is fixture layout, not a recovered complete class."
+}

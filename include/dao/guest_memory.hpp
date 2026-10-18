@@ -26,6 +26,17 @@ public:
         return value;
     }
 
+    std::uint8_t read_u8(std::uint32_t offset) const {
+        check(offset, readable_, 1);
+        return bytes_[offset];
+    }
+
+    std::uint16_t read_u16(std::uint32_t offset) const {
+        check(offset, readable_, 2);
+        return static_cast<std::uint16_t>(std::uint16_t{bytes_[offset]} |
+                                         (std::uint16_t{bytes_[offset + 1]} << 8));
+    }
+
     void write_u32(std::uint32_t offset, std::uint32_t value) {
         check(offset, writable_);
         for (std::uint32_t i = 0; i < 4; ++i)

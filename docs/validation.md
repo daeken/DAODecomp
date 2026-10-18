@@ -174,3 +174,89 @@ equivalent lifetime control for its descendants. This is not a security sandbox.
 - [angr modeling caveats](https://docs.angr.io/en/stable/advanced-topics/gotchas.html)
 - [Triton symbolic instruction semantics](https://triton-library.github.io/)
 
+
+## Opt-in fresh-child indexed-field batching
+
+On POSIX hosts supporting `fork`, `waitid(WNOWAIT)` and `/dev/fd`, build the usual
+CMake targets and opt into the indexed-field adapter with:
+
+```sh
+.venv/bin/python validation/validate_indexed_fields.py --execution batch --suite public --jobs 2
+.venv/bin/python validation/validate_indexed_fields.py --execution batch --suite heldout --jobs 2
+.venv/bin/python validation/validate_indexed_fields.py --execution batch --expect-mismatch --jobs 2
+```
+
+`--execution single` remains the default and the existing reference/fallback.
+Batching does not reduce cases, repetitions or observations. Each side/repetition
+starts an independent clean Python supervisor. It verifies immutable module/slice
+bytes or loads the native C ABI adapter, but never executes a function itself.
+Every case runs in a fresh child session/process group with a new arena and, for
+the original side, a new Unicorn machine. Native candidate calls use the unchanged
+accepted C++ bodies through a separately built shared adapter, inside the child.
+No initialized game runtime or native/Unicorn state is recycled.
+
+Batches contain at most 128 cases (`--batch-size 1..128`), each request frame at
+most 256 KiB and each supervisor at most 8,192 cases/32 MiB of input or output.
+Case stdout is capped at 64 KiB and stderr at 4 KiB; every case has a five-second
+wall deadline plus the original instruction budget. Supervisors have a separate
+finite deadline. A case crash, timeout, unknown dependency, exhausted budget,
+missing/duplicate/reordered identity, malformed output or output cap violation
+cannot pass. After a case execution error, remaining cases are explicit runner
+errors. Missing whole-worker output marks every requested case as a runner error.
+The comparator retains its exact type-sensitive observation and nondeterminism
+rules, full failure replay observations and artifact hashes checked before/after.
+
+Case groups are killed on completion or failure before their leaders are reaped.
+A start gate and atomic active-child record let the controller kill a case group
+if its supervisor fails. This handles descendants that remain in that group;
+processes deliberately escaping it with another session are outside this runtime's
+isolation model. The backend is not a security sandbox. Darwin's EPERM for a
+zombie-only group is accepted only after libproc reports no live group members;
+EPERM with a live/unknown member fails closed. Actual crash/hang/descendant/output
+faults are tested in `tests/test_batch.py`.
+
+The initial adapter allowlist is the eleven existing `indexed-fields-002` call-free
+integer/explicit-memory functions. Extending it to globals, TLS, floating point,
+OS state or dependencies requires a separately reviewed adapter/state contract.
+The runtime cannot certify native Windows semantics or whole-game behavior. New
+reports require the same public, heldout, negative-control and independent-review
+gates; this transport option does not promote registry status by itself.
+
+For paired recovery, `tools/freeze_indexed_fields_pair.py --execution batch` selects
+batching for public, heldout and negative commands in the generated manifest.
+Default manifests retain the legacy path. Batch freezing additionally requires
+independent acceptance-review hash coverage of the transport, native/Python adapter,
+real fault tests, coordinator binding checks and these runtime limitations. The
+snapshot includes all new source/test support files. Each deterministic report
+binds the actual newly linked shared library, wrapper/runtime, accepted candidate
+source and build inputs; the paired coordinator rejects missing library or process
+provenance bindings. A dry-run prepares review material without approval or dispatch.
+
+## Complete incremental checkpoint composition
+
+Routine checkpoint plans select approved fresh-child batching for indexed fields
+and object bitfields, retaining all six legacy groups and their controls. Batch
+size, mode and effective validator argv are execution-key inputs. Cache policy
+`clean-build-local-groups-003` adds explicit normal/mutant shared-image and selected
+object-fixture/specification bindings; it never backfills earlier policy entries.
+
+Every invocation recreates its owned direct-child `build-incremental*` directory
+at the same stable path, then configures and builds current source with reproducible
+Apple linker settings. Selected outputs/dependencies must exist as regular files.
+Full current source/build attestations remain separate from comparison identity.
+Runtime-provider symlinks retain their original lookup paths and resolved targets;
+the target bytes are hashed, and changed resolution during inventory or hashing
+fails. This does not permit symlinked candidate/build artifacts. The independent
+[runtime-provider review](../analysis/reviews/runtime-provider-links-001.json)
+covers this distinction.
+Missing/ambiguous routes, partial fifteen-function promotion, missing libraries,
+changed selected contracts/corpora, stale generated targets or incomplete controls
+cannot produce reusable current evidence. Publication and the v2 updater additionally
+require every implemented positive and required negative record, without duplicates.
+
+After independent combined approval and source integration, run the incremental
+checkpoint with a stable shared build/cache path and a new output/record path,
+then refresh README with the ordinary progress updater. A partial `--group` or
+`--identity-only` experiment cannot publish progress. Historical comparisons stay
+immutable; a complete fresh checkpoint supplies current provenance. Local runtime
+reuse currently supports macOS only and is emulator corpus evidence, not game proof.

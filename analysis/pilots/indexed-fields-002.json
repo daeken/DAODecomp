@@ -1,0 +1,461 @@
+{
+  "schema_version": 1,
+  "group": "indexed-fields-002",
+  "status": "integrated_full_checkpoint_passed",
+  "functions": [
+    "fn_00347cf0",
+    "fn_00347d30",
+    "fn_00347d70",
+    "fn_00347d90",
+    "fn_00347db0",
+    "fn_00347dd0",
+    "fn_00347df0",
+    "fn_00347e10",
+    "fn_00347e70",
+    "fn_00347e90",
+    "fn_00347eb0"
+  ],
+  "source_sha256": "ac2f8bb857bbd7a72f53347634f9b577409a4b0c41cd061c57437b11552aba35",
+  "public_cases": 14224,
+  "heldout_cases": 1408,
+  "accepted_run_elapsed_seconds": 3048.991,
+  "gates": [
+    {
+      "stage": "build",
+      "passed": true,
+      "reports": []
+    },
+    {
+      "stage": "public",
+      "passed": true,
+      "reports": [
+        {
+          "contract_raw_file_sha256": "d3cdcc52b834664e407e22faf1496f52d5ed1dd909f4f09a86c1f3ab7b87dfba",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "addbfde7805f8e941d914c6791bb57e228664ebb332c24c8567e3495448e045d",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347cf0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347cf0-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "b9a22a91090aef5653d8f41017d9028db045a9f50971945089fd7ec7a17c92c0",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "90f5545f04b701beb980c0ca2b25034c960f90b03832c9c33bf4fa7c4f38f2c1",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347d30",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d30-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "3a30b92549c6f68554a0132952553817a5e17656766971e79dfdff423160b9c0",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "8eeea6598d9c13d5fc9105bbc689658e53a71cf9e6f1e248ea3ec7cec8ef9fca",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347d70",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d70-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "2a55f6c2a722658bcb376635b0e8c4452721546704bfbeda6a92741422df335c",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "83b29230c3b49752c6c11fb79847f510938e30a20d9c92aeee40ba671e1afc93",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347d90",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d90-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "7f494d63aa3837b8272c50eeca1bf42f0f925ccd621f9a32894059ca281c0050",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "87cfbd86aed7e489bd59248f25818f5a92cbd1b85ae2045cea2732019c5015ad",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347db0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347db0-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "ce3f91f14a61a66f51668dbba43542eb2c73edd2608344db5039f8a7a0e88071",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "e1ed8e92abfe8a9c3a8646f414cf5c4c11e0fd8fd1b02dd6af91de3ba6022fc9",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347dd0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347dd0-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "57280488bc2af33763eb91282ebc50660551fa44f381e71a2cab8b8287e4fd32",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "72e02e0cdf582171f5f6f85d7b6d895e6368282b8372447852fb8b1fab21d2a1",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347df0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347df0-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "3c9eb7b7d1e9420446a7b00beffc3f72048e54b7141ef3a249f9477d27b6b324",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "9e5313b3e77d9e799eceddd7370934515da7c65d20e3c23e80058e4ca97aac4d",
+          "counts": {
+            "corpus_pass": 1304
+          },
+          "function": "fn_00347e10",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e10-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "d6226f08f5f32534fec0a43ec2ba7db25c4237182ba1ff88fd959802114e0da9",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "764bccec853320ef219aa4dd9e6c0c00b34a411ee7a6a2bd0556f3858bcfdbd1",
+          "counts": {
+            "corpus_pass": 1264
+          },
+          "function": "fn_00347e70",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e70-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "00a156bfcec1224a3947e7f962faad98cd7941de2df0104ccea26ee44a3cd728",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "303760461892e7f9c46eb1e7986bb86f961c5df99e05539ade7e86cf66467fd5",
+          "counts": {
+            "corpus_pass": 1264
+          },
+          "function": "fn_00347e90",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e90-public.json"
+        },
+        {
+          "contract_raw_file_sha256": "de0be73429b0b77d689b1bcda4eaa7f2b88a6e47403a7a3d9fd298ba99537218",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "b35bd4f464e4e9128febf95472244bbfdf82b508b87458e17d735e2c3000368b",
+          "counts": {
+            "corpus_pass": 1264
+          },
+          "function": "fn_00347eb0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347eb0-public.json"
+        }
+      ]
+    },
+    {
+      "stage": "heldout",
+      "passed": true,
+      "reports": [
+        {
+          "contract_raw_file_sha256": "d3cdcc52b834664e407e22faf1496f52d5ed1dd909f4f09a86c1f3ab7b87dfba",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "82b8ae1ab51e99048c714c3d702dee8027d54fadf8c95cc3c02d0eaa853160e1",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347cf0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347cf0-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "b9a22a91090aef5653d8f41017d9028db045a9f50971945089fd7ec7a17c92c0",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "5770b487e96d18a092102d3b8c57b4af7539f8adfe2dae39895677bb15ecf421",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347d30",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d30-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "3a30b92549c6f68554a0132952553817a5e17656766971e79dfdff423160b9c0",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "0aafbaa6d391112f7bb02d13879c912ba913e7a631623af54c6a8e8ddcec7f57",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347d70",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d70-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "2a55f6c2a722658bcb376635b0e8c4452721546704bfbeda6a92741422df335c",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "99cdc39c0c2b010a96a5cbb71fe35022c1c1339acdf78f3e076844c1b735a422",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347d90",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d90-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "7f494d63aa3837b8272c50eeca1bf42f0f925ccd621f9a32894059ca281c0050",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "4e7a5e6b247eb24a9eb6dc74a30673f5023b2cdf9edc1b7261808869772aee8d",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347db0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347db0-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "ce3f91f14a61a66f51668dbba43542eb2c73edd2608344db5039f8a7a0e88071",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "f3be206980b79f5af558cc89a6fae45c33389999583cba9dff69c676ebd77935",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347dd0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347dd0-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "57280488bc2af33763eb91282ebc50660551fa44f381e71a2cab8b8287e4fd32",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "a6f1e6140eee698e226e7f6cababac0eda6e4d727c801e2d4a824cb6642afaea",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347df0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347df0-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "3c9eb7b7d1e9420446a7b00beffc3f72048e54b7141ef3a249f9477d27b6b324",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "638e89b5adbd5746571a766f53ca3ba7d7b2922a99f97cbe342021652881b8ac",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347e10",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e10-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "d6226f08f5f32534fec0a43ec2ba7db25c4237182ba1ff88fd959802114e0da9",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "36bd8181669d01071f325043074412ce90a9b1e0b77179cd4a48edc7ae09d7dc",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347e70",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e70-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "00a156bfcec1224a3947e7f962faad98cd7941de2df0104ccea26ee44a3cd728",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "584dbdd232f92ade698eb2ffa0aabaa20de1c072d8867b814db066cc846855f5",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347e90",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347e90-heldout.json"
+        },
+        {
+          "contract_raw_file_sha256": "de0be73429b0b77d689b1bcda4eaa7f2b88a6e47403a7a3d9fd298ba99537218",
+          "corpus": "heldout",
+          "corpus_raw_file_sha256": "087dc9c77f623db47c044f21cc4d44b23d1d36eaa5fdfa9848c70322fe1c6225",
+          "counts": {
+            "corpus_pass": 128
+          },
+          "function": "fn_00347eb0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347eb0-heldout.json"
+        }
+      ]
+    },
+    {
+      "stage": "negative",
+      "passed": true,
+      "reports": [
+        {
+          "contract_raw_file_sha256": "d3cdcc52b834664e407e22faf1496f52d5ed1dd909f4f09a86c1f3ab7b87dfba",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "addbfde7805f8e941d914c6791bb57e228664ebb332c24c8567e3495448e045d",
+          "counts": {
+            "corpus_pass": 557,
+            "mismatch": 747
+          },
+          "function": "fn_00347cf0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347cf0-mutant.json"
+        },
+        {
+          "contract_raw_file_sha256": "3a30b92549c6f68554a0132952553817a5e17656766971e79dfdff423160b9c0",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "8eeea6598d9c13d5fc9105bbc689658e53a71cf9e6f1e248ea3ec7cec8ef9fca",
+          "counts": {
+            "corpus_pass": 557,
+            "mismatch": 747
+          },
+          "function": "fn_00347d70",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347d70-mutant.json"
+        },
+        {
+          "contract_raw_file_sha256": "7f494d63aa3837b8272c50eeca1bf42f0f925ccd621f9a32894059ca281c0050",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "87cfbd86aed7e489bd59248f25818f5a92cbd1b85ae2045cea2732019c5015ad",
+          "counts": {
+            "corpus_pass": 308,
+            "mismatch": 996
+          },
+          "function": "fn_00347db0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347db0-mutant.json"
+        },
+        {
+          "contract_raw_file_sha256": "de0be73429b0b77d689b1bcda4eaa7f2b88a6e47403a7a3d9fd298ba99537218",
+          "corpus": "public",
+          "corpus_raw_file_sha256": "b35bd4f464e4e9128febf95472244bbfdf82b508b87458e17d735e2c3000368b",
+          "counts": {
+            "corpus_pass": 514,
+            "mismatch": 750
+          },
+          "function": "fn_00347eb0",
+          "passed": true,
+          "report": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-run-4/attempt-1/reports/fn_00347eb0-mutant.json"
+        }
+      ]
+    }
+  ],
+  "unique_cli_requests": 4,
+  "requests": [
+    {
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 41.513,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 36598,
+          "output_tokens": 3062,
+          "reasoning_output_tokens": 99
+        }
+      ],
+      "exit_code": 0,
+      "origin": "local/pairs/indexed-fields-002-run-1/status.json"
+    },
+    {
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 33.924,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 38718,
+          "output_tokens": 2987,
+          "reasoning_output_tokens": 43
+        }
+      ],
+      "exit_code": 0,
+      "origin": "local/pairs/indexed-fields-002-run-1/status.json"
+    },
+    {
+      "kind": "implementation",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 33.867,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 42661,
+          "output_tokens": 2999,
+          "reasoning_output_tokens": 28
+        }
+      ],
+      "exit_code": 0,
+      "origin": "local/pairs/indexed-fields-002-run-1/status.json"
+    },
+    {
+      "kind": "review",
+      "requested_model": "gpt-6.1-sol",
+      "elapsed_seconds": 19.03,
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 181509,
+          "output_tokens": 820,
+          "reasoning_output_tokens": 98
+        }
+      ],
+      "exit_code": 0,
+      "origin": "local/pairs/indexed-fields-002-run-4/status.json"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "cli_reported_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 299486,
+    "output_tokens": 9868,
+    "reasoning_output_tokens": 268
+  },
+  "summed_request_seconds": 128.334,
+  "reused_responses_counted_again": false,
+  "preparation_and_acceptance_assignments": 5,
+  "collaboration_usage": null,
+  "coordinator_usage": null,
+  "account_quota_attribution": null,
+  "failed_runs": [
+    {
+      "run": 1,
+      "new_requests": 3,
+      "cause": "Missing protected pre-commit hook. All three candidate sources identical; two unnecessary source-repair requests. No game comparisons."
+    },
+    {
+      "run": 2,
+      "new_requests": 0,
+      "cause": "CTest selected system Python without Unicorn; explicit venv unit suite passed. No game comparisons."
+    },
+    {
+      "run": 3,
+      "new_requests": 0,
+      "cause": "Synthetic contract absent from snapshot; build/unit/CTest passed. No game comparisons."
+    }
+  ],
+  "support_prompt_repair": {
+    "v1_prompt_bytes": 18142176,
+    "v2_prompt_bytes": 326039,
+    "raw_corpus_bytes_retained": 17524462,
+    "prior_refusal": "analysis/reviews/indexed-fields-002-acceptance-v1.json"
+  },
+  "proof": false,
+  "native_windows_validated": false,
+  "actual_source_review_prompt_bytes": 444736,
+  "checkpoint_attempts": [
+    {
+      "path": "reports/checkpoint-indexed-fields-002",
+      "status": "failed",
+      "failed_step": "unittest",
+      "reason": "Checkpoint stopped before game comparisons because unit-test baseline used real already-promoted registry; now explicitly constructs contracted baseline and tests promotion/partial rejection."
+    },
+    {
+      "path": "reports/checkpoint-indexed-fields-002-r2",
+      "status": "superseded_incomplete",
+      "receipt": "reports/checkpoint-indexed-fields-002-r2/superseded.json",
+      "replacement": "reports/checkpoint-throughput-001"
+    }
+  ],
+  "validation_record": "analysis/validation/throughput-reuse-001.json",
+  "seed_validation_record": "analysis/validation/throughput-001.json"
+}

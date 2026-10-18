@@ -1,0 +1,589 @@
+{
+  "schema_version": 1,
+  "decision": "needs-evidence",
+  "review_kind": "independent bounded acceptance-support preparation review; no candidate source review",
+  "group": "indexed-fields-002",
+  "proposal": "support-proposal",
+  "base_commit": "a4d58315a68659338467ec87ce28ee6e6dd85be8",
+  "reviewer_role": "independent acceptance reviewer, not implementation author",
+  "reviewed_at_utc": "2026-10-18T00:01:07.154339+00:00",
+  "scope": "Eleven isolated integer indexed-field helpers using the existing indexed-stores-001 memory execution backend and comparator. Approval withheld for freeze/pipeline integration; no recovered function bodies, candidate differential acceptance, native ABI bridge, caller subsystem or whole-game equivalence assessed.",
+  "blocking_findings": [
+    {
+      "id": "IF002-R1",
+      "severity": "blocking",
+      "path": "tools/freeze_indexed_fields_pair.py",
+      "detail": "Freeze assigns all REVIEW_REQUIRED files to manifest review_evidence, including 22 complete public/heldout corpus JSON files. Existing tools/run_recovery_pair.py reviewer_prompt reads each verbatim into Frozen evidence; summary provenance deduplication does not remove that content.",
+      "measured_evidence": {
+        "review_evidence_paths": 56,
+        "raw_corpus_paths_in_review_evidence": 22,
+        "raw_corpus_file_bytes": 17524462,
+        "actual_reviewer_prompt_chars_with_empty_build_and_no_source": 18064282,
+        "actual_reviewer_prompt_utf8_bytes_with_empty_build_and_no_source": 18064282,
+        "payload_construction": "tools/run_recovery_pair.py reviewer_prompt reads all review_evidence files verbatim into canonical(evidence); provenance deduplication only applies to summaries",
+        "note": "This is a lower-bound review prompt with no candidate body or actual build reports. No model dispatched."
+      },
+      "required_resolution": "Separate snapshot/hash coverage from model-facing review evidence. Retain every contract/corpus/oracle hash and complete frozen acceptance cases; provide compact independently reviewable corpus coverage/provenance plus bounded instruction/caller/contract evidence in the source-review prompt. Reproduce the resulting actual reviewer_prompt size and show no raw complete corpus insertion. No backend/comparator or semantic changes needed.",
+      "reason": "The measured 18,064,282-character prompt before any candidate or build outputs is an unbounded practical request/context burden for the configured independent source reviewer. The existing frozen manifest would construct this exact payload. This review does not authorize a model request to discover a limit."
+    }
+  ],
+  "nonblocking_findings": [
+    {
+      "id": "IF002-R2",
+      "severity": "coverage limitation",
+      "path": "validation/indexed_field_cases.py",
+      "detail": "Heldout forced accepted states use even i and low index i modulo limit. For six-slot functions the saved accepted indexes omit fn_00347e70 slots 1 and 3, and fn_00347e90/fn_00347eb0 slots 1,3,5. Public cases cover every accepted slot; reviewer-created independent original probes also covered all low indexes. No observed semantic contradiction. Same-producer heldout is not independent generation, and these omissions must remain explicit if the exact corpus is retained.",
+      "requested_followup": "Disclose exact omissions and same-producer provenance in acceptance coverage; future corpus expansion needs separate reviewed hashes. This finding alone does not prevent bounded support preparation."
+    }
+  ],
+  "positive_findings": [
+    "proposal.patch applied independently to a pristine pinned-base git archive; all 27 resulting file hashes match file-mapping.json, including the nonfunctional candidate placeholder.",
+    "All 21 existing registry rows remain byte-equivalent as parsed data. Existing execute_memory, harness comparator, leaf loader and PE intake modules are unchanged from pinned base; their previously approved semantics were reused without unrelated backend re-audit.",
+    "All eleven contracts, declarations, registry identities and exact slice bytes agree on widths, offsets, six/seven bounds, low-byte index interpretation, stack cleanup and full EAX return mapping. Narrow rejected getters retain upper incoming EAX bits; rejected setters merge low index; the two dword getter sentinels differ as observed.",
+    "All 98 supplied slice instruction byte records and 312 instruction records across 26 caller contexts were independently matched to the pinned PE; direct call destinations checked. No unknown calls/dependencies occur inside these slices. Caller records support the boundary without establishing caller execution equivalence.",
+    "GuestMemory narrow readers validate complete 1/2-byte footprint and allocation end using widened arithmetic before any access, then assemble little-endian bytes without host alignment/aliasing assumptions. Native adapter declares exact width/range permissions; original adapter checks ECX/nonvolatile/stack/DF using the unchanged backend. Both sides serialize complete 512-byte arenas and full u32 EAX.",
+    "Parsed all 22 public/heldout corpora: 14,224 public and 1,408 heldout states, no identical public/heldout input payloads per function, exact strict schema and recorded raw hash equality. Implementation packet contains instruction/caller/header/contract evidence without heldout state payloads; existing launcher receives packet text only.",
+    "Four return mutations are applied only after a recovered call, and their build definitions/negative report paths are distinct and fail closed on errors. Unit checks exercise synthetic return mutation values only. Independent original replays found distinguishing outputs for all four controls; actual compiled candidate negative gates await source.",
+    "Freeze dry-run independently verifies pinned original/slices and generated-versus-characterized corpora. Required review hashes cover 56 paths, include contracts and both corpora, and exclude candidate placeholder from acceptance snapshot. Freeze refuses missing/unapproved/unbound review. Checkpoint registers all eleven positives and four negatives and refuses partial batch promotion."
+  ],
+  "tests": {
+    "host": {
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "machine": "arm64",
+      "python": "3.14.7",
+      "unicorn": "2.1.4",
+      "capstone": "5.0.6"
+    },
+    "compiler": "AppleClang 21.0.0.21000334",
+    "build": "RelWithDebInfo; project C++20 warning/FP options",
+    "pristine_patch_replay": {
+      "passed": true,
+      "mapped_files": 27,
+      "report": "patch-replay.json"
+    },
+    "tooling": {
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "cwd": "acceptance-review/isolated",
+      "tests": 136,
+      "skipped": 1,
+      "passed": true,
+      "seconds": 17.996,
+      "log": "unittest.log"
+    },
+    "selected_cmake": {
+      "configure": "cmake -S isolated -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo",
+      "build": "cmake --build build --parallel 2 --target guest_memory_tests guest_memory_narrow_tests test_indexed_field_mutant synthetic_candidate synthetic_mutant dao_recovered",
+      "passed": true,
+      "logs": [
+        "configure.log",
+        "build.log"
+      ]
+    },
+    "focused_ctest": {
+      "command": "ctest --test-dir build -R '^(guest_memory|guest_memory_narrow|indexed_field_mutant)$' --output-on-failure",
+      "tests": 3,
+      "passed": true,
+      "log": "ctest.log"
+    },
+    "native_runner_translation_units": {
+      "normal_and_mutant_syntax_only": true,
+      "linked_or_candidate_executed": false,
+      "report": "runner-syntax-check.json"
+    },
+    "synthetic_demos": {
+      "commands": [
+        ".venv/bin/python examples/synthetic/demo.py --build-dir ../build",
+        ".venv/bin/python examples/synthetic/demo.py --build-dir ../build --expect-mismatch"
+      ],
+      "positive_pass": 59,
+      "negative_pass": 53,
+      "expected_mismatch": 6,
+      "passed": true,
+      "logs": [
+        "synthetic-good.log",
+        "synthetic-mutant.log"
+      ]
+    },
+    "original_evidence": {
+      "original_replays": 4224,
+      "heldout_original_replays": 1408,
+      "independent_new_original_states": 2816,
+      "slice_instructions_bytes_verified": 98,
+      "caller_contexts_verified": 26,
+      "caller_instructions_bytes_verified": 312,
+      "four_return_mutation_discriminators": {
+        "fn_00347cf0": 310,
+        "fn_00347d70": 311,
+        "fn_00347db0": 311,
+        "fn_00347eb0": 313
+      }
+    },
+    "original_evidence_method": "independent_checks.py independently specifies field contracts/return expectations and guarded footprints, loads pinned original slices, and invokes unchanged execute_memory. Replayed all 1,408 heldout inputs plus 2,816 newly generated original-only states (all 256 low index values for every function, unrelated high bytes/EAX/value/random arena and endpoint/unaligned object offsets). All return bits and arena bytes agree with those expectations. These are original-only characterization checks, not recovered-source tests.",
+    "additional_original_protocol_tests": "The 136-test run includes 44 fresh-process original protocol invocations and 22 direct original invocations; reported separately from 4,224 independent replays.",
+    "freeze_dry_run": {
+      "passed": true,
+      "command": ".venv/bin/python tools/freeze_indexed_fields_pair.py",
+      "report": "freeze-dry-run.json"
+    },
+    "review_payload_size": {
+      "passed_measurement": true,
+      "report": "review-prompt-size.json"
+    },
+    "setup_note": "An initial incomplete isolated copy produced test import errors; discarded as setup failure. Completed isolated copy was then used for the recorded full passing run. No proposal/shared file repair occurred."
+  },
+  "corpus_coverage": [
+    {
+      "name": "fn_00347cf0",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 67,
+        "rejected": 61,
+        "object_offsets": 51,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347d30",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 64,
+        "rejected": 64,
+        "object_offsets": 59,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347d70",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 66,
+        "rejected": 62,
+        "object_offsets": 50,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347d90",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 67,
+        "rejected": 61,
+        "object_offsets": 58,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347db0",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 66,
+        "rejected": 62,
+        "object_offsets": 56,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347dd0",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 68,
+        "rejected": 60,
+        "object_offsets": 55,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347df0",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 64,
+        "rejected": 64,
+        "object_offsets": 55,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347e10",
+      "public": {
+        "cases": 1304,
+        "accepted": 308,
+        "rejected": 996,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 66,
+        "rejected": 62,
+        "object_offsets": 56,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347e70",
+      "public": {
+        "cases": 1264,
+        "accepted": 264,
+        "rejected": 1000,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 67,
+        "rejected": 61,
+        "object_offsets": 56,
+        "accepted_low_indexes": [
+          0,
+          2,
+          4,
+          5
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347e90",
+      "public": {
+        "cases": 1264,
+        "accepted": 264,
+        "rejected": 1000,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 65,
+        "rejected": 63,
+        "object_offsets": 53,
+        "accepted_low_indexes": [
+          0,
+          2,
+          4
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    },
+    {
+      "name": "fn_00347eb0",
+      "public": {
+        "cases": 1264,
+        "accepted": 264,
+        "rejected": 1000,
+        "object_offsets": 5,
+        "accepted_low_indexes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "heldout": {
+        "cases": 128,
+        "accepted": 65,
+        "rejected": 63,
+        "object_offsets": 53,
+        "accepted_low_indexes": [
+          0,
+          2,
+          4
+        ]
+      },
+      "public_heldout_input_overlap": 0,
+      "independent_new_original_states": 256,
+      "heldout_original_replays": 128
+    }
+  ],
+  "limits": [
+    "No recovered source bodies exist; static library configuration support is not linkable candidate acceptance. Full build/link, public and heldout differential execution, four compiled candidate negative gates, independent source review and promotion remain required after a corrected acceptance freeze.",
+    "Emulator execution on macOS ARM64 only. No native Windows/x86 or translated Windows experiment was run in this review; original caller/subsystem integration, object lifetime, FP/OS behavior and whole-game execution remain outside this boundary.",
+    "Review rechecked all heldout states and independently generated states, not every prior public characterization execution, composition sequence, or prior observation digest. Existing characterization counts remain producer claims rather than newly repeated full characterization.",
+    "The four post-call mutation checks and both synthetic demos establish infrastructure behavior, not semantic proof for unrecovered functions or the game. Corpus agreement is finite evidence only.",
+    "Bounded domain excludes null/faulting objects, address wrap, concurrency, MMIO, globals/dependencies, exceptions and binary ABI bridge. Other volatile registers/flags remain excluded by the high-level mapping and require future caller composition relations.",
+    "No models/agents were called, no freeze/adoption/commit/push/promotion performed, and no shared or proposal files changed. Review writes were confined to acceptance-review and its disposable isolated directories."
+  ],
+  "reviewed_artifacts_sha256": {
+    "CMakeLists.txt": "6eeb6a03cac1bb6dec624d81c692225563458fbc4a9747295e54d132d9d5ac3e",
+    "analysis/functions.json": "35750f88278a85002a8db6c331eb260e40294b098199d9acec16d66518a251a6",
+    "contracts/functions/fn_00347cf0.json": "d3cdcc52b834664e407e22faf1496f52d5ed1dd909f4f09a86c1f3ab7b87dfba",
+    "contracts/functions/fn_00347d30.json": "b9a22a91090aef5653d8f41017d9028db045a9f50971945089fd7ec7a17c92c0",
+    "contracts/functions/fn_00347d70.json": "3a30b92549c6f68554a0132952553817a5e17656766971e79dfdff423160b9c0",
+    "contracts/functions/fn_00347d90.json": "2a55f6c2a722658bcb376635b0e8c4452721546704bfbeda6a92741422df335c",
+    "contracts/functions/fn_00347db0.json": "7f494d63aa3837b8272c50eeca1bf42f0f925ccd621f9a32894059ca281c0050",
+    "contracts/functions/fn_00347dd0.json": "ce3f91f14a61a66f51668dbba43542eb2c73edd2608344db5039f8a7a0e88071",
+    "contracts/functions/fn_00347df0.json": "57280488bc2af33763eb91282ebc50660551fa44f381e71a2cab8b8287e4fd32",
+    "contracts/functions/fn_00347e10.json": "3c9eb7b7d1e9420446a7b00beffc3f72048e54b7141ef3a249f9477d27b6b324",
+    "contracts/functions/fn_00347e70.json": "d6226f08f5f32534fec0a43ec2ba7db25c4237182ba1ff88fd959802114e0da9",
+    "contracts/functions/fn_00347e90.json": "00a156bfcec1224a3947e7f962faad98cd7941de2df0104ccea26ee44a3cd728",
+    "contracts/functions/fn_00347eb0.json": "de0be73429b0b77d689b1bcda4eaa7f2b88a6e47403a7a3d9fd298ba99537218",
+    "contracts/indexed-fields-002.packet.json": "4f06a06b8b0188541f7caf9b4aa7a7a2cc3a3dcae74a2303c7c3c974adadf120",
+    "include/dao/guest_memory.hpp": "db31c64a298f483d5245eff020aaca5cb1d7787c9acec51b56fa7be066a1178a",
+    "include/dao/indexed_fields.hpp": "cd8ed84460a7094d859bd8653d7514c8e96a494a9a742613bf289de3e0bc5a22",
+    "local/pilots/memory-batch-003/caller-contexts.json": "da883849a8837604026696753b34c376a1733d5b42d8c36c8e1e06d65cb0f63e",
+    "local/pilots/memory-batch-003/characterization.json": "ebc6382ff2f762eb94e95ac2f057c748671c96e79e269aa7f7f9f75cbf63e756",
+    "local/pilots/memory-batch-003/evidence-hashes.json": "62f7e2c9c75ddc4a2d5c7528d74cdd11c99966b4a6ec2f09dfbb68526b275921",
+    "local/pilots/memory-batch-003/fn_00347cf0-heldout-cases.json": "82b8ae1ab51e99048c714c3d702dee8027d54fadf8c95cc3c02d0eaa853160e1",
+    "local/pilots/memory-batch-003/fn_00347cf0-public-cases.json": "addbfde7805f8e941d914c6791bb57e228664ebb332c24c8567e3495448e045d",
+    "local/pilots/memory-batch-003/fn_00347d30-heldout-cases.json": "5770b487e96d18a092102d3b8c57b4af7539f8adfe2dae39895677bb15ecf421",
+    "local/pilots/memory-batch-003/fn_00347d30-public-cases.json": "90f5545f04b701beb980c0ca2b25034c960f90b03832c9c33bf4fa7c4f38f2c1",
+    "local/pilots/memory-batch-003/fn_00347d70-heldout-cases.json": "0aafbaa6d391112f7bb02d13879c912ba913e7a631623af54c6a8e8ddcec7f57",
+    "local/pilots/memory-batch-003/fn_00347d70-public-cases.json": "8eeea6598d9c13d5fc9105bbc689658e53a71cf9e6f1e248ea3ec7cec8ef9fca",
+    "local/pilots/memory-batch-003/fn_00347d90-heldout-cases.json": "99cdc39c0c2b010a96a5cbb71fe35022c1c1339acdf78f3e076844c1b735a422",
+    "local/pilots/memory-batch-003/fn_00347d90-public-cases.json": "83b29230c3b49752c6c11fb79847f510938e30a20d9c92aeee40ba671e1afc93",
+    "local/pilots/memory-batch-003/fn_00347db0-heldout-cases.json": "4e7a5e6b247eb24a9eb6dc74a30673f5023b2cdf9edc1b7261808869772aee8d",
+    "local/pilots/memory-batch-003/fn_00347db0-public-cases.json": "87cfbd86aed7e489bd59248f25818f5a92cbd1b85ae2045cea2732019c5015ad",
+    "local/pilots/memory-batch-003/fn_00347dd0-heldout-cases.json": "f3be206980b79f5af558cc89a6fae45c33389999583cba9dff69c676ebd77935",
+    "local/pilots/memory-batch-003/fn_00347dd0-public-cases.json": "e1ed8e92abfe8a9c3a8646f414cf5c4c11e0fd8fd1b02dd6af91de3ba6022fc9",
+    "local/pilots/memory-batch-003/fn_00347df0-heldout-cases.json": "a6f1e6140eee698e226e7f6cababac0eda6e4d727c801e2d4a824cb6642afaea",
+    "local/pilots/memory-batch-003/fn_00347df0-public-cases.json": "72e02e0cdf582171f5f6f85d7b6d895e6368282b8372447852fb8b1fab21d2a1",
+    "local/pilots/memory-batch-003/fn_00347e10-heldout-cases.json": "638e89b5adbd5746571a766f53ca3ba7d7b2922a99f97cbe342021652881b8ac",
+    "local/pilots/memory-batch-003/fn_00347e10-public-cases.json": "9e5313b3e77d9e799eceddd7370934515da7c65d20e3c23e80058e4ca97aac4d",
+    "local/pilots/memory-batch-003/fn_00347e70-heldout-cases.json": "36bd8181669d01071f325043074412ce90a9b1e0b77179cd4a48edc7ae09d7dc",
+    "local/pilots/memory-batch-003/fn_00347e70-public-cases.json": "764bccec853320ef219aa4dd9e6c0c00b34a411ee7a6a2bd0556f3858bcfdbd1",
+    "local/pilots/memory-batch-003/fn_00347e90-heldout-cases.json": "584dbdd232f92ade698eb2ffa0aabaa20de1c072d8867b814db066cc846855f5",
+    "local/pilots/memory-batch-003/fn_00347e90-public-cases.json": "303760461892e7f9c46eb1e7986bb86f961c5df99e05539ade7e86cf66467fd5",
+    "local/pilots/memory-batch-003/fn_00347eb0-heldout-cases.json": "087dc9c77f623db47c044f21cc4d44b23d1d36eaa5fdfa9848c70322fe1c6225",
+    "local/pilots/memory-batch-003/fn_00347eb0-public-cases.json": "b35bd4f464e4e9128febf95472244bbfdf82b508b87458e17d735e2c3000368b",
+    "local/pilots/memory-batch-003/slices.txt": "da1b759be0a5831c8158a25cf66822ff86a821a4d000e16de25f63a50183d9b4",
+    "tests/guest_memory_narrow.cpp": "171de3ab557686965f44a8385b77449269f9b062444fdf5ce84e74fd749b63ef",
+    "tests/indexed_field_mutant.cpp": "c7d85c0cca0e73933ba68ee8ba5a74549d12d258ef13ec226ad6c7d49b534237",
+    "tests/test_indexed_fields.py": "a30c0abceeee874a0f02c418a8fd72f44e8986590c6c3d2a1a08cf7a26325963",
+    "tools/daodecomp/harness.py": "8d044b074b82dc1aad9d36f280d8081c959626f8921f68d4fc9022b509476246",
+    "tools/daodecomp/leaf.py": "179fb460a8f8f3d28e96139756a3d6f35703ad118f2e86ac81ccc79d3780bf13",
+    "tools/daodecomp/memory.py": "d211fd6a395b8608433f4f4afb6ca339f50400260890a768c131dcc498bd3fac",
+    "tools/daodecomp/pe.py": "f406f2fdcb3e5a868091b1db453f2a257bcc77fa9688f5e0c7a0523d48f175c2",
+    "tools/freeze_indexed_fields_pair.py": "afa1d98a5768601e5061e388f98710e4c54623d10738fcf67349de4d2db520aa",
+    "tools/validate_checkpoint.py": "d8a6513363c4f702b029538dd29298df535c0470a1b6163e22533f9b7bc9fded",
+    "validation/indexed_field_cases.py": "7c8f50e8be247dad97188cd1cc2b74505d616bad5089a0996d87ebbd446d1cf8",
+    "validation/indexed_field_mutant.hpp": "385fb9cec1ac3c6928860913569a1a6df02b38e26790bcc70e46e68a096d4ca6",
+    "validation/indexed_field_native_runner.cpp": "4953e15057c3796cc475692866e79dcf7a884192c19080915ba8ab1af3063077",
+    "validation/indexed_field_runner.py": "cb8099331ef46177480a106e99e77584198910a7620582d85c5b847035fbb9ec",
+    "validation/validate_indexed_fields.py": "d415bfa7ba941e3d4f65071b1f7d34dabe31cb4bb10a397c90c0308a114714d4"
+  },
+  "additional_artifacts_sha256": {
+    "proposal.patch": "6fa0ee3155a4da7eca71d6d870bc1e5e28c02f4215a3759575e5aceeaa9a3f97",
+    "file-mapping.json": "3c8ac64edcc96b617a6bb99929bdcf060b5e234ddbb5b0ceb0bed54f2b15367d",
+    "support-handoff.json": "ef15082c0f667917b3825ec64aadfc060d067119ded1ccf973fc822518c286b5"
+  }
+}

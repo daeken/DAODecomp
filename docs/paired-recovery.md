@@ -17,6 +17,10 @@ failures stop the invocation with `needs-evidence`; they are never supplied to
 an implementation retry. Missing CMake sources, compiler/configuration errors,
 missing build executables and build timeouts stop with `infrastructure-error`.
 An implementation model cannot repair protected infrastructure.
+Protected unit tests, CTest and synthetic demonstrations, as well as missing
+Python modules or files, stop the invocation instead of triggering source repair.
+Snapshots must include their non-code dependencies, including the pre-commit hook
+and synthetic contract; CMake must use the explicit validation Python interpreter.
 Public-stage missing reports, launch failures, timeouts, runner errors and
 nondeterminism stop with `needs-evidence`; only stable semantic mismatches justify
 a public repair retry. Candidate compilation failures include diagnostics from

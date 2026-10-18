@@ -1,0 +1,37 @@
+{
+  "after_sha256": "e117a40d039c69dbda25df59a9c3cdaffb09cc32024cd5488fcfff92e9b57f21",
+  "assessment": "The conditional only gates duplicate comparison with ignored private evidence. All15 public contracts remain validated; every30 public/heldout corpus load retains fixed raw hash checks, counts, case schema/IDs, footprint validation and public/heldout disjointness. If private evidence exists its files remain mandatory; incomplete evidence fails. Production freezer/source/contract/corpus/oracle and acceptance rules are unchanged.",
+  "before_sha256": "f95bb655463c7536507eeb7f44011481b926aad455c48586e1a8b5e352dbfce8",
+  "changed_path": "tests/test_object_bitfields.py",
+  "decision": "approve",
+  "evidence_sha256": {
+    "local/pairs/throughput-packaging-unittest.log": "53241695ee792b2d71705d76651685345970862bd40c97844cbc13d83ac364f4",
+    "local/pilots/throughput-integration-001/packaging-delta.json": "a1da61889364cda918c7504c97e055757adec78a2b9ec18f6990b99db52c5f0f",
+    "local/pilots/throughput-integration-review-001/audit_delta.py": "bd1e8b32f4f345d592803d582066ace7ec9a4711f60e53e75956bdb9581d2624",
+    "local/pilots/throughput-integration-review-001/delta-audit.json": "604ba78cb2d3adf27b043a1c679fd7af6707f3e589448e5395f58997748e7b52",
+    "local/pilots/throughput-integration-review-001/delta-tests.log": "beda6d6e3e3bfa19a0ea93f9f1f9d082a9c2489412ed5984d966ff737d9edced"
+  },
+  "independent_execution": {
+    "evidence_type": "Infrastructure tests and source review, not original game execution.",
+    "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "partial_private_directory_probe": "failed FileNotFoundError as required",
+    "public_only_probe": "passed, observed all30 public/heldout cases() calls",
+    "targeted_suite": "9 object-bitfield tooling tests passed,0skips,0.242s"
+  },
+  "issues": [],
+  "original_patch_sha256": "f3c81c815c1cb36a61f4c7cc893686dc6b0b9aeb682d717d17b3ad4221409516",
+  "original_source_manifest_sha256": "32e3745ff0b897eac0683c59a6a7c385a1e00b4e649a00fe8bbb60c5119ddc5c",
+  "prior_review_sha256": "899be3a9ceb2a9236b12d9a14578838788e82e422db0bfe8ee1a35886d5cfde2",
+  "private_evidence": {
+    "binding": "55 files exactly match prior approved support review; indexed corpus summary matches exact frozen integration proposal; superseded summary retained.",
+    "files_verified": 56,
+    "receipt_sha256": "a21ca6f2f47d098e6fe7ea1f869a7a4e86177adbaf64e7bcfeadec174ba8e5db"
+  },
+  "recorded_full_tooling": "Inspected coordinator log:191tests,1skip,passed26.366s; no separate duplicate full run by reviewer.",
+  "remaining_obligation": "Failed initial checkpoint earns no progress/evidence credit. Run complete fresh shared checkpoint with all47positive+26negative reports and infrastructure gates, then publish v2 and update progress only on success.",
+  "reviewed_artifacts_sha256": {
+    "tests/test_object_bitfields.py": "e117a40d039c69dbda25df59a9c3cdaffb09cc32024cd5488fcfff92e9b57f21"
+  },
+  "schema_version": 1,
+  "scope": "Bounded packaging/test delta only; original frozen composition approval remains intact. Other coordinator metadata changes are outside this delta review."
+}

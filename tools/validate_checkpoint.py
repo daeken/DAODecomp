@@ -8,6 +8,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 MAX_JOBS = 4
 DEFAULT_TIMEOUT = 3600
 
@@ -16,20 +17,23 @@ def is_windows_platform():
     return os.name == "nt"
 
 
-def build_commands(build_dir, output_dir, jobs, windows=None):
+def build_commands(build_dir, output_dir, jobs, windows=None, batch_size=128):
     """Return ordered (name, argv, cwd, log) steps, with platform-aware CMake paths."""
     build_dir, output_dir = Path(build_dir).resolve(), Path(output_dir).resolve()
     windows = is_windows_platform() if windows is None else windows
     if windows:
         raise ValueError("full checkpoint is unavailable on Windows until both frozen validators accept a separate multi-config executable and CMakeCache path")
+    if type(batch_size) is not int or not 1 <= batch_size <= 128:
+        raise ValueError("batch size must be 1..128")
     config = "RelWithDebInfo"
     build_command = ["cmake", "--build", str(build_dir), "--config", config, "--parallel", str(jobs)]
     test_command = ["ctest", "--test-dir", str(build_dir), "--output-on-failure"]
     demo_dir = build_dir
     py = sys.executable
     common = ["--binary", str(ROOT / "gamedata/bin_ship/DAOrigins.exe"), "--build-dir", str(demo_dir)]
-    return [
-        ("configure", ["cmake", "-S", str(ROOT), "-B", str(build_dir), "-DCMAKE_BUILD_TYPE=" + config], ROOT),
+    steps = [
+        ("configure", ["cmake", "-S", str(ROOT), "-B", str(build_dir), "-DCMAKE_BUILD_TYPE=" + config,
+                       "-DPython3_EXECUTABLE=" + py], ROOT),
         ("build", build_command, ROOT), ("unittest", [py, "-m", "unittest", "discover", "-s", "tests", "-v"], ROOT),
         ("ctest", test_command, ROOT),
         ("demo_good", [py, str(ROOT / "examples/synthetic/demo.py"), "--build-dir", str(demo_dir)], ROOT),
@@ -42,9 +46,23 @@ def build_commands(build_dir, output_dir, jobs, windows=None):
         ("object_counters_negative", [py, str(ROOT / "validation/validate_object_counters.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/object-counters"), *common], ROOT),
         ("indexed_stores_all", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
         ("indexed_stores_negative", [py, str(ROOT / "validation/validate_indexed_stores.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/indexed-stores"), *common], ROOT),
+        ("indexed_fields_all", [py, str(ROOT / "validation/validate_indexed_fields.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/indexed-fields"), *common], ROOT),
+        ("indexed_fields_negative", [py, str(ROOT / "validation/validate_indexed_fields.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/indexed-fields"), *common], ROOT),
         ("linked_structures_all", [py, str(ROOT / "validation/validate_linked_structures.py"), "--suite", "all", "--jobs", str(jobs), "--report-dir", str(output_dir / "reports/linked-structures"), *common], ROOT),
         ("linked_structures_negative", [py, str(ROOT / "validation/validate_linked_structures.py"), "--expect-mismatch", "--report-dir", str(output_dir / "reports/linked-structures"), *common], ROOT),
     ]
+    for name, argv, _ in steps:
+        if name in {'indexed_fields_all','indexed_fields_negative'}:
+            argv += ['--execution','batch','--batch-size',str(batch_size)]
+    registry = json.loads((ROOT / "analysis/functions.json").read_text())
+    active = {f['name'] for f in registry['functions'] if f.get('backend') == 'object-bitfields-001' and f.get('status') in {'implemented','corpus_pass','reviewed','integrated'}}
+    if active:
+        from validation.object_bitfield_cases import NAMES
+        if active != set(NAMES):
+            raise ValueError('object-bitfields-001 must be promoted as the complete reviewed batch')
+        for name, extra in [('object_bitfields_all', ['--suite','all','--jobs',str(jobs)]),('object_bitfields_negative', ['--expect-mismatch'])]:
+            steps.append((name,[py,str(ROOT/'validation/validate_object_bitfields.py'),*extra,'--execution','batch','--batch-size',str(batch_size),'--report-dir',str(output_dir/'reports/object-bitfields'),*common],ROOT))
+    return steps
 
 
 def publication_paths(output_dir):
@@ -53,6 +71,8 @@ def publication_paths(output_dir):
     positives, negatives = [], []
     active_object_counters = False
     active_indexed_stores = False
+    active_indexed_fields = set()
+    active_object_bitfields = set()
     active_linked_structures = 0
     for function in registry["functions"]:
         status = function.get("status")
@@ -72,11 +92,26 @@ def publication_paths(output_dir):
             positives.append(output_dir / "reports/object-counters" / (function["name"] + "-all.json"))
             if function["name"] == "fn_00061f40":
                 negatives.append(output_dir / "reports/object-counters/fn_00061f40-mutant.json")
+        elif backend == "indexed-stores-001" and function.get("recovery_group") == "indexed-fields-002":
+            from validation.indexed_field_cases import FIELD_SPECS, NEGATIVE_NAMES
+            if function["name"] not in FIELD_SPECS:
+                raise ValueError("unknown indexed field function")
+            active_indexed_fields.add(function["name"])
+            positives.append(output_dir / "reports/indexed-fields" / (function["name"] + "-all.json"))
+            if function["name"] in NEGATIVE_NAMES:
+                negatives.append(output_dir / "reports/indexed-fields" / (function["name"] + "-mutant.json"))
         elif backend == "indexed-stores-001":
             active_indexed_stores = True
             positives.append(output_dir / "reports/indexed-stores" / (function["name"] + "-all.json"))
             if function["name"] == "fn_00347d10":
                 negatives.append(output_dir / "reports/indexed-stores/fn_00347d10-mutant.json")
+        elif backend == "object-bitfields-001":
+            from validation.object_bitfield_cases import NAMES
+            if function['name'] not in NAMES:
+                raise ValueError('unknown object bitfield function')
+            active_object_bitfields.add(function['name'])
+            positives.append(output_dir / 'reports/object-bitfields' / (function['name']+'-all.json'))
+            negatives.append(output_dir / 'reports/object-bitfields' / (function['name']+'-mutant.json'))
         elif backend == "linked-structures-001":
             active_linked_structures += 1
             positives.append(output_dir / "reports/linked-structures" / (function["name"] + "-all.json"))
@@ -84,6 +119,16 @@ def publication_paths(output_dir):
         else:
             raise ValueError(f"unsupported validation backend for implemented function {function['name']}: {backend}")
     expected_negative_controls = 2 + int(active_object_counters) + int(active_indexed_stores) + active_linked_structures
+    if active_indexed_fields:
+        from validation.indexed_field_cases import FIELD_SPECS, NEGATIVE_NAMES
+        if active_indexed_fields != set(FIELD_SPECS):
+            raise ValueError("indexed-fields-002 must be promoted as the complete reviewed batch")
+        expected_negative_controls += len(NEGATIVE_NAMES)
+    if active_object_bitfields:
+        from validation.object_bitfield_cases import NAMES
+        if active_object_bitfields != set(NAMES):
+            raise ValueError('object-bitfields-001 must be promoted as the complete reviewed batch')
+        expected_negative_controls += len(NAMES)
     if not positives or len(negatives) != expected_negative_controls:
         raise ValueError("registry lacks an expected scalar, memory, or active backend negative-control function")
     return positives, negatives

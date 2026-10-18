@@ -25,8 +25,21 @@ settings. Keep coordinator overhead low, every deterministic gate and independen
 review requirement. DeepSeek is a deferred option, not configured or authorized
 for new service setup.
 
-Aim for batches of 8–16 related functions where existing evidence and types permit;
-do not invent contracts to fill a batch. Review once per batch. The coordinator
+The user now prioritizes batched execution and conservative incremental validation
+before increasing packet size. The independently reviewed fresh-child transport
+checks the 11-function indexed-field group's 15,632 positive cases and four negative
+controls in 274.515 seconds, 10.88 times faster than the retained legacy run. The
+combined incremental checkpoint passed independent acceptance review in
+`analysis/reviews/throughput-integration-001.json`. The complete 47-function shared checkpoint and an unchanged all-seven-group
+cache-hit rerun passed. The latter took about 100 seconds versus 43 minutes for
+the initial run, including a fresh clean build and current attestation. The queue
+tracks later integration and publication status. Use the reviewed commands below;
+do not count an incomplete run or partial cache experiment as accepted evidence.
+
+After adoption, aim for batches of 20–30 related functions where existing evidence
+and types permit; do not invent contracts to fill a batch. Keep at most two
+implementation lanes. The target is 50–100 accepted functions per hour for suitable
+groups; complex functions and missing contracts can take longer. Review once per batch. The coordinator
 reads compact package/status summaries, integrates and handles disagreements.
 Avoid repeated full-artifact reads, routine result relays and new infrastructure
 audit/repair chains. Nonblocking tooling proposals stay in the backlog. A new
@@ -75,28 +88,46 @@ writes and explicit incoming-register observations. Follow the queue's
 current checkpoint and blockers. Grow toward dependent functions and subsystems,
 not merely maximize tiny leaf counts.
 
-The queue also tracks reviewed infrastructure handoffs. Evidence reuse currently
-has approval only for a non-counting shadow audit; existing evidence rules and
-full checkpoint checks remain in force. Review-prompt deduplication may consolidate
-repeated provenance but must preserve every binding and acceptance requirement.
+The queue also tracks reviewed infrastructure handoffs. The incremental checkpoint
+recreates an empty owned build directory and attests the complete current sources
+and build. A group may reuse historical comparisons only when its actual execution
+images, dependencies, runtime, contracts, registry entries, corpus and invocation
+are unchanged. Missing or unverifiable evidence forces new validation or failure.
+Old comparison provenance remains historical. Complete current coverage and all
+infrastructure gates are required for publication; partial runs never count.
+Review-prompt deduplication may consolidate repeated provenance but must preserve
+every binding and acceptance requirement.
 
 After integrating an accepted package, run one checkpoint command on the current
-Linux/macOS host, choosing new output and record paths each time:
+macOS host, choosing new output and record paths each time. Keep the source working
+directory and these build/cache paths stable to permit exact reuse:
 
 ```sh
-.venv/bin/python tools/validate_checkpoint.py \
-  --output-dir reports/checkpoint-memory-001 \
-  --record analysis/validation/memory-001.json --jobs 4
+env PATH="/opt/homebrew/Cellar/cmake/4.2.0/bin:$PATH" \
+  .venv/bin/python tools/incremental_checkpoint.py \
+  --build-dir "$PWD/build-incremental-throughput" \
+  --cache-dir "$PWD/local/checkpoint-cache/throughput-003" \
+  --output-dir "$PWD/reports/checkpoint-throughput-001" \
+  --record "$PWD/analysis/validation/throughput-001.json" \
+  --jobs 4 --batch-size 128
+.venv/bin/python tools/update_progress.py
 ```
 
-It builds, runs tooling/CTest/synthetic controls, checks all registered scalar,
-memory, object-counter, indexed-store and linked-structure functions and their negative controls,
-verifies report/input hashes, then
-publishes compact evidence and refreshes README progress. A failed step stops
-publication and leaves logs plus `checkpoint.json`. It does not stage, commit or
-push. Windows full checkpoints are currently rejected because the game validators
+Run these sequentially and stop on any failure. The checkpoint builds, runs
+tooling/CTest/synthetic controls, covers all seven implemented groups and their
+required negative controls, verifies report/input hashes, and publishes compact
+evidence. The next command refreshes README progress. A failed step stops
+publication and preserves diagnostic artifacts. Neither command stages, commits
+or pushes. Exact runtime reuse currently supports macOS; the complete legacy
+`tools/validate_checkpoint.py` remains available without reuse on Linux/macOS.
+Windows full checkpoints are currently rejected because the game validators
 do not yet accept separate executable/configuration and CMake-cache directories;
 cross-platform infrastructure CI remains separate from original-game validation.
+
+The local PATH prefix above selects the actual installed CMake executable:
+the strict artifact policy rejects `/opt/homebrew/bin/cmake`, which is a symlink.
+After a tool upgrade, resolve the current installation and keep that invocation
+stable; changed tool/runtime identities must invalidate affected reuse.
 
 The heartbeat can be paused or stopped when the user requests it. Missing tools,
 quota or reference-host capabilities should be recorded accurately; do not invent

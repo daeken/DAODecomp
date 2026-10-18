@@ -1,0 +1,60 @@
+{
+  "assessment": [
+    "The runtime-only helper snapshots each original absolute lookup to its strict resolved target, hashes regular resolved target files using the existing strict manifest helper, and re-resolves original lookups after hashing to reject retargeting.",
+    "Runtime provider file resolutions are also checked against the earlier provider membership inventory, closing the inventory-to-hashing retarget gap. Runtime returned identity contains both target-byte hashes and original-to-target bindings.",
+    "Normal/mutant candidate and build images continue to use unchanged files_manifest and reject symlink inputs. No oracle, corpus, contract, C++, comparator, acceptance inventory or publication gate changes.",
+    "Actual runtime identity changes with target bytes, different target resolution even for identical bytes, alias membership, dangling links or before/after instability. This changes execution input key bytes; it does not import legacy caches or relabel historical evidence."
+  ],
+  "decision": "approve",
+  "independent_execution": {
+    "additional_probes": [
+      "same-byte target change via directory link changes runtime identity",
+      "two original lookup aliases bind to one target-byte hash",
+      "selected image manifest rejects file and directory links"
+    ],
+    "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "patch_reproduction": "exact two-file match",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "result": "passed",
+    "scope": "proposed runtime-link tests plus existing incremental policy, batch-provider and composition tests, loaded through importlib with ROOT pointing to shared repo; production files untouched",
+    "skipped": 1,
+    "tests_run": 34
+  },
+  "issues": [],
+  "limitations": [
+    "Finite synthetic infrastructure tests and source inspection establish this bounded repair; no original game execution, cache hit, full checkpoint or universal-equivalence claim is made.",
+    "Existing macOS provider closure and supported adapter limitations remain."
+  ],
+  "proposal_patch_sha256": "fd9a98e1abdbb9913a57c42bdc892310de3370ebede76ed113ff997ae635cfec",
+  "recorded_evidence_inspected": {
+    "game_or_cache_or_publication_evidence": false,
+    "path": "local/pilots/runtime-symlink-repair-001/verification.json",
+    "scope": "Author recorded193tests1skip and two matching full real runtime manifests across3208 resolved files. Reviewer inspected this result and implementation; did not repeat expensive full runtime manifests or game execution."
+  },
+  "remaining_obligation": "Apply exact approved two-file patch, run identity-only preflight with all7group identities nonnull at the stable resolved build-tool PATH, then run the fresh complete47positive/26negative checkpoint and required infrastructure gates. Publish/count progress only after complete success; failed/partial runs remain unpublishable.",
+  "review_evidence_sha256": {
+    "local/pilots/runtime-symlink-repair-001/handoff.json": "70638b45442989a2c3bd37be88518a4b07d41c823521d1f35a569c83d22c33a0",
+    "local/pilots/runtime-symlink-repair-001/review/audit-results.json": "9452ed5e0e3c4fe7ea8606583316bf3ee9102dc029c43b04c80750e9bca52d38",
+    "local/pilots/runtime-symlink-repair-001/review/audit.py": "357e861458ef4178b4ff421afe00d6bf963badc521c04016188f4dedf53fe8e3",
+    "local/pilots/runtime-symlink-repair-001/review/tests.log": "4f1c0578f06e24a00e28cfeca2ed8a44165279bb3f31fea886b08864b8ed5d7a",
+    "local/pilots/runtime-symlink-repair-001/source-bindings.json": "aa7dccceb1c78e06428e5f41ef733499d9b250d431083053142daf8496a0714f",
+    "local/pilots/runtime-symlink-repair-001/verification.json": "b7cdb83ab4ec16015f6c041f085f9501415d6cb79587d9146f92e2f678027115",
+    "local/pilots/runtime-symlink-repair-001/verification.log": "cc0acb3a546fbfab40e6324e084211f0e64cb8973e2c35af46840bfeeb6878d1"
+  },
+  "reviewed_artifacts_sha256": {
+    "tests/test_runtime_provider_links.py": "be8097c313947c137689026f27e2b84f748396c38f3fff8895d63bfe735aa8b3",
+    "tools/incremental_checkpoint.py": "9e4f22c526de4802f1321fe502ea1a6105183e5ad49089b7e050216435fa1e60"
+  },
+  "schema_version": 1,
+  "scope": "Bounded runtime provider link repair only. Prior combined composition and packaging approvals remain unchanged.",
+  "source_bindings": {
+    "tests/test_runtime_provider_links.py": {
+      "after": "be8097c313947c137689026f27e2b84f748396c38f3fff8895d63bfe735aa8b3",
+      "before": null
+    },
+    "tools/incremental_checkpoint.py": {
+      "after": "9e4f22c526de4802f1321fe502ea1a6105183e5ad49089b7e050216435fa1e60",
+      "before": "7dc05148462de66cb92354516b4ae4289c060de589230996e62ab493477de4c6"
+    }
+  }
+}

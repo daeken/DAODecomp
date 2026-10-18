@@ -1,0 +1,63 @@
+{
+  "functions": 15,
+  "group": "object-bitfields-001",
+  "heldout_cases": 1920,
+  "limitations": [
+    "Pair-stage throughput excludes characterization, preparation, integration and checkpoints; not sustained total recovery throughput.",
+    "Historical reports remain unchanged; complete current checkpoint is required before progress publication."
+  ],
+  "manifest_canonical_sha256": "c5b8ee6e094e9274064e648d36c4afe2bdb928fbe75c4465e9d9e02e4050b7fa",
+  "manifest_raw_sha256": "8e45109f81107d5a2e9af5f0f0f2fb0648300d90cd498d434af9493c3dd4bfc4",
+  "model_requests": [
+    {
+      "elapsed_seconds": 73.578,
+      "kind": "implementation",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 43608,
+          "output_tokens": 5234,
+          "reasoning_output_tokens": 848
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 22.585,
+      "kind": "review",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "usage": [
+        {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 251101,
+          "output_tokens": 857,
+          "reasoning_output_tokens": 143
+        }
+      ]
+    }
+  ],
+  "native_windows_validated": false,
+  "negative_cases": 5760,
+  "nonblocking_backlog": [
+    "Compact matched-pass report presentation could reduce review input; no implementation/new requests in this composition."
+  ],
+  "package_raw_sha256": "dcb430d353f97ab0e7610c048d283edbbfa5dc82af7e7e75c00b3be538577162",
+  "pair_elapsed_seconds": 464.679,
+  "pair_stage_functions_per_hour": 116.20925413027058,
+  "pair_status_raw_sha256": "5df4563f085e15e16a09e7ab564b6a760364780e5a82c15d39199234d5376adb",
+  "proof": false,
+  "public_cases": 5760,
+  "repairs": 0,
+  "repetitions_per_side": 2,
+  "schema_version": 1,
+  "source_review_raw_sha256": "642b0b2477c1032c4ce19bc5da4abcc8f4d2919f2cf035ab9846bbaf5bef81b8",
+  "source_sha256": "96e72c8606fe3bb3ad189b594e47c79215b9f724e7629e2d7d58435576a0e8da",
+  "status": "integrated_full_checkpoint_passed",
+  "support_review_raw_sha256": "21bdea99f1f0e8406d6a4aeb7baa09f61572aa8f53bfe28414ddeedbe505a878",
+  "validation_record": "analysis/validation/throughput-reuse-001.json",
+  "seed_validation_record": "analysis/validation/throughput-001.json"
+}

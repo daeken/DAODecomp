@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "ready": false,
+  "group": "object-bitfields-001",
+  "model": "gpt-6.1-sol",
+  "maximum_attempts": 3,
+  "allowed_write_paths": [
+    "src/object_bitfields.cpp"
+  ],
+  "header": "include/dao/object_bitfields.hpp",
+  "functions": [
+    {
+      "name": "fn_0052a680",
+      "contract": "contracts/functions/fn_0052a680.json",
+      "rva": 5416576,
+      "size": 31,
+      "code_sha256": "a134ad0d00e8dd6ffb3afe30e77a3d36a6482e29752060273266b6eaed41f7eb"
+    },
+    {
+      "name": "fn_0052a820",
+      "contract": "contracts/functions/fn_0052a820.json",
+      "rva": 5416992,
+      "size": 27,
+      "code_sha256": "96511a802899cb0a033bd7580d9d83545d946fe3fca22ed68bac360ca66d8deb"
+    },
+    {
+      "name": "fn_0052a840",
+      "contract": "contracts/functions/fn_0052a840.json",
+      "rva": 5417024,
+      "size": 27,
+      "code_sha256": "10234a4c1801d861c1165fd87735916f4792f0f6d9f1dbb324415107bc077d6e"
+    },
+    {
+      "name": "fn_0052a860",
+      "contract": "contracts/functions/fn_0052a860.json",
+      "rva": 5417056,
+      "size": 27,
+      "code_sha256": "289803a7e103ac622becf7bd63b8e17220ad6d39d67c9d3933525fe6c36746d1"
+    },
+    {
+      "name": "fn_0052a950",
+      "contract": "contracts/functions/fn_0052a950.json",
+      "rva": 5417296,
+      "size": 32,
+      "code_sha256": "bc7ebfcedf1e080741f2bae8c8e799a58115e4e87a7605f560038f2a76dd72cc"
+    },
+    {
+      "name": "fn_0052a9d0",
+      "contract": "contracts/functions/fn_0052a9d0.json",
+      "rva": 5417424,
+      "size": 30,
+      "code_sha256": "95252ffee21a98610a87579f9ae0af6bc714b5973d658444237037f06e2f4788"
+    },
+    {
+      "name": "fn_0052a9f0",
+      "contract": "contracts/functions/fn_0052a9f0.json",
+      "rva": 5417456,
+      "size": 30,
+      "code_sha256": "b1c9fe13f412cdaa758aa83a180d0366bce88e6577d5b184eb577b0af5dd441f"
+    },
+    {
+      "name": "fn_0052aa10",
+      "contract": "contracts/functions/fn_0052aa10.json",
+      "rva": 5417488,
+      "size": 30,
+      "code_sha256": "af336b7876d4626203c42c04a09ae324b7faa8f96451e654e4b6ce6bc9ee4b58"
+    },
+    {
+      "name": "fn_0052aa30",
+      "contract": "contracts/functions/fn_0052aa30.json",
+      "rva": 5417520,
+      "size": 31,
+      "code_sha256": "0d5e390e32bbc55e8e7c36344b865c26181c97b6721e790293c590a04358c6b9"
+    },
+    {
+      "name": "fn_0052aa50",
+      "contract": "contracts/functions/fn_0052aa50.json",
+      "rva": 5417552,
+      "size": 31,
+      "code_sha256": "5a3a642023570e4af888ddfe96576b6a319259b27e31f625499015ce6fb9ad2d"
+    },
+    {
+      "name": "fn_0052aa70",
+      "contract": "contracts/functions/fn_0052aa70.json",
+      "rva": 5417584,
+      "size": 31,
+      "code_sha256": "8008322066c5e06aab82092c347ba63d457c92c6550ba3dac1078dc6d0399152"
+    },
+    {
+      "name": "fn_0052aa90",
+      "contract": "contracts/functions/fn_0052aa90.json",
+      "rva": 5417616,
+      "size": 31,
+      "code_sha256": "72e54a4027df1aa690e42af920e8c0dc3372b494b5acb6bd9334c210d953744f"
+    },
+    {
+      "name": "fn_0052ab30",
+      "contract": "contracts/functions/fn_0052ab30.json",
+      "rva": 5417776,
+      "size": 31,
+      "code_sha256": "c98b1d8660dcaa3dd6fb409c9420577d36d1d5e623f6e4f4c40e539da4bab070"
+    },
+    {
+      "name": "fn_0052ab70",
+      "contract": "contracts/functions/fn_0052ab70.json",
+      "rva": 5417840,
+      "size": 103,
+      "code_sha256": "519f2703b79dbe90b39143fd25563eac6b9b300d71d82bfa2d6c165b82c2c4de"
+    },
+    {
+      "name": "fn_0052abe0",
+      "contract": "contracts/functions/fn_0052abe0.json",
+      "rva": 5417952,
+      "size": 39,
+      "code_sha256": "7e2b18c600938fb0440d6711757627c83d96e1358be8e9b0eb779b9c19de2df4"
+    }
+  ],
+  "scope": "Unimplemented15-function group; exact immutable v1 contracts/corpora, proposed observation interface; only independent support acceptance can permit freezing",
+  "repeats": 2
+}

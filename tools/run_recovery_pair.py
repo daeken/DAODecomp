@@ -341,6 +341,38 @@ def inspect_report(path, declaration, m, tree):
     for required in (tree / m["candidate"], tree / f["contract"], Path(m["reference"]["path"])):
         if artifacts.get(str(required)) != sha(required):
             raise PairError(f"report does not bind tested source/contract/reference: {required}")
+    batch_requested = any('--execution' in cmd['argv'] and
+                          cmd['argv'][cmd['argv'].index('--execution')+1] == 'batch'
+                          for stage in m['commands'].values() for cmd in stage)
+    if batch_requested:
+        backend = report.get('execution_backend', {})
+        processes = backend.get('process_counts', [])
+        if (backend.get('name') != 'posix-fresh-child-batch-v1'
+                or backend.get('case_process_isolation') != 'fresh-fork-session'
+                or backend.get('supervisor_reuse') != 'none across sides or repetitions'
+                or len(processes) != 2 * report['repeats']
+                or any(p.get('case_processes') != len(expected) or p.get('supervisor_processes') != 1 for p in processes)):
+            raise PairError('batch report lacks complete fresh-child execution provenance')
+        original_command = report.get('oracle_command', [])
+        candidate_command = report.get('candidate_command', [])
+        adapter = 'object_bitfield' if m['group'] == 'object-bitfields-001' else 'indexed_field'
+        runner = tree / f'validation/{adapter}_batch_runner.py'
+        if (len(original_command) != 4 or len(candidate_command) != 4
+                or original_command[1:3] != [str(runner), 'original']
+                or candidate_command[1:3] != [str(runner), 'candidate']
+                or original_command[0] != candidate_command[0]
+                or original_command[3] != m['reference']['path']):
+            raise PairError('batch report command identity mismatch')
+        library = Path(candidate_command[3])
+        stem = f'libdao_{adapter}_batch' + ('_mutant' if declaration['expect'] == 'mismatch' else '')
+        if library.parent != tree / 'build' or library.name not in (stem+'.dylib',stem+'.so'):
+            raise PairError('batch report native library identity mismatch')
+        required_batch = [library, runner, tree/'tools/daodecomp/batch.py',
+                          tree/f'validation/{adapter}_batch_native.cpp',
+                          tree/'CMakeLists.txt', tree/'build/CMakeCache.txt', tree/'build/compile_commands.json']
+        for required in required_batch:
+            if not required.is_file() or artifacts.get(str(required)) != sha(required):
+                raise PairError('batch report does not bind executed adapter/library/build: '+str(required))
     counts = dict(Counter(row["status"] for row in rows))
     if declaration["expect"] == "mismatch":
         passed = (report.get("status") == "failed" and counts.get("mismatch", 0) > 0
@@ -355,7 +387,7 @@ def inspect_report(path, declaration, m, tree):
                "contract_raw_file_sha256": m["snapshot"][f["contract"]],
                "corpus_raw_file_sha256": m["snapshot"][f["corpora"][declaration["corpus"]]],
                "source_raw_file_sha256": sha(tree / m["candidate"]),
-               "execution": {key: report.get(key) for key in ("host", "backend_versions", "oracle_command", "candidate_command")},
+               "execution": {key: report.get(key) for key in ("host", "backend_versions", "oracle_command", "candidate_command", "execution_backend")},
                "execution_artifacts_raw_sha256": artifacts}
     if not passed:
         row = next((r for r in rows if r["status"] != "corpus_pass"), rows[0])
@@ -510,10 +542,17 @@ def infrastructure_failure(gate, attempt):
         if command["exit_code"] is None or command["timed_out"]:
             return True
         if command["exit_code"] != 0:
+            argv = command["argv"]
+            # These checks exercise protected support, not a compiler diagnostic
+            # or a validated public semantic counterexample for the candidate.
+            if (Path(argv[0]).stem == "ctest" or argv[1:3] == ["-m", "unittest"]
+                    or any(arg.endswith("/examples/synthetic/demo.py") for arg in argv)):
+                return True
             logs = "\n".join((attempt / f"build-{index}" / name).read_text(errors="replace")
                              for name in ("stdout.log", "stderr.log"))
             markers = ("Cannot find source file", "No SOURCES given to target", "CMake Error",
-                       "Could NOT find", "No CMAKE_CXX_COMPILER", "is not able to compile a simple test program")
+                       "Could NOT find", "No CMAKE_CXX_COMPILER", "is not able to compile a simple test program",
+                       "FileNotFoundError:", "ModuleNotFoundError:", "ImportError:")
             if any(marker in logs for marker in markers):
                 return True
     return False

@@ -13,10 +13,10 @@ selection may differ; observable function behavior must agree with the reference
 | Measure | Count |
 | --- | ---: |
 | Function hypotheses in the initial main EXE inventory | 27,555 |
-| Functions in the recovery registry | 21 |
-| C++ implementations | 21 |
-| Implementations with current emulator corpus evidence | 21 |
-| Input cases across those functions (excluding repeat runs) | 10,366 |
+| Functions in the recovery registry | 47 |
+| C++ implementations | 47 |
+| Implementations with current emulator corpus evidence | 47 |
+| Input cases across those functions (excluding repeat runs) | 33,678 |
 | Implementations with current native Windows corpus evidence | 0 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
@@ -45,6 +45,10 @@ failed or blocked work stays recorded rather than counting as accepted progress.
 After building and installing the dependencies below, with the original game at
 `gamedata/bin_ship/DAOrigins.exe`:
 
+For ongoing recovery, use the complete [incremental checkpoint](docs/continuous-recovery.md).
+It rebuilds current source and reuses comparisons only when their execution inputs
+still match exactly. Individual groups can also be checked with these commands:
+
 ```sh
 .venv/bin/python validation/validate_leaves.py --suite all --jobs 4
 .venv/bin/python validation/validate_leaves.py --expect-mismatch
@@ -54,6 +58,10 @@ After building and installing the dependencies below, with the original game at
 .venv/bin/python validation/validate_object_counters.py --expect-mismatch
 .venv/bin/python validation/validate_indexed_stores.py --suite all --jobs 2
 .venv/bin/python validation/validate_indexed_stores.py --expect-mismatch
+.venv/bin/python validation/validate_indexed_fields.py --execution batch --suite all --jobs 4
+.venv/bin/python validation/validate_indexed_fields.py --execution batch --expect-mismatch
+.venv/bin/python validation/validate_object_bitfields.py --suite all --jobs 4
+.venv/bin/python validation/validate_object_bitfields.py --expect-mismatch
 .venv/bin/python validation/validate_linked_structures.py --suite all --jobs 2
 .venv/bin/python validation/validate_linked_structures.py --expect-mismatch
 ```
@@ -85,6 +93,15 @@ The indexed-store adapter checks conditional byte/word writes, truncation, all
 incoming EAX bits on rejected indexes, and preserved ECX in the original slice.
 Its negative control incorrectly clears the upper return bits on rejected indexes.
 See the [indexed-store recovery record](analysis/indexed-stores-001.md).
+
+Eleven related indexed getters and setters additionally preserve narrow reads,
+full incoming return bits and distinct rejected-index sentinels. See the
+[indexed-field recovery record](analysis/indexed-fields-002.md).
+
+Fifteen related object functions cover flag updates, packed fields, color merging,
+sequential overlapping copies and conditional pointer traversal. Their observations
+include full return/register bits and every arena byte. See the
+[object-bitfield recovery record](analysis/object-bitfields-001.md).
 
 The linked-structure adapter validates disjoint list/node graphs, raw guest
 pointers (including a valid node at arena offset zero), exact branch footprints

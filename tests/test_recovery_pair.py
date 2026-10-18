@@ -191,6 +191,23 @@ class RecoveryPairTests(unittest.TestCase):
         self.assertEqual(len(self.calls), 1)
         self.assertFalse((self.output / "accepted").exists())
 
+    def test_protected_tooling_and_missing_dependencies_never_request_source_repair(self):
+        commands = [
+            ["{python}", "-m", "unittest", "missing_protected_test_module"],
+            ["{python}", "-c", "import missing_protected_dependency"],
+            ["{python}", "-c", "open('missing_protected_fixture', 'rb')"],
+        ]
+        for index, argv in enumerate(commands):
+            with self.subTest(argv=argv):
+                self.output = self.root / "local/pairs" / ("protected-" + str(index))
+                self.calls = []
+                self.manifest["commands"]["build"] = [{
+                    "argv": argv, "timeout_seconds": 5, "reports": []}]
+                result = self.run_pair(attempts=3)
+                self.assertEqual(result["status"], "infrastructure-error")
+                self.assertEqual(len(self.calls), 1)
+                self.assertFalse((self.output / "accepted").exists())
+
     @unittest.skipUnless(shutil.which("cmake"), "CMake configuration preflight")
     def test_cmake_missing_support_fails_before_spending_any_model_request(self):
         cmake = self.root / "CMakeLists.txt"

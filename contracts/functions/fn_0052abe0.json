@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kind": "game",
+  "function_id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052abe0",
+  "inputs": {
+    "arena": "bytes",
+    "object": "u32",
+    "value": "u32",
+    "source": "u32",
+    "entry_eax": "u32"
+  },
+  "return_type": "u32",
+  "memory": {
+    "arena": 512,
+    "exit_ecx": 4
+  },
+  "calls": [],
+  "preconditions": "{\"abi\": {\"cleanup\": 0, \"entry_eax\": \"entry_eax\", \"entry_ecx\": \"ARENA_BASE+object\", \"nonvolatile\": \"EBX ESI EDI EBP preserved\", \"observe_eax\": \"raw u32 except copy returns arena-relative destination offset\", \"observe_exit_ecx\": true, \"stack_arguments\": []}, \"domain\": {\"all_inputs\": \"u32 except arena lowercase hex; object/source bounded by fixture spans\", \"arena_bytes\": 512, \"calls\": [], \"globals\": [], \"unknown\": \"Class identity, native signature and ownership/lifetime are unknown; no Windows/native caller execution\"}, \"id\": \"2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:DAOrigins.exe:0x0052abe0\", \"memory\": \"All512bytes observed; only fixture spans may be accessed. Partial overlap and unaligned objects allowed. Read/write order observable. ExitECX is serialized as4little-endian bytes.\", \"module_sha256\": \"2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3\", \"name\": \"fn_0052abe0\", \"rva\": \"0x52abe0\", \"semantics\": \"EAX=ptr[object+0x9c], then ptr[EAX+0x11c]; nonnull replaceAL with(byte[EAX+0x64]>>1)&1 retaining pointer upper24bits and preserveentryECX; null pathECX=ptr[object+0x98], AL=(byte[ECX+0x50]>>5)&1 with upperEAX zero.\", \"size\": 39, \"slice_sha256\": \"7e2b18c600938fb0440d6711757627c83d96e1358be8e9b0eb779b9c19de2df4\", \"spec\": [\"graph\", 156, 0, 0, \"nullable\"], \"status\": \"draft_requires_independent_acceptance\"}"
+}

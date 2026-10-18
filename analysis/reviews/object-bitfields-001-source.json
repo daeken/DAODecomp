@@ -1,0 +1,39 @@
+{
+  "decision": "approve",
+  "issues": [
+    {
+      "detail": "All 15 bodies agree with the supplied instruction bytes within the frozen observation domain. The flag helpers preserve full entry EAX and raw ECX, use the recorded byte/word footprints, and distinguish low-byte truth from the unsigned full-u32 >1 predicate.",
+      "function": "*",
+      "severity": "note"
+    },
+    {
+      "detail": "Preserves the dirty-byte write before field reads, both modulo-256 additions, the XOR update, and entry EAX bits 8..31. Access widths and order match the recorded slice.",
+      "function": "fn_0052a950",
+      "severity": "note"
+    },
+    {
+      "detail": "The high byte is widened to u32 before shifting by 24; the merge, dword store and full EAX return match the bytes with defined C++ semantics.",
+      "function": "fn_0052ab30",
+      "severity": "note"
+    },
+    {
+      "detail": "Preserves eight byte, four word and one dword read/write pairs in instruction order, including partial-overlap propagation and unaligned accesses. Returns the destination offset under the explicit normalization and records the final source dword as raw exit ECX.",
+      "function": "fn_0052ab70",
+      "severity": "note"
+    },
+    {
+      "detail": "Preserves the unconditional first pointer dereference, nonnull pointer upper EAX bits, and null-path zero upper EAX and fallback ECX. Guest pointers remain integer addresses; no invented null-success behavior is introduced.",
+      "function": "fn_0052abe0",
+      "severity": "note"
+    }
+  ],
+  "limitations": [
+    "Approval covers only src/object_bitfields.cpp with raw SHA-256 96e72c8606fe3bb3ad189b594e47c79215b9f724e7629e2d7d58435576a0e8da against the supplied module/RVA/slice identities and frozen contracts. It does not authorize registry integration.",
+    "Review used only supplied material. Hashes and pipeline binding verification were supplied evidence, not independently recomputed here; raw-file and canonical-JSON hash domains were distinguished.",
+    "Recorded validation used AppleClang 21 on macOS ARM64, Python 3.14.7 and Unicorn 2.1.4. All public, heldout and negative gates passed, alongside build, tooling, CTest and synthetic demos. Original x86 execution was emulated, without native Windows corroboration.",
+    "Scope is guarded 512-byte ordinary RAM with valid fixture footprints, including unaligned objects, graph aliasing and sequential copy overlap. Invalid accesses, concurrent mutation, MMIO and accesses outside that domain are excluded.",
+    "The uniform interface models full EAX and raw exit ECX; it does not establish the original native C++ signature, physical caller ABI composition, class identity or ownership/lifetime. Exit EDX and arithmetic EFLAGS are excluded.",
+    "Finite corpus agreement and instruction-level review do not establish exhaustive equivalence or whole-game behavior."
+  ],
+  "summary": "Approve the scoped source package. Instruction review supports exact return bits, memory widths and overlap order, and defined unsigned arithmetic and shifts; supplied validation bindings support the tested package."
+}

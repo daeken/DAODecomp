@@ -644,6 +644,565 @@
         6039837
       ],
       "pilot": "luna-001"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347cf0",
+      "name": "fn_00347cf0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439856,
+      "size": 29,
+      "code_sha256": "fe5ec2d090f480c799f7975af981c904e4a06fe8ab12806e5bf57bccbcaeff58",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347cf0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347cf0.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d30",
+      "name": "fn_00347d30",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439920,
+      "size": 26,
+      "code_sha256": "68e657fa6835e2096d5105c54e65b7fd9240014f3326aaaa6bd9950f4fcf3cae",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347d30(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d30.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d70",
+      "name": "fn_00347d70",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3439984,
+      "size": 26,
+      "code_sha256": "8d7af58d4df9b6db552a21aba6db12d89212d05d9f25e73bf7f94a09f7f9b06c",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347d70(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d70.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347d90",
+      "name": "fn_00347d90",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440016,
+      "size": 25,
+      "code_sha256": "d088edecee9d5e3c4e3d2231b7b2e81a700d6a03dc888d8f2363545e2427d46e",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index",
+          "value"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 8,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347d90(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347d90.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347db0",
+      "name": "fn_00347db0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440048,
+      "size": 29,
+      "code_sha256": "d7da1ba66dc89b021c957d6af4981e820f71af15e0477b757cb0764b7734a1e1",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347db0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347db0.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347dd0",
+      "name": "fn_00347dd0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440080,
+      "size": 25,
+      "code_sha256": "d990b020ac73148d3c9e312d190047435c3d4cf7e7f0c3028c2dc67c00ab2d2f",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index",
+          "value"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 8,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347dd0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347dd0.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347df0",
+      "name": "fn_00347df0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440112,
+      "size": 26,
+      "code_sha256": "d65079a7af0abcd6b2f0681f045f4f2d64d8624d8710c129bb6b50afe754a5e2",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347df0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347df0.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347e10",
+      "name": "fn_00347e10",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440144,
+      "size": 25,
+      "code_sha256": "b8f7bcbbbc9c5c26a0f0e08a06cdbc4a0c03515e5e215fef0bab84f1b529031d",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index",
+          "value"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 8,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347e10(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347e10.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347e70",
+      "name": "fn_00347e70",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440240,
+      "size": 29,
+      "code_sha256": "07c6a1c8150d5d11e2ba977aec4d9d0770027c6056ceb9b140c5ebe4d640287e",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347e70(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347e70.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347e90",
+      "name": "fn_00347e90",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440272,
+      "size": 26,
+      "code_sha256": "16ce21f6bda3cdf011abb2c0e1aa52650dfe09295f844f6a3fc7d961e75ba902",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 4,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347e90(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347e90.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-00347eb0",
+      "name": "fn_00347eb0",
+      "original_name": null,
+      "subsystem": null,
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "rva": 3440304,
+      "size": 25,
+      "code_sha256": "97aef0e563139d6bd1812ab3e708eab0bd2afa6c89864994ca09ae289b0b1789",
+      "abi": {
+        "this": "ecx",
+        "arguments": [
+          "index",
+          "value"
+        ],
+        "return_bits": 32,
+        "stack_cleanup": 8,
+        "preserved_registers": [
+          "ecx"
+        ]
+      },
+      "calling_convention": "instruction-observed ECX object / callee-popped u32 stack slots",
+      "signature": "std::uint32_t fn_00347eb0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "status": "implemented",
+      "contract": "contracts/functions/fn_00347eb0.json",
+      "source": "src/indexed_fields.cpp",
+      "backend": "indexed-stores-001",
+      "recovery_group": "indexed-fields-002",
+      "evidence": "local/pilots/memory-batch-003/characterization.json"
+    },
+    {
+      "name": "fn_0052a680",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "a134ad0d00e8dd6ffb3afe30e77a3d36a6482e29752060273266b6eaed41f7eb",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a680",
+      "rva": 5416576,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a680.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a680"
+    },
+    {
+      "name": "fn_0052a820",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 27,
+      "code_sha256": "96511a802899cb0a033bd7580d9d83545d946fe3fca22ed68bac360ca66d8deb",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a820",
+      "rva": 5416992,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a820.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a820"
+    },
+    {
+      "name": "fn_0052a840",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 27,
+      "code_sha256": "10234a4c1801d861c1165fd87735916f4792f0f6d9f1dbb324415107bc077d6e",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a840",
+      "rva": 5417024,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a840.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a840"
+    },
+    {
+      "name": "fn_0052a860",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 27,
+      "code_sha256": "289803a7e103ac622becf7bd63b8e17220ad6d39d67c9d3933525fe6c36746d1",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a860",
+      "rva": 5417056,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a860.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a860"
+    },
+    {
+      "name": "fn_0052a950",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 32,
+      "code_sha256": "bc7ebfcedf1e080741f2bae8c8e799a58115e4e87a7605f560038f2a76dd72cc",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a950",
+      "rva": 5417296,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a950.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a950"
+    },
+    {
+      "name": "fn_0052a9d0",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 30,
+      "code_sha256": "95252ffee21a98610a87579f9ae0af6bc714b5973d658444237037f06e2f4788",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a9d0",
+      "rva": 5417424,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a9d0.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a9d0"
+    },
+    {
+      "name": "fn_0052a9f0",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 30,
+      "code_sha256": "b1c9fe13f412cdaa758aa83a180d0366bce88e6577d5b184eb577b0af5dd441f",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052a9f0",
+      "rva": 5417456,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052a9f0.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052a9f0"
+    },
+    {
+      "name": "fn_0052aa10",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 30,
+      "code_sha256": "af336b7876d4626203c42c04a09ae324b7faa8f96451e654e4b6ce6bc9ee4b58",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aa10",
+      "rva": 5417488,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052aa10.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052aa10"
+    },
+    {
+      "name": "fn_0052aa30",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "0d5e390e32bbc55e8e7c36344b865c26181c97b6721e790293c590a04358c6b9",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aa30",
+      "rva": 5417520,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052aa30.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052aa30"
+    },
+    {
+      "name": "fn_0052aa50",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "5a3a642023570e4af888ddfe96576b6a319259b27e31f625499015ce6fb9ad2d",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aa50",
+      "rva": 5417552,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052aa50.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052aa50"
+    },
+    {
+      "name": "fn_0052aa70",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "8008322066c5e06aab82092c347ba63d457c92c6550ba3dac1078dc6d0399152",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aa70",
+      "rva": 5417584,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052aa70.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052aa70"
+    },
+    {
+      "name": "fn_0052aa90",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "72e54a4027df1aa690e42af920e8c0dc3372b494b5acb6bd9334c210d953744f",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052aa90",
+      "rva": 5417616,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052aa90.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052aa90"
+    },
+    {
+      "name": "fn_0052ab30",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 31,
+      "code_sha256": "c98b1d8660dcaa3dd6fb409c9420577d36d1d5e623f6e4f4c40e539da4bab070",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052ab30",
+      "rva": 5417776,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052ab30.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052ab30"
+    },
+    {
+      "name": "fn_0052ab70",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 103,
+      "code_sha256": "519f2703b79dbe90b39143fd25563eac6b9b300d71d82bfa2d6c165b82c2c4de",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052ab70",
+      "rva": 5417840,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052ab70.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052ab70"
+    },
+    {
+      "name": "fn_0052abe0",
+      "module": "DAOrigins.exe",
+      "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
+      "size": 39,
+      "code_sha256": "7e2b18c600938fb0440d6711757627c83d96e1358be8e9b0eb779b9c19de2df4",
+      "id": "DAOrigins.exe:2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3:rva-0052abe0",
+      "rva": 5417952,
+      "status": "implemented",
+      "backend": "object-bitfields-001",
+      "recovery_group": "object-bitfields-001",
+      "contract": "contracts/functions/fn_0052abe0.json",
+      "source": "src/object_bitfields.cpp",
+      "symbol": "fn_0052abe0"
     }
   ]
 }

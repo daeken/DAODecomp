@@ -1,0 +1,75 @@
+{
+  "assessment": [
+    "DECLARED_VALIDATION_DEPENDENCIES contains one exact path for linked_structures. Group identity copies that full file hash from the fresh source manifest; missing declaration hash raises rather than omitting evidence.",
+    "historical_role recognizes the exact declared path only for its group, requires identity source membership, and returns an execution role. It cannot take historical-only exemption: unchanged verify_entry compares current file hash to immutable report hash. Changed or missing file fails; other groups and undeclared test files stay unknown.",
+    "The key includes the changed driver itself, so this repair invalidates previous group identities. No cache import, generic resume, evidence rewriting, historical exemption or publication/coverage change was introduced."
+  ],
+  "base_binding": {
+    "drift": [
+      "analysis/recovery-queue.json"
+    ],
+    "explanation": "Coordinator confirmed queue metadata records current review/request3. All production/test repair base bindings match; queue is outside execution source manifest. Do not overwrite coordinator queue on integration.",
+    "matched_snapshot_files": 257
+  },
+  "changed_paths": {
+    "tests/test_incremental_artifact_roles.py": {
+      "base_sha256": null,
+      "proposed_sha256": "803c8eba351f3453564d4d1daf6be3cf430c27c7b69efea75c03fd414bd56827"
+    },
+    "tests/test_incremental_checkpoint.py": {
+      "base_sha256": "9b63ce5a0e4979fd0a9d05da4d29c38154b9f40fe6a2d9d51367f1e85c0e9f47",
+      "proposed_sha256": "39e187146b6ee5793533a081ca96d270f66e209a052d7f2a22dc148e8c9d0b70"
+    },
+    "tools/incremental_checkpoint.py": {
+      "base_sha256": "9e4f22c526de4802f1321fe502ea1a6105183e5ad49089b7e050216435fa1e60",
+      "proposed_sha256": "91142c6b419415a1fe90f02d2e5fc6813fe2d3d4c66b68837137b5a49dfa016a"
+    }
+  },
+  "decision": "approve",
+  "handoff_sha256": "d9898a36d7e7178f7c353684fea0c9d8c09a8d69dbc7cefb5305fcb5b3c185fd",
+  "independent_execution": {
+    "actual_report_audit": {
+      "all_nonlinked_groups_reject_linked_declared_path": true,
+      "declarations_independently_reclassified": 3729,
+      "meaning": "Role classification of actual declared paths only. Paired path projection does not import reports or establish a current execution/cache match.",
+      "proposed_rejections": 0,
+      "reports_raw_hash_verified": 88
+    },
+    "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "patch_reproduction": "Exact three-file patch application reproduced every proposed hash",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "result": "passed",
+    "scope": "proposed incremental policy tests and live declaration/key role tests; synthetic comparison interception only, no original/native execution",
+    "skipped": 0,
+    "targeted_tests_run": 27
+  },
+  "issues": [],
+  "limitations": [
+    "Source review and synthetic infrastructure tests are not original game execution, native Windows evidence or universal equivalence proof.",
+    "Unchanged runtime/comparator/contracts/corpora/C++ and earlier reviewed components were not re-audited."
+  ],
+  "proposal_patch_sha256": "e82843611b2ce275145bb0ca43f435083929c0cc66adee79816b4a55d623b025",
+  "recorded_full_tests_inspected": {
+    "meaning": "Author frozen full tooling log inspected; reviewer ran scoped27 tests independently.",
+    "result": "passed",
+    "seconds": 24.646,
+    "skipped": 2,
+    "tests": 196
+  },
+  "remaining_obligation": "Integrate exact approved three-file patch and rerun the complete checkpoint with47positive+26negative reports and infrastructure gates. Prior stopped run seeded no cache and is not progress; do not resume/import its reports or claim full completion. Publication/progress follows complete success only.",
+  "review_evidence_sha256": {
+    "local/pilots/historical-role-repair-001/actual-report-inventory-audit.json": "e9bf48b5832ab77bf6601e96c55ac10bea971f6819328365e42077e5f7ac364e",
+    "local/pilots/historical-role-repair-001/full-tests-final.log": "faba68f757c7bf3959e2caab945e39f35498c6ce6207abfb5c50ca9114dc576e",
+    "local/pilots/historical-role-repair-001/handoff.json": "d9898a36d7e7178f7c353684fea0c9d8c09a8d69dbc7cefb5305fcb5b3c185fd",
+    "local/pilots/historical-role-repair-001/review/audit-results.json": "9044569e01eb7e6ab93b01fe752dc550c771ec79e7001fe62e41e849ebba10e4",
+    "local/pilots/historical-role-repair-001/review/audit.py": "e4036628c0da42fdbdebc25736fac226acec3364003a92e7698321f77e7308ac",
+    "local/pilots/historical-role-repair-001/review/tests.log": "c4776479517f354668dbf9c1fbc9511a1246324cdb8e6925af80fa2bea4c4c95"
+  },
+  "reviewed_artifacts_sha256": {
+    "tests/test_incremental_artifact_roles.py": "803c8eba351f3453564d4d1daf6be3cf430c27c7b69efea75c03fd414bd56827",
+    "tests/test_incremental_checkpoint.py": "39e187146b6ee5793533a081ca96d270f66e209a052d7f2a22dc148e8c9d0b70",
+    "tools/incremental_checkpoint.py": "91142c6b419415a1fe90f02d2e5fc6813fe2d3d4c66b68837137b5a49dfa016a"
+  },
+  "schema_version": 1,
+  "scope": "Exact linked-structure declared-test dependency repair only; prior runtime, batching and packaging approvals preserved."
+}

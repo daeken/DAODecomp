@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-18",
+  "reviewer_model_requested": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "source_sha256": "ac2f8bb857bbd7a72f53347634f9b577409a4b0c41cd061c57437b11552aba35",
+  "review_raw_file_sha256": "0c9bf24225273d05d664e1ddc605308558e3d5b474298d1b5b82a15e564973a3",
+  "review": {
+    "decision": "approve",
+    "issues": [
+      {
+        "detail": "Instruction-level inspection supports all eleven bodies: MOV AL selects index & 255; unsigned CMP/JAE enforces seven or six slots; MOVZX clears upper EAX on accepted paths. Rejected word/byte getters preserve the specified incoming upper bits, setters merge the low index, and the two dword getter sentinels remain distinct (255 versus 0). Offsets, scales, access widths and declarations match the recorded module/RVA/slice identities.",
+        "function": "*",
+        "severity": "note"
+      },
+      {
+        "detail": "Each accepted path performs exactly one specified GuestMemory operation; rejected paths perform none. Byte assembly preserves little-endian values without host alignment or typed-pointer aliasing assumptions. Setters receive values by copy and introduce no extra arena reads. Unsigned arithmetic and narrowing are defined; accepted offsets cannot overflow within object offsets 0..64, and helper shifts have valid counts. No in-scope memory-footprint or overlap contradiction was found.",
+        "function": "*",
+        "severity": "note"
+      },
+      {
+        "detail": "Heldout coverage remains limited: fn_00347e70 omits accepted slots 1 and 3; fn_00347e90 and fn_00347eb0 omit 1, 3 and 5. Public fixtures cover every accepted slot. Same-producer generation and prior original-only probes do not constitute independent candidate coverage, but direct inspection of these uniform indexed accesses reveals no corresponding source defect.",
+        "function": "*",
+        "severity": "note"
+      }
+    ],
+    "limitations": [
+      "Approval covers only src/indexed_fields.cpp with raw SHA-256 ac2f8bb857bbd7a72f53347634f9b577409a4b0c41cd061c57437b11552aba35 under the eleven frozen contracts; registry integration and promotion are not approved.",
+      "Review used supplied material only. Binary bytes, hashes, report contents and execution bindings were not independently recomputed. Supplied raw-file and canonical-JSON hash domains were treated separately.",
+      "Reported validation ran AppleClang 21 C++20 RelWithDebInfo on macOS ARM64 against Unicorn 2.1.4 original execution: 14,224 public and 1,408 heldout cases passed, and all four compiled negative controls distinguished outputs. Build, tooling, CTest and both synthetic demonstrations also reportedly passed.",
+      "The original ECX, nonvolatile-register, stack-cleanup and DF obligations are supported by slice inspection and emulator checks. The C++ signatures are explicit state mappings, not a tested native Windows/x86 ABI bridge; other volatile registers and flags remain excluded.",
+      "Scope is initialized ordinary RAM in one disjoint 512-byte arena and private stack. Faults, address wrap, concurrency, MMIO, cross-allocation aliasing, object lifecycle and caller/subsystem composition remain excluded. Bytewise helpers do not establish atomic-access equivalence outside that scope.",
+      "The previous review approved acceptance support only. Neither that review, finite corpus agreement nor synthetic tests proves native original execution or whole-game equivalence."
+    ],
+    "summary": "Approve the hash-bound scoped source package. Direct comparison with the supplied instruction bytes supports full return-bit behavior, exact memory accesses and defined C++ semantics; no blocking in-scope defect was identified."
+  },
+  "manifest_canonical_json_sha256": "55f1031b2011e2090080306ba2d0a2a38a529ffd46e0c74c72f69edd7f402dda",
+  "package_raw_file_sha256": "8a935c4f729fa160339dfa23aff27618bf492aa908342abbe2f1c7b71818a045",
+  "integration_transition": {
+    "schema_version": 1,
+    "frozen_acceptance_artifacts_verified_before_integration": true,
+    "before_registry_raw_sha256": "35750f88278a85002a8db6c331eb260e40294b098199d9acec16d66518a251a6",
+    "after_registry_raw_sha256": "ee81eee802d22cf525132ce97ae0539441daed650fe816351bd4c2057e3a9d15",
+    "source_sha256": "ac2f8bb857bbd7a72f53347634f9b577409a4b0c41cd061c57437b11552aba35",
+    "change": "Exact accepted source; only the eleven declared registry statuses change from contracted to implemented.",
+    "post_run_infrastructure_changes": {
+      "tools/run_recovery_pair.py": {
+        "base_sha256": "911cdd89835f1a0adc2e1f236f0fed0be2e5a12e25190a18f31474430db8e3bc",
+        "proposed_sha256": "157d71157dfdf365d7af57dcd23614a5cd4ed25981aa0870b0ba9fab117800ec"
+      },
+      "tools/freeze_indexed_fields_pair.py": {
+        "base_sha256": "b75c9a7f6b76ae10980bb3e11bdcaee01d36617264850691593cd886aabc373c",
+        "proposed_sha256": "59447bdc729e852f273ab0b7eff2e655d4569ad78d04866e99e98fa840d92eee"
+      },
+      "tests/test_recovery_pair.py": {
+        "base_sha256": "2b305959d8b0e3a51cbb7e8896676a70c0f632857b5b0e90897574655a0a51c3",
+        "proposed_sha256": "9e1ea8c87d42ac4332a39bddcbc8563ffe2bb98773581f36ba3137625d1c1472"
+      }
+    },
+    "post_run_infrastructure_scope": "Add unchanged hook and synthetic contract to future snapshots; select explicit validation Python; stop protected tooling/dependency failures instead of requesting model source repairs. No oracle/contracts/fixtures/header changes.",
+    "coverage_summary_change": "Only derivation-source hash changes; all coverage fields and corpus hashes identical.",
+    "historical_acceptance_review_scope": "Retained review binds original frozen support. It does not claim to review later coordinator infrastructure changes; current full checkpoint is required.",
+    "prepared_fix_tests": {
+      "exit_code": 0,
+      "elapsed_seconds": 8.484,
+      "cwd": "/Users/daeken/projects/DAODecomp/local/pairs/indexed-fields-002-support-preflight/tree",
+      "scope": "Full tooling suite; failed protected-test/import/file cases and existing compiler repair preserved"
+    },
+    "checkpoint_setup_corrections": {
+      "status": "checkpoint_retry_pending",
+      "failure": "Checkpoint stopped before game comparisons because unit-test baseline used real already-promoted registry; now explicitly constructs contracted baseline and tests promotion/partial rejection.",
+      "changes": {
+        "tests/test_indexed_fields.py": {
+          "before": "3d5bca1fb140a4e389424fec0848b2280b25a11645c4b00b8664d60985e33bfc",
+          "after": "736de4a11bfbb240385b98163f7b92a9f95f7d4dfae866b425c01647add7bc66"
+        },
+        "tools/validate_checkpoint.py": {
+          "before": "d8a6513363c4f702b029538dd29298df535c0470a1b6163e22533f9b7bc9fded",
+          "after": "f73eef2eca4a519458a68d82d098fb36be969e6f4e406e2a890b249025ad7f57"
+        }
+      },
+      "additional_reason": "Full checkpoint configures CTest with the same explicit validation Python, preserving installed dependencies.",
+      "focused_test_log_sha256": "82821c935bb517502a51563c41b71c0f2692a74fc02a84468449059891219b09",
+      "source_contract_oracle_corpus_changed": false
+    }
+  },
+  "proof": false,
+  "native_windows_validated": false
+}

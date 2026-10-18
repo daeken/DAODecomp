@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "ready": false,
+  "group": "indexed-fields-002",
+  "model": "gpt-6.1-sol",
+  "maximum_attempts": 3,
+  "allowed_write_paths": [
+    "src/indexed_fields.cpp"
+  ],
+  "header": "include/dao/indexed_fields.hpp",
+  "functions": [
+    {
+      "name": "fn_00347cf0",
+      "signature": "std::uint32_t fn_00347cf0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347cf0.json",
+      "rva": "0x00347cf0",
+      "size": 29,
+      "code_sha256": "fe5ec2d090f480c799f7975af981c904e4a06fe8ab12806e5bf57bccbcaeff58"
+    },
+    {
+      "name": "fn_00347d30",
+      "signature": "std::uint32_t fn_00347d30(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347d30.json",
+      "rva": "0x00347d30",
+      "size": 26,
+      "code_sha256": "68e657fa6835e2096d5105c54e65b7fd9240014f3326aaaa6bd9950f4fcf3cae"
+    },
+    {
+      "name": "fn_00347d70",
+      "signature": "std::uint32_t fn_00347d70(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347d70.json",
+      "rva": "0x00347d70",
+      "size": 26,
+      "code_sha256": "8d7af58d4df9b6db552a21aba6db12d89212d05d9f25e73bf7f94a09f7f9b06c"
+    },
+    {
+      "name": "fn_00347d90",
+      "signature": "std::uint32_t fn_00347d90(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347d90.json",
+      "rva": "0x00347d90",
+      "size": 25,
+      "code_sha256": "d088edecee9d5e3c4e3d2231b7b2e81a700d6a03dc888d8f2363545e2427d46e"
+    },
+    {
+      "name": "fn_00347db0",
+      "signature": "std::uint32_t fn_00347db0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347db0.json",
+      "rva": "0x00347db0",
+      "size": 29,
+      "code_sha256": "d7da1ba66dc89b021c957d6af4981e820f71af15e0477b757cb0764b7734a1e1"
+    },
+    {
+      "name": "fn_00347dd0",
+      "signature": "std::uint32_t fn_00347dd0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347dd0.json",
+      "rva": "0x00347dd0",
+      "size": 25,
+      "code_sha256": "d990b020ac73148d3c9e312d190047435c3d4cf7e7f0c3028c2dc67c00ab2d2f"
+    },
+    {
+      "name": "fn_00347df0",
+      "signature": "std::uint32_t fn_00347df0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347df0.json",
+      "rva": "0x00347df0",
+      "size": 26,
+      "code_sha256": "d65079a7af0abcd6b2f0681f045f4f2d64d8624d8710c129bb6b50afe754a5e2"
+    },
+    {
+      "name": "fn_00347e10",
+      "signature": "std::uint32_t fn_00347e10(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347e10.json",
+      "rva": "0x00347e10",
+      "size": 25,
+      "code_sha256": "b8f7bcbbbc9c5c26a0f0e08a06cdbc4a0c03515e5e215fef0bab84f1b529031d"
+    },
+    {
+      "name": "fn_00347e70",
+      "signature": "std::uint32_t fn_00347e70(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347e70.json",
+      "rva": "0x00347e70",
+      "size": 29,
+      "code_sha256": "07c6a1c8150d5d11e2ba977aec4d9d0770027c6056ceb9b140c5ebe4d640287e"
+    },
+    {
+      "name": "fn_00347e90",
+      "signature": "std::uint32_t fn_00347e90(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347e90.json",
+      "rva": "0x00347e90",
+      "size": 26,
+      "code_sha256": "16ce21f6bda3cdf011abb2c0e1aa52650dfe09295f844f6a3fc7d961e75ba902"
+    },
+    {
+      "name": "fn_00347eb0",
+      "signature": "std::uint32_t fn_00347eb0(GuestMemory memory, std::uint32_t object, std::uint32_t index, std::uint32_t value, std::uint32_t entry_eax);",
+      "contract": "contracts/functions/fn_00347eb0.json",
+      "rva": "0x00347eb0",
+      "size": 25,
+      "code_sha256": "97aef0e563139d6bd1812ab3e708eab0bd2afa6c89864994ca09ae289b0b1789"
+    }
+  ],
+  "reference": {
+    "module": "DAOrigins.exe",
+    "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3"
+  },
+  "preconditions": [
+    "Exact per-function contracts; initialized ordinary RAM; no x87/OS/dependency calls."
+  ],
+  "observable_state": [
+    "Full EAX bits, complete512-byte arena, original ECX/nonvolatile/stack/DF obligations."
+  ],
+  "deliverables": [
+    "One complete src/indexed_fields.cpp using exact supplied declarations",
+    "Function explanations tied to instruction evidence",
+    "Remaining uncertainties"
+  ],
+  "acceptance": "No original adapter/comparator/header/contract/fixture edits. No success stubs. No tools/models/agents in implementation packet. Frozen public/heldout corpus and independent source review required; corpus agreement is not universal proof."
+}

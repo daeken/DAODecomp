@@ -27,6 +27,18 @@ def relative(path):
     return value
 
 
+def checkpoint_inventory(registry):
+    active = [f for f in registry['functions'] if f.get('status') in {'implemented','corpus_pass','reviewed','integrated'}]
+    negatives = {'bit_mask_or_all','fn_00061fa0','fn_00061f40','fn_00347d10',
+                 'fn_00347cf0','fn_00347d70','fn_00347db0','fn_00347eb0'}
+    allowed = {'scalar','memory-001','object-counters-001','indexed-stores-001','linked-structures-001','object-bitfields-001'}
+    if any(f.get('backend','scalar') not in allowed for f in active):
+        raise ValueError('unknown current checkpoint route')
+    expected = {(f['id'],False) for f in active}
+    expected |= {(f['id'],True) for f in active if f['name'] in negatives or f.get('backend') in {'linked-structures-001','object-bitfields-001'}}
+    return expected
+
+
 class Snapshot:
     def __init__(self, root, staged=False):
         self.root = Path(root)
@@ -60,7 +72,29 @@ class Snapshot:
 
     def document(self, name):
         result = json.loads(self.read(name))
-        if result.get("schema_version") != 1:
+        if result.get("schema_version") == 2 and name.startswith("analysis/validation/"):
+            unsigned = dict(result)
+            expected = unsigned.pop("attestation_sha256", None)
+            actual = hashlib.sha256(json.dumps(unsigned, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+            if (result.get("policy") != "clean-build-local-groups-003"
+                    or result.get("fresh_clean_build") is not True
+                    or result.get("complete_checkpoint") is not True
+                    or result.get("proof") is not False
+                    or result.get("native_windows_validated") is not False
+                    or actual != expected):
+                raise ValueError(f"invalid fresh reuse attestation: {name}")
+            registry = self.document('analysis/functions.json')
+            pairs = [(r.get('function_id'),r.get('negative_control')) for r in result.get('records',[])]
+            if (any(type(negative) is not bool for _,negative in pairs)
+                    or len(pairs) != len(set(pairs)) or set(pairs) != checkpoint_inventory(registry)):
+                raise ValueError(f"incomplete current reuse checkpoint: {name}")
+            for record in result.get("records", []):
+                if (record.get("provenance_kind") != "fresh_clean_build_and_exact_execution_inputs"
+                        or type(record.get("comparison_reused")) is not bool
+                        or not record.get("historical_comparison")
+                        or not record.get("current_identity_sha256")):
+                    raise ValueError(f"incomplete reuse provenance: {name}")
+        elif result.get("schema_version") != 1:
             raise ValueError(f"unsupported metadata schema: {name}")
         return result
 
