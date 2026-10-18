@@ -966,6 +966,7 @@ def verify_controller(config):
 
 def approved(directory):
     directory = Path(directory).absolute()
+    require(not (directory / 'successor.json').exists(), 'runtime superseded; use exact reviewed successor')
     config = load(directory / 'config.json')
     review = load(directory / 'approval.json')
     require(review.get('decision') == 'approve' and review.get('config_sha256') == digest(directory / 'config.json'),
