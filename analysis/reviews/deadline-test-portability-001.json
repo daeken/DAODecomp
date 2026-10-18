@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope": "CI deadline-test portability correction only; production provider unchanged",
+  "decision": "approve",
+  "base_commit": "14a29a30fc33f1d156320eec5f6694657f2445de",
+  "file": "workers/tests/test_deepseek_packet.py",
+  "source_sha256": "d6b044675a998be77b40feffa9387bda2a4b9ffe0007647630f600f2b888654f",
+  "patch_sha256": "cf4ab12c9028ad7cbb31bc763a4b45da854e114c97147a6042d9f08da120bff2",
+  "independent_review_sha256": "0fc7ae15aa4e5bd214a4a5b7ee849f6a87917bbbb81789175ad3f982247f3a00",
+  "independent_checks_sha256": "336eb6fbfaa57ff8293d6d5cf77945bb0bd082fd8f874b5390093ed2d797ba04",
+  "validation": {
+    "worker_tests": 50,
+    "tooling_tests": 209,
+    "tooling_skips": 7,
+    "real_alarm_repetitions": 100,
+    "injected_scheduler_latency_control": "passed",
+    "disabled_timer_control": "rejected_as_required"
+  },
+  "game_recovery_credit": 0,
+  "native_windows_game_evidence": false
+}

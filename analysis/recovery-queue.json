@@ -118,13 +118,14 @@
     "exec_session": null,
     "log": "local/dispatcher-setup-001/checkpoint-ci-001.log",
     "negative_reports": 48,
-    "next_action": "Do not duplicate or mutate source inputs. After complete publication commit approved fixture/controller/docs/provenance, push and verify exact-headCI. Ready24 promotion waits for exact named69+48record binding before integration review/shared writes.",
+    "next_action": "Narrow exact-head CI failure assigned to windows_ci_fixture; no duplicate checkpoint. Current evidence remains the completed69/48 record.",
     "output_dir": "reports/checkpoint-direct-object-fields-ci-001",
     "pid": null,
     "positive_reports": 69,
     "publication_receipt": "local/dispatcher-setup-001/bootstrap-publication/receipt.json",
     "record": "analysis/validation/direct-object-fields-ci-001.json",
-    "status": "passed_publication_and_exact_head_CI_in_progress"
+    "status": "passed_committed_pushed_CI_failed",
+    "commit": "14a29a30fc33f1d156320eec5f6694657f2445de"
   },
   "ci_platform_repair": {
     "exec_session": null,
@@ -260,10 +261,10 @@
   "director_mode": {
     "design": "docs/dependency-queue.md",
     "limits": "Two implementationlanes;12requests pernonoverlapping30mincontrollercycle persistedacrossrestart;50USD/Chicago calendarday DeepSeekcap; allgatesunchanged.",
-    "next_action": "Director handles genuine exceptions only. Controller owns startup characterization, frozen implementation, gate/review/integration/publication stages. Preserve running CI-fixture checkpoint inputs.",
+    "next_action": "Review tested Windows checkpoint adapter and compact review transport; fix exact-head CI. Preserve stopped dispatcher config/claims/budgets; use approved adoption before resuming. Do not repeat proposal-only startup dispatch.",
     "policy": "Director sets Windowsmilestones,priorities,budgets andresolves genuineexceptions. Persistentprogram owns routineclaim/dispatch/handoff/retry/gates/checkpoint/push/CI; no directorperpacketloop.",
     "requested_by_user": true,
-    "status": "reviewed_persistent_controller_running"
+    "status": "exception_remedies_under_independent_review_scheduler_stopped"
   },
   "groups": [
     {
@@ -699,15 +700,34 @@
     "native_windows_validated": false,
     "opening_model_debit": 3,
     "path": "workers/recovery_dispatcher.py",
-    "pid": 55363,
+    "pid": null,
     "proof": false,
     "repository_skips": 1,
     "repository_tests": 209,
     "review": "local/dispatcher-setup-001/independent-review/verdict-final.json",
     "review_sha256": "ec9588cf137393a126935361a1e7e3c73f14ecaec2b69725d4f7a0210d77ca02",
     "state": "local/dispatcher-setup-001/runtime-final",
-    "status": "running",
-    "worker_tests": 50
+    "status": "stopped_new_scheduling_for_concrete_exceptions",
+    "worker_tests": 50,
+    "exception_window": "local/dispatcher-setup-001/director-exceptions-0643.json",
+    "current_exception_work": {
+      "review_agent": "/root/exception_packages_review",
+      "ci_agent": "/root/windows_ci_fixture",
+      "transport_proposal": "local/review-packet-repair-001/acceptance-review-packet.json",
+      "windows_capture_proposal": "local/startup-capture-adapter-001/handoff/artifact-manifest.json",
+      "transport_test_run": 221,
+      "transport_skips": 7,
+      "windows_controlled_tests_passed": 12,
+      "windows_scope": "x86 under Windows ARM64 translation; controlled fixtures only, no original launch",
+      "review_only_limit": "Two deleted execution images cannot satisfy current-artifact reuse; independent review must not waive this. Compaction may be adopted separately with ordinary gates rerun for unchanged candidate.",
+      "model_accounting": "local/dispatcher-setup-001/runtime-final/request-adjustments/director-exceptions-20261018-0713.json",
+      "review_decisions": {
+        "transport": "approved for ordinary fresh pair gates; historical-only resume rejected",
+        "windows_capture": "bounded fixture profile approved; pinned-game setup needs review",
+        "ci_test": "approved, publishing exact test-only repair"
+      },
+      "review_evidence": "local/exception-packages-review-001/REVIEW.md"
+    }
   },
   "previous_activation": {
     "coordinator": "Current thread",

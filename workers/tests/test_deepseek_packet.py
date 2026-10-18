@@ -196,9 +196,20 @@ class ProviderTests(unittest.TestCase):
 
     def test_absolute_deadline(self):
         factory, calls = self.fake(delay=.2)
-        started = time.monotonic()
-        self.assertEqual(p.transport(b'{}', 'fake-test-credential', factory=factory, seconds=.02), ('timeout', None, None))
-        self.assertLess(time.monotonic()-started, .15); self.assertEqual(len(calls), 1)
+        completed = []
+        sleep = time.sleep
+        previous = signal.getsignal(signal.SIGALRM)
+        def delayed_request(seconds):
+            sleep(seconds)
+            completed.append(True)
+        # Observe interruption and timer wiring without imposing a scheduler latency bound.
+        with patch.object(p.time, 'sleep', side_effect=delayed_request), \
+                patch.object(p.signal, 'setitimer', wraps=signal.setitimer) as timer:
+            self.assertEqual(p.transport(b'{}', 'fake-test-credential', factory=factory, seconds=.02), ('timeout', None, None))
+        self.assertEqual(completed, [])
+        self.assertEqual(timer.call_args_list, [unittest.mock.call(signal.ITIMER_REAL, .02), unittest.mock.call(signal.ITIMER_REAL, 0)])
+        self.assertEqual(signal.getsignal(signal.SIGALRM), previous)
+        self.assertEqual(calls, [('api.deepseek.com', .02)])
 
     def test_manifest_pin_packet_schema_and_path_hashes(self):
         args = self.fixture()
