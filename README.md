@@ -36,12 +36,22 @@ ARM64 VM is available for translated reference experiments; native x86 hardware
 corroboration remains unavailable. Symbolic proofs and a full game executable
 loader remain planned. The synthetic example below is separate infrastructure testing.
 
-New recovery uses a [native C++ and reccmp loop](docs/reccmp-loop.md):
-DeepSeek writes C++ with inline address markers, the historical x86 compiler
-builds it, and reccmp supplies automatic comparison feedback. Full comparisons
-can be accepted without authored per-function contracts, fixtures or adapters.
-Matching evidence is tied to the compiled artifact and remains distinct from a
-universal proof or a working game.
+New recovery uses an [all-function object-file loop](docs/object-recovery.md).
+DeepSeek writes C++ with inline address markers and dependency declarations;
+the historical x86 compiler builds individual COFF objects without linking.
+Missing dependency implementations therefore do not prevent compilation.
+The comparator resolves known function/global references to pinned original
+addresses and accepts exact full-function matches. Unknown comparisons remain
+available for iteration. C++ is the only authored per-function artifact.
+
+All **27,555 inventory identities** are catalogued, including calls, globals,
+imports, indirect calls, floating point, TLS and discontiguous or large bodies.
+The initial queue imports **807 existing native matches** and schedules the other
+**26,748 functions in 2,904 groups**. These counts describe the initial preparation;
+live results are available through `python -m rapid_object status`. Signature
+hypotheses can improve during recovery rather than blocking generation. Object
+matches remain evidence for pinned compiled artifacts, not a universal proof or
+a working game.
 
 The first native pilot produced **four complete function matches**, after one
 DeepSeek repair, using the VC8 x86 compiler in the Windows ARM64 VM. Its two
@@ -50,13 +60,15 @@ provenance and counts; they are not added to the historical registry above.
 The exact [pilot C++](src/native/reccmp_pilot.cpp) is retained in the repository
 and builds through the native loop, separately from the portable CMake targets.
 
-The native runner batches call-free integer and pointer-memory functions, with
-four provider lanes and up to six repairs per batch. Repairs focus on unmatched
-functions, retain the best source, and stop after repeated lack of progress.
-The default native request ceiling is 120 per half hour; the existing $50/day
-DeepSeek budget remains in force. Calls, unresolved globals and TLS remain
-outside this profile. Live counts, configuration and pause commands are available
-through the [native runner](docs/reccmp-loop.md#continuous-native-profile).
+The object runner uses **16 provider lanes** and up to six repairs per batch.
+Repairs focus on unmatched functions, retain the best source, and stop after
+repeated lack of progress. Large bodies use context pages; known truncated
+responses can split into smaller groups while preserving consumed allowances.
+The shared request ceiling is 120 per half hour and the existing $50/day DeepSeek
+budget remains in force. Ledger values are conservative peak-price budget
+estimates, not actual billed dollars. The earlier
+[native C++ and reccmp loop](docs/reccmp-loop.md) and its results remain retained;
+its exhausted call-free queue is stopped.
 
 The earlier [lightweight candidate factory](docs/rapid-recovery.md) retains its
 register-state C++ proposals but is paused for this native-ABI transition.
@@ -202,6 +214,7 @@ the old evidence from the current count until refreshed results are recorded.
 | Location | Purpose |
 | --- | --- |
 | `src/`, `include/dao/` | Recovered C++ and explicit guest ABI types |
+| `rapid_object/` | All-function catalog, unresolved COFF builds, exact comparison and continuous repairs |
 | `rapid_native/` | Native C++ generation, historical compiler builds and reccmp feedback |
 | `rapid/` | Shared lightweight queue and provider accounting; earlier Context profile paused |
 | `analysis/` | Function identities, evidence and coverage accounting |
