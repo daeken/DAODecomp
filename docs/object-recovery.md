@@ -29,6 +29,8 @@ After complete context, up to six repairs use retained best sources paired with 
 
 Every provider call shares the existing physical request ledger, anchor and history, with at most 120 total requests per persisted 1,800-second cycle. The existing $50/calendar-day America/Chicago ledger is unchanged. Status reports a **conservative estimated budget debit**, using the existing peak rates, rather than actual billed dollars; off-peak billing can be lower. Neither a queue restart nor a split resets accounting.
 
+The paid pilot used the production queue itself. Attempt 1 was retained with VC8 C3865 errors; automatic attempt 2 compiled in 1.797 seconds and produced one exact object match plus one inconclusive global-identity mismatch. The matched function is excluded from further repairs. The 16-lane continuous runner is launched with the defaults above; its ignored launch receipt is `local/coff-expansion-001/launch-receipt.json`. Current counts belong to `local/rapid-object/status.json`, rather than this dated pilot observation.
+
 Common queue controls run without a game, VM or compiler:
 
 ```sh
