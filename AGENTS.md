@@ -1,7 +1,11 @@
 # DAODecomp working rules
 
 - Goal: function-level behavioral equivalence to the pinned original build, then
-  a replacement executable using original assets. Binary matching is a non-goal.
+  a replacement executable using original assets. A byte-identical whole game is
+  not required. Complete reccmp matches are an authorized automatic acceptance
+  path for native x86 C++ built with the selected historical compiler; retain
+  nonmatches for later iteration or other checking. Keep this evidence distinct
+  from a universal proof of C++ semantics or whole-game behavior.
 - Read README.md and docs/validation.md before changing validation or recovered code.
 - Never describe synthetic tests, guessed signatures, emulator-only results or a
   passing corpus as a proof of the game. Distinguish observation from inference.
@@ -16,6 +20,10 @@
   through reusable machinery. Automatically derived inputs, compiler products,
   execution records and counterexamples may be cached, but require no per-function
   authoring or manual acceptance packet. No difference observed is not a proof.
+- For reccmp, inline source annotations carry function identity. Generate build
+  configuration, symbol/size metadata and reports automatically. A complete match
+  requires the requested function and full original range, not a matching prefix,
+  a rounded percentage, a missing comparison or an effective-match heuristic.
 - Preserve observed wraparound, signedness, shifts, aliasing, layout and floating
   point behavior with defined C++ semantics. Guest pointers are not host pointers.
 - Worker scope comes from its packet. Do not change the oracle, comparator, frozen

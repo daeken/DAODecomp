@@ -1,5 +1,9 @@
 # Candidate generation first
 
+This register-state candidate factory is paused during the transition to the
+[native x86 C++ and reccmp loop](reccmp-loop.md). Retained proposals remain
+available; do not resume dispatch with the old ABI merely to increase counts.
+
 `rapid/` is an independent candidate factory. It reads actual pinned executable
 bytes and the existing static function inventory, and stores DeepSeek C++ proposals
 under ignored `local/rapid/`. Every result is **unvalidated**. Syntax compilation

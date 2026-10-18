@@ -1,9 +1,10 @@
 # DAODecomp
 
 A functional decompilation of **Dragon Age: Origins**. The intended result is a
-replacement executable using the original game's data files. Binary matching is
-explicitly not a goal. Source organization, compiler choice and instruction
-selection may differ; observable function behavior must agree with the reference.
+replacement executable using the original game's data files. A byte-identical
+whole executable is not required. Complete reccmp matches from native x86 C++
+are an automatic acceptance path; nonmatching functions remain available for
+iteration or other checking. Observable function behavior is the overall goal.
 
 <!-- progress:start -->
 ## Progress
@@ -35,11 +36,23 @@ ARM64 VM is available for translated reference experiments; native x86 hardware
 corroboration remains unavailable. Symbolic proofs and a full game executable
 loader remain planned. The synthetic example below is separate infrastructure testing.
 
-New recovery uses a [lightweight candidate factory](docs/rapid-recovery.md):
-compact groups of original instructions go to DeepSeek, and proposed C++ is saved
-with its identity, dependencies and uncertainties. Generation runs independently
-of later deterministic validation. Syntax checks do not establish equivalence;
-unvalidated candidates do not contribute to the progress counts above.
+New recovery uses a [native C++ and reccmp loop](docs/reccmp-loop.md):
+DeepSeek writes C++ with inline address markers, the historical x86 compiler
+builds it, and reccmp supplies automatic comparison feedback. Full comparisons
+can be accepted without authored per-function contracts, fixtures or adapters.
+Matching evidence is tied to the compiled artifact and remains distinct from a
+universal proof or a working game.
+
+The first native pilot produced **four complete function matches**, after one
+DeepSeek repair, using the VC8 x86 compiler in the Windows ARM64 VM. Its two
+provider requests cost an estimated **$0.01091232**. These matches have their own
+provenance and counts; they are not added to the historical registry above.
+The exact [pilot C++](src/native/reccmp_pilot.cpp) is retained in the repository
+and builds through the native loop, separately from the portable CMake targets.
+
+The earlier [lightweight candidate factory](docs/rapid-recovery.md) retains its
+register-state C++ proposals but is paused for this native-ABI transition.
+Syntax-only proposals do not contribute to the historical progress counts above.
 
 The previous [recovery workflow](docs/continuous-recovery.md) and its
 [queue](analysis/recovery-queue.json) remain historical records. Its suspended
@@ -51,9 +64,10 @@ or modify that work.
 After building and installing the dependencies below, with the original game at
 `gamedata/bin_ship/DAOrigins.exe`:
 
-For ongoing recovery, use the complete [incremental checkpoint](docs/continuous-recovery.md).
-It rebuilds current source and reuses comparisons only when their execution inputs
-still match exactly. Individual groups can also be checked with these commands:
+The historical [incremental checkpoint](docs/continuous-recovery.md) rebuilds
+current source and reuses comparisons only when their execution inputs still
+match exactly. It is not a prerequisite for new native candidates. Existing
+groups can be replayed with these commands:
 
 ```sh
 .venv/bin/python validation/validate_leaves.py --suite all --jobs 4
@@ -180,6 +194,8 @@ the old evidence from the current count until refreshed results are recorded.
 | Location | Purpose |
 | --- | --- |
 | `src/`, `include/dao/` | Recovered C++ and explicit guest ABI types |
+| `rapid_native/` | Native C++ generation, historical compiler builds and reccmp feedback |
+| `rapid/` | Shared lightweight queue and provider accounting; earlier Context profile paused |
 | `analysis/` | Function identities, evidence and coverage accounting |
 | `contracts/` | Reviewed function contracts and agent work packets |
 | `tools/daodecomp/` | PE fingerprinting, strict differential comparator |
