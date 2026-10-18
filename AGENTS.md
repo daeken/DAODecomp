@@ -7,8 +7,15 @@
   passing corpus as a proof of the game. Distinguish observation from inference.
 - Original instruction bytes and measured execution are evidence. Decompiled
   pseudocode and model explanations are hypotheses to check against that evidence.
-- Each recovered function needs a stable binary SHA-256 + module + RVA identity,
-  a contract, provenance and a reproducible validation report. Unknown stays unknown.
+- The only authored artifact per new function is its decompiled C++. Do not require
+  per-function contracts, fixtures, test corpora, adapters or proof annotations.
+  The candidate factory records binary SHA-256 + module + RVA and provenance
+  automatically. Generated candidates remain unvalidated; preserve the separate
+  historical accepted-function count. Unknown stays unknown.
+- New equivalence checking must consume the original binary and candidate C++
+  through reusable machinery. Automatically derived inputs, compiler products,
+  execution records and counterexamples may be cached, but require no per-function
+  authoring or manual acceptance packet. No difference observed is not a proof.
 - Preserve observed wraparound, signedness, shifts, aliasing, layout and floating
   point behavior with defined C++ semantics. Guest pointers are not host pointers.
 - Worker scope comes from its packet. Do not change the oracle, comparator, frozen

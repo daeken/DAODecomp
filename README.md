@@ -35,10 +35,16 @@ ARM64 VM is available for translated reference experiments; native x86 hardware
 corroboration remains unavailable. Symbolic proofs and a full game executable
 loader remain planned. The synthetic example below is separate infrastructure testing.
 
-Recovery now runs as an [ongoing workflow](docs/continuous-recovery.md), with a
-[durable queue](analysis/recovery-queue.json). Implementation/review agent pairs
-use automatic deterministic checks before independent review and integration;
-failed or blocked work stays recorded rather than counting as accepted progress.
+New recovery uses a [lightweight candidate factory](docs/rapid-recovery.md):
+compact groups of original instructions go to DeepSeek, and proposed C++ is saved
+with its identity, dependencies and uncertainties. Generation runs independently
+of later deterministic validation. Syntax checks do not establish equivalence;
+unvalidated candidates do not contribute to the progress counts above.
+
+The previous [recovery workflow](docs/continuous-recovery.md) and its
+[queue](analysis/recovery-queue.json) remain historical records. Its suspended
+checkpoint is preserved in the original checkout; the new runner does not resume
+or modify that work.
 
 ## Validate the recovered functions
 

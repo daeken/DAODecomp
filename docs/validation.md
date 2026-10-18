@@ -1,5 +1,13 @@
 # Function equivalence
 
+**Current workflow:** candidate generation is independent of validation. New
+functions must not require authored contracts, fixtures, corpora, adapters or
+proof annotations. The [automatic checking direction](automatic-checking.md)
+supersedes the per-function preparation workflow below. Existing validators and
+accepted results remain historical evidence; the following protocol documents
+their behavior and the general equivalence problem, not a prerequisite for
+generating new candidates.
+
 We want corresponding initial states to produce corresponding observable outcomes:
 
 ```text
