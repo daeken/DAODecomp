@@ -219,3 +219,16 @@ The host's native runtime/decoder dependencies are pinned in
 installs those pins so the actual decoded-memory mutation controls run as well
 as the standard-library descriptor controls. The Windows reccmp environment and
 historical compiler remain their separately pinned existing setup.
+
+Native provider responses now require only a JSON `source` string, with optional
+string-array `uncertainties`. Exact requested identities and duplicates are
+checked from the C++ `FUNCTION: DAO` annotations. Redundant ancillary function
+notes are ignored, including notes in older retained responses; they cannot
+reject otherwise correctly identified C++ source. Source/envelope size and type
+checks, strict JSON parsing and every compiler/PDB/range/operand/score check stay
+in place. A measured retained-response recovery corrected one such metadata-only
+rejection without a provider request: its original fifteen-function source
+compiled with twelve full matches and three actual code nonmatches. Historical
+provider failure/usage records and two genuinely truncated error responses were
+preserved. Derived provenance is recorded in
+`local/reccmp-scale-001/parser-recovery.json`.
