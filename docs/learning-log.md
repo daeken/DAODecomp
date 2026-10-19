@@ -395,3 +395,51 @@ contains 2,216 functions. Seven generic refusal tests and the full 270-test suit
 needed: these exact compiled artifacts already existed. Keep old publication
 state as the base of incremental exports; rebuilding from incomplete input roots
 can silently omit earlier imported sources.
+
+## 2026-10-19: measure the remaining reach of a successful rewrite
+
+Scaling the ordered-zero rewrite used a frozen census of 37,492 retained rows,
+with 13,490 distinct reported compiling nonmatch identities. The conservative
+selection required 24–512-byte bodies, a length difference of at most 16 bytes,
+similar instruction shape, an original compare-with-zero followed by JA/JBE,
+and the unchanged rule as the first proposal. Published identities and prior
+pilot cases were excluded. Only two new targets qualified; neither matched.
+All five unchanged exact controls passed. Seven actual build receipts total
+11.928 seconds; two smoke builds were reused instead of compiled twice.
+
+This exhausts the stated selection profile, not every possible zero-predicate
+rewrite. The remaining differences in these two callers include ECX receiver
+setup and stack cleanup. Their callees both return with four bytes of cleanup,
+but that alone does not identify a calling convention. The next bounded
+investigation uses caller and callee instructions together before proposing
+declaration changes. A successful local rewrite should be measured against its
+remaining population before assuming it will scale to thousands of functions.
+
+## 2026-10-19: defer comparison extensions with low measured yield
+
+A retained inconclusive group contained 620 defined-target references: 547
+compiler string symbols, 65 floating-point literals and eight other symbols.
+An isolated experiment selected 50 literal cases and ten existing exact controls.
+It derived whole standalone COFF literal extents and considered only narrow or
+wide terminated strings with no embedded relocations. The proposed resolver
+required unique full content across backed PE sections, read-only storage,
+alignment, a preceding zero unit, zero addend, and a decoded original immediate
+reference to the independently selected address. It did not fill relocation
+fields with whatever address would make the function match.
+
+The experiment made three functions comparable, all nonmatches (320 original
+body bytes). Forty-seven remained inconclusive; all ten exact controls stayed
+exact. The remaining reasons were differing instruction layout at 26 reference
+sites, ten unsupported floating-point literals, eight duplicate literals, two
+uncertain string starts and one conflicting reference. Fifty focused tests
+passed, including 29 new refusal/acceptance controls and 21 existing comparator
+controls; the configured project environment passed 270 tests with seven skips.
+The initial system-Python run lacked Unicorn and is retained as an environment
+failure. No compiler builds or provider calls were needed for this experiment.
+
+This proposal remains local, unreviewed and unadopted because its measured match
+yield is zero. Original debug metadata is not categorically necessary for literal
+matching, but unique byte content alone is insufficient evidence. Measure whether
+a comparison extension unlocks useful matches before adding production machinery.
+These two experiments used no DeepSeek calls; development and Codex costs are
+separate and have not been priced here.
