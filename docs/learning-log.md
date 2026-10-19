@@ -802,3 +802,93 @@ Local checks passed 29 focused tests, 296 standard tests (33 skips), 241 object-
 tool tests, a macOS ARM64 CMake build and six C++ checks; both synthetic demos
 returned 59 positive passes and 53 passes plus six expected negative mismatches.
 Synthetic results remain separate from complete native-function comparisons.
+
+
+### Fixed stack cohort: compose an observed allocator-result receiver
+
+The next subgroup kept the same **6,487** identities and started from retained
+cookie-corrected C++, without rebuilding those baselines. The two constructor
+leads cover 509 callers: 500 have compiled corrected inputs and nine retain
+transport-unknown variants, which were excluded from replay. The complete
+observed constructor bodies read ECX, store a word through that receiver,
+increment a global counter and return; one removes four stack bytes, the other
+removes none. Neither reads EDX, calls another function or reads an explicit
+stack argument. RET4 alone was not used to infer thiscall, and the unread
+existing word argument was preserved rather than replaced with a guessed value.
+
+The [allocator receiver proposal](../rapid_object/allocator_receiver_fix.py)
+binds an actual own pointer local assigned the allocator result, a simple
+nonnull guard and the first ordinary constructor call in that guarded block.
+Complete target-aware AST IDs/spans establish source storage and declaration
+identity. Existing signed/unsigned word argument expressions and types remain
+unchanged. Macro, nested/unevaluated call, early receiver escape/mutation,
+pre-call parameter mutation, unsupported storage and extra-call cases refuse.
+The source edit adds that actual pointer expression as the ECX receiver through
+an explicit thiscall function-pointer hypothesis. It does not create a class,
+assume object lifetime semantics, stub a call or alter memory/return/frame code.
+
+Original instruction evidence separately checks the whole bounded CFG, actual
+allocator argument setup, EAX return provenance, null predicate and every path
+reaching the constructor. The receiver must be that return value in ECX; the
+RET4 case must preserve the observed entry-ECX word as its stack argument.
+Complete callee ranges and symbol identities are bound to the pinned original.
+Suffix instructions are decoded and visited structurally but their data effects
+remain unmodeled and are not rewritten. One independent review found a real
+guard defect: LOOP in the suffix could be mistaken for fallthrough. The fixed
+rule rejects unrecognized generic control transfers, including LOOP/interrupts;
+the failing synthetic counterexample and original freeze were retained, and all
+500 candidate sources regenerated unchanged without compiler replay. This was a
+provenance/refusal defect, not a demonstrated comparator false acceptance.
+
+All **500** compiled inputs passed the rule's explicit eligibility checks. A
+stratified 24-target pilot was followed by the reviewed ascending 476-target
+plan, one new variant per identity. Across **500 attempts /
+51,233 original body bytes (inventory range hypotheses)**, 494 compiled and
+6 new outcomes remain inconclusive. Eight unchanged exact controls
+reused objects and passed fresh comparisons. The complete unchanged comparator
+found **0 new exact functions / 0 matched body bytes**. The allocator-result ECX
+setup passed the same provenance check in zero compiled baselines and all 494
+compiled candidates. This is a targeted symptom result, not function recovery.
+Residual primary categories were 373 stack cleanup and 121 instruction selection,
+with six inconclusive outcomes.
+The same 121 compiled baselines and candidates lack the heuristic stack label;
+no primary category or stack-label presence changed in this receiver round.
+Receiver dataflow improvement receives no function acceptance credit. All 6,487
+full functions remain unresolved, and prior unknowns and failed C++ stay private and unvalidated.
+
+The next shared residual is grounded more narrowly than the stack label:
+all 500 originals push the source-associated handler address and share a
+handler prefix with a cookie check, descriptor load and jump to one common
+target; all observed descriptors start with `0x19930522`. The corrected sources
+still contain explicit FS-frame hypotheses. These observations prioritize
+native compiler exception/unwind-frame reconstruction on the composed inputs.
+They do not yet establish a safe C++ type, unwinding or allocation-failure
+contract. Unknown input/pointer semantics remain unknown.
+
+Target build/transport receipts total 676.710
+seconds, not compiler CPU time. The 476-case sweep took
+705.270 seconds, including 0.0261
+seconds waiting for the existing VM lock. The final pilot invocation took
+31.388 seconds after the first two smoke cases were retained.
+VC8 x86 14.00.50727.762 under Windows11 ARM64 translation and Apple Clang21.0.0
+with i686/MS compatibility14 parsing were unchanged. Zero production inference
+calls still consumed prepaid engineering, one separately accounted independent
+review, builds and publication/CI time. These are static compiler observations, not game execution
+or semantic-equivalence proof.
+
+The exact generic helper/tests were independently approved for this pinned DAO
+image base/naming family and existing POSIX workflow, not arbitrary games or a
+Windows-hosted Python reader. Fresh final checks rebound source, objects,
+compiler, original ranges, symbols and relocations. The existing exporter
+verified zero rows and preserved all 2,244 entries, translation units and source
+bytes. A future exact chained candidate still needs truthful lineage accepted
+by the existing exporter; the current chain is not automatically that bridge's
+expected provenance shape, so no invented receipt or permissive adapter was
+added. Private plans, every attempt, refused controls, original/corrected review
+freezes and reproduction evidence remain in `local/allocator-receiver-001/`.
+Both parked helper files remain unpublished.
+
+Validation passed 35 focused tests, 296 standard tests (33 skips), 276 object-
+tool tests, the macOS ARM64 CMake build and seven CTest entries. Synthetic demos
+returned 59 positive passes and 53 passes plus six expected negative mismatches;
+these stay separate from complete native-function comparisons.

@@ -303,3 +303,27 @@ transport unknowns; new source hypotheses still require the unchanged complete
 comparator and existing exporter. This DAO-specific helper's image-base/naming
 and POSIX-host limits must be addressed before claiming a port to another game
 or a Windows-hosted analysis tool.
+
+
+### Stack repairs compose on retained candidates
+
+`rapid_object.allocator_receiver_fix.rewrite(source, complete_ast, bound_report,
+actual_callee_captures)` proposes one allocator-result receiver correction for
+the pinned constructor family. It consumes the retained cookie-corrected input,
+not a newly rebuilt or reset baseline. Source spans/types, actual complete callee
+bodies and bounded original CFG/register/stack provenance must agree; unknown
+control transfers, escapes, input/storage or call contexts refuse. Existing
+argument expressions and RET4/RET0 distinction remain intact. Suffix data effects
+and native exception-frame semantics remain unknown. Only the complete unchanged
+comparator and existing exporter can accept/publish a source; a diagnostic
+receiver or stack-label improvement cannot. Preserve both the original lineage
+and every intervening source/object binding, including inconclusive variants.
+
+The measured 500-input composed checkpoint improved the observed receiver setup
+but produced zero new full matches. The largest residual remains the shared
+native exception/unwind-frame hypothesis. This preserves the fixed 6,487 cohort
+and gives the next iteration a concrete cause to investigate instead of counting
+primary-label churn or resetting to pre-repair sources. Generic tests run with
+`python -m unittest rapid_object.tests.test_allocator_receiver_fix -v` on the
+existing POSIX target-aware Clang workflow. Image base `0x400000` and the named
+DAO allocator/constructor family are explicit current limitations.

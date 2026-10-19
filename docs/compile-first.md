@@ -570,3 +570,25 @@ cache, full relocation-aware comparison and verified-source exporter. A nonmatch
 or unknown cannot be promoted. Private `local/stack-cohort-001/eligibility.py`
 regenerates the fixed proposals without compiling; `summarize_sweep.py` freshly
 checks the completed pilot/sweep and preserves all prior published source bytes.
+
+
+### Bind the allocator result before tackling the remaining frame
+
+For retained cookie-corrected factory wrappers, the original may move the actual
+allocator EAX result into ECX before a null-guarded constructor call. The generic
+`allocator_receiver_fix` proposal checks complete AST storage/declaration binding,
+complete original CFG provenance and the actual constructor body before adding
+that existing pointer as receiver. It preserves signed/unsigned word argument
+expressions and the observed RET4/RET0 difference; an unread argument is not
+replaced with a guessed formal value. LOOP, interrupts and other unsupported
+control transfers refuse even in otherwise unmodeled suffixes. Calls, memory,
+returns and frame code outside the edited expression remain unchanged hypotheses.
+
+The fixed-cohort checkpoint tested all 500 compiled leads once (24 pilot plus
+476 reviewed continuation) and retained nine earlier unknowns without replay.
+It produced zero full exact matches. Receiver setup observations cannot make the
+explicit FS-frame source equivalent to the original native exception/unwind
+registration. Continue from the composed retained candidate and actual handler/
+unwind evidence; do not restart these completed builds, infer a thiscall signature
+from RET alone, or invent input/type/cleanup values to force a match. The existing
+full comparator/exporter gates and all 2,244 published sources are preserved.
