@@ -303,3 +303,70 @@ patching individual functions or stripping security checks.
 
 These are explicit next investigations, not successes implied by the current
 function counts or synthetic tooling tests.
+
+## 2026-10-19: recover declaration closure before rewriting calls
+
+A saved Ghidra FunctionDefinition for `_func_4879` was present while the C++ draft
+used `_func_4879 *` without its typedef. Read-only metadata export and a narrow
+numeric-callback declaration pass recover the omitted declaration while preserving
+all pre-existing source bytes. Explicit type widths, convention, variadic form,
+project revision and module identity must agree; missing or ambiguous metadata
+stays unsupported. This repairs declaration closure and does not establish the
+original signature's correctness.
+
+**Measured:** 75/80 previously failing targets compiled; four compiler failures and
+one interrupted unknown were retained. No new exact matches resulted: 59 target
+comparisons were inconclusive and 16 were nonmatches. All 20 controls retained
+source and comparison outcomes, including ten prior exact matches. The 104 build
+receipts, including five transport retries, total 201.130 seconds of receipt time;
+481.489 seconds of per-case elapsed time includes shared VM waits. A subsequent
+0.237-second cache check is not the build cost. No DeepSeek calls occurred;
+operator development and review were separately prepaid and remain unpriced here.
+
+The completed, separate FS sweep produced 965 additional compilations from 1,934
+targets and zero new exact matches. Its deduplicated pilot/sweep aggregate contains
+1,983 targets and 20 controls; the three exact results are old controls. Keep these
+counts separate from callback compilation and the ongoing frame sweep. See
+[conditions and reproduction](compile-first.md#round-005-restore-omitted-callback-typedef-declarations).
+The callback plan's remaining 298 cases stay queued. The parked helper/storage
+round remains needs-fix; it was not published with this approved declaration pass.
+
+## 2026-10-19: bound AST matching and deduplicate novelty against publication
+
+An equal-length near-nonmatch frontier contained 94 bodies of at least 24 bytes
+with at most four differing bytes. Eighty-five had eligible integer-comparison
+AST sites (24–261-byte bodies); nine had none. Complete target-aware parsing,
+validated byte spans and integer types supported deterministic comparison/source
+form proposals with four variants per pilot function. Original source and failed
+variants were retained. The unchanged full-range relocation-aware comparator,
+not instruction distance, decided acceptance.
+
+**Measured:** 12/85 frontier sources matched, totaling 529 bytes. Five identities
+were already in the published index, so the actual new yield is **seven distinct
+functions and 340 bytes**. All ten unchanged exact controls stayed byte-identical.
+The frozen status counter measures frontier-source improvements; the final
+receipt corrects novelty against the prior 2,209 published identities. Comparing
+only with the chosen baseline would have overstated new recovery credit.
+
+Every winning proposal used unsigned ordered-zero form. An operator-only smoke
+failed in eight attempts; a subsequent generic ordered-zero smoke matched a full
+87-byte function in one attempt, and that identity was independently rebuilt in
+the pilot. Equivalent comparison spellings can lower differently in VC8, so a
+baseline nonmatch is not evidence that its behavior was wrong. Other proposed
+comparison forms added no matches in this bounded experiment.
+
+The 316 pilot attempts contain 310 compiled objects and six retained inconclusive
+transport failures, with no automatic retries. Fresh comparison of all 310
+objects reproduced their reports. Build receipts total 522.343 seconds; resumed
+wall time was 941.162 seconds with shared VM waits and cache checks. Nine separate
+smoke attempts took 58.863 seconds elapsed. Eleven near-case variants compiled
+to previously observed function bytes. These are measured development costs even
+though no DeepSeek calls occurred; separately prepaid operator costs are unknown.
+
+The approved exporter skipped the AST report format unchanged, so all new matches
+remain local with hashed source/build/comparison paths. No adapter was added, and
+all 2,209 prior published records, source files and provenance were preserved.
+See [the conditions and commands](compile-first.md#bounded-ast-guided-matching-pilot).
+No game executable was linked or run, and these compiled-artifact results do not
+establish whole-game behavior. Harder functions and broader synthesis remain later
+work rather than an extrapolation from this selected frontier.

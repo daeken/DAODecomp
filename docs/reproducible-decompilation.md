@@ -99,6 +99,13 @@ inventory while deferring known failures from the next expensive compiler pass;
 record the deterministic selection rule and preserve the omitted identities.
 See the [FS round and its limits](compile-first.md#round-002-explicit-fs-memory-access).
 
+Before changing a failed call, check declaration closure against the retained
+analysis metadata. The [callback declaration pass](compile-first.md#round-005-restore-omitted-callback-typedef-declarations)
+restores only omitted numeric callback typedefs with explicit supported signatures
+from the same read-only project revision. Missing metadata remains unknown. Its
+75/80 compilation improvement produced zero new exact matches, demonstrating why
+compilation repair and matching yield need separate denominators.
+
 ## 4. Keep compilation, comparison and execution separate
 
 | State | What has actually been observed |
@@ -122,6 +129,15 @@ Do not require a handwritten contract, fixture corpus, wrapper and review packet
 for every new function. Generated evidence should bind source, original bytes,
 compiler/object and comparison inputs automatically. Compilable nonmatches remain
 valuable working material, but are not silently upgraded to equivalence.
+
+For already-compiling near nonmatches, try a bounded deterministic AST search
+before individual model repair. Our [matching pilot](compile-first.md#bounded-ast-guided-matching-pilot)
+uses complete target-aware parses, actual integer types and source spans, a fixed
+frontier and at most four variants per pilot function. Comparison and signedness
+edits are candidate hypotheses, so every failed variant remains unvalidated.
+Instruction similarity only ranks work; a full-range exact object comparison
+still decides acceptance. Preserve known exact controls and count every compiler
+attempt, including failed exploratory smoke work.
 
 ## 5. Spend inference on diagnosed gaps
 

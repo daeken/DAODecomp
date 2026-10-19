@@ -266,3 +266,142 @@ reuse. Independent review caught alternate MSVC inline qualifiers and traps not
 covered by a mnemonic-prefix check; instruction groups plus explicit ungrouped
 trap/system boundaries now have generic negative controls. The original needs-fix
 verdict and final independent approval are retained locally.
+
+## Round 005: restore omitted callback typedef declarations
+
+[`ghidra_declaration_fix.py`](../rapid_object/ghidra_declaration_fix.py) closes a
+specific declaration omission: a draft references a numeric `_func_N` type whose
+FunctionDefinition metadata exists in the saved Ghidra project but whose typedef
+was omitted from C++ export. The pass prepends the metadata-derived typedef and
+preserves every existing source byte. It supplies no dependency implementation
+and changes no call arguments or storage layout.
+
+The read-only type export binds the pinned module, image base, x86 Windows
+language/compiler specification, exporter and unchanged persistent project hash.
+Each raw draft must come from that same project revision. Rendering requires an
+unambiguous signature, explicit supported calling convention and ABI-sized
+primitive/pointer types. Missing/ambiguous metadata, conflicting declarations,
+unknown conventions, unsupported records/arrays/nested callbacks and incompatible
+variadics are refused. Ghidra signatures remain hypotheses about the original ABI.
+
+The fixed pilot selected 80 previously failing functions and 20 compiling controls:
+**75 targets compiled, four still failed, one interrupted build remained unknown,
+and zero new exact matches**. Target comparisons were 59 inconclusive and 16
+nonmatches. All 20 controls retained identical source bytes and comparison statuses;
+the ten exact controls were already exact. The four compiler failures were two
+argument-count disagreements, one unresolved import and one pointer conversion.
+The unknown empty build directory at RVA00335350 was retained without replay.
+
+Ghidra 12.1.4 exported the graph in 3.846 seconds. VC8 SP1 14.00.50727.762 x86
+compiled under Windows 11 ARM64 translation; Apple Clang 21.0.0 supplied the
+existing target-aware parsing. The 104 retained build receipts, including five
+transport-only retries, sum to 201.130 seconds. Per-case elapsed times including
+lock waits sum to 481.489 seconds across two run episodes. A later 0.237-second
+cache reconciliation performed no new builds. No DeepSeek requests were made;
+separately prepaid operator work is development cost and is not priced here.
+
+With the configured original and analyzed project:
+
+```sh
+python -m rapid_object.ghidra_declaration_fix export-types --root local/repro-callback-fix
+python -m rapid_object.ghidra_declaration_fix census --root local/repro-callback-fix
+python -m rapid_object.ghidra_declaration_fix pilot --root local/repro-callback-fix
+python -m unittest rapid_object.tests.test_ghidra_declaration_fix -v
+```
+
+The measured 378-identity plan is a subset of retained repair sources, not the
+whole remaining inventory. Its 298 identities without pilot results remain queued;
+the sweep has not been launched. This round does not fix the parked round-004
+helper/storage approach, which remains unapproved and unpublished.
+
+Separately, the completed FS round-002 sweep measured **1,934/1,934 targets, 965
+additional compilations and zero new exact matches**. Deduplicating its original
+pilot and sweep gives 1,983 targets plus 20 controls; 985 compiled includes those
+20 controls, and all three exact results are old controls. These completed FS
+counts do not include the separate ongoing frame-address sweep.
+
+## Bounded AST-guided matching pilot
+
+[`ast_match.py`](../rapid_object/ast_match.py) searches a small retained nonmatch
+frontier after compilation works. Instruction distance ranks the search only;
+the unchanged comparator's complete, relocation-aware function equality is the
+sole acceptance condition. The original source is retained as the baseline, and
+failed variants stay local and explicitly UNVALIDATED.
+
+The pass requires a successful complete Clang parse targeting i686 Windows MSVC
+with C++98 and MSVC-14 compatibility settings. It supports ASCII source only,
+checks AST integer32 types and nested source byte spans, verifies actual operator
+spelling against masked comments/strings, and refuses macro expansion/spelling
+ranges. Finite single-site proposals change comparison operators, compare operand
+signedness, or express a zero test as an unsigned ordered comparison. Pure operand
+reorientation additionally excludes calls, assignment/increment effects and
+volatile reads. These are proposals about decompiler hypotheses and source forms; they are not
+assumed to preserve the baseline's behavior. A nonmatch alone does not establish
+that baseline behavior is wrong: equivalent comparison spellings can lower
+differently with the historical compiler.
+
+The order is deterministic and source-hash deduplicated, with a hard maximum of
+eight variants per function and a four-variant pilot budget. Each variant must
+parse completely before the existing VC8 build and exact comparison. The fixed
+plan binds generator/dependency versions; retained attempts bind source, object,
+compiler, original request/ranges and comparison implementation. Interrupted build
+outputs are retained and refused, rather than silently recompiled. The shared VM
+lock serializes this experiment with the frame sweep.
+
+The retained census contained 94 equal-length nonmatches of at least 24 bytes
+with at most four differing bytes. Of those, 85 supported these AST sites and nine
+had no eligible integer comparison. Eligible bodies span 24–261 bytes. The pilot
+uses all 85 eligible cases, stratified by body size and
+relocation count, plus ten unchanged known-exact controls. This selected frontier
+is not a sample of all game functions. The retained census is an input to these
+commands; another project must derive its own pinned frontier first:
+
+```sh
+python -m rapid_object.ast_match prepare --root local/repro-ast-match
+python -m rapid_object.ast_match run --root local/repro-ast-match
+python -m unittest rapid_object.tests.test_ast_match -v
+```
+
+The initial operator-only smoke exhausted eight variants without a match. A
+generic unsigned ordered-zero hypothesis then matched the full 87-byte function
+at RVA005b0470 in one attempt. Both smoke episodes remain recorded separately
+from the fixed pilot. Apple Clang 21.0.0 provided the AST; VC8 SP1 14.00.50727.762
+x86 compiled with the existing `/O2 /Ob1 /Oy /Gy /Z7 /Zl /GS- /GR- /EHsc` profile
+under Windows 11 ARM64 translation. No original or candidate game code was
+executed. Zero DeepSeek calls excludes neither operator/model development cost
+nor compiler and review time.
+
+The existing reviewed source exporter does not consume this new AST result
+format unchanged: its actual smoke-row probe skipped the row as missing the
+expected status field. New matching artifacts therefore remain local with exact
+source/build/report paths; no export adapter was added. The 2,209 published
+function records and their existing C++/provenance remain intact.
+
+**Completed pilot:** 85/85 near cases and all ten controls were accounted for.
+Twelve frontier sources became full exact matches, totaling 529 body bytes.
+Cross-checking the existing published index identified five already-published
+identities (189 bytes), leaving **seven genuinely new matching identities and
+340 body bytes**. The successful smoke identity is included in those seven,
+not added again. All twelve frontier wins used the unsigned ordered-zero rule;
+other proposed comparison forms produced no additional matches in this budget.
+All ten control sources and their compiled function bytes stayed identical.
+
+The pilot retained 316 build attempts: 310 compiled objects and six transport
+exit-255 outcomes without compiler/object receipts. Those six remain inconclusive
+and were not retried or credited. All 310 compiled comparisons were freshly
+recomputed against the pinned original and agreed with their retained reports.
+Build receipts total 522.343 seconds; the resumed invocation took 941.162 seconds
+including cache checks and shared VM waits. The earlier interrupted episode and
+nine separate smoke attempts are retained; smoke elapsed time was 58.863 seconds.
+These durations overlap/reuse work and must not be added as compiler time.
+Eleven near-case mutations compiled to machine bodies already seen for that
+function; source-hash deduplication cannot predict every compiler equivalence.
+
+The original runner stopped after 14 complete cases; the cause is unknown.
+One complete compiler/object receipt lacked only its comparison summary. Artifact
+checks and the unchanged comparator finished that step without rebuilding, and
+the same plan continued with a detached process. The final local
+`final-pilot-receipt.json` distinguishes novel identities from the frozen status
+counter, which counts improvements over selected nonmatching sources and does
+not deduplicate against previously published sources. No search or acceptance
+rule changed during the pilot. Seventy-three target sources remain unvalidated.
