@@ -493,3 +493,11 @@ all 80 initial trees without structural changes. Source, binary and runtime
 bindings are verified, and refreshing a manifest remains an explicit build step.
 No VC8 rebuilds or provider calls occurred. See [paired-lift usage](../tools/sharpretro/README.md)
 and [measured limitations](sharp-retro.md).
+
+The first diagnostic-tool checkpoint passed Linux/macOS CI but Windows could
+not import the paired tests: its job installed only the execution dependency,
+while Capstone and pefile were restricted to Unix jobs. The pure diagnostic
+readers now need those pinned packages on every host. CI installs the unchanged
+native dependency list on Windows too and explicitly runs the portable mismatch
+controls there; Unix-only orchestration suites remain separately scoped. Optional
+actual SharpRetro execution still requires the explicit checkout/build configuration.
