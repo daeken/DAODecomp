@@ -443,3 +443,53 @@ matching, but unique byte content alone is insufficient evidence. Measure whethe
 a comparison extension unlocks useful matches before adding production machinery.
 These two experiments used no DeepSeek calls; development and Codex costs are
 separate and have not been priced here.
+
+## 2026-10-19: classify observations before diagnosing repairs
+
+A deterministic census freshly reproduced 14,174 retained object comparisons
+without a binding failure or status change. Removing 2,181 already-published
+identities left 11,993 repair candidates or unsupported comparisons. The largest
+primary labels were stack adjustment/cleanup (3,658) and branch condition (1,985),
+but most included broader structural differences. Only 106 unpublished nonmatches
+had identical instruction shapes throughout. Small observed frontiers include
+40 memory-addressing cases, 13 register cases and seven stack-cleanup cases.
+
+Fixed label precedence makes counts reproducible; overlapping labels and bounded
+instruction examples keep the primary label from hiding other differences.
+Relative calls require decoded targets as well as encoded operands: identical
+relative bytes at different instruction offsets can call different addresses.
+That case now has a generic regression control. Unknown relocations, unsupported
+ranges, incomplete decoding and alignment-budget limits remain explicit.
+
+Fresh comparison plus initial classification took 138.731 seconds; the final
+classification replay took 24.310 seconds. Thirty focused controls and the
+270-test standard suite (seven skips) passed on macOS ARM64. No compiler or
+provider calls were needed; engineering/review effort is separate. The
+[census methodology, results and command](mismatch-analysis.md) are public;
+original decoded instructions and all generated evidence stay ignored locally.
+
+## 2026-10-19: compare paired lifted trees without treating unknowns as agreement
+
+SharpRetro revision `685b7578457cad325226aa8923b45ded35098fa3` built successfully
+with .NET 10. A small external-checkout adapter serializes actual typed Bits32
+LiftIl, retaining lossless constants, register/flag/memory operations and opaque
+nodes. Capstone separately checks complete instruction boundaries. Synthetic
+controls demonstrate that different ADD encodings can share a tree, while
+register, immediate, memory, flag, width and call/return changes remain visible.
+
+The 40-pair retained pilot took 13.883 seconds: 25 of 30 nonmatches yielded
+supported IL differences, four were opaque and one incomplete. All ten exact
+controls had identical raw trees, but one was opaque. Counting all ten as
+supported agreement would have hidden that limitation. Seventy-one of 80 sides
+were fully supported; 720 of 3,235 decoded instructions were opaque, mostly x87.
+The entire 27-byte undecoded suffix was preserved. This is a stratified pilot,
+not a whole-game coverage estimate or a new equivalence acceptance path.
+
+Twenty-six focused tests passed; independent review repeated five representative
+real pairs and the controls. Portable artifact readers must not import VM build
+orchestration: the adapter uses pure comparison/export helpers and explicit
+original/checkout/DLL/manifest configuration. The final portable version reproduced
+all 80 initial trees without structural changes. Source, binary and runtime
+bindings are verified, and refreshing a manifest remains an explicit build step.
+No VC8 rebuilds or provider calls occurred. See [paired-lift usage](../tools/sharpretro/README.md)
+and [measured limitations](sharp-retro.md).

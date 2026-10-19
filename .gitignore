@@ -12,6 +12,8 @@ __pycache__/
 # Keep game inputs/assets in the ignored directories above; captures under local/.
 *.exe
 *.dll
+/tools/sharpretro/adapter/bin/
+/tools/sharpretro/adapter/obj/
 *.dmp
 *.gpr
 *.rep/

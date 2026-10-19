@@ -17,6 +17,11 @@ approaches, measurements, reproduction steps and changes needed for another game
 This is an evolving reference implementation; a runnable whole-game replacement
 and the $200 completion target have not yet been demonstrated.
 
+[Deterministic mismatch analysis](docs/mismatch-analysis.md) ranks retained
+compiler differences; [paired SharpRetro IL diagnostics](tools/sharpretro/README.md)
+compare lifted original/candidate instructions. Both guide repairs without
+changing source acceptance.
+
 <!-- progress:start -->
 ## Progress
 

@@ -141,6 +141,14 @@ attempt, including failed exploratory smoke work.
 
 ## 5. Spend inference on diagnosed gaps
 
+First run a [deterministic mismatch census](mismatch-analysis.md) over retained
+objects. Rank observed differences by both function count and requested body
+bytes, excluding identities already matched by another candidate. Keep broad
+heuristic labels separate from small, aligned repair frontiers: a primary
+stack-cleanup label can coexist with substantial structural differences. Preserve
+unsupported comparisons and unknown causes. Typed paired IL is a further
+diagnostic layer; do not silently promote structural agreement to equivalence.
+
 Send a model the current draft/source, requested identities, relevant dependency
 information and concrete compiler/comparison feedback. Keep complete evidence
 locally while avoiding repeated caller lists and unrelated metadata in prompts.
