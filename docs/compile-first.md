@@ -208,3 +208,61 @@ XOR expressions. None of those 33 is a positive incoming-argument offset or a
 zero return-address offset. Numeric offsets alone cannot justify an arbitrary
 C++ local address. The next round investigates compiler frame/cookie reconstruction
 from original instructions and storage evidence; unsupported inputs remain visible.
+
+
+## Round 003: original entry-stack address values
+
+[`ghidra_frame_fix.py`](../rapid_object/ghidra_frame_fix.py) handles a narrower
+case than reconstructing a stack frame: a single cookie XOR whose only stack
+pseudo-object use is `(uint)&stack0xNEG`. It derives the fixed signed offset from
+the actual original prologue and expresses the address value as the native
+`_AddressOfReturnAddress()` converted to unsigned32, plus that offset with
+unsigned32 wraparound. It allocates no substitute local and never dereferences
+the reconstructed address.
+
+The rule requires complete pinned ranges/bytes, an unambiguous actual unsigned32
+type, a resolved global, and exactly one matching cookie-XOR site in a bounded
+linear prefix. Distinct cookie sites are permitted only when the expected offset
+uniquely identifies one. Calls, branches, interrupts, traps and system transfers
+bound the scan; dynamic/unknown SP changes, ambiguous sites and any other storage
+use remain unsupported. Inline spellings, forced-inline and naked entries are
+refused. The selected single-function VC8 `/Ob1 /Oy` build must preserve the
+out-of-line entry boundary; changing the build profile requires fresh validation.
+
+This reconstructs an **original address expression**, not the replacement
+compiler's security/SEH frame layout, handler fields, try levels or local aliases.
+Those remain unresolved. Compilation and nonmatching objects are provisional;
+no cookie or check is removed and no unknown input/callee becomes a success stub.
+
+The initial 4,103-case profile was measured on 80 previous failures plus 20
+compiling controls: **62 sources emitted, 53 newly compiling, zero new exact
+matches**. All controls kept identical source and comparison outcomes. The three
+exact pilot results were already-matching controls. Its 100-case invocation took
+264.099 seconds after a retained two-case 4.615-second smoke, including shared VM
+lock waits; four transport-only retries were retained and compiled. The selected
+compiler emitted real intrinsic address math without an external intrinsic call.
+No objects were executed or linked into a game, and no provider requests occurred.
+
+A second fixed-prologue cookie site adds 842 eligible identities. Its separate
+16-function pilot emitted four sources but compiled none: four prototype errors,
+ten unsupported three-byte subpieces and two thiscall-declaration rejections.
+Thus the expanded 4,945-case plan is eligibility, not a measured success forecast.
+All 116 retained source/artifact outcomes reconciled unchanged after review fixes.
+
+With the retained FS deferred plan, original and compiler configured:
+
+```sh
+python -m rapid_object.ghidra_frame_fix prepare --root local/repro-frame-fix
+python -m rapid_object.ghidra_frame_fix pilot --root local/repro-frame-fix
+python -m unittest discover -s rapid_object/tests -v
+# After checking the measured pilot and exact implementation:
+python -m rapid_object.ghidra_frame_fix sweep --root local/repro-frame-fix --resume
+python -m rapid_object.ghidra_frame_fix pause --root local/repro-frame-fix
+```
+
+Preparation preserves an existing pilot selection and leaves the sweep paused.
+The sweep uses the same serialized VM lock and verifies retained bindings before
+reuse. Independent review caught alternate MSVC inline qualifiers and traps not
+covered by a mnemonic-prefix check; instruction groups plus explicit ungrouped
+trap/system boundaries now have generic negative controls. The original needs-fix
+verdict and final independent approval are retained locally.

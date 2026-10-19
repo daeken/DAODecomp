@@ -264,6 +264,36 @@ just to repair a reader. A small isolated helper plus explicit parity controls
 can preserve the running worker; shared-module cleanup can wait for a stopped,
 measured migration.
 
+## 2026-10-19: distinguish an address value from replacement frame storage
+
+The next free rule handles one negative stack address used only in a cookie XOR.
+Original instructions establish its fixed offset from entrySP. A real compiler
+intrinsic returns the actual entry return-slot address; unsigned32 addition then
+preserves the original address value without fabricating a local array, incoming
+parameter or zero cookie. This does not reconstruct SEH frame fields or make the
+remaining draft safe to run. Unknown storage uses stay unresolved.
+
+**Measured initial pilot:** 53/80 newly compiling functions, 62 emitted sources,
+20/20 unchanged controls and zero new exact matches. The 100-case invocation took
+264.099 seconds, reusing a two-case 4.615-second smoke; VM lock waits and four
+retained transport retries are included. A separate 16-function two-cookie-site
+extension produced zero compile gains because later helper/prototype issues
+blocked it. No provider requests or game execution occurred. Do not pool the
+extension with the initial denominator or infer whole-inventory yield.
+
+**Review finding:** a register-delta proof also needs an execution boundary.
+Mnemonic prefixes missed INT3, UD2, INTO, IRETD and HLT, allowing a later cookie
+site to appear reachable. The correction uses decoded instruction groups and
+explicit ungrouped traps/system transfers. Alternate `_inline`/`__inline`
+spellings also need the same entry-boundary refusal. Generic negative controls
+and an independent delta review cover both corrections; all 116 retained sources
+and artifact outcomes remain unchanged. Source compilation still grants no match
+credit. See [preconditions and commands](compile-first.md#round-003-original-entry-stack-address-values).
+
+**Next shared blockers:** three-byte subpiece operations, missing declarations
+and prototype mismatches. Preserve their type/storage uncertainty rather than
+patching individual functions or stripping security checks.
+
 ## Still unproven
 
 - The $200 target for a runnable whole-game replacement.
