@@ -551,3 +551,44 @@ new source rows, preserving all 2,216 previous published identities and source
 bytes; the snapshot now contains 2,232 functions. Engineering and review cost
 remain separate from zero provider calls. See the [rule conditions and measured
 reproduction](compile-first.md#bind-indirect-receiver-hypotheses-to-the-observed-call-edge).
+
+
+### Unchanged receiver-rule breadth checkpoint
+
+The follow-up applied the reviewed `indirect_receiver_fix` unchanged to the
+frozen 14,174-identity retained census (11,098 compiled nonmatches). Selection
+excluded 351 published nonmatch identities and 13 unpublished prior attempts;
+the other 16 prior attempts were already published. The prior exit-255 input was
+excluded without replay. Cheap original-edge checks left 48 cases; complete AST
+checks admitted 25 new targets covering 480 original body bytes, rejecting 23
+unsupported source shapes. The deterministic ascending-RVA plan had no remainder.
+
+One variant per target used 25 new VC8 attempts: 24 compiled, nine passed the
+unchanged complete relocation-aware comparator (161 body bytes), 15 remained
+nonmatches and one transport exit 255 stayed unknown without retry. Ten unchanged
+exact controls reused their objects and passed fresh comparisons. Selection took
+3.627 seconds; the pilot took 35.185 seconds, including 32.998 seconds in build
+receipts and 0.0012 seconds waiting for the shared VM lock. Compiler, target-aware
+Clang settings, rule and acceptance remained those of the preceding checkpoint.
+Remaining differences include tail-call/register allocation, narrow return values
+and arithmetic forms; no additional repair was attempted in this round.
+
+The existing AST bridge and source exporter freshly rebound all nine accepted
+source/object/compiler/original/range/symbol/relocation records. The snapshot grew
+from 2,232 to **2,241**, preserving every previous entry, translation unit and
+source byte. Exact object agreement remains evidence for the pinned build, not a
+proof of game behavior or of unknown ABI semantics. There were no provider calls,
+new machinery reviews or worker calls; zero provider calls still cost engineering,
+compiler and publication time. Paid production remains paused.
+
+Private reproducibility inputs, exclusions, cache and receipts are retained under
+`local/memory-ast-scale-001/`: `prepare.py` freezes `plan.json`, `run.py` resumes it
+without replaying recorded attempts, and `final_audit.py` regenerates proposals
+and rechecks current bindings before `tools/export_ast_matches.py` consumes
+`accepted-exact-input.json`. Both this round's unknown RVA `0040e2e0` and the prior
+unknown `00530cc0` remain retained, with no match or compile-failure credit.
+
+Local post-integration validation on macOS ARM64 passed 296 standard tests
+(33 skips), 187 object-tool tests, the CMake build, six C++ checks and both
+synthetic demos (59 positive; 53 passing plus six expected negative mismatches).
+The generic transformation and its tests were unchanged from the approved pilot.

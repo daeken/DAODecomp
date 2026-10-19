@@ -103,3 +103,10 @@ bytes), 12 nonmatches and one transport unknown; ten existing exact controls
 remained intact. The original census above stays a historical snapshot rather
 than being relabeled after these repairs. [Conditions, limits and measurements](compile-first.md#bind-indirect-receiver-hypotheses-to-the-observed-call-edge)
 describe the generic rule and unchanged acceptance gate.
+
+
+The unchanged receiver-rule breadth pass exhausted its eligible frozen-census
+population: 25 targets, 24 compiled, nine new exact objects / 161 body bytes,
+15 retained nonmatches and one transport unknown. Ten cached exact controls
+remained exact. See [compile-first](compile-first.md#unchanged-receiver-rule-breadth-checkpoint)
+for exclusions, timing and the 2,241-source snapshot checkpoint.
