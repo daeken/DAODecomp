@@ -6,6 +6,11 @@ whole executable is not required. Complete reccmp matches from native x86 C++
 are an automatic acceptance path; nonmatching functions remain available for
 iteration or other checking. Observable function behavior is the overall goal.
 
+**[Browse the recovered native C++ and matching-function index](src/native/recovered/README.md).**
+This published source snapshot tracks the new reccmp/object workflow separately
+from the historical emulator-validated registry below. The recovery harness and
+source snapshot currently live on the `codex/rapid-recovery` branch.
+
 <!-- progress:start -->
 ## Progress
 

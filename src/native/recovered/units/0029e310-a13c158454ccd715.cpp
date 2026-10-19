@@ -1,0 +1,152 @@
+struct NodeA {
+    NodeA* next;
+    unsigned char pad0[0x21];
+    unsigned char field_25;
+};
+
+struct C_67b4d0_Sub {
+    unsigned char pad0[0x7c];
+    unsigned int field_7c;
+};
+
+struct C_67b4d0 {
+    unsigned char pad0[0x658];
+    C_67b4d0_Sub* field_658;
+    bool fn_0027b4d0();
+};
+
+struct NodeB {
+    NodeB* field_0;
+    NodeB* field_4;
+    NodeB* field_8;
+    unsigned int field_c;
+    unsigned int field_10;
+    unsigned char pad14[0x11];
+    unsigned char field_25;
+};
+
+struct KeyB {
+    unsigned int low;
+    unsigned int high;
+};
+
+struct C_67ba00 {
+    unsigned char pad0[4];
+    NodeB* field_4;
+    NodeB* fn_0027ba00(const KeyB* key);
+};
+
+struct Elem20 {
+    unsigned int f0;
+    unsigned int f1;
+    unsigned int f2;
+    unsigned int f3;
+    unsigned int f4;
+};
+
+struct C_68d020 {
+    unsigned char pad0[0x1a8];
+    unsigned char* field_1a8;
+    unsigned char* field_1ac;
+    unsigned char pad1[0xa4];
+    unsigned int field_254;
+    bool fn_0028d020(unsigned int index);
+};
+
+struct S_69e300 {
+    unsigned char pad0[0x1c];
+    unsigned char field_1c;
+};
+
+struct C_69e310 {
+    S_69e300* field_0;
+    unsigned char fn_0029e310();
+};
+
+// FUNCTION: DAO 0x67A8F0
+NodeA* fn_0027a8f0(NodeA* p) {
+    NodeA* res = p;
+    NodeA* cur = p->next;
+    if (cur->field_25 != 0)
+        return res;
+    do {
+        res = cur;
+        cur = res->next;
+    } while (cur->field_25 == 0);
+    return res;
+}
+
+// FUNCTION: DAO 0x67B4D0
+bool C_67b4d0::fn_0027b4d0() {
+    if (field_658 == 0)
+        return false;
+    return field_658->field_7c == 1;
+}
+
+// FUNCTION: DAO 0x67BA00
+NodeB* C_67ba00::fn_0027ba00(const KeyB* key) {
+    NodeB* res = field_4;
+    NodeB* cur = res->field_4;
+    if (cur->field_25 != 0)
+        return res;
+    unsigned int keyHigh = key->high;
+    for (;;) {
+        unsigned int edx = cur->field_10;
+        if (edx < keyHigh) {
+            cur = cur->field_8;
+        } else if (edx != keyHigh) {
+            res = cur;
+            cur = cur->field_0;
+        } else {
+            edx = cur->field_c;
+            if (edx >= key->low) {
+                res = cur;
+                cur = cur->field_0;
+            } else {
+                cur = cur->field_8;
+            }
+        }
+        if (cur->field_25 != 0)
+            return res;
+    }
+}
+
+// FUNCTION: DAO 0x689A40
+void fn_00289a40(const Elem20* first, const Elem20* last, Elem20* dest) {
+    if (first == last)
+        return;
+    const Elem20* src = first;
+    Elem20* dst = dest;
+    do {
+        dst->f0 = src->f0;
+        dst->f1 = src->f1;
+        dst->f2 = src->f2;
+        dst->f3 = src->f3;
+        dst->f4 = src->f4;
+        ++src;
+        ++dst;
+    } while (src != last);
+}
+
+// FUNCTION: DAO 0x68D020
+bool C_68d020::fn_0028d020(unsigned int index) {
+    unsigned char* begin = field_1a8;
+    if (begin == 0)
+        return false;
+    unsigned char* end = field_1ac;
+    unsigned int count = (unsigned int)((end - begin) >> 2);
+    if (count > index) {
+        field_254 = index;
+        return true;
+    }
+    return false;
+}
+
+// FUNCTION: DAO 0x69E310
+unsigned char C_69e310::fn_0029e310() {
+    unsigned char result = 0;
+    S_69e300* p = field_0;
+    if (p != 0)
+        result = p->field_1c;
+    return result;
+}
