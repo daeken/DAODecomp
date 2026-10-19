@@ -34,21 +34,25 @@ def packet(rvas,feedback=None):
     return value
 
 
-def prepare_request(value):
+def prepare_request(value, *, thinking=True, max_tokens=32768):
+    if type(thinking) is not bool or type(max_tokens) is not int or not 1 <= max_tokens <= 32768:
+        raise ValueError('request_options')
     domain=[{'name':f['name'],'id':f"DAOrigins.exe:{PIN}:rva-{f['rva']:08x}"} for f in value['functions']]
-    body=provider.encode({'model':'deepseek-flash','messages':[{'role':'system','content':'Return exactly one JSON object, without markdown fences, matching: '+json.dumps(SOURCE_SCHEMA)},{'role':'user','content':provider.encode(value).decode()}],'thinking':{'type':'enabled'},'reasoning_effort':'low','response_format':{'type':'json_object'},'max_tokens':32768,'stream':False})
+    request={'model':'deepseek-flash','messages':[{'role':'system','content':'Return exactly one JSON object, without markdown fences, matching: '+json.dumps(SOURCE_SCHEMA)},{'role':'user','content':provider.encode(value).decode()}],'thinking':{'type':'enabled' if thinking else 'disabled'},'response_format':{'type':'json_object'},'max_tokens':max_tokens,'stream':False}
+    if thinking:request['reasoning_effort']='low'
+    body=provider.encode(request)
     if len(body)>provider.MAX_INPUT_BYTES: raise ValueError('request_cap')
     bindings={'manifest_sha256':provider.sha(provider.encode({'native_pilot':True,'domain':domain})),'packet_sha256':provider.sha(provider.encode(value)),'response_schema_sha256':provider.sha(provider.encode(SOURCE_SCHEMA)),'request_sha256':provider.sha(body),'function_domain_sha256':provider.sha(provider.encode(domain))}
-    maximum=(len(body)+2048)*provider.RATES['uncached']+32768*provider.RATES['output']
+    maximum=(len(body)+2048)*provider.RATES['uncached']+max_tokens*provider.RATES['output']
     return body,bindings,maximum,domain
 
 
-def request_packet(folder,value,request_id,ledger_dir=DEFAULT_LEDGER,global_db=DEFAULT_GLOBAL):
+def request_packet(folder,value,request_id,ledger_dir=DEFAULT_LEDGER,global_db=DEFAULT_GLOBAL, *, thinking=True, max_tokens=32768):
     folder=Path(folder); folder.mkdir(parents=True,mode=0o700,exist_ok=False)
     provider.atomic(folder/'packet.json',value)
-    body,bindings,maximum,domain=prepare_request(value)
+    body,bindings,maximum,domain=prepare_request(value,thinking=thinking,max_tokens=max_tokens)
     (folder/'request.json').write_bytes(body); ledger=provider.Ledger(ledger_dir); attempt=None; outcome='transport_error'; usage=None; started=time.time()
-    result={'schema_version':1,**bindings,'request_id':request_id,'automatic_retry':False,'requested_model':'deepseek-flash','reasoning_effort':'low','outcome':'interrupted_unknown','validation_status':'native_comparison_pending'}
+    result={'schema_version':1,**bindings,'request_id':request_id,'automatic_retry':False,'requested_model':'deepseek-flash','thinking':thinking,'reasoning_effort':'low' if thinking else None,'max_tokens':max_tokens,'outcome':'interrupted_unknown','validation_status':'native_comparison_pending'}
     provider.atomic(folder/'result.json',result)
     try:
         attempt,day=ledger.reserve(bindings,maximum); result.update(attempt_id=attempt,budget_day=day,reserved_nanodollars=maximum)

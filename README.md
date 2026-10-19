@@ -65,7 +65,10 @@ provenance and counts; they are not added to the historical registry above.
 The exact [pilot C++](src/native/reccmp_pilot.cpp) is retained in the repository
 and builds through the native loop, separately from the portable CMake targets.
 
-The object runner uses **16 provider lanes** and up to six repairs per batch.
+The object runner is currently **paused and drained for cost reduction**. The
+[measured $200 budget plan](docs/cost-target.md) records the Ghidra first pass,
+source normalization experiments and remaining executable-integration work.
+Its retained configuration uses **16 provider lanes** and up to six repairs per batch.
 Repairs focus on unmatched functions, retain the best source, and stop after
 repeated lack of progress. Large bodies use context pages; known truncated
 responses can split into smaller groups while preserving consumed allowances.
