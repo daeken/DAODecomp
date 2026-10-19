@@ -526,3 +526,23 @@ leaf-cleanup targets plus two earlier byte-store smoke variants compiled, while
 ten cached exact controls remained exact. The prototype remains private and the
 snapshot stays at 2,241. See the [negative findings](learning-log.md#stack-cleanup-diagnosis-bounded-negative-result);
 stack deltas alone do not establish calling convention or unknown formal inputs.
+
+
+### Signed negative-one thresholds
+
+`rapid_object.branch_zero_fix` rewrites already-signed 32-bit negative-one
+comparisons into zero sign tests using complete AST spans and original sign-test
+evidence. It preserves operand types/expressions and refuses effects, volatile
+reads and unsupported comparisons. The bounded 8+2 pilot compiled ten targets:
+three new exact / 100 bytes, seven retained nonmatches, no unknowns; ten cached
+controls stayed exact. The existing exporter preserved all 2,241 prior entries
+while extending the snapshot to 2,244. See the
+[measured selection and limits](learning-log.md#signed-threshold-spelling-a-small-positive-result).
+
+```sh
+python -m unittest rapid_object.tests.test_branch_zero_fix -v
+```
+
+The rule emits hypotheses; the unchanged complete relocation-aware comparator
+remains the sole source acceptance gate. It does not restart a provider queue or
+spend the unrun portion of the private plan.

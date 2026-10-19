@@ -647,3 +647,70 @@ regeneration, independent review and receipts are under
 attempts without recompiling them. The existing AST exporter accepted no rows,
 and its in-memory snapshot extension preserved all **2,241** published entries,
 translation units and source bytes. No acceptance rule or shared helper changed.
+
+
+### Signed threshold spelling: a small positive result
+
+A deterministic sample of 25 body-size/instruction-shape strata from 1,985
+unpublished branch-primary cases was decoded and completely parsed with the
+existing target-aware Clang path. Branch mnemonics alone did not identify errors:
+reversed CMP operands and inverse branches can describe corresponding decisions,
+and layout/call/return differences were often mixed into the same label. Three
+retained pairs were also lifted through pinned SharpRetro: one reported differing
+supported IL, while two remained opaque/unsupported. These diagnostics supplied
+no semantic equivalence or acceptance credit.
+
+A grounded spelling family compared a signed integer to negative one while the
+original tested its sign at zero. For an already promoted signed 32-bit integer,
+`-1 < x` and `x > -1` select the same values as `x >= 0`; `x <= -1` and
+`-1 >= x` select the same values as `x < 0`. The generic AST helper preserves the
+existing operand expression once, its type and surrounding evaluation order;
+it adds no arithmetic, contract or dependency declaration. It refuses unsigned,
+floating-point and wide comparisons, calls, assignments, increments, volatile
+operands, macros, overlapping sites and incomplete decode. It requires original
+TEST/CMP-zero plus signed-branch evidence, but that evidence is a selection guard,
+not proof of source-to-instruction correspondence or whole-function behavior.
+All outputs stay unvalidated until the complete unchanged comparator succeeds.
+
+Text screening found 96 candidates; ten exceeded 256 original bytes, 22 lacked
+the required original sign-test evidence, and one failed the AST preconditions.
+The remaining 63 were eligible; a deterministic plan capped selection at 40 with
+23 initially unselected. One variant per function was permitted. An eight-target
+size-stratified smoke yielded one exact match (23 bytes) and seven nonmatches.
+The wider profile stopped there. A further instruction-shape screen of the same
+frozen 40 found only three threshold-only cases, including the already measured
+match. Both remaining cases compiled to complete matches. Thirty planned targets
+with other differences stayed unrun; there was no padding to the suggested
+20–40 target quota and no claim that all eligible cases were exhausted.
+
+Across the actual ten targets / 873 original body bytes, ten new VC8 attempts
+compiled: **three new distinct exact functions / 100 body bytes**, seven retained
+nonmatches and zero new unknowns. Ten unchanged exact controls reused their
+objects and passed fresh comparisons. Smoke took 11.679 seconds and follow-up
+3.706 seconds; compiler receipts totalled 14.443 seconds and combined VM-lock
+wait was 0.00045 seconds. The existing VC8 x86 14.00.50727.762 flags under Windows
+11 ARM64 translation and target-aware Apple Clang 21 / MS compatibility 14 settings
+were unchanged. No game code executed. Zero provider calls still consumed prepaid
+engineering, one independent review, compiler and publication time.
+
+The exact generic helper and its 25 focused regressions received one independent
+review together with all three source/export bindings. The existing reviewed AST
+bridge and source exporter freshly checked full source/object/compiler/original/
+range/symbol/relocation bindings, extending the snapshot from 2,241 to **2,244**
+while preserving every prior entry, translation unit and source byte. Private
+inputs, selection, all nonmatches, original compiler products and receipts remain
+under `local/branch-ast-match-001/`. No transport unknown was replayed, and no
+provider queue or wider sweep was restarted.
+
+Run the generic tests with `python -m unittest rapid_object.tests.test_branch_zero_fix -v`.
+The reusable API is `rapid_object.branch_zero_fix.rewrite(source, complete_ast, bound_report)`;
+use `rapid_object.ast_match.parse` for the target-aware AST and the existing build,
+cache and full comparator path for evaluation. Private `prepare.py` freezes the
+plan; `run.py --measured-only --chunk-size 20` reuses completed records, and
+`final_audit.py` regenerates candidates and freshly rechecks current bindings.
+
+Post-integration checks passed 296 standard tests (33 skips), 212 object-tool
+tests including the 25 new regressions, the macOS ARM64 CMake build, six C++
+checks and both synthetic demo paths (59 positive; 53 passing plus six expected
+negative mismatches). These tooling results are separate from the three VC8
+whole-function matches and do not constitute game execution.

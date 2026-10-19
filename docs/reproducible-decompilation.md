@@ -268,3 +268,17 @@ stack bytes and an unused formal input were left unresolved. The zero-yield
 prototype stays private, and the published snapshot remains 2,241 sources. See
 the [measured negative result](learning-log.md#stack-cleanup-diagnosis-bounded-negative-result)
 for selection conditions, exclusions, timings and retained reproduction steps.
+
+
+### Predicate spelling without changing signedness
+
+Equivalent integer spellings can expose different historical compiler lowering.
+The [signed-threshold experiment](learning-log.md#signed-threshold-spelling-a-small-positive-result)
+kept existing signed 32-bit types and changed `-1 < x` into `x >= 0`, with the
+corresponding negative predicate form. This removed a CMP-negative-one versus
+TEST-zero mismatch in three complete functions. A low-yield eight-case smoke
+stopped the wider profile; only two additional threshold-only cases were built.
+Three exact / 100 bytes from ten attempts justify this narrow generic rule, while
+53 eligible cases remain unrun. Predicate spelling identity is not evidence for
+the original signature or whole-game behavior; source promotion still requires
+the complete existing comparator and fresh exporter bindings.
