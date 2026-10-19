@@ -714,3 +714,91 @@ tests including the 25 new regressions, the macOS ARM64 CMake build, six C++
 checks and both synthetic demo paths (59 positive; 53 passing plus six expected
 negative mismatches). These tooling results are separate from the three VC8
 whole-function matches and do not constitute game execution.
+
+
+### Fixed stack cohort: separate a cookie argument from its frame
+
+The next checkpoint froze all **6,487** stack-cleanup primary nonmatches from the
+current deduplicated status snapshot. This is a fixed cohort, not a union of
+successful repair passes. The labels are instruction symptoms: 5,347 cases mix
+several stack differences. Overlapping facts include 4,716 adjacent post-call
+cleanup differences, 2,438 own-return cleanup differences, 2,627 pre-call stack
+adjustment differences, 5,796 push/pop differences and 1,113 partial-width stack
+accesses. A pre-call adjustment does not by itself identify local allocation,
+and RET cleanup does not identify thiscall or a complete signature.
+
+Source subdivision found 2,819 explicit FS exception-frame hypotheses, 2,285
+entry-stack cookie expressions and 2,143 sources passing that cookie to a call.
+These sets overlap. The largest repeated exact stack signature (395 bodies)
+also combines frame, receiver and call hypotheses, and fails the straight-line
+first-call screen. The previous 117 unknown-high-byte mask family and five
+zero-yield leaf-cleanup proposals were preserved, not replayed.
+
+The reusable [cookie-call proposal](../rapid_object/cookie_call_fix.py) targets
+one narrow subgroup. The original must store its cookie before FS installation,
+then push contiguous argument words for its first direct call and perform
+balanced caller cleanup. The complete callee must be a one-word forwarding
+wrapper with an explicit `[ESP+4]` read, a constant-plus-word nested call and a
+plain return. This is observed dataflow, not a guessed formal signature or
+transitive callee semantics. Complete target-aware Clang ASTs bind an actual
+32-bit unsigned local, its single cookie assignment/global identity, and the final
+pure cookie argument in an ordinary top-level call or assignment. Macro,
+unevaluated/introspection, nested/conditional-call, unknown-storage and extra-use
+cases refuse. The only source edit removes that final argument; all other
+argument expressions, memory statements, returns and frame code are retained.
+Candidates remain hypotheses until the complete unchanged comparator accepts.
+
+Of 2,143 source hypotheses, 714 passed the caller screen; 697 also passed the
+complete callee screen; 670 passed complete source parsing/binding. The 27 AST
+refusals were eight mutation/missing-assignment cases, fourteen definition
+identity cases and five additional cookie uses. Seventeen other callees were
+unsupported. All 670 eligible identities were measured once: a 24-target pilot
+followed by the reviewed unchanged-rule 646-target sweep. Eight unchanged exact
+controls reused their objects and passed fresh comparisons. No prior completed
+or transport-unknown source attempt was replayed. Later unknown variant outcomes
+never erase the earlier usable compiled baseline.
+
+Across **670 target attempts / 71,619 original body bytes**,
+656 compiled and 14 retained inconclusive build/transport outcomes.
+The unchanged full comparator found **0 new distinct exact functions /
+0 body bytes**. The targeted first-call explicit cleanup now agrees with the
+original within the strict two-instruction diagnostic window in **652** compiled
+targets. Four others schedule MOV/XOR before the same literal `ADD ESP,4`
+(original and corrected amount4, versus baseline8), so all 656 compiled targets
+show the corrected amount; register/flag and scheduling differences remain. In 242 cases the heuristic stack label
+is absent afterward; this is diagnostic label churn, not additional recovered
+functions. Residual frame, register, memory, receiver/call and control-flow
+hypotheses remain. In particular, removing an excess call argument does not
+reconstruct the original native SEH/unwinding frame. Unknown outcomes and all
+nonmatching C++ remain private and unvalidated.
+
+The pilot took 36.052 seconds; the full sweep took 947.395
+seconds with 0.0427 seconds waiting for the existing
+VM lock. Target receipts total 900.940 seconds
+of build/transport time; this is not compiler CPU time. Range sizes follow the
+pinned inventory boundary hypotheses, not unique game-code coverage. VC8 x86 14.00.50727.762
+under Windows 11 ARM64 translation, existing flags, and target-aware Apple Clang 21
+/MS compatibility 14 were unchanged. Zero provider calls still consumed prepaid
+engineering, one independent review, compilation and publication time. These
+observations are not game execution or a semantic-equivalence proof.
+
+One independent review approved the exact generic helper/tests and the fixed
+646-target plan, scoped to this pinned DAO image/naming convention and the
+existing POSIX workflow. The helper assumes image base `0x400000` and inherits
+the existing AST tool's host requirements; it is not yet a cross-game or
+Windows-hosted reader. Final checks freshly rebound source/object/compiler/
+original/callee/relocation evidence. The existing exporter verified
+0 new rows and preserved all 2,244 prior published entries,
+translation units and source bytes. Private cohort partitions, refusals,
+selection hashes, all attempts and reproduction artifacts remain under
+`local/stack-cohort-001/`. Both parked helper files remain unpublished.
+
+The API is `rapid_object.cookie_call_fix.rewrite(source, complete_ast,
+bound_report, actual_callee_captures)`; it only proposes C++ and provenance.
+Freshly bind captures to the pinned original before invoking it, then use the
+existing build/cache/comparator/export gates. Generic regressions run with
+`python -m unittest rapid_object.tests.test_cookie_call_fix -v`.
+Local checks passed 29 focused tests, 296 standard tests (33 skips), 241 object-
+tool tests, a macOS ARM64 CMake build and six C++ checks; both synthetic demos
+returned 59 positive passes and 53 passes plus six expected negative mismatches.
+Synthetic results remain separate from complete native-function comparisons.

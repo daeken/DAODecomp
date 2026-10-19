@@ -282,3 +282,24 @@ Three exact / 100 bytes from ten attempts justify this narrow generic rule, whil
 53 eligible cases remain unrun. Predicate spelling identity is not evidence for
 the original signature or whole-game behavior; source promotion still requires
 the complete existing comparator and fresh exporter bindings.
+
+
+### Keep stack cohorts fixed while repairing one cause
+
+A stack-primary cohort can contain call arguments, native exception frames,
+return cleanup, spills and partial-value input hypotheses together. Freeze the
+identity list and retained source/report selection, partition actual stack facts
+with overlaps, then subdivide by source/dataflow evidence. Track both complete
+matches and the specific targeted instruction symptom. A primary label changing
+to another category does not count as a recovered function.
+
+The [cookie-argument checkpoint](learning-log.md#fixed-stack-cohort-separate-a-cookie-argument-from-its-frame)
+measures the full strict eligible subgroup of a fixed 6,487-function cohort.
+Its [generic rule](../rapid_object/cookie_call_fix.py) removes only a final pure
+cookie-local argument when complete original caller/callee observations and a
+complete target-aware AST support the proposal. Other arguments and unknown
+frame/callee semantics remain explicit. Reuse completed candidates and preserve
+transport unknowns; new source hypotheses still require the unchanged complete
+comparator and existing exporter. This DAO-specific helper's image-base/naming
+and POSIX-host limits must be addressed before claiming a port to another game
+or a Windows-hosted analysis tool.

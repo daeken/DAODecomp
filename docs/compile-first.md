@@ -546,3 +546,27 @@ python -m unittest rapid_object.tests.test_branch_zero_fix -v
 The rule emits hypotheses; the unchanged complete relocation-aware comparator
 remains the sole source acceptance gate. It does not restart a provider queue or
 spend the unrun portion of the private plan.
+
+
+### Cookie arguments and exception-frame storage
+
+`rapid_object.cookie_call_fix` is an additive, byte/AST-guided proposal for the
+first direct call in a narrowly supported DAO exception-frame subgroup. It binds
+actual original cookie storage and call setup plus a complete one-word forwarding
+callee, then removes a final pure cookie-local argument from the source call.
+It never synthesizes missing formal inputs or a native SEH frame, and it does
+not accept or export a function. Scope is the pinned DAO image base/naming and
+existing POSIX AST workflow. See the [full fixed-cohort measurement](learning-log.md#fixed-stack-cohort-separate-a-cookie-argument-from-its-frame)
+for denominators, exclusions, compiler outcomes and the distinction between a
+corrected cleanup instruction and complete function agreement.
+
+```sh
+python -m unittest rapid_object.tests.test_cookie_call_fix -v
+```
+
+Use `rewrite(source, complete_ast, bound_report, actual_callee_captures)` with
+freshly attested original slices. The caller owns the existing VM lock, immutable
+cache, full relocation-aware comparison and verified-source exporter. A nonmatch
+or unknown cannot be promoted. Private `local/stack-cohort-001/eligibility.py`
+regenerates the fixed proposals without compiling; `summarize_sweep.py` freshly
+checks the completed pilot/sweep and preserves all prior published source bytes.
