@@ -1,6 +1,6 @@
 """Publish exact source snapshots of recorded native matches, without private data.
 
-This exports existing evidence; it does not compare or accept new functions.
+This exports retained evidence and can recheck free object reports before export.
 Read-only database snapshots let the recovery workers continue running.
 """
 import argparse
@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import re
 import sqlite3
+import sys
 
 
 MODULE_SHA256 = "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3"
@@ -108,6 +109,143 @@ def snapshot(native_root, object_root):
     }, files
 
 
+
+SELECTED_COMPILER_SHA256 = "5f6489b0d211b14ae09d93d3fb58a7bce84d070287f008e06416c9baa5564219"
+SELECTED_FLAGS = ["/c", "/O2", "/Ob1", "/Oy", "/Gy", "/Z7", "/Zl", "/GS-", "/GR-", "/EHsc"]
+
+
+def read_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))
+
+
+def require(condition, reason):
+    if not condition:
+        raise ValueError(reason)
+
+
+def retained_free_match(row, original):
+    """Adapt either free report row, verifying retained artifacts without a build.
+
+    The unchanged comparator independently repeats the complete comparison. Raw
+    export identities and the mechanically decoded COFF names bind relocation
+    targets; stored relocation maps are never accepted as overrides.
+    """
+    # Support both module imports and the documented direct script invocation.
+    if str(REPO) not in sys.path:
+        sys.path.insert(0, str(REPO))
+    from rapid_object import compare
+    from rapid_object.build import symbol_bindings
+
+    measurement = row.get("measurement", row)
+    rva = row["rva"]
+    summary_path = Path(measurement["summary"])
+    folder = summary_path.parent
+    report_raw = summary_path.read_bytes()
+    report = json.loads(report_raw)
+    source = Path(row["source"]).read_bytes()
+    obj = (folder / "candidate.obj").read_bytes()
+    build = read_json(folder / "run.json")
+    compiler = read_json(folder / "compiler.json")
+    identities = read_json(folder / "identities.json")
+    raw_path = row.get("raw_export") or row["baseline"]["raw_export"]
+    raw = read_json(raw_path)
+    if "baseline" in row:
+        require(digest(Path(raw_path).read_bytes()) == row["baseline"]["raw_export_sha256"], "raw_export_binding")
+    else:
+        conversion = read_json(Path(row["source"]).parent / "conversion.json")
+        require(digest(Path(raw_path).read_bytes()) == conversion["export_sha256"], "raw_export_binding")
+        require(conversion["source_sha256"] == digest(source), "conversion_source_binding")
+    require(raw["module_sha256"] == MODULE_SHA256 and raw["rva"] == rva, "original_identity_binding")
+    require(report["module_sha256"] == MODULE_SHA256, "module_binding")
+    require(digest(source) == report["source_sha256"] == build["source_sha256"], "source_binding")
+    require((folder / "candidate.cpp").read_bytes() == source, "build_source_binding")
+    require(digest(obj) == report["object_sha256"] == build["object_sha256"], "object_binding")
+    require(report["build"] == measurement["build"] == build, "build_receipt_binding")
+    require(build["exit_code"] == 0 and build["module_sha256"] == MODULE_SHA256 and build["flags"] == SELECTED_FLAGS, "selected_build_binding")
+    require(report["compiler"] == build["compiler"] == compiler and compiler["sha256"] == SELECTED_COMPILER_SHA256, "selected_compiler_binding")
+    implementation = {name: digest((REPO / "rapid_object" / name).read_bytes()) for name in ("coff.py", "compare.py")}
+    require(report["implementation_sha256"] == implementation, "comparator_binding")
+    requested = {rva: {key: raw[key] for key in ("original_va", "ranges", "bytes_sha256")}}
+    registry = {}
+    for symbol in raw["symbols"]:
+        if symbol.get("kind") not in ("function", "global"):
+            continue
+        va = symbol["original_va"]
+        kind = "fn" if symbol["kind"] == "function" else "g"
+        registry[f"{kind}_{va - 0x400000:08x}"] = va
+    registry[f"fn_{rva:08x}"] = raw["original_va"]
+    symbols = symbol_bindings(folder / "candidate.obj", requested, registry)
+    normalized = {str(key): value for key, value in requested.items()}
+    require(report["requested"] == normalized == identities["requested"] and identities["module_sha256"] == MODULE_SHA256, "full_original_range_binding")
+    require(report["symbol_addresses"] == symbols == identities["symbols"], "symbol_identity_binding")
+    actual = compare.compare_bytes(original, obj, requested, symbols, digest(source), compiler, MODULE_SHA256)
+    require(actual.get("functions") == report.get("functions") and not actual.get("error"), "recomparison_binding")
+    entries = actual["functions"]
+    require(len(entries) == 1 and entries[0]["rva"] == rva and entries[0]["status"] == "exact_object_match", "not_complete_exact_match")
+    evidence = entries[0]
+    require(evidence["original_bytes_sha256"] == raw["bytes_sha256"] == evidence["relocated_bytes_sha256"] and evidence["object_size"] == evidence["original_size"], "full_bytes_binding")
+    text = source.decode("utf-8")
+    require(not re.search(r"(?:/Users/|/home/|[A-Za-z]:\\)", text), "private_source_path")
+    markers = [number for number, line in enumerate(text.splitlines(), 1) if re.search(r"//\s*FUNCTION:\s*DAO\s+0x%08x\b" % (rva + 0x400000), line, re.I)]
+    require(len(markers) == 1, "source_annotation_identity")
+    filename = f"units/{rva:08x}-{digest(source)[:16]}.cpp"
+    unit_id = f"exact_object_match:{digest(source)}"
+    unit = {"id": unit_id, "source": filename, "source_sha256": digest(source),
+            "comparison_report_sha256": digest(report_raw), "compiled_artifact_sha256": digest(obj),
+            "matched_rvas": [f"0x{rva:08x}"], "comparator_modules": implementation,
+            "compiler_version": compiler["file_version"], "compiler_sha256": compiler["sha256"],
+            "compiler_flags": build["flags"], "provenance": "retained_free_report_recompared"}
+    function = {"rva": f"0x{rva:08x}", "status": "exact_object_match", "unit": unit_id,
+                "source": filename, "source_sha256": digest(source), "annotation_line": markers[0],
+                "original_ranges": [{key: rr[key] for key in ("start_rva", "end_rva_inclusive")} for rr in raw["ranges"]], "original_bytes_sha256": raw["bytes_sha256"]}
+    return function, unit, source
+
+
+def extend_snapshot(index, files, reports, original_path):
+    """Keep the existing snapshot first; deterministically add verified identities.
+
+    Every reported match is checked, including duplicates. Rejected rows are
+    accounted for locally and never silently counted as matches.
+    """
+    original = Path(original_path).read_bytes()
+    require(digest(original) == MODULE_SHA256, "original_module_binding")
+    index = json.loads(json.dumps(index))
+    files = dict(files)
+    seen = {function["rva"] for function in index["functions"]}
+    audit = {"reports": len(set(map(str, reports))), "rows": 0, "reported_matches": 0,
+             "verified_matches": 0, "added": 0, "duplicates_preserved": 0,
+             "rejected": [], "not_reported_match": {}}
+    skipped = Counter()
+    for path in sorted(set(map(Path, reports))):
+        for row in read_json(path)["records"]:
+            audit["rows"] += 1
+            status = row.get("measurement", {}).get("status", row.get("matching_status") or row.get("conversion_status") or row.get("repair_status"))
+            if status != "exact_object_match":
+                skipped[status or "missing_status"] += 1
+                continue
+            audit["reported_matches"] += 1
+            try:
+                function, unit, source = retained_free_match(row, original)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                audit["rejected"].append({"report": str(path), "rva": row.get("rva"), "reason": str(exc)})
+                continue
+            audit["verified_matches"] += 1
+            if function["rva"] in seen:
+                audit["duplicates_preserved"] += 1
+                continue
+            require(function["source"] not in files or files[function["source"]] == source, "source_filename_collision")
+            files[function["source"]] = source
+            index["functions"].append(function)
+            index["translation_units"].append(unit)
+            seen.add(function["rva"])
+            audit["added"] += 1
+    index["functions"].sort(key=lambda f: f["rva"])
+    index["matched_functions"] = len(index["functions"])
+    index["counts"] = dict(sorted(Counter(f["status"] for f in index["functions"]).items()))
+    audit["not_reported_match"] = dict(sorted(skipped.items()))
+    audit["rejected_reasons"] = dict(Counter(r["reason"] for r in audit["rejected"]))
+    return index, files, audit
+
 def publish(index, files, output):
     output.mkdir(parents=True, exist_ok=True)
     for filename, raw in files.items():
@@ -135,7 +273,9 @@ def publish(index, files, output):
         "[Earlier reccmp workflow](../../../docs/reccmp-loop.md)", "",
         "Refresh from retained local results with:", "", "```sh",
         "python3 tools/export_native_sources.py", "```", "",
-        "The exporter checks the retained source and compiled artifact hashes. "
+        "The exporter checks retained source and compiled artifact hashes. Free-report "
+        "imports also bind the selected compiler and full original ranges, and repeat "
+        "the exact object comparison. "
         "It publishes C++ and comparison identities only; private game bytes, build "
         "products and raw reports stay local. Source names use stable RVAs; inferred "
         "types and descriptive names in generated code remain provisional.", "",
@@ -153,8 +293,19 @@ def main():
     parser.add_argument("--native-root", type=Path, default=REPO / "local/rapid-native")
     parser.add_argument("--object-root", type=Path, default=REPO / "local/rapid-object")
     parser.add_argument("--output", type=Path, default=REPO / "src/native/recovered")
+    parser.add_argument("--free-report", type=Path, action="append", default=[])
+    parser.add_argument("--original", type=Path)
+    parser.add_argument("--audit", type=Path, help="Private import accounting, outside the publication tree")
     args = parser.parse_args()
     index, files = snapshot(args.native_root, args.object_root)
+    if args.free_report:
+        if not args.original or not args.audit:
+            parser.error("--free-report requires --original and --audit")
+        if args.audit.resolve().is_relative_to(args.output.resolve()):
+            parser.error("private audit must be outside the publication tree")
+        index, files, audit = extend_snapshot(index, files, args.free_report, args.original)
+        args.audit.parent.mkdir(parents=True, exist_ok=True)
+        args.audit.write_text(json.dumps(audit, indent=2) + "\n")
     publish(index, files, args.output)
     print(json.dumps({"matched_functions": index["matched_functions"], "counts": index["counts"], "source_files": len(files), "output": str(args.output)}))
 

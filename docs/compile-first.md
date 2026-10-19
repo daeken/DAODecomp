@@ -122,11 +122,11 @@ it does not require a libclang Python package.
 
 ## Preserve the baseline
 
-The original free compilation pass continues against its unchanged converter and
-sources. Repairs use an additive module and separate output directories so the
-live pass and its source bindings cannot change underneath it. The repaired pass
-shares the existing VM lock, preserves failed attempts and does not modify the
-comparator or production acceptance counts.
+The first baseline and repair sweeps have completed. Their converter, sources and
+reports remain retained as the baseline for later rounds. Repairs use additive
+modules and separate output directories so a live pass and its source bindings
+cannot change underneath it. Passes share the existing VM lock, preserve failed
+attempts and do not modify the comparator or production acceptance counts.
 
 Unmodeled incoming registers, stack state and unsupported helper semantics remain
 unresolved. Unknown calls are not replaced by successful dummy functions. Declared
@@ -136,3 +136,75 @@ The first repair measurement and subsequent sweep receipts live under ignored
 `local/deterministic-compile-001/`. See the [$200 plan](cost-target.md) for the
 broader budget and the distinction between compiled functions and a runnable
 replacement executable.
+
+## Continuing improvement loop
+
+Each round ranks remaining failure families, selects a shared transformation,
+checks its explicit preconditions, and measures a stratified real-compiler pilot
+with already-compiling controls. After generic tests and independent review,
+apply the rule broadly, compare unique outcomes, and pick the next root cause.
+Preserve prior observations and count source publication separately. Do not build
+a new per-function validation workflow around this loop.
+
+The first completed sweeps yielded 14,174 distinct compiling identities and 1,842
+exact-match reports. See the [dated aggregate results](learning-log.md) for overlap
+with the 920 starting published functions and remaining limitations. Artifact
+verification and source export subsequently brought the public source tree to
+2,209 matching functions. Compile success and source publication remain separate.
+
+## Round 002: explicit FS memory access
+
+The register/stack diagnostic family contains decompiler notation for explicit
+machine operations as well as genuinely unresolved inputs. Of 9,369 state-blocked
+drafts, 8,014 mention `unaff_FS_OFFSET`. Original-byte decoding and a syntax-use
+audit admit 7,507 under the first bounded profile: absolute DWORD `FS:[0]` MOV
+reads/writes used in x86 exception registration.
+
+[`ghidra_state_fix.py`](../rapid_object/ghidra_state_fix.py) requires the pinned
+binary, complete range hashes and decoding, matching static read/write counts,
+exactly one supported pointer declaration, and no unresolved pseudo-base use or
+other unknown state input. It emits real VC8 `__readfsdword`/`__writefsdword`
+intrinsics and preserves signed load types. Alias widths must have an unambiguous
+actual typedef after comments and literals are masked. Other offsets, widths,
+operations and unknown state remain unsupported. This does not reconstruct the
+rest of an exception frame or establish exception-unwinding correctness.
+
+The stratified pilot measured 80 previously blocked functions and 20 compiling
+controls: **58 new sources emitted, 16 newly compiling functions, zero new exact
+matches**, and no compile or comparison-status regressions in the controls.
+The remaining sources and failures are retained. The three exact pilot matches
+belong to existing controls. Do not extrapolate the targeted 16/80 yield to the
+whole inventory.
+
+The pilot used VC8 SP1 14.00.50727.762 x86 under Windows 11 ARM64 translation,
+Capstone 5.0.6 and the existing Clang-based repair pass. Its 100-case invocation
+took 123.760 seconds, reusing a two-case smoke run that took 3.405 seconds; two
+transport-only retries were retained. No provider requests or game execution
+occurred. The focused controls, full tooling suite and independent review passed.
+
+Reproduce with the configured original and compiler available:
+
+```sh
+python -m rapid_object.ghidra_state_fix census --root local/repro-fs-fix
+python -m rapid_object.ghidra_state_fix pilot --root local/repro-fs-fix
+python -m unittest discover -s rapid_object/tests -v
+```
+
+After reviewing a measured pilot, run the retained plan with:
+
+```sh
+python -m rapid_object.ghidra_state_fix sweep --root local/repro-fs-fix --resume
+python -m rapid_object.ghidra_state_fix pause --root local/repro-fs-fix
+```
+
+The current execution subset contains 1,934 cases without a `stack0x` identifier
+after masking comments/literals. All 7,507 cases remain in the full plan, with the
+other 5,573 explicitly deferred for stack-frame work. This scheduling partition
+changes no source or acceptance rule. The shared VM lock serializes compiler
+access, and retained results are reused only after their bindings verify.
+
+All 33 pilot failures involving `stack0x` use negative frame addresses in cookie
+XOR expressions. None of those 33 is a positive incoming-argument offset or a
+zero return-address offset. Numeric offsets alone cannot justify an arbitrary
+C++ local address. The next round investigates compiler frame/cookie reconstruction
+from original instructions and storage evidence; unsupported inputs remain visible.

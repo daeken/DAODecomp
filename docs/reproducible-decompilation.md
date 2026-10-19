@@ -91,6 +91,14 @@ by root cause and use shared transformations rather than one model request per
 error message. Rebuild every changed candidate. A separate baseline makes repair
 yield and regressions measurable.
 
+Do not treat every decompiler state placeholder alike. Our next round separated
+byte-backed `FS:[0]` memory operations from genuinely unresolved register/stack
+inputs and lowered the supported accesses to native compiler intrinsics. This
+exposed compiler-cookie frame addresses as a separate problem. Keep a complete
+inventory while deferring known failures from the next expensive compiler pass;
+record the deterministic selection rule and preserve the omitted identities.
+See the [FS round and its limits](compile-first.md#round-002-explicit-fs-memory-access).
+
 ## 4. Keep compilation, comparison and execution separate
 
 | State | What has actually been observed |

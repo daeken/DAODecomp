@@ -85,5 +85,141 @@ class NativeSourceExportTests(unittest.TestCase):
         self.assertEqual(len(files), 1)
 
 
+class RetainedFreeExportTests(unittest.TestCase):
+    """Synthetic tiny PE/COFF controls; no game behavior claim."""
+
+    def setUp(self):
+        from unittest.mock import patch
+        from tests.test_rapid_object_coff import pe, coff
+        from rapid_object.compare import compare_bytes
+        from tools import export_native_sources as exporter
+        self.exporter = exporter
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.folder = self.root / "build"
+        self.folder.mkdir()
+        self.original = pe(b"\xc3")
+        self.original_path = self.root / "original.exe"
+        self.original_path.write_bytes(self.original)
+        self.pin = digest(self.original)
+        self.patch = patch.object(exporter, "MODULE_SHA256", self.pin)
+        self.patch.start()
+        self.addCleanup(self.patch.stop)
+        self.source = self.root / "candidate.cpp"
+        self.source.write_bytes(b"// FUNCTION: DAO 0x00401000\nvoid fn_00001000() {}\n")
+        (self.folder / "candidate.cpp").write_bytes(self.source.read_bytes())
+        obj = coff(b"\xc3", aux_size=1)
+        (self.folder / "candidate.obj").write_bytes(obj)
+        compiler = {"sha256": exporter.SELECTED_COMPILER_SHA256, "file_version": "synthetic selected identity"}
+        self.build = {"exit_code": 0, "compiler": compiler, "source_sha256": digest(self.source.read_bytes()),
+                      "object_sha256": digest(obj), "module_sha256": self.pin, "flags": exporter.SELECTED_FLAGS}
+        self.raw = {"module_sha256": self.pin, "rva": 0x1000, "original_va": 0x401000,
+                    "ranges": [{"start_rva": 0x1000, "end_rva_inclusive": 0x1000}],
+                    "bytes_sha256": digest(b"\xc3"), "symbols": []}
+        self.write(self.root / "raw.json", self.raw)
+        self.write(self.root / "conversion.json", {"export_sha256": digest((self.root / "raw.json").read_bytes()), "source_sha256": self.build["source_sha256"]})
+        requested = {0x1000: {k: self.raw[k] for k in ("original_va", "ranges", "bytes_sha256")}}
+        requested[0x1000]["symbol"] = "_fn_00001000"
+        symbols = {"_fn_00001000": 0x401000}
+        report = compare_bytes(self.original, obj, requested, symbols, self.build["source_sha256"], compiler, self.pin)
+        report["build"] = self.build
+        self.write(self.folder / "summary.json", report)
+        self.write(self.folder / "run.json", self.build)
+        self.write(self.folder / "compiler.json", compiler)
+        self.write(self.folder / "identities.json", {"requested": requested, "symbols": symbols, "module_sha256": self.pin})
+        self.row = {"rva": 0x1000, "source": str(self.source), "raw_export": str(self.root / "raw.json"),
+                    "measurement": {"status": "exact_object_match", "summary": str(self.folder / "summary.json"), "build": self.build}}
+        self.index = {"functions": [], "translation_units": [], "counts": {}, "matched_functions": 0}
+
+    def write(self, path, value):
+        path.write_text(json.dumps(value))
+
+    def run_export(self, rows=None):
+        report = self.root / "sample-report.json"
+        self.write(report, {"records": rows or [self.row]})
+        return self.exporter.extend_snapshot(self.index, {}, [report], self.original_path)
+
+    def mutate_json(self, filename, change):
+        path = self.folder / filename
+        value = json.loads(path.read_text())
+        change(value)
+        self.write(path, value)
+
+    def test_verified_match_and_sanitized_metadata(self):
+        index, files, audit = self.run_export()
+        self.assertEqual(audit["added"], 1)
+        self.assertEqual(audit["rejected"], [])
+        self.assertEqual(list(files.values()), [self.source.read_bytes()])
+        public = json.dumps(index)
+        self.assertNotIn(str(self.root), public)
+        self.assertNotIn("bytes_hex", public)
+        self.assertEqual(index["functions"][0]["original_bytes_sha256"], digest(b"\xc3"))
+
+    def test_duplicates_preserve_existing_evidence(self):
+        index, files, audit = self.run_export([self.row, self.row])
+        self.assertEqual((audit["verified_matches"], audit["added"], audit["duplicates_preserved"]), (2, 1, 1))
+        self.index = index
+        _, _, audit = self.run_export()
+        self.assertEqual((audit["added"], audit["duplicates_preserved"]), (0, 1))
+
+    def test_missing_artifacts_are_explicit_rejections(self):
+        for filename in ("candidate.obj", "candidate.cpp", "run.json", "compiler.json", "identities.json", "summary.json"):
+            path = self.folder / filename
+            saved = path.read_bytes()
+            path.unlink()
+            with self.subTest(filename=filename):
+                _, _, audit = self.run_export()
+                self.assertEqual(audit["added"], 0)
+                self.assertEqual(len(audit["rejected"]), 1)
+            path.write_bytes(saved)
+
+    def test_mutation_controls_fail_closed(self):
+        mutations = [
+            ("summary.json", lambda r: r.update(source_sha256="changed")),
+            ("summary.json", lambda r: r.update(object_sha256="changed")),
+            ("summary.json", lambda r: r.update(module_sha256="changed")),
+            ("summary.json", lambda r: r.update(implementation_sha256={})),
+            ("summary.json", lambda r: r["requested"]["4096"]["ranges"][0].update(end_rva_inclusive=4097)),
+            ("summary.json", lambda r: r["symbol_addresses"].update(_fn_00001000=0x401001)),
+            ("summary.json", lambda r: r["functions"][0].update(status="nonmatch")),
+            ("summary.json", lambda r: r["functions"][0].update(object_size=0)),
+            ("compiler.json", lambda r: r.update(sha256="other compiler")),
+            ("run.json", lambda r: r.update(flags=["/c"])),
+        ]
+        for filename, change in mutations:
+            path = self.folder / filename
+            saved = path.read_bytes()
+            self.mutate_json(filename, change)
+            with self.subTest(filename=filename, change=change):
+                _, _, audit = self.run_export()
+                self.assertEqual(audit["added"], 0)
+                self.assertEqual(len(audit["rejected"]), 1)
+            path.write_bytes(saved)
+
+    def test_forged_report_does_not_override_actual_object(self):
+        (self.folder / "candidate.obj").write_bytes(b"corrupt")
+        _, _, audit = self.run_export()
+        self.assertEqual(audit["rejected_reasons"], {"object_binding": 1})
+
+    def test_other_statuses_cannot_be_accepted(self):
+        for status in ("nonmatch", "inconclusive", "rounded_match", "comparison_missing"):
+            self.row["measurement"]["status"] = status
+            _, _, audit = self.run_export()
+            self.assertEqual(audit["added"], 0)
+            self.assertEqual(audit["not_reported_match"], {status: 1})
+
+
+    def test_coordinated_object_hash_mutation_still_recompares(self):
+        from tests.test_rapid_object_coff import coff
+        obj = coff(b"\x90", aux_size=1)
+        (self.folder / "candidate.obj").write_bytes(obj)
+        self.build["object_sha256"] = digest(obj)
+        self.write(self.folder / "run.json", self.build)
+        self.mutate_json("summary.json", lambda r: r.update(build=self.build, object_sha256=digest(obj)))
+        _, _, audit = self.run_export()
+        self.assertEqual(audit["rejected_reasons"], {"recomparison_binding": 1})
+
+
 if __name__ == "__main__":
     unittest.main()

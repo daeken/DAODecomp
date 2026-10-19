@@ -9,7 +9,7 @@ is unchanged.
 
 ## What the measurements changed
 
-The published snapshot contains 920 matches: 807 from the earlier native leaf
+The starting published snapshot contained 920 matches: 807 from the earlier native leaf
 workflow and 113 from the broader object workflow. Those matches cover about
 27,900 of 6,026,653 inventoried function-body bytes (0.46%). Ranges can overlap;
 neither byte coverage nor the provisional 27,555 identities measures game completion.
@@ -43,11 +43,17 @@ executed the original game or a replacement game.
 | Address-name normalization, 20 retained batches | 175 compared function observations; exact matches increased from 9 to 17; 8 new distinct matches | $0 |
 | Non-thinking Ghidra-assisted pilot, 20 functions in 6 groups | 5 valid responses; 2 groups compiled; 1 exact match, already found by the deterministic seed pass | ~$0.0271 conservative debit |
 | Full-inventory Ghidra export and conversion | All 27,555 identities processed in 312.59s; 27,553 drafts and 15,859 provisional C++ sources; 2 decompiler failures retained | $0 |
+| Full baseline compilation/comparison | All 27,555 identities measured; 11,986 compiled objects and 1,658 reported exact matches | $0 |
+| Deterministic compile-repair sweep | 4,424 eligible prior failures/rejections examined; 2,188 additional compiling functions and 184 reported exact matches | $0 |
 
-The full-inventory pass is complete in 28 bounded read-only batches. Its 15,859
-sources have **not** undergone bulk compilation/comparison; the 106-object result
-above belongs only to the measured 200-function sample. The other 11,696 identities
-retain raw drafts or explicit failures for later handling, not fabricated source.
+The full-inventory export and baseline compilation are complete in 28 batches.
+The additive repair pass also completed. Their combined results contain 14,174
+distinct compiling functions (51.44% of the inventory) and 1,842 exact-match reports.
+Of those matches, 553 overlap the starting published snapshot; 1,289 are new
+publication candidates. Source/artifact verification and export are separate from
+this report aggregation. The 106-object result above is the earlier 200-function
+sample, not the whole-inventory result. Unsupported drafts and failures remain
+retained rather than being replaced with fabricated source.
 The persistent Ghidra project fingerprint was checked unchanged around each batch.
 The local aggregate receipt is `local/cost-reduction-001/full-seed/summary.json`.
 
@@ -67,9 +73,11 @@ The result supports a free first pass. It does **not** support switching the
 production queue wholesale to non-thinking generation. The current paid queue
 is paused and drained; its original thinking/repair defaults remain unchanged.
 
-The next pass prioritizes [deterministic compilation repairs](compile-first.md)
-before spending on matching: fix source-conversion defects and supported type
-conversions, retain compilable nonmatches, and measure the resulting compile yield.
+Continuing passes prioritize [deterministic compilation repairs](compile-first.md)
+before spending on matching. Rank actual remaining root causes, implement one
+reusable rule, measure a stratified pilot with controls, then expand the tested
+rule to the inventory. Preserve nonmatches and failures. Record each round's
+distinct compile/match yield in the [learning log](learning-log.md).
 
 ## Proposed production order
 

@@ -151,6 +151,96 @@ and leave unsupported class conversions unresolved. Test the transformation's
 preconditions with small synthetic examples; compilation by itself would not
 have exposed this behavior change.
 
+## 2026-10-19: completed whole-inventory free compilation and repairs
+
+Both passes completed without provider requests. The baseline measured all
+27,555 identities in 28 chunks: 11,986 compiled objects, including 1,658 reported
+exact matches. The additive repair sweep examined 4,424 eligible failures or
+conversion rejections and produced 2,188 additional compiling functions, including
+184 reported exact matches. There is no identity overlap between either pair of
+baseline/repair result sets.
+
+**Combined:** 14,174 distinct identities compile (51.44% of the inventory), and
+1,842 have exact-match reports from these free passes. Deduplicating against the
+920 previously published functions leaves **1,289 new unpublished matches** and
+2,209 distinct reported matches overall. These aggregate counts come from retained
+reports; the new sources still need artifact verification and source publication.
+At the time of this aggregation, the published source index remained at 920.
+Neither compilation nor the inventory percentage measures whole-game completion.
+
+The baseline wall duration was 28,257.355 seconds (7.85 hours); the following repair
+pass took 20,707.124 seconds (5.75 hours), overlapping the baseline and sharing its
+VM compiler lock. Do not add those durations or treat the repair's waiting time as
+compiler execution. Both used the existing VC8 x86 compiler under Windows ARM64
+translation, with no linked replacement execution.
+
+**Next limitation:** 13,381 identities still lack a compiling source in these two
+passes. Of those, 9,369 retain an `unmodeled_register_or_stack_input` diagnostic;
+other leading categories include extended types/instructions, declarations and
+calling-convention conversion. This is a converter diagnostic census, not proof
+that each binary function requires unusual machine state. Investigate shared
+signature/state reconstruction rules before paying for individual rewrites; do
+not invent incoming values to make the code compile.
+
+Reproduction uses the [baseline commands](reproducible-decompilation.md) and
+[repair sweep](compile-first.md). Private receipts are
+`local/cost-reduction-001/full-seed/compile-summary.json`,
+`local/deterministic-compile-001/sweep-status.json` and the RVA-deduplicated
+`local/deterministic-compile-001/completed-aggregate.json`.
+
+## 2026-10-19: publish free-pass matches by reusing verified compiler artifacts
+
+The source exporter now consumes the free baseline and repair reports. It checks
+the pinned original identity and complete ranges, actual source/build copies,
+object/compiler/flag identities and comparator bindings, then repeats the existing
+object comparison. It derives relocation targets from stable identities and actual
+object symbols rather than trusting cached relocation overrides.
+
+**Measured:** all 1,842 reported exact rows verified again, with zero rejections;
+553 were already published and 1,289 were new. The resulting source tree contains
+2,209 matching functions in 1,544 translation units. All 920 prior function records
+and 255 source files were preserved. An independent review repeated the comparisons
+and checked every staged public file. This required no model generation or VM
+recompilation and did not promote the retained nonmatches.
+
+**Learning:** retained compiler artifacts can support cheap source publication
+when their actual identities still verify. A success label alone is insufficient.
+Keep public C++ and sanitized provenance separate from local binaries, raw exports
+and machine paths. The reusable adapter and generic tamper/missing-artifact tests
+are in [the exporter](../tools/export_native_sources.py) and
+[its tests](../tests/test_native_source_export.py).
+
+## 2026-10-19: distinguish explicit FS access from unknown incoming state
+
+The state-input blacklist hid a reusable conversion opportunity: 8,014 of 9,369
+blocked drafts mention `unaff_FS_OFFSET`, and 7,507 satisfy the first byte-backed
+DWORD `FS:[0]` access profile. The new shared pass checks the original instruction
+forms, complete ranges, widths and static access counts before using real native
+compiler intrinsics. It does not invent incoming registers or remove exception
+registration operations. Review caught a typedef-width check fooled by a commented
+declaration; comments/literals are now masked and an actual unique type is required.
+
+**Measured pilot:** 58 new sources and 16 new compilations among 80 previously
+blocked functions, with zero new exact matches. All 20 compiling controls retained
+their source and comparison outcomes. The 100-case pilot invocation took 123.760
+seconds after a 3.405-second two-case smoke run; two transport retries remain
+recorded. No DeepSeek requests occurred. These are VC8 x86 object builds under
+Windows ARM64 translation, not execution or exception-behavior validation.
+
+**Next bottleneck:** 33 pilot failures contain negative frame-address placeholders
+XORed with the cookie global. Among all 9,369 state-blocked drafts, 6,201 contain
+`stack0x` and 6,001 contain the cookie/address pattern. An arbitrary local array
+or guessed frame address would hide the problem rather than recover it. The
+reviewed FS sweep therefore selects 1,934 cases without those placeholders and
+retains 5,573 explicitly deferred cases. The full 7,507-case plan and partition
+recipe remain available; nothing is removed from the inventory.
+
+**Learning:** separate decompiler notation, explicit machine operations and true
+incoming-state uncertainty. A generic fix can expose the next root cause without
+immediately producing a match. Classify that cause before spending thousands of
+known-failing compiler attempts. See [preconditions and reproduction](compile-first.md)
+and the generic [regression controls](../rapid_object/tests/test_ghidra_state_fix.py).
+
 ## Still unproven
 
 - The $200 target for a runnable whole-game replacement.
