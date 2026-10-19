@@ -380,3 +380,18 @@ lock directory and redirects the repository path there, preserving the real
 locking and source/object rejection checks. A separate run with a deliberately
 absent original checkout reproduces the clean environment. This changes test
 isolation only; production transformations and comparison rules are unchanged.
+
+## 2026-10-19: bridge report formats without weakening comparison
+
+AST results needed a small generated metadata bridge to the existing source
+exporter. It validates the accepted candidate and redundant identity fields,
+retains the original receipts, and produces the envelope the exporter expects.
+The unchanged exporter independently repeats the full comparison before import.
+Independent replay verified 12 matching identities: seven new functions totaling
+340 bytes and five existing duplicates. All 2,209 prior function records,
+translation-unit records and source bytes were preserved; the source index now
+contains 2,216 functions. Seven generic refusal tests and the full 270-test suite
+(seven skips) passed on macOS ARM64. No provider calls or new VM builds were
+needed: these exact compiled artifacts already existed. Keep old publication
+state as the base of incremental exports; rebuilding from incomplete input roots
+can silently omit earlier imported sources.

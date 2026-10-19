@@ -371,11 +371,29 @@ under Windows 11 ARM64 translation. No original or candidate game code was
 executed. Zero DeepSeek calls excludes neither operator/model development cost
 nor compiler and review time.
 
-The existing reviewed source exporter does not consume this new AST result
-format unchanged: its actual smoke-row probe skipped the row as missing the
-expected status field. New matching artifacts therefore remain local with exact
-source/build/report paths; no export adapter was added. The 2,209 published
-function records and their existing C++/provenance remain intact.
+The original exporter skipped the AST result format because its status and
+requested-identity fields use a different envelope. The independently reviewed
+`tools/export_ast_matches.py` now generates a canonical private report from bound
+AST results. It checks redundant module/RVA fields before projecting them out of
+copied receipts; original reports stay unchanged. The existing exporter then
+rechecks the original, source, object, compiler, ranges and complete comparison.
+
+```sh
+python tools/export_ast_matches.py \
+  --report local/matching-frontier-002/STATUS.json \
+  --original gamedata/bin_ship/DAOrigins.exe \
+  --output local/repro-ast-export
+python -m unittest tests.test_export_ast_matches -v
+```
+
+Use a new output directory for each bridge run. To extend an existing source
+snapshot, load its index and translation-unit source bytes, then call
+`tools.export_native_sources.extend_snapshot(index, files, [report_path], original_path)`
+and `publish(index, files, output)` after checking the returned audit. This retains
+previously published identities and source bytes. The exporter's standalone CLI
+rebuilds a snapshot from its supplied roots/reports; omitting old free reports can
+omit their functions. The AST import added seven functions while preserving all
+2,209 previous records and source bytes, bringing the snapshot to **2,216**.
 
 **Completed pilot:** 85/85 near cases and all ten controls were accounted for.
 Twelve frontier sources became full exact matches, totaling 529 body bytes.

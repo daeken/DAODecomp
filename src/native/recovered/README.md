@@ -1,6 +1,6 @@
 # Recovered native C++
 
-**2,209 matching functions** in this published snapshot: 807 reccmp matches and 1,402 exact COFF object matches.
+**2,216 matching functions** in this published snapshot: 807 reccmp matches and 1,409 exact COFF object matches.
 
 Snapshot: 2026-10-19T17:01:39.072892+00:00. The running local queue may be further ahead.
 
@@ -358,6 +358,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000bc1e0` | Exact object | [000bc1e0-bd9451951885199e.cpp](units/000bc1e0-bd9451951885199e.cpp#L26) |
 | `0x000be5f0` | Exact object | [000be5f0-067d18b5db9d0cc9.cpp](units/000be5f0-067d18b5db9d0cc9.cpp#L27) |
 | `0x000be8d0` | reccmp | [000b58d0-c60eec0912472f1d.cpp](units/000b58d0-c60eec0912472f1d.cpp#L232) |
+| `0x000bf010` | Exact object | [000bf010-1c5a1c39465b587b.cpp](units/000bf010-1c5a1c39465b587b.cpp#L25) |
 | `0x000bff90` | reccmp | [00074fb0-300e17b4f8c2414f.cpp](units/00074fb0-300e17b4f8c2414f.cpp#L128) |
 | `0x000bffc0` | Exact object | [000bffc0-5e9eea4b7ce81dc5.cpp](units/000bffc0-5e9eea4b7ce81dc5.cpp#L25) |
 | `0x000c0d90` | reccmp | [00003c70-8a98a2498b3d082e.cpp](units/00003c70-8a98a2498b3d082e.cpp#L160) |
@@ -372,6 +373,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000c5530` | Exact object | [000c5530-36f6e7de1049ef80.cpp](units/000c5530-36f6e7de1049ef80.cpp#L153) |
 | `0x000c5c60` | Exact object | [000c5c60-0ec619c44344d244.cpp](units/000c5c60-0ec619c44344d244.cpp#L26) |
 | `0x000c8e10` | Exact object | [000c8e10-892d18a625e01c15.cpp](units/000c8e10-892d18a625e01c15.cpp#L27) |
+| `0x000ca960` | Exact object | [000ca960-c3a922618a125617.cpp](units/000ca960-c3a922618a125617.cpp#L25) |
 | `0x000cb340` | Exact object | [000cb340-ed52ec6a2bba2a6a.cpp](units/000cb340-ed52ec6a2bba2a6a.cpp#L250) |
 | `0x000cb390` | Exact object | [000cb390-8e76c1aadb374ebf.cpp](units/000cb390-8e76c1aadb374ebf.cpp#L25) |
 | `0x000cb480` | Exact object | [000cb480-25e025cfdf6a64cc.cpp](units/000cb480-25e025cfdf6a64cc.cpp#L25) |
@@ -1841,6 +1843,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x0054d5e0` | reccmp | [00544860-2292164fd2781e0b.cpp](units/00544860-2292164fd2781e0b.cpp#L320) |
 | `0x0054d600` | reccmp | [00544860-2292164fd2781e0b.cpp](units/00544860-2292164fd2781e0b.cpp#L327) |
 | `0x0054db90` | reccmp | [0054db90-dacc4e8a2ca528cc.cpp](units/0054db90-dacc4e8a2ca528cc.cpp#L169) |
+| `0x0054e080` | Exact object | [0054e080-2f22d0a07daa6280.cpp](units/0054e080-2f22d0a07daa6280.cpp#L25) |
 | `0x0054f0f0` | reccmp | [0054f0f0-c03bfe57cd5120d7.cpp](units/0054f0f0-c03bfe57cd5120d7.cpp#L144) |
 | `0x0054f160` | reccmp | [0054f0f0-c03bfe57cd5120d7.cpp](units/0054f0f0-c03bfe57cd5120d7.cpp#L154) |
 | `0x005575c0` | Exact object | [005575c0-0ad10d862674f7dc.cpp](units/005575c0-0ad10d862674f7dc.cpp#L27) |
@@ -1850,6 +1853,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x00564d90` | reccmp | [00564d90-4892b87bc1103fe1.cpp](units/00564d90-4892b87bc1103fe1.cpp#L148) |
 | `0x00564e90` | reccmp | [00544860-2292164fd2781e0b.cpp](units/00544860-2292164fd2781e0b.cpp#L336) |
 | `0x00565b00` | reccmp | [00564d90-4892b87bc1103fe1.cpp](units/00564d90-4892b87bc1103fe1.cpp#L157) |
+| `0x00566c20` | Exact object | [00566c20-b16d4bde3d812665.cpp](units/00566c20-b16d4bde3d812665.cpp#L25) |
 | `0x0056bdf0` | reccmp | [00564d90-4892b87bc1103fe1.cpp](units/00564d90-4892b87bc1103fe1.cpp#L163) |
 | `0x0056ebd0` | Exact object | [0056ebd0-9ee144f8eec71f21.cpp](units/0056ebd0-9ee144f8eec71f21.cpp#L25) |
 | `0x005724f0` | Exact object | [005724f0-07fcfbed32f4b825.cpp](units/005724f0-07fcfbed32f4b825.cpp#L25) |
@@ -1872,6 +1876,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x00584f40` | Exact object | [00584f40-1b6662fc17017d50.cpp](units/00584f40-1b6662fc17017d50.cpp#L26) |
 | `0x00584fc0` | reccmp | [00580bd0-0098991b6cf94331.cpp](units/00580bd0-0098991b6cf94331.cpp#L182) |
 | `0x005850b0` | reccmp | [005850b0-d4c5d51b639bb526.cpp](units/005850b0-d4c5d51b639bb526.cpp#L28) |
+| `0x00585120` | Exact object | [00585120-c87484d51e6b6d01.cpp](units/00585120-c87484d51e6b6d01.cpp#L25) |
 | `0x00585140` | Exact object | [00585140-20a582dc7a6cb605.cpp](units/00585140-20a582dc7a6cb605.cpp#L25) |
 | `0x005851c0` | Exact object | [005851c0-9da7e58566f70734.cpp](units/005851c0-9da7e58566f70734.cpp#L27) |
 | `0x005851e0` | Exact object | [005851e0-522a767b06a3d908.cpp](units/005851e0-522a767b06a3d908.cpp#L25) |
@@ -1907,6 +1912,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x005ac2f0` | reccmp | [005a02d0-324433170474c87e.cpp](units/005a02d0-324433170474c87e.cpp#L245) |
 | `0x005af390` | reccmp | [005af390-a6c30012c1a255b0.cpp](units/005af390-a6c30012c1a255b0.cpp#L313) |
 | `0x005af4e0` | reccmp | [005af390-a6c30012c1a255b0.cpp](units/005af390-a6c30012c1a255b0.cpp#L321) |
+| `0x005b0470` | Exact object | [005b0470-837ba9a1a6fb6b70.cpp](units/005b0470-837ba9a1a6fb6b70.cpp#L26) |
 | `0x005b3b40` | Exact object | [005b3b40-25dddcdd048856bb.cpp](units/005b3b40-25dddcdd048856bb.cpp#L27) |
 | `0x005b5d80` | reccmp | [005b5d80-ac6b7b846b0da4ea.cpp](units/005b5d80-ac6b7b846b0da4ea.cpp#L225) |
 | `0x005b6050` | Exact object | [005b6050-ea97a4e58042fe3c.cpp](units/005b6050-ea97a4e58042fe3c.cpp#L25) |
@@ -1983,6 +1989,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x0060dc30` | reccmp | [0050685b-6fac9c6b02f88309.cpp](units/0050685b-6fac9c6b02f88309.cpp#L105) |
 | `0x0060e1c0` | reccmp | [0060e1c0-249b0b6fe30386a8.cpp](units/0060e1c0-249b0b6fe30386a8.cpp#L115) |
 | `0x0060e200` | Exact object | [0060e200-6e6e443384c2f562.cpp](units/0060e200-6e6e443384c2f562.cpp#L25) |
+| `0x0060e220` | Exact object | [0060e220-5c87810362a9113a.cpp](units/0060e220-5c87810362a9113a.cpp#L25) |
 | `0x0060e250` | reccmp | [0060e250-7f7a8f6ff9b7af48.cpp](units/0060e250-7f7a8f6ff9b7af48.cpp#L165) |
 | `0x006100c0` | Exact object | [006100c0-1e2adf9965b847f7.cpp](units/006100c0-1e2adf9965b847f7.cpp#L27) |
 | `0x00611120` | reccmp | [00611120-8d40e478a75daa1e.cpp](units/00611120-8d40e478a75daa1e.cpp#L103) |
