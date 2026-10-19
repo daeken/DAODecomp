@@ -501,3 +501,27 @@ readers now need those pinned packages on every host. CI installs the unchanged
 native dependency list on Windows too and explicitly runs the portable mismatch
 controls there; Unix-only orchestration suites remain separately scoped. Optional
 actual SharpRetro execution still requires the explicit checkout/build configuration.
+
+### 2026-10-19: fix the shared instruction model before interpreting IL differences
+
+Paired lifting exposed a reusable SharpRetro addressing problem: ModRM offset
+arithmetic used 64 bits even when the instruction selected a 16- or 32-bit address
+size. The reviewed correction reduces the completed effective offset to the
+decoded address width before segment-base addition. Operand width is separate.
+It is published as [SharpRetro PR 2](https://github.com/daeken/SharpRetro/pull/2),
+commit `ec8344102af8b495e5de1a869188b91bc3d4d756`, now pinned by the optional adapter.
+
+The 24 new upstream tests reproduced 19 failures before correction; all 278
+upstream tests now pass. A separately implemented address-effects protocol found
+245/245 agreements with Unicorn versus 171/245 disagreements on the baseline;
+independent review repeated this and added 11 passing controls. These observations
+cover selected address effects, not every instruction effect or real x86 hardware.
+Do not use a common lifter's agreement with itself as independent verification.
+
+All 40 prior diagnostic inputs were replayed after rebuilding the adopted adapter:
+13.692 seconds, no category changes, all ten exact controls preserved, zero new
+accepted functions. Address trees changed as expected; old dependency builds and
+receipts remain available. The 27-byte incomplete suffix is embedded jump-table
+data, so decoder expansion would be the wrong repair. Opaque x87 semantics remain
+separate work. No provider calls or VC8 builds were made; toolkit development and
+independent review still consumed Codex effort. See [reproduction and limits](sharp-retro.md).

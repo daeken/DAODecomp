@@ -7,7 +7,10 @@ Dependencies are deliberately external; SharpRetro is not vendored.
 
 Use the existing Python environment with Capstone installed, .NET 10, and an
 unmodified SharpRetro checkout at commit
-`685b7578457cad325226aa8923b45ded35098fa3`. Supply its path explicitly:
+`ec8344102af8b495e5de1a869188b91bc3d4d756`. This includes the reviewed
+ModRM address-size wrapping correction. Earlier diagnostic reports used
+`685b7578457cad325226aa8923b45ded35098fa3`; preserve their original dependency
+builds and manifests rather than relabeling their results. Supply the path explicitly:
 
 ```sh
 dotnet build tools/sharpretro/adapter/PairedLift.csproj -c Release -p:SharpRetroRoot=/absolute/path/to/SharpRetro

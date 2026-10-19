@@ -226,6 +226,24 @@ negative cases on the new target, then expand. Keep the per-game differences
 explicit; a reusable configuration interface can follow demonstrated second-game
 requirements instead of being designed speculatively now.
 
+## Reusable core and eventual MCP interface
+
+Keep deterministic operations callable without a model: inspect an identity,
+compile its C++, compare the complete range, classify differences, lift both
+ranges, propose an AST edit and recompile the result. Retained artifact bindings
+make these operations reusable across CLI tools and model providers. Discovery,
+compilation, exact comparison, diagnostic agreement and publication are separate
+states; an MCP wrapper must preserve those distinctions.
+
+An eventual MCP can expose these existing operations and a durable review queue.
+It should carry compact results and artifact references rather than reimplement
+the compiler, comparator or decompiler in prompts. AST operations such as renaming,
+introducing a typedef or extracting a class need explicit symbol/type scope,
+previewable edits and recompilation; they are future refactoring capabilities,
+not features delivered by the current diagnostic tool. Per-game configuration
+belongs in the backend boundary. Keep developing and measuring the core before
+adding a broad protocol or plugin layer.
+
 ## How to add a learning
 
 Append a concise entry to [the learning log](learning-log.md) when an experiment

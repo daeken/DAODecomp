@@ -1,9 +1,10 @@
 # SharpRetro evaluation
 
-Pinned revision `685b7578457cad325226aa8923b45ded35098fa3` was inspected on
-2026-10-17 and built for paired IL diagnostics on 2026-10-19. No SharpRetro source
-has been vendored into DAODecomp. Building and comparing lifted trees does not
-certify its instruction semantics.
+Current pin: `ec8344102af8b495e5de1a869188b91bc3d4d756`, the reviewed effective
+address-size correction to the initial `685b7578457cad325226aa8923b45ded35098fa3`
+baseline. Both were built and measured on 2026-10-19. SharpRetro remains an
+external dependency. Building and comparing lifted trees does not certify its
+instruction semantics.
 
 ## Implemented diagnostic tool
 
@@ -39,6 +40,37 @@ call and return mutations, incomplete decoding, opaque operations, context and
 artifact-binding refusals. Independent review reproduced five representative real
 pairs and the focused controls. Existing acceptance and published-source counts
 are unchanged. Dependency build products and raw input/output evidence stay local.
+
+## Address-size correction
+
+The initial lifter computed ModRM offsets in a 64-bit carrier even for narrower
+decoded address sizes. Base/index overflow and signed displacements could produce
+the wrong effective offset. The generic fix truncates the completed offset to
+the decoded address size and zero-extends it **before** adding a segment base.
+Operand size is independent; FS/GS bases may contain higher bits.
+
+The [two-file upstream change](https://github.com/daeken/SharpRetro/pull/2)
+adds 24 generic NUnit cases: 19 failed on the old
+implementation, and all 24 pass after the fix. All 278 upstream tests pass on
+macOS ARM64 with .NET 10. A separate Capstone 5.0.6 / Unicorn 2.1.4 address-effects
+comparison agrees on 245 generated cases, versus 171 disagreements with the
+original implementation. An independent reviewer repeated these checks and added
+11 passing controls. This is emulator evidence, not native hardware certification.
+
+Replaying the same 40 diagnostic pairs took 13.437 seconds. Address trees changed
+in 39 pairs / 76 sides / 1,413 instructions; every diagnostic category and all ten
+exact controls were preserved. No new match or equivalence credit results from
+this correction. The adapter must be rebuilt and its manifest refreshed explicitly
+when adopting the new pin. The original reports and dependency builds are retained.
+The adopted DAO adapter was rebuilt, then all 40 inputs were replayed in 13.692
+seconds with identical reviewed trees and diagnostics (elapsed times excluded).
+Configured tooling discovery passed 296 tests with seven unrelated optional skips.
+
+The correction covers ModRM effective offsets only. Default segment selection,
+segment limits/faults, LEA segment overrides, moffs/string addressing, paging and
+unrelated instruction semantics remain outside its scope. The pilot's incomplete
+27-byte suffix was traced to embedded jump-table data, not a missing instruction;
+it remains an explicit incomplete linear lift. Most opaque operations are x87.
 
 ## Earlier semantic-checking research
 

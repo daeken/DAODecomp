@@ -21,7 +21,7 @@ def configure(config_path):
 
 def config():
  require(CONFIG is not None,'explicit_config_required'); return CONFIG
-REVISION='685b7578457cad325226aa8923b45ded35098fa3'
+REVISION='ec8344102af8b495e5de1a869188b91bc3d4d756'
 
 def atomic(path,value):
  path=Path(path); path.parent.mkdir(parents=True,exist_ok=True)
