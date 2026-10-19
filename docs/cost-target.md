@@ -42,6 +42,14 @@ executed the original game or a replacement game.
 | Ghidra first pass, 200 functions stratified by size and direct calls | 200 drafts in 6.09s; 133 provisional C++ sources; 106 compiled objects; 12 exact matches, of which 8 were new | $0 |
 | Address-name normalization, 20 retained batches | 175 compared function observations; exact matches increased from 9 to 17; 8 new distinct matches | $0 |
 | Non-thinking Ghidra-assisted pilot, 20 functions in 6 groups | 5 valid responses; 2 groups compiled; 1 exact match, already found by the deterministic seed pass | ~$0.0271 conservative debit |
+| Full-inventory Ghidra export and conversion | All 27,555 identities processed in 312.59s; 27,553 drafts and 15,859 provisional C++ sources; 2 decompiler failures retained | $0 |
+
+The full-inventory pass is complete in 28 bounded read-only batches. Its 15,859
+sources have **not** undergone bulk compilation/comparison; the 106-object result
+above belongs only to the measured 200-function sample. The other 11,696 identities
+retain raw drafts or explicit failures for later handling, not fabricated source.
+The persistent Ghidra project fingerprint was checked unchanged around each batch.
+The local aggregate receipt is `local/cost-reduction-001/full-seed/summary.json`.
 
 The initial version of the paid pilot spent another ~$0.0319 and failed response
 checks in all six groups. The corrected pilot sorted requested functions and
