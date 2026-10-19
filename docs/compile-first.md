@@ -519,3 +519,10 @@ Local post-integration validation on macOS ARM64 passed 296 standard tests
 (33 skips), 187 object-tool tests, the CMake build, six C++ checks and both
 synthetic demos (59 positive; 53 passing plus six expected negative mismatches).
 The generic transformation and its tests were unchanged from the approved pilot.
+
+
+A later stack-cleanup experiment produced no new exact matches: five strict
+leaf-cleanup targets plus two earlier byte-store smoke variants compiled, while
+ten cached exact controls remained exact. The prototype remains private and the
+snapshot stays at 2,241. See the [negative findings](learning-log.md#stack-cleanup-diagnosis-bounded-negative-result);
+stack deltas alone do not establish calling convention or unknown formal inputs.

@@ -255,3 +255,16 @@ its preconditions, the measured before/after denominator, reproduction/code link
 and what remains unresolved. Record failed experiments too. Add generic synthetic
 regression cases for reusable transformations, not bespoke paperwork per game
 function. This documentation is part of the ongoing work.
+
+
+### Diagnose stack deltas before editing ABI hypotheses
+
+A stack-cleanup label can reflect local byte storage, an incomplete call
+declaration, or an unknown formal input. The bounded follow-up sampled 33 of
+3,658 stack-primary cases, retained two failed byte-store smokes, then tested five
+strict leaf-cleanup declaration proposals. All seven attempts compiled but no
+complete match resulted; ten unchanged controls remained exact. Unknown high
+stack bytes and an unused formal input were left unresolved. The zero-yield
+prototype stays private, and the published snapshot remains 2,241 sources. See
+the [measured negative result](learning-log.md#stack-cleanup-diagnosis-bounded-negative-result)
+for selection conditions, exclusions, timings and retained reproduction steps.
