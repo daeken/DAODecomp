@@ -67,6 +67,10 @@ The result supports a free first pass. It does **not** support switching the
 production queue wholesale to non-thinking generation. The current paid queue
 is paused and drained; its original thinking/repair defaults remain unchanged.
 
+The next pass prioritizes [deterministic compilation repairs](compile-first.md)
+before spending on matching: fix source-conversion defects and supported type
+conversions, retain compilable nonmatches, and measure the resulting compile yield.
+
 ## Proposed production order
 
 1. **Decompile once locally.** Export Ghidra drafts and automatically inferred

@@ -1,5 +1,11 @@
 # All-inventory object recovery
 
+This page describes the retained paid object-generation profile. It is currently
+paused; the active direction is [free decompilation followed by deterministic
+compilation repairs](compile-first.md). The launch command below is a historical
+configuration, not a recommendation to restart six paid repairs per batch.
+See the [reusable methodology](reproducible-decompilation.md) for the current order.
+
 This profile feeds every identity in the pinned 27,555-function inventory into a durable queue. It does not exclude calls, globals, imports, indirect calls, floating point, TLS, large functions or discontiguous ranges. The first catalog contains 26,748 new generation identities and imports 807 existing native reccmp attestations without another provider request. Imported attestations and new exact COFF matches are separate counts. All inventory signatures remain hypotheses; `undefined fn(void)` does not establish a zero-argument ABI.
 
 The sole authored function artifact is C++98. Automatically derived packets contain original range hashes, instruction bytes, callers/callees, address references, import details and provisional declaration context. Source uses stable `fn_RVA` and `g_RVA` identities; extern declarations and out-of-line class methods are permitted. Unknown calls must remain unresolved rather than successful stubs. The compiler emits `/c /Gy /Z7` COFF objects with no link, entry point, dependency implementation or game execution. Compiler symbols are mapped mechanically to pinned identities.

@@ -11,6 +11,12 @@ This published source snapshot tracks the new reccmp/object workflow separately
 from the historical emulator-validated registry below. The recovery harness and
 source snapshot currently live on the `codex/rapid-recovery` branch.
 
+**[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
+**[learning log](docs/learning-log.md)** document the successful and unsuccessful
+approaches, measurements, reproduction steps and changes needed for another game.
+This is an evolving reference implementation; a runnable whole-game replacement
+and the $200 completion target have not yet been demonstrated.
+
 <!-- progress:start -->
 ## Progress
 

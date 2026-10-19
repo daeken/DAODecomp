@@ -40,4 +40,11 @@
 - For tooling changes run `python3 -m unittest discover -s tests -v`. For C++ or
   harness changes build with CMake and run both synthetic demo commands in README.
   Report which host/build actually ran; CI definitions alone are not test results.
+- Maintain the public methodology in `docs/reproducible-decompilation.md` and
+  `docs/learning-log.md` as work proceeds. Record reusable discoveries, failed
+  approaches, transformation preconditions, measured costs/yields with denominators,
+  tool/source versions, reproduction steps and unresolved limitations. Distinguish
+  measured results from proposals and DAO-specific assumptions from portable ideas.
+  Keep proprietary inputs, raw captures and credentials local. This is shared
+  experiment/tooling documentation, not a new per-function authoring requirement.
 
