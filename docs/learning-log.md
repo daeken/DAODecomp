@@ -370,3 +370,13 @@ See [the conditions and commands](compile-first.md#bounded-ast-guided-matching-p
 No game executable was linked or run, and these compiled-artifact results do not
 establish whole-game behavior. Harder functions and broader synthesis remain later
 work rather than an extrapolation from this selected frontier.
+
+## 2026-10-19: make compiler test fixtures independent of local setup
+
+The first AST/declaration tooling checkpoint passed locally but failed five
+callback tests on clean Linux CI: their fake builds still opened the real
+checkout's ignored VM lock directory. The fixture now creates its own temporary
+lock directory and redirects the repository path there, preserving the real
+locking and source/object rejection checks. A separate run with a deliberately
+absent original checkout reproduces the clean environment. This changes test
+isolation only; production transformations and comparison rules are unchanged.

@@ -61,7 +61,7 @@ class Declarations(unittest.TestCase):
 
 class BuildBindings(unittest.TestCase):
     def run_fake(self,tmp,mutate_source=False,compiler='expected',object_exists=True):
-        root=Path(tmp);source=root/'baseline.cpp';source.write_text('_func_7 *p;');raw=root/'raw.json';raw.write_text(json.dumps({'rva':0x1000,'module_sha256':PIN,'original_va':0x401000,'ranges':[],'bytes_sha256':'original','symbols':[],'analysis_revision':{'project_store_sha256':'project'}}));baseline=root/'baseline.json';baseline.write_text('{}')
+        root=Path(tmp).resolve();(root/'local/rapid-object').mkdir(parents=True);source=root/'baseline.cpp';source.write_text('_func_7 *p;');raw=root/'raw.json';raw.write_text(json.dumps({'rva':0x1000,'module_sha256':PIN,'original_va':0x401000,'ranges':[],'bytes_sha256':'original','symbols':[],'analysis_revision':{'project_store_sha256':'project'}}));baseline=root/'baseline.json';baseline.write_text('{}')
         case={'rva':0x1000,'category':'callback','baseline_status':'compile_failure','source':str(source),'source_sha256':sha(source.read_bytes()),'raw_export':str(raw),'raw_export_sha256':sha(raw.read_bytes()),'baseline_report':str(baseline),'baseline_report_sha256':sha(baseline.read_bytes())}
         current={'compile_fix':{'expected_cl_sha256':'expected','code_sha256':{'coff.py':'coff','compare.py':'compare'}}}
         def build(src,out,requested,symbols):
@@ -71,7 +71,7 @@ class BuildBindings(unittest.TestCase):
             (out/'run.json').write_text(json.dumps(receipt));(out/'summary.json').write_text(json.dumps(report))
             if mutate_source:src.write_text('changed')
             return report
-        with patch.object(decl,'load_graph',return_value=(graph(),{'project_store_sha256_before':'project'})),patch.object(decl,'bindings',return_value=current),patch('rapid_object.build.build_and_compare',side_effect=build):
+        with patch.object(decl,'REPO',root),patch.object(decl,'load_graph',return_value=(graph(),{'project_store_sha256_before':'project'})),patch.object(decl,'bindings',return_value=current),patch('rapid_object.build.build_and_compare',side_effect=build):
             result=decl.evaluate(case,root)
             return result,case,current
     def test_good_object_is_required_and_wrong_compiler_source_never_match(self):
