@@ -525,3 +525,29 @@ receipts remain available. The 27-byte incomplete suffix is embedded jump-table
 data, so decoder expansion would be the wrong repair. Opaque x87 semantics remain
 separate work. No provider calls or VC8 builds were made; toolkit development and
 independent review still consumed Codex effort. See [reproduction and limits](sharp-retro.md).
+
+## 2026-10-19: a memory-addressing label exposed a missing receiver input
+
+All 40 small aligned memory-addressing nonmatches were inspected against actual
+bytes and complete source ASTs. Twenty-nine supported one common hypothesis:
+the original indirect edge carries a receiver in ECX and reads its vtable slot,
+but the provisional no-argument function-pointer call does not express that
+input. The generic proposal binds both expressions to original dataflow, retains
+the target and return hypothesis, and adds the observed receiver. It does not
+invent callee implementations or claim unknown stack/EDX contracts are known.
+
+One variant per target made 29 distinct VC8 attempts: 28 compiled, **16 newly
+matching functions / 311 body bytes**, 12 nonmatches and one transport-255
+unknown. The three successful smoke builds are included, not repeated or added
+again. Ten prior exact controls were reused and freshly checked. Nonmatches
+still differ in target-register selection; no register difference was normalized
+away or accepted. The transport outcome is preserved without replay.
+
+Build receipts total 45.362 seconds, with 5.367-second smoke and 42.561-second
+continuation wall times. Twenty-eight generic controls and the full local
+project/object suites passed, as did CMake, six C++ checks and both synthetic
+demos. The independently reviewed rule and existing exporter verified sixteen
+new source rows, preserving all 2,216 previous published identities and source
+bytes; the snapshot now contains 2,232 functions. Engineering and review cost
+remain separate from zero provider calls. See the [rule conditions and measured
+reproduction](compile-first.md#bind-indirect-receiver-hypotheses-to-the-observed-call-edge).

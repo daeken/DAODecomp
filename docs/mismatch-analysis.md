@@ -92,3 +92,14 @@ diagnostic layer. Typed IL can expose register, flag, memory and control-flow
 effects that instruction spelling obscures. Unsupported nodes or incomplete
 lifting must remain explicit. Agreement between lifted trees is a diagnostic
 observation, not a replacement for the current object-match acceptance rule.
+
+## Follow-up: inspect the cause behind the memory label
+
+The frozen 40-case memory-addressing frontier later supported 29 AST-bound
+indirect receiver proposals. The original ECX/vtable dataflow was missing from
+the provisional call expression; this was not evidence to change field offsets
+blindly. One variant per target produced 16 new full exact matches (311 body
+bytes), 12 nonmatches and one transport unknown; ten existing exact controls
+remained intact. The original census above stays a historical snapshot rather
+than being relabeled after these repairs. [Conditions, limits and measurements](compile-first.md#bind-indirect-receiver-hypotheses-to-the-observed-call-edge)
+describe the generic rule and unchanged acceptance gate.

@@ -423,3 +423,58 @@ the same plan continued with a detached process. The final local
 counter, which counts improvements over selected nonmatching sources and does
 not deduplicate against previously published sources. No search or acceptance
 rule changed during the pilot. Seventy-three target sources remain unvalidated.
+
+## Bind indirect receiver hypotheses to the observed call edge
+
+The frozen memory-addressing frontier contained 40 unpublished near nonmatches
+(766 body bytes) with identical instruction shapes and at most four changed
+aligned pairs. Its leading shared cause was indirect-call receiver setup: the
+original loaded an object into ECX, read its vtable and dispatched through a slot,
+while the provisional no-argument `code(...)` call lost that input. A memory
+label alone did not identify a bad field offset.
+
+`rapid_object.indirect_receiver_fix.rewrite(source, ast, bound_report)` is a
+callable proposal helper. Supply the existing complete target-aware Clang AST and
+a freshly bound single-function original/object report. It requires one source
+call with the existing unsigned-int return hypothesis and no explicit arguments,
+a pure existing receiver/target expression, and matching original ECX/vtable-slot
+dataflow. Nonlinear or earlier-call prefixes, unresolved/indexed/segmented/stack
+receiver loads, unknown effects, unsupported parameters, multiple calls, volatile
+expressions and macro spans remain unsupported. The edit retains the target
+expression and return hypothesis while explicitly passing the observed receiver
+through `__thiscall`. It makes no semantic-preserving-refactor claim. Dynamic
+callee stack arguments, EDX live-ins and behavior remain unknown; a complete
+unchanged exact comparison is still the sole acceptance gate.
+
+The preregistered pilot selected all 29 supported cases (462 body bytes), one
+variant each, plus ten unchanged exact controls. Three diverse smoke cases
+matched in three attempts and their artifacts were reused. In total, 29 distinct
+VC8 attempts produced 28 compiled objects: **16 new exact matches, 311 body
+bytes**, 12 retained nonmatches and one transport exit-255 unknown. That unknown
+has no compiler/object receipt and was not retried. Remaining nonmatches differ
+in target-register selection; unknown live-ins prevent declaring that harmless.
+All ten controls were freshly compared without recompilation.
+
+All attempt receipts total 45.362 seconds; successful compiler receipts total
+45.212 seconds. Smoke took 5.367 seconds and the continuation 42.561 seconds,
+including checks and about 0.0016 seconds of VM-lock wait. Apple Clang 21 parsed
+C++98 for i686-pc-windows-msvc with MS compatibility 14; VC8 x86 14.00.50727.762
+built with the existing exact flags under Windows 11 ARM64 translation. No game
+code executed. Zero provider calls still consumed prepaid engineering and review
+effort. Twenty-eight generic tests, 296 standard cases (33 skips), 187 object
+tests, the macOS ARM64 CMake build, six C++ checks and both synthetic demo paths
+passed. The 26 optional paired-lift tests were among the unconfigured skips.
+
+Run the generic tests with:
+
+```sh
+python -m unittest rapid_object.tests.test_indirect_receiver_fix -v
+```
+
+The measured plan, original inputs and compiler caches remain private under `local/memory-ast-match-001/`;
+the helper is not an automatic provider-queue restart. Its accepted records use
+the existing reviewed AST metadata bridge and source exporter. Sixteen source
+rows were freshly checked against source/object/compiler/original/range/symbol
+and relocation bindings, extending the snapshot from 2,216 to **2,232** while
+preserving every prior entry and source byte. No new exporter or per-function
+proof artifact was authored.

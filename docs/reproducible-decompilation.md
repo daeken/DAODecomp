@@ -136,8 +136,11 @@ uses complete target-aware parses, actual integer types and source spans, a fixe
 frontier and at most four variants per pilot function. Comparison and signedness
 edits are candidate hypotheses, so every failed variant remains unvalidated.
 Instruction similarity only ranks work; a full-range exact object comparison
-still decides acceptance. Preserve known exact controls and count every compiler
-attempt, including failed exploratory smoke work.
+still decides acceptance. The [indirect receiver follow-up](compile-first.md#bind-indirect-receiver-hypotheses-to-the-observed-call-edge)
+shows why a memory-addressing label can require restoring an observed call input
+rather than changing field offsets. Its bounded AST rule retains unknown callee
+semantics and relies on the same complete comparator. Preserve known exact
+controls and count every compiler attempt, including failed exploratory smoke work.
 
 ## 5. Spend inference on diagnosed gaps
 
