@@ -241,6 +241,29 @@ immediately producing a match. Classify that cause before spending thousands of
 known-failing compiler attempts. See [preconditions and reproduction](compile-first.md)
 and the generic [regression controls](../rapid_object/tests/test_ghidra_state_fix.py).
 
+## 2026-10-19: keep artifact readers independent of build orchestration
+
+The free-match exporter passed on macOS and Linux but Windows CI failed because
+its pure symbol helper lived in a module that transitively imported Unix-only
+process locking. No build was needed for the export; the import graph introduced
+the platform dependency anyway.
+
+The isolated repair uses an export-local symbol decoder with parity tests against
+the frozen build helper. A fresh child process forbids the build modules and
+`fcntl` while running every retained-export acceptance/refusal control. The old
+version reproduced 20 errors across seven tests; all seven passed after repair.
+The full macOS tooling run passed 263 tests with seven skips. Replaying all 29
+retained reports produced identical 1,842 verified rows and the same published
+2,209 function records, 1,544 units and source bytes. The restricted-import check
+is a regression control, not a substitute for actual Windows CI.
+
+**Learning:** a helper can have a platform-neutral body but a platform-dependent
+import graph. Keep read-only artifact processing behind pure dependencies. When
+a compiler worker is running with pinned inputs, avoid changing its shared module
+just to repair a reader. A small isolated helper plus explicit parity controls
+can preserve the running worker; shared-module cleanup can wait for a stopped,
+measured migration.
+
 ## Still unproven
 
 - The $200 target for a runnable whole-game replacement.

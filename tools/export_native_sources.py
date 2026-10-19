@@ -123,6 +123,35 @@ def require(condition, reason):
         raise ValueError(reason)
 
 
+def retained_symbol_bindings(object_path, requested, registry):
+    """Decode retained COFF identities without importing the VM build backend.
+
+    Keep this pure export-local copy in parity with rapid_object.build's
+    symbol_bindings; the live recovery backend is independently provenance-pinned.
+    Only uniquely defined requested functions gain an explicit symbol identity.
+    """
+    from rapid_object.coff import Coff
+    obj = Coff(Path(object_path).read_bytes())
+    addresses, defined = {}, {}
+    for symbol in obj.symbols.values():
+        found = re.search(r'(?:^|[?_])(fn|g)_([0-9a-fA-F]{8})(?=@|$)', symbol.name)
+        if found is None:
+            continue
+        name = found[1] + '_' + found[2].lower()
+        record = registry.get(name)
+        if record is None:
+            continue
+        address = record['original_va'] if type(record) is dict else record
+        addresses[symbol.name] = address
+        rva = int(found[2], 16)
+        if found[1] == 'fn' and rva in requested and symbol.section > 0:
+            defined.setdefault(rva, []).append(symbol.name)
+    for rva, names in defined.items():
+        if len(names) == 1:
+            requested[rva]['symbol'] = names[0]
+    return addresses
+
+
 def retained_free_match(row, original):
     """Adapt either free report row, verifying retained artifacts without a build.
 
@@ -134,7 +163,6 @@ def retained_free_match(row, original):
     if str(REPO) not in sys.path:
         sys.path.insert(0, str(REPO))
     from rapid_object import compare
-    from rapid_object.build import symbol_bindings
 
     measurement = row.get("measurement", row)
     rva = row["rva"]
@@ -174,7 +202,7 @@ def retained_free_match(row, original):
         kind = "fn" if symbol["kind"] == "function" else "g"
         registry[f"{kind}_{va - 0x400000:08x}"] = va
     registry[f"fn_{rva:08x}"] = raw["original_va"]
-    symbols = symbol_bindings(folder / "candidate.obj", requested, registry)
+    symbols = retained_symbol_bindings(folder / "candidate.obj", requested, registry)
     normalized = {str(key): value for key, value in requested.items()}
     require(report["requested"] == normalized == identities["requested"] and identities["module_sha256"] == MODULE_SHA256, "full_original_range_binding")
     require(report["symbol_addresses"] == symbols == identities["symbols"], "symbol_identity_binding")

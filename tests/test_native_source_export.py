@@ -221,5 +221,79 @@ class RetainedFreeExportTests(unittest.TestCase):
         self.assertEqual(audit["rejected_reasons"], {"recomparison_binding": 1})
 
 
+class ExportPortabilityTests(unittest.TestCase):
+    def test_symbol_decoder_matches_frozen_build_helper(self):
+        # Load only the actual helper's AST: importing its VM backend is precisely
+        # what this export path must avoid on Windows. No replacement fcntl module.
+        import ast
+        import copy
+        import re
+        from tests.test_rapid_object_coff import coff
+        from tools.export_native_sources import REPO, retained_symbol_bindings
+        tree = ast.parse((REPO / "rapid_object/build.py").read_text())
+        helper = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
+                      and node.name == "symbol_bindings")
+        scope = {"Path": Path, "re": re, "__package__": "rapid_object"}
+        exec(compile(ast.Module(body=[helper], type_ignores=[]), "frozen symbol_bindings", "exec"), scope)
+        targets = [
+            ("?fn_00002000@@YAXXZ", 0, 1), ("_fn_00003000@4", 0, 0),
+            ("_g_0000ABCD", 0, 0), ("_g_00004000", 0, 1),
+            ("_fn_00005000", 0, 0), ("_fn_00006000", 0, -1),
+            ("_fn_00007000", 0, 1), ("_fn_00008000", 0, 1),
+            ("_fn_00002000", 0, 1), ("_fn_00009000", 0, 0),
+            ("prefixfn_00003000", 0, 0), ("_fn_00003000suffix", 0, 0),
+            ("_fn_0000300", 0, 0), ("_fn_000030000", 0, 0),
+        ]
+        registry = {"fn_00001000": 0x401000, "fn_00002000": {"original_va": 0x402000},
+                    "fn_00003000": 0x403000, "g_0000abcd": 0x40abcd,
+                    "g_00004000": {"original_va": 0x404000}, "fn_00005000": 0x405000,
+                    "fn_00006000": 0x406000, "fn_00007000": None, "fn_00009000": 0}
+        requested = {rva: {} for rva in (0x1000, 0x2000, 0x3000, 0x5000, 0x6000, 0x7000, 0x8000)}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "candidate.obj"
+            for extra in ([], targets[:-7], targets):
+                with self.subTest(targets=len(extra)):
+                    path.write_bytes(coff(b"\xc3", targets=extra, aux_size=1))
+                    reference_requested = copy.deepcopy(requested)
+                    export_requested = copy.deepcopy(requested)
+                    reference = scope["symbol_bindings"](path, reference_requested, registry)
+                    actual = retained_symbol_bindings(path, export_requested, registry)
+                    self.assertEqual(actual, reference)
+                    self.assertEqual(export_requested, reference_requested)
+                    self.assertEqual(export_requested[0x1000], {"symbol": "_fn_00001000"})
+                    for rva in (0x3000, 0x5000, 0x6000, 0x7000, 0x8000):
+                        self.assertEqual(export_requested[rva], {})
+                    if extra == targets:
+                        self.assertEqual(export_requested[0x2000], {})
+                        self.assertEqual(actual["_g_0000ABCD"], 0x40abcd)
+                        self.assertEqual(actual["_fn_00009000"], 0)
+                        self.assertNotIn("prefixfn_00003000", actual)
+                        self.assertNotIn("_fn_00003000suffix", actual)
+
+    def test_retained_controls_without_platform_build_imports(self):
+        import subprocess
+        import sys
+        from tools.export_native_sources import REPO
+        script = """
+import builtins
+import sys
+import unittest
+real_import = builtins.__import__
+blocked = {'fcntl', 'rapid_object.build', 'rapid_native.pipeline', 'rapid.factory'}
+def restricted(name, *args, **kwargs):
+    if name in blocked:
+        raise ModuleNotFoundError('forbidden export dependency: ' + name)
+    return real_import(name, *args, **kwargs)
+builtins.__import__ = restricted
+suite = unittest.defaultTestLoader.loadTestsFromName('tests.test_native_source_export.RetainedFreeExportTests')
+result = unittest.TextTestRunner(verbosity=2).run(suite)
+assert not blocked.intersection(sys.modules)
+raise SystemExit(not result.wasSuccessful())
+"""
+        result = subprocess.run([sys.executable, "-c", script], cwd=REPO,
+                                capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()
