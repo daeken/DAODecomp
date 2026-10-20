@@ -129,7 +129,7 @@ def lift_callees(request):
     # are durable request inputs; exact slice and entry evidence are retained too.
     caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
     selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
-    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1')
+    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1','vc8-x86-flat32-terminal-aware-memory-control-v1')
     dependencies={};chains=[]
     for original_target,initial in selected:
         target=original_target;entry=initial;seen=set();chain=[]
@@ -140,11 +140,15 @@ def lift_callees(request):
                 require(derived['image_base']==caller['image_base'] and derived['image_end']==caller['image_end'],'callee_module_boundary_changed')
                 dependencies[target]=dict(target=target,rva=entry['rva'],entry=entry,binary_slice_sha256=derived['binary_slice_sha256'],lifter_manifest_sha256=derived['lifter_manifest_sha256'],lift=derived['lift'])
             next_target=pure_forwarding_target(dependencies[target]) if follow else None
-            if next_target is None and request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1'):next_target=effectful_tail_dependency_target(dependencies[target])
+            if next_target is None and request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1','vc8-x86-flat32-terminal-aware-memory-control-v1'):next_target=effectful_tail_dependency_target(dependencies[target])
             if next_target is None:break
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
-    return dict(caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
+    terminal={}
+    if request.get('recipe',{}).get('architecture')=='x86-bits32-terminal-aware-memory-encoding-v1':
+        from tools.replayable.terminal_calls import derive
+        project=request['project'];terminal['runtime_terminal_evidence']=derive(Path(project['original']).read_bytes(),Path(project['inventory']).read_bytes(),{name:Path(path).read_bytes() for name,path in project['libraries'].items()})
+    return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
                 scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown',proof=False)
 
 
@@ -262,7 +266,7 @@ def compare_built(request, folder, source, receipt=None):
                 source_sha256=sha(source.encode()), object_sha256=sha(obj), comparison_sha256=sha((folder / 'comparison.json').read_bytes()), build=receipt, proof=False,
                 publication='draft_only_pending_independent_machinery_review', provider_calls=0,
                 scope='fresh VC8 x86 object and pinned complete original function range; no game execution')
-    if status=='mismatch' and request.get('recipe',{}).get('architecture')=='x86-bits32-composed-memory-encoding-equivalence-v1':
+    if status=='mismatch' and request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1'):
         try:
             from tools.replayable.encoding_check import certify_report
             certificate=certify_report(report,project,request['inputs'])
@@ -279,7 +283,7 @@ def verify_encoding_cache(request,folder):
     # Fresh host-only validation. Never rewrite retained reports or launch cl.
     from tools.replayable.encoding_check import parse
     import adapter as retained_adapter
-    require(request.get('recipe',{}).get('architecture')=='x86-bits32-composed-memory-encoding-equivalence-v1','encoding_cache_recipe')
+    require(request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1'),'encoding_cache_recipe')
     result=parse((folder/'result.json').read_bytes());retained=parse((folder/'retained-check-request.json').read_bytes())
     require(result['status'] in ('full_match','encoding_equivalent') and retained['project']==request['project'] and retained['build']['config']['rva']==request['rva'] and retained['build']['config'].get('allow_encoding_equivalence') is True,'encoding_cache_request_binding')
     if result['status']=='encoding_equivalent':

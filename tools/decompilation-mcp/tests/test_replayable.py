@@ -54,3 +54,8 @@ sys.path.insert(0,str(ROOT))
 EncodingEquivalenceTests = load_shared('test_encoding_equivalence').EncodingEquivalenceTests
 EncodingPipelineTests = load_shared('test_replayable_encoding').EncodingPipelineTests
 EncodingBridgeTests = load_shared('test_replayable_encoding').EncodingBridgeTests
+
+TerminalCallTests = load_shared('test_replayable_terminal_calls').TerminalCallTests
+RuntimeBindingTests = load_shared('test_replayable_terminal_calls').RuntimeBindingTests
+MutableFlowTests = load_shared('test_replayable_terminal_calls').MutableFlowTests
+ReceiverLayoutTests = load_shared('test_replayable_terminal_calls').ReceiverLayoutTests

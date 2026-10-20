@@ -11,26 +11,29 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     public static PipelineRecipe CallAdapters=>new(1,"x86-bits32-composed-call-adapters-v1","sharpretro-typed-v1",Vc8CallAdaptersProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-call-adapters-v1"]);
     public static PipelineRecipe ByValueCalls=>new(1,"x86-bits32-composed-byvalue-calls-v1","sharpretro-typed-v1",Vc8ByValueCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","raise-initialized-private-subword-copies-v1","observe-outgoing-push-and-private-cleanup-regions-v1","emit-vc8-composed-byvalue-calls-v1"]);
+    public static PipelineRecipe TerminalMemory=>new(1,"x86-bits32-terminal-aware-memory-encoding-v1","sharpretro-typed-v1",Vc8TerminalCallProfile.Version,[..OrderedMemory.Steps,"derive-original-noncontinuable-CRT-exits-v1","raise-terminal-calls-incoming-word-slots-v1","emit-vc8-terminal-aware-memory-control-v1","compare-complete-x86-encoding-equivalence-v1"]);
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesTerminalMemory=>Architecture==TerminalMemory.Architecture;
     public static PipelineRecipe EncodingEquivalence=>new(1,"x86-bits32-composed-memory-encoding-equivalence-v1","sharpretro-typed-v1",Vc8StructuredMemoryProfile.Version,[..OrderedMemory.Steps,"compare-complete-x86-encoding-equivalence-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesEncodingEquivalence=>Architecture==EncodingEquivalence.Architecture;
+    public bool UsesEncodingEquivalence=>Architecture==EncodingEquivalence.Architecture||UsesTerminalMemory;
     public static PipelineRecipe OrderedMemory=>new(1,"x86-bits32-composed-ordered-memory-control-v1","sharpretro-typed-v1",Vc8StructuredMemoryProfile.Version,[..CountedLoops.Steps[..^1],"raise-aliasable-forward-memory-effects-v1","emit-vc8-composed-ordered-memory-control-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesOrderedMemory=>CompilerProfile==Vc8StructuredMemoryProfile.Version;
+    public bool UsesOrderedMemory=>CompilerProfile is Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     public static PipelineRecipe CountedLoops=>new(1,"x86-bits32-composed-counted-loops-v1","sharpretro-typed-v1",Vc8LoopsProfile.Version,[..ByValueCalls.Steps[..^1],"raise-reducible-ordered-memory-graph-v1","raise-guarded-counted-loop-v1","emit-vc8-composed-counted-loops-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesCountedLoops=>CompilerProfile is Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public bool UsesCountedLoops=>CompilerProfile is Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesByValueCalls=>CompilerProfile is Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public bool UsesByValueCalls=>CompilerProfile is Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesCallAdapters=>CompilerProfile is Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public bool UsesCallAdapters=>CompilerProfile is Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory,EncodingEquivalence}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory,EncodingEquivalence,TerminalMemory}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -198,7 +201,12 @@ public sealed partial class Engine
                             try {var recovered=Vc8ByValueCallsProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8ByValueCallsProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
                             catch(ArgumentException) when(recipe.UsesCountedLoops) {
                                 try {var recovered=Vc8LoopsProfile.Raise(lifted.GetProperty("lift"));ir=recovered;source=Vc8LoopsProfile.Emit(recovered,rva,imageBase,project.Module);}
-                                catch(ArgumentException) when(recipe.UsesOrderedMemory) {var recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
+                                catch(ArgumentException) when(recipe.UsesOrderedMemory) {
+                                    StructuredMemoryFunction recovered;
+                                    try {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees);}
+                                    catch(ArgumentException) when(recipe.UsesTerminalMemory) {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees,dependencies.GetProperty("runtime_terminal_evidence").Deserialize<RuntimeTerminalEvidence>(Options));}
+                                    ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module,lifted.GetProperty("lift"));
+                                }
                             }
                         }
                     }

@@ -2008,3 +2008,45 @@ unknown effects remain aligned, not stubbed or proved. Reports keep `proof=false
 for universal function/game claims. Review/adoption and fresh installed ordered
 checks are recorded locally; no development result silently transfers into a
 released input key or source export.
+
+### Terminal callees, shared joins and observed receiver layout
+
+The next ascending frontier, `0x1210`, exposed a complete callee that ends in an
+external call rather than RET. Missing RET alone did not establish nonreturn.
+The new opt-in profile independently identifies the complete VC8 CRT
+`_CxxThrowException@8` body, its readonly exception-record template and its
+`KERNEL32!RaiseException` import from bound original bytes and the selected CRT
+archive. It requires a unique complete identity, including relocation targets.
+The profile assumes the documented noncontinuable Windows exception behavior;
+exception dispatch, handler effects and termination remain unknown. It neither
+invents a return value/cleanup nor inlines unknown callee effects. See Microsoft's
+[CxxThrowException documentation](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/cxxthrowexception?view=msvc-170)
+and [RaiseException documentation](https://learn.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-raiseexception).
+
+Recovery now represents exceptional terminal paths separately from ordinary
+returns, delayed explicit caller cleanup, observed writes/reloads of incoming
+word slots and shared forward joins with mutable scalar state. Source emission
+retains original typed operand provenance and refuses uninitialized registers,
+unknown flags, escaping frame values and memory observations it cannot retain.
+External declarations stay conservative: a tested noreturn annotation changed
+compiler liveness and removed a size reload, so that variant was rejected.
+
+Receiver-layout observations retain entry-receiver lineage, fixed access
+intervals/widths, indexed expressions, path guards, origins and possible overlaps.
+A 32-bit access establishes four observed bytes, not a four-byte declared field.
+Checked byte-slot views name unambiguous offsets; padding, actual field types,
+object extent, indexed bounds and union ambiguity remain unknown. No methods are
+merged into one type without receiver/type evidence. Memory helpers remain a
+fallback for unknown alignment/type/aliasing, not a requirement of the shared IR.
+
+The five-identity development sample preserved three exact controls (including
+EH197 and the loop), the separately labeled `0x11c0` encoding relation and a
+rejected `0x1210`. Three five-item runs took 11.56s, 11.62s and 11.26s; later
+changed-frontier-only probes took 4.29–4.50s each. The candidate improved from
+349 to132 bytes against the original131, but address-sum reassociation and load
+scheduling still prevent the complete comparison from passing. Volatile-input
+variants produced136 bytes and remain rejected. No new match, source export or
+frontier advance follows from these recovery capabilities. Other identities were
+not scanned or compiled under this composition; historical835 accepted identities
+remain bound to their prior releases. CI and broad suites were not run under the
+user's representative-validation policy.

@@ -1,7 +1,7 @@
 using System.Text.Json;
 namespace Decompilation;
 
-public sealed record StructuredMemoryFunction(FlowFunction Flow,string[] Hypotheses);
+public sealed record StructuredMemoryFunction(FlowFunction Flow,string[] Hypotheses,bool TerminalAware=false,ReceiverLayout? ReceiverLayout=null);
 
 // Acyclic effect-tree emission is separate from x86 recovery. Stack aliases
 // remain explicit in FlowExit, and no allocator/string semantics are invented.
@@ -22,19 +22,27 @@ public static class Vc8StructuredMemoryProfile
         return null;
     }
     static FlowEffect[] Observable(FlowPath p)=>p.Effects.Where(e=>e.Kind is "memory_read" or "memory_store" or "external_call").ToArray();
-    public static StructuredMemoryFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees)
+    public static FlowFunction RecoverFlow(JsonElement lift,IEnumerable<CalleeStackLift> callees,RuntimeTerminalEvidence? terminalRuntime=null)
     {
-        var f=X86FlowRecovery.Raise(lift,new(Abi,true,true,PrivateSubwordStack:true,ObserveOutgoingPushRegion:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true),callees);
-        Need(f.ReturnCleanupBytes.Length==1&&f.ReturnCleanupBytes[0] is >0 and <=32&&f.ReturnCleanupBytes[0]%4==0&&f.NormalPaths.Length is >=2 and <=7&&!f.Incoming.AddressEscapeObserved,"structured_memory_thiscall_normal_paths_domain");
+        var allCallees=callees.ToArray();var terminals=new List<TerminalCalleeSummary>();
+        if(terminalRuntime!=null)foreach(var callee in allCallees) {var rows=callee.Lift.GetProperty("instructions").EnumerateArray();bool reachesRuntime=rows.Any(row=>row.GetProperty("tree").GetProperty("Body").EnumerateArray().Any(n=>n.GetProperty("type").GetString()=="LiftIl.IlBranch"&&n.GetProperty("Kind").GetProperty("name").GetString()=="Call"&&X86TerminalCallRecovery.DirectCallTarget(row,n)==terminalRuntime.Target));if(reachesRuntime)terminals.Add(Vc8TerminalCallProfile.Inspect(callee.Target,callee.Lift,terminalRuntime));}
+        return X86FlowRecovery.Raise(lift,new(Abi,true,true,PrivateSubwordStack:true,ObserveOutgoingPushRegion:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true,TerminalCallees:terminals.ToArray(),MaximumPaths:terminalRuntime==null?8:32,IncomingWordStores:terminalRuntime!=null,CleanupLookahead:terminalRuntime==null?1:16),allCallees);
+    }
+    public static StructuredMemoryFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees,RuntimeTerminalEvidence? terminalRuntime=null)
+    {
+        var f=RecoverFlow(lift,callees,terminalRuntime);
+        Need(f.ReturnCleanupBytes.Length==1&&f.ReturnCleanupBytes[0] is >0 and <=32&&f.ReturnCleanupBytes[0]%4==0&&f.NormalPaths.Length>=2&&f.NormalPaths.Length<=(terminalRuntime==null?7:31)&&!f.Incoming.AddressEscapeObserved,"structured_memory_thiscall_normal_paths_domain");
         Need(f.Incoming.RequiredReadBytes<=f.ReturnCleanupBytes[0]&&f.NormalPaths.All(p=>p.Effects.Where(e=>e.Kind=="incoming_read").All(e=>e.Value is IncomingStackRead{MemoryEpoch:0})) ,"structured_memory_precall_incoming_extent");
         Need(f.NormalPaths.SelectMany(p=>p.Effects).Where(e=>e.Kind=="incoming_read").Select(e=>(IncomingStackRead)e.Value!).All(v=>v.Bits is 8 or 32&&v.Offset>=4&&v.Offset%4==0),"structured_memory_incoming_byte_or_word_slots_only");
         Need(f.NormalPaths.Any(p=>p.Effects.Any(e=>e.Kind=="memory_store"))&&f.NormalPaths.Any(p=>p.Effects.Any(e=>e.Kind=="external_call")),"structured_memory_calls_and_stores_required");
         foreach(var path in f.NormalPaths){foreach(var call in path.Effects.Where(e=>e.Kind=="external_call").Select(e=>e.Call!))Need(call.CalleeCleanup==0&&call.CallerPrivateCleanupBytes==0&&call.CallerCleanup==call.Arguments.Length*4&&call.Arguments.Length is >0 and <=8,"structured_memory_cdecl_observed_words");Need(path.Effects.Where(e=>e.Kind=="memory_store").All(e=>e.Bits is 8 or 32),"structured_memory_store_width");}
-        return new(f,["flat32 thiscall void and observed cdecl outgoing-word signatures are compiler hypotheses; zero callee cleanup never proves arity","external target, unknown result/effects/throw/termination retained; no allocator or container interpretation","ordered potentially aliased observations retained, stack POP/RET become fresh unknown memory reads after stores; no untouched-frame proof","structured forward paths share only identical ordered effects; complete original/native comparison required"]);
+        if(terminalRuntime!=null)Need(f.NormalPaths.All(p=>Low(p.Exit.Return)==new RegisterInput(1)),"terminal_memory_requires_observed_receiver_return");
+        return new(f,["flat32 thiscall void and observed cdecl outgoing-word signatures are compiler hypotheses; zero callee cleanup never proves arity","external target, unknown result/effects/throw/termination retained; no allocator or container interpretation","ordered potentially aliased observations retained, stack POP/RET become fresh unknown memory reads after stores; no untouched-frame proof","structured forward paths share only identical ordered effects; complete original/native comparison required"],terminalRuntime!=null,terminalRuntime==null?null:ReceiverLayoutRecovery.Observe(f));
     }
     sealed record Path(FlowPredicate[] Predicates,FlowEffect[] Effects);
-    public static string Emit(StructuredMemoryFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
+    public static string Emit(StructuredMemoryFunction ir,uint rva,uint imageBase,uint imageEnd,string module,JsonElement? originalLift=null)
     {
+        if(ir.TerminalAware){Need(originalLift!=null,"terminal_memory_original_lift_required");return Vc8MutableMemoryEmitter.Emit(ir,originalLift!.Value,rva,imageBase,imageEnd,module);}
         Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");var f=ir.Flow;int arguments=f.ReturnCleanupBytes[0]/4;var allEffects=f.NormalPaths.SelectMany(Observable).ToArray();var reads=allEffects.Where(e=>e.Kind=="memory_read").DistinctBy(e=>((MemoryReadValue)e.Value!).Pc).ToArray();var calls=allEffects.Where(e=>e.Kind=="external_call").GroupBy(e=>e.Call!.Target).ToArray();
         string Value(RecoveredValue raw) {
             var v=Low(Normalize(raw));return v switch{

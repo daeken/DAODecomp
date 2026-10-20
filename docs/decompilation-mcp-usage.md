@@ -599,3 +599,17 @@ records have `proof=false` for universal function/game claims. Old recipes and
 immutable releases remain available for rollback. Public `candidate_check` keeps
 its existing exact policy; the explicit replayable recipe opts its internal
 retained-artifact gate into the additional lane.
+
+The opt-in terminal-aware composition uses architecture
+`x86-bits32-terminal-aware-memory-encoding-v1` and profile
+`vc8-x86-flat32-terminal-aware-memory-control-v1`. It appends
+`derive-original-noncontinuable-CRT-exits-v1`,
+`raise-terminal-calls-incoming-word-slots-v1`,
+`emit-vc8-terminal-aware-memory-control-v1` and the existing
+`compare-complete-x86-encoding-equivalence-v1` to the ordered-memory steps.
+The existing durable recovery/regression operations accept this recipe; no new
+MCP operation or caller-authored per-function contract is introduced. Runtime
+terminal evidence is derived from pinned original inputs and bound CRT libraries.
+Recovered reports include separate terminal paths and receiver access-layout
+observations, with unknown effects/types/extent retained. This composition has
+not made `0x1210` pass; its complete native mismatch remains the frontier.

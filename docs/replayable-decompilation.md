@@ -237,3 +237,33 @@ side channels and arbitrary entry into instruction interiors are outside this
 relation. Source exports remain separate. The current local release/handoff
 records identify which exact reviewed runtime is installed; development sample
 results do not silently transfer into another input key.
+
+### Terminal-aware memory composition and layout observations
+
+The explicit architecture `x86-bits32-terminal-aware-memory-encoding-v1` adds
+original/library-bound exceptional-terminal evidence and mutable forward joins
+to the previous memory composition. Its profile is
+`vc8-x86-flat32-terminal-aware-memory-control-v1`. Previously supported recipes
+remain available, and the new composition tries their source domains first.
+Fresh dependency derivation binds complete original/runtime bytes, readonly
+data, imports and selected CRT archive members. A complete typed callee CFG must
+reach the certified exceptional call on every path; missing RET, an arbitrary
+symbol name, a propagated indirect target or an incomplete range is insufficient.
+The Windows noncontinuable API assumption is explicit; nested effects and
+exceptional destinations remain unknown.
+
+Incoming extent, return cleanup and observed outgoing arguments are separate.
+Observed aligned incoming-word writes can feed later loads only within the
+already observed input extent. Explicit delayed caller cleanup cannot cross a
+call or control boundary. Mutable join emission keeps typed register/temp
+provenance and refuses unsupported state or memory effects. Complete object,
+relocation and EH checks still determine outcomes; the existing narrow SIB
+encoding relation is unchanged and cannot accept length-changing rearrangements.
+
+Receiver observations describe accesses, not a guessed class declaration.
+Fixed intervals and indexed expressions retain guards/origins; overlapping slots
+and unknown index bounds remain ambiguous. Generated checked raw-byte views may
+name fixed offsets without declaring the object's extent or indexing beyond a
+proven view. Cross-method class merging needs separate receiver/type evidence.
+The current development frontier remains `0x1210`: generated source is useful
+recovery evidence, but its retained native comparison is a mismatch.
