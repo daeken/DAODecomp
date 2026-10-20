@@ -19,11 +19,12 @@ public static class Program
                 using var input=JsonDocument.Parse(await Console.In.ReadToEndAsync());var x=input.RootElement;
                 try {
                     var abi=x.TryGetProperty("abi",out var abiElement)?abiElement.Deserialize<RecoveryAbi>(Engine.Options)!:Vc8Profile.Abi;
-                    var stack=x.TryGetProperty("stack_arguments",out var selected)&&selected.GetBoolean();object ir;string source;
+                    var conditional=x.TryGetProperty("conditional_calls",out var conditionalSelected)&&conditionalSelected.GetBoolean();var stack=conditional||(x.TryGetProperty("stack_arguments",out var selected)&&selected.GetBoolean());if(conditional&&!x.TryGetProperty("abi",out _))abi=Vc8ConditionalCallsProfile.Abi;object ir;string source;
                     try {var basic=X86Recovery.Raise(x.GetProperty("lift"),abi);ir=basic;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8Profile.Emit(basic,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");}
                     catch(ArgumentException) when(stack) {
                         var callees=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
-                        var recovered=X86StackArgumentRecovery.Raise(x.GetProperty("lift"),abi,callees);ir=recovered;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8StackArgsProfile.Emit(recovered,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");
+                        try {var recovered=X86StackArgumentRecovery.Raise(x.GetProperty("lift"),abi,callees);ir=recovered;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8StackArgsProfile.Emit(recovered,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");}
+                        catch(ArgumentException) when(conditional) {var recovered=X86ConditionalRecovery.Raise(x.GetProperty("lift"),abi,callees,true);ir=recovered;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8ConditionalCallsProfile.Emit(recovered,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");}
                     }
                     if(source.Length==0)Console.WriteLine(Engine.Json(new{status="recovered",ir,proof=false}));
                     else Console.WriteLine(Engine.Json(new{status="generated",ir,source,proof=false}));

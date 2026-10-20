@@ -24,3 +24,7 @@ sys.path.insert(0,str(ROOT / 'tests'))
 StackArgumentTests = load_shared('test_replayable_stackargs').StackArgumentTests
 StackIntegrationTests = load_shared('test_replayable_stackargs').StackIntegrationTests
 StackDependencyTests = load_shared('test_replayable_stackargs').StackDependencyTests
+
+ConditionalTests = load_shared('test_replayable_conditional').ConditionalTests
+ConditionalDependencyTests = load_shared('test_replayable_conditional').ConditionalDependencyTests
+ConditionalIntegrationTests = load_shared('test_replayable_conditional').ConditionalIntegrationTests

@@ -368,3 +368,27 @@ indirect caller calls and unsupported source shapes refuse. Dependency evidence
 joins source/object/report integrity checks. `scan_stackargs.py` assesses every
 inventory identity against this added rule's preconditions and actual typed
 frontend; its generated hypotheses are not comparisons or acceptance.
+
+A further opt-in composed recipe adds bounded conditional external calls:
+
+```json
+{"schema_version":1,"architecture":"x86-bits32-one-forward-conditional-v1","frontend":"sharpretro-typed-v1","compiler_profile":"vc8-x86-flat32-conditional-calls-v1","steps":["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","emit-vc8-composed-conditional-v1"]}
+```
+
+The same three recipe-aware MCP operations accept it. Earlier domains are tried
+first. Its new domain is one forward conditional diamond, a low-byte incoming
+word/mask test, a common return and one conditional outgoing call. It tracks typed
+flags, live stack state, original call-entry registers/frame, memory epochs and
+explicit joins. Different live stacks or preserved registers, unknown predicates,
+back edges, nested branches and known private-frame pointer escapes refuse.
+
+Original-derived normal-return evidence may follow at most eight complete pure
+one-instruction direct near-JMP thunks, with exact inventory targets and cycle
+checks. The original called target and relocation remain unchanged; every thunk
+and terminal range has retained provenance. Nested callee effects and termination
+remain unknown. Outgoing word extent derives from the original caller stack
+adjustment plus the callee cleanup hypothesis: cleanup zero does not establish
+zero arguments. The current source profile supports receiver-preserving member
+calls and one receiver word passed by value with separate caller cleanup. These
+are candidate ABI/profile assumptions, checked by complete compiled-object
+comparison, not a proof of callee semantics or globally consistent source types.

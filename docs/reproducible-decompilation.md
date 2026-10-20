@@ -714,3 +714,57 @@ five tail-call mismatches remain rejected. Both added-rule candidates are checke
 with zero unrun or new uncertain compiler outcomes; seven discontiguous-callee
 analyses remain unresolved. All 27,555 rows have explicit applicability/accounting
 records. There are still zero new source exports and no game-execution claim.
+
+### Preserve call identity while forwarding ABI evidence
+
+A pure forwarding thunk does not justify retargeting a source call. Require its
+complete original body to be one direct unconditional near JMP with no other
+typed effects, resolve a unique exact inventory target, preserve every chain
+range/hash and enforce cycle/depth bounds. Reuse complete reachable-CFG/uniform
+RET analysis only at the terminal body. Attach that normal-return hypothesis to
+the **original** call target; leave nested calls, memory effects and termination
+unknown. Do not infer formal arity from cleanup zero.
+
+For a bounded conditional region, process every typed effect and keep explicit
+states at the join. Equal live frames and preserved registers are required;
+differing volatile state remains unknown. Retain typed flags even when the native
+ABI does not require their exit values. A by-value outgoing word and a caller ADD
+are distinct from callee-pop cleanup. An incoming byte read after a call refers
+to current storage, so it must not become an assumed unchanged pre-call value.
+Reject known frame-address escapes and unsupported joins instead of pretending
+a callee has no effects. The initial implementation supports one forward diamond
+and a narrow flat32 VC8 source profile; it is not a general CFG decompiler.
+
+A real first pilot matched the entire 36-byte original function using those
+reusable rules, with the three prior ordered controls also matching. Its source
+kept the original forwarding-thunk target. A separate SDK transport failure was
+handled through the previously reviewed nonaccepting operation and an explicit
+new request; its unknown history remains unchanged. Compiler/object matches are
+pinned native observations, not proof of callee semantics, source-type consistency
+across the executable, or game execution.
+
+The final added-rule scan assessed all 27,555 inventory identities in 128.016
+seconds on macOS ARM64. Necessary static preconditions excluded 26,473 identities;
+actual typed checking generated 577 hypotheses and refused 389 cases. Another 116
+dependency analyses remain unresolved: 95 incomplete/opaque lifts and 21
+discontiguous callee ranges. The earlier profile generated none of those 577
+conditional hypotheses. One is the 36-byte pilot; the other 576 are still
+unchecked. Generated-candidate rows and C++ stayed identical across the final aliasing
+guard, which now refuses 12 known frame-address escapes earlier. This is
+applicability, not comparison credit. The final 652-test suite (33 skips),
+standalone 87 tests (two skips), seven CTest checks and both synthetic demos
+passed; the negative demo detected six of 59 case mismatches. Prior 206 native
+object matches remain under their exact original bindings, with zero source
+exports. The cumulative new machinery still requires independent approval and
+fresh installed checks before adoption.
+
+The first cumulative review rejected a real private-frame alias defect: a word
+store at entry-SP minus one overlapped the saved return address, while the word
+slot model retained its old value. The rejected freeze and actual typed-lift
+counterexample remain preserved. The bounded repair requires each private word
+store to be aligned relative to entry SP, fully inside the allocated negative
+frame, and ordinary SP adjustments to remain aligned and nonpositive. Generic
+boundary tests and the actual counterexample now refuse; all four ordered native
+controls still match with unchanged generated C++. The corrected whole-inventory
+scan rows are byte-identical: 577 hypotheses, including 576 still unchecked.
+No full comparator was changed, and no false full match was claimed.

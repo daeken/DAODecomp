@@ -302,3 +302,16 @@ class PipelineBoundaryTests(unittest.TestCase):
             with closing(sqlite3.connect(self.root/'state/jobs.sqlite3')) as db,db:db.execute('UPDATE replayable_frontier SET status=?',(state,))
             with self.assertRaises(ValueError):self.submit('stack-cross-'+state)
             with self.assertRaises(ValueError):self.regression('stack-regression-cross-'+state,recipe_json=json.dumps(recipe))
+
+    def test_conditional_recipe_is_explicit_and_does_not_skip_or_clear_unknown(self):
+        import sqlite3
+        recipe=dict(schema_version=1,architecture='x86-bits32-one-forward-conditional-v1',frontend='sharpretro-typed-v1',compiler_profile='vc8-x86-flat32-conditional-calls-v1',steps=['raise-linear-effects-tail-v2','derive-original-normal-return-stack-v1','resolve-pure-forwarding-normal-return-v1','raise-one-forward-conditional-v1','emit-vc8-composed-conditional-v1'])
+        baseline=self.client.call('replayable_status',project_id='open');selected=self.client.call('replayable_status',project_id='open',recipe_json=json.dumps(recipe));self.assertNotEqual(selected['pipeline_key'],baseline['pipeline_key']);self.assertEqual(selected['first_unresolved_rva'],0x1000)
+        first=self.submit('conditional-selected',recipe_json=json.dumps(recipe));stdio.wait_job(self.client,first['job_id']);self.assertEqual(self.submit('conditional-selected',recipe_json=json.dumps(recipe))['job_id'],first['job_id'])
+        with self.assertRaises(ValueError):self.submit('conditional-selected')
+        bad=dict(recipe,steps=list(reversed(recipe['steps'])))
+        with self.assertRaises(ValueError):self.submit('conditional-bad-order',recipe_json=json.dumps(bad))
+        ahead=self.regression('conditional-ahead',recipe_json=json.dumps(recipe));stdio.wait_job(self.client,ahead['job_id']);self.assertEqual(self.client.call('replayable_status',project_id='open',recipe_json=json.dumps(recipe))['first_unresolved_rva'],0x1000)
+        with closing(sqlite3.connect(self.root/'state/jobs.sqlite3')) as db,db:db.execute("UPDATE replayable_frontier SET status='external_outcome_unknown' WHERE job=?",(first['job_id'],))
+        for extra in ({},{'recipe_json':json.dumps(recipe)}):
+            with self.assertRaises(ValueError):self.submit('conditional-unknown-cross-'+str(len(extra)),**extra)

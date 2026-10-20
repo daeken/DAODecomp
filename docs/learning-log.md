@@ -1609,3 +1609,65 @@ five tail-call mismatches remain rejected. Both added-rule candidates are checke
 with zero unrun or new uncertain compiler outcomes; seven discontiguous-callee
 analyses remain unresolved. All 27,555 rows have explicit applicability/accounting
 records. There are still zero new source exports and no game-execution claim.
+
+### Conditional calls, forwarding evidence and separate cleanup obligations
+
+The first conditional frontier required three related capabilities. Its called
+forwarder is a complete one-instruction direct JMP to another exact inventory
+entry. A bounded resolver now forwards only normal-return ABI evidence through
+such pure thunks, retains their raw-slice hashes and preserves the *original*
+called target in generated source and object relocation binding. Cycles, missing
+entries, side effects, indirect transfers, prefixes and exhausted depth refuse.
+Unknown nested calls remain external; uniform return encoding is a normal-return
+hypothesis, not a whole-callee stack/effect or termination proof.
+
+A separate bounded interpreter handles one forward conditional diamond. It
+records the actual typed byte load, bit/flag expressions, native frame operations,
+call-entry state, outgoing words and independent caller/callee cleanup. Both
+paths must reach the same live stack and preserved-register state. Differing
+volatile state joins as unknown. Incoming reads name current stack storage at a
+PC/memory epoch, rather than a cached value from before an unknown call. The
+explicit flat32 compiler profile relates segmented stack and ordinary ESP-based
+addresses; known private-frame address escapes refuse. Native ABI frame lowering
+and volatile exit flags remain compiler-profile obligations verified by the full
+compiled range, not ignored unknown effects.
+
+The source profile generated a complete 36/36-byte object match for the frontier,
+alongside fresh ordered 22/22, 11/11 and 25/25 controls. A control dispatch first
+returned a Parallels SDK error without a compiler exit marker. The existing
+reviewed MCP quiescence operation proved its absent synchronous launch prefix
+safe to abandon **without acceptance**; the original unknown result was retained,
+and a separate explicit request then succeeded. No compiler outcome was inferred
+from host exit255, no automatic retry was added and no transport code was changed.
+
+Generic boundary tests additionally exposed duplicate call temporaries as an
+invalid target-evidence shape; they now refuse. Complete frame/call-entry evidence
+and a known-frame-pointer escape guard were retained before the final pilot.
+Earlier variants/results remain private. The original-body source output stayed
+unchanged; no function-specific source patch or RVA guard was introduced.
+
+The final added-rule scan assessed all 27,555 inventory identities in 128.016
+seconds on macOS ARM64. Necessary static preconditions excluded 26,473 identities;
+actual typed checking generated 577 hypotheses and refused 389 cases. Another 116
+dependency analyses remain unresolved: 95 incomplete/opaque lifts and 21
+discontiguous callee ranges. The earlier profile generated none of those 577
+conditional hypotheses. One is the 36-byte pilot; the other 576 are still
+unchecked. Generated-candidate rows and C++ stayed identical across the final aliasing
+guard, which now refuses 12 known frame-address escapes earlier. This is
+applicability, not comparison credit. The final 652-test suite (33 skips),
+standalone 87 tests (two skips), seven CTest checks and both synthetic demos
+passed; the negative demo detected six of 59 case mismatches. Prior 206 native
+object matches remain under their exact original bindings, with zero source
+exports. The cumulative new machinery still requires independent approval and
+fresh installed checks before adoption.
+
+The first cumulative review rejected a real private-frame alias defect: a word
+store at entry-SP minus one overlapped the saved return address, while the word
+slot model retained its old value. The rejected freeze and actual typed-lift
+counterexample remain preserved. The bounded repair requires each private word
+store to be aligned relative to entry SP, fully inside the allocated negative
+frame, and ordinary SP adjustments to remain aligned and nonpositive. Generic
+boundary tests and the actual counterexample now refuse; all four ordered native
+controls still match with unchanged generated C++. The corrected whole-inventory
+scan rows are byte-identical: 577 hypotheses, including 576 still unchecked.
+No full comparator was changed, and no false full match was claimed.

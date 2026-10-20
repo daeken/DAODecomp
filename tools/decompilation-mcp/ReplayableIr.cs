@@ -12,6 +12,8 @@ namespace Decompilation;
 [JsonDerivedType(typeof(SegmentedAddress),"segmented_address")]
 [JsonDerivedType(typeof(IncomingStackInput),"incoming_stack_input")]
 [JsonDerivedType(typeof(IncomingStackAddress),"incoming_stack_address")]
+[JsonDerivedType(typeof(BitValue),"bit_operation")]
+[JsonDerivedType(typeof(IncomingStackRead),"incoming_stack_read")]
 public abstract record RecoveredValue;
 public sealed record Constant(ulong Value, int Bits) : RecoveredValue;
 public sealed record RegisterInput(int Index) : RecoveredValue;
@@ -25,6 +27,8 @@ public sealed record RecoveredStackEffect(RecoveredValue Address,RecoveredValue 
 public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return");
 public sealed record IncomingStackInput(int Offset,int Bits) : RecoveredValue;
 public sealed record IncomingStackAddress(int Offset,int Bits) : RecoveredValue;
+public sealed record BitValue(string Operation,RecoveredValue[] Operands,int Bits) : RecoveredValue;
+public sealed record IncomingStackRead(int Offset,int Bits,ulong Pc,int MemoryEpoch) : RecoveredValue;
 public sealed record CalleeStackLift(ulong Target,JsonElement Lift);
 public sealed record NormalReturnStackEvidence(ulong Target,int CleanupBytes,int ReturnSites,int CallSites,string Basis,bool Proof=false);
 public sealed record RecoveredStackCall(ulong Pc,NormalReturnStackEvidence Evidence,RecoveredValue[] Arguments);
@@ -218,7 +222,7 @@ public static class X86StackArgumentRecovery
             foreach(var p in n.EnumerateObject())foreach(var b in Branches(p.Value))yield return b;
         } else if(n.ValueKind==JsonValueKind.Array)foreach(var item in n.EnumerateArray())foreach(var b in Branches(item))yield return b;
     }
-    static int RetCleanup(JsonElement instruction)
+    internal static int RetCleanup(JsonElement instruction)
     {
         Need(instruction.TryGetProperty("raw_hex",out var raw),"missing_original_return_encoding");
         byte[] bytes;try{bytes=Convert.FromHexString(raw.GetString()!);}catch{throw new ArgumentException("invalid_original_return_encoding");}
@@ -242,7 +246,7 @@ public static class X86StackArgumentRecovery
         var op=value.GetProperty("Op").GetProperty("name").GetString();Need(op is "Add" or "Sub","unsupported_return_stack_tree");
         return ReturnStackDelta(value.GetProperty("L"))+(op=="Add"?(long)delta:-(long)delta);
     }
-    static void VerifyReturnTree(JsonElement row,int cleanup) {
+    internal static void VerifyReturnTree(JsonElement row,int cleanup) {
         var nodes=row.GetProperty("tree").GetProperty("Body").EnumerateArray().ToArray();Need(nodes.Length is >=3 and <=8,"unsupported_return_stack_tree");
         Need(Tag(nodes[0])=="IlLet"&&Tag(nodes[^1])=="IlBranch","unsupported_return_stack_tree");var load=nodes[0].GetProperty("Val");
         Need(Tag(load)=="IlLoad"&&load.GetProperty("Ty").GetProperty("Bits").GetInt32()==32,"unsupported_return_width");

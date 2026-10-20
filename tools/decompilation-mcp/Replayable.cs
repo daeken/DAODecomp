@@ -7,9 +7,12 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
 {
     public static PipelineRecipe Default=>new(1,"x86-bits32-linear-tail-v2","sharpretro-typed-v1",Vc8Profile.Version,["raise-linear-effects-tail-v2","emit-thiscall-stores-tail-v2"]);
     public static PipelineRecipe StackArguments=>new(1,"x86-bits32-linear-tail-stack-v1","sharpretro-typed-v1",Vc8StackArgsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","emit-vc8-composed-stack-v1"]);
+    public static PipelineRecipe ConditionalCalls=>new(1,"x86-bits32-one-forward-conditional-v1","sharpretro-typed-v1",Vc8ConditionalCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","emit-vc8-composed-conditional-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesStackArguments=>CompilerProfile==Vc8StackArgsProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesConditionalCalls=>CompilerProfile==Vc8ConditionalCallsProfile.Version;
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -134,7 +137,8 @@ public sealed partial class Engine
                 File.WriteAllText(Path.Combine(folder,"callee-lifts.json"),dependencies.GetRawText());
                 if(dependencies.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("callee_caller_binding_changed");
                 var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
-                var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;
+                try {var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}
+                catch(ArgumentException) when(recipe.UsesConditionalCalls) {var conditional=Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
             }
             File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));File.WriteAllText(Path.Combine(folder,"candidate.cpp"),source);
             if(request.TryGetProperty("expected_source_sha256",out var expectedSource)&&expectedSource.ValueKind!=JsonValueKind.Null&&expectedSource.GetString()!=HashText(source))throw new ArgumentException("generated_source_hash_mismatch_no_compile");

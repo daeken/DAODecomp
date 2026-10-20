@@ -94,21 +94,44 @@ def select_callee_entries(request, caller, inventory):
     return selected
 
 
+def pure_forwarding_target(derived):
+    """Only a complete one-instruction direct near JMP with no typed effects."""
+    lifted=derived['lift']
+    require(lifted['mode']=='Bits32' and lifted['decode_complete'] and lifted['lift_errors']==0 and lifted['opaque_instructions']==0,'incomplete_forwarding_evidence')
+    rows=lifted['instructions']
+    if len(rows)!=1:return None
+    row=rows[0];body=row['tree'].get('Body',[])
+    if len(body)!=1 or body[0].get('type')!='LiftIl.IlBranch' or body[0]['Kind']['name']!='Jmp':return None
+    branch=body[0]
+    require(branch['Cond'] is None and branch['Target'].get('type')=='LiftIl.IlConst','non_direct_forwarding_thunk')
+    import capstone
+    md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);md.detail=True;decoded=list(md.disasm(bytes.fromhex(row['raw_hex']),row['pc']))
+    require(len(decoded)==1 and decoded[0].mnemonic=='jmp' and len(decoded[0].operands)==1 and decoded[0].operands[0].type==capstone.x86.X86_OP_IMM,'non_direct_forwarding_encoding')
+    raw=bytes.fromhex(row['raw_hex']);require((len(raw)==2 and raw[0]==0xeb) or (len(raw)==5 and raw[0]==0xe9),'prefixed_or_far_forwarding_encoding')
+    target=int(branch['Target']['Bits']['decimal']);require(target==decoded[0].operands[0].imm,'forwarding_encoding_target_disagrees');return target
+
+
 def lift_callees(request):
     # Every dependency is original-derived. Full module/inventory/lifter closure
     # are durable request inputs; exact slice and entry evidence are retained too.
-    caller = lift(request)
-    inventory = json.loads(Path(request['project']['inventory']).read_text())
-    dependencies = []
-    for target, entry in select_callee_entries(request, caller, inventory):
-        dependency_request = dict(request, rva=entry['rva'], entry=entry)
-        derived = lift(dependency_request)
-        require(derived['image_base'] == caller['image_base'] and derived['image_end'] == caller['image_end'], 'callee_module_boundary_changed')
-        dependencies.append(dict(target=target, rva=entry['rva'], entry=entry,
-                                 binary_slice_sha256=derived['binary_slice_sha256'],
-                                 lifter_manifest_sha256=derived['lifter_manifest_sha256'], lift=derived['lift']))
-    return dict(caller_slice_sha256=caller['binary_slice_sha256'], callees=dependencies,
-                scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown', proof=False)
+    caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
+    selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
+    follow=request.get('recipe',{}).get('compiler_profile')=='vc8-x86-flat32-conditional-calls-v1'
+    dependencies={};chains=[]
+    for original_target,initial in selected:
+        target=original_target;entry=initial;seen=set();chain=[]
+        for depth in range(9):
+            require(target not in seen,'forwarding_cycle');seen.add(target);chain.append(target)
+            if target not in dependencies:
+                derived=lift(dict(request,rva=entry['rva'],entry=entry))
+                require(derived['image_base']==caller['image_base'] and derived['image_end']==caller['image_end'],'callee_module_boundary_changed')
+                dependencies[target]=dict(target=target,rva=entry['rva'],entry=entry,binary_slice_sha256=derived['binary_slice_sha256'],lifter_manifest_sha256=derived['lifter_manifest_sha256'],lift=derived['lift'])
+            next_target=pure_forwarding_target(dependencies[target]) if follow else None
+            if next_target is None:break
+            require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
+        chains.append(dict(original_target=original_target,chain=chain))
+    return dict(caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
+                scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown',proof=False)
 
 
 def build(request, folder, source):
