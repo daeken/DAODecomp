@@ -145,7 +145,7 @@ def lift_callees(request):
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
     terminal={}
-    if request.get('recipe',{}).get('architecture')=='x86-bits32-terminal-aware-memory-encoding-v1':
+    if request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'):
         from tools.replayable.terminal_calls import derive
         project=request['project'];terminal['runtime_terminal_evidence']=derive(Path(project['original']).read_bytes(),Path(project['inventory']).read_bytes(),{name:Path(path).read_bytes() for name,path in project['libraries'].items()})
     return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
@@ -266,7 +266,7 @@ def compare_built(request, folder, source, receipt=None):
                 source_sha256=sha(source.encode()), object_sha256=sha(obj), comparison_sha256=sha((folder / 'comparison.json').read_bytes()), build=receipt, proof=False,
                 publication='draft_only_pending_independent_machinery_review', provider_calls=0,
                 scope='fresh VC8 x86 object and pinned complete original function range; no game execution')
-    if status=='mismatch' and request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1'):
+    if status=='mismatch' and request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'):
         try:
             from tools.replayable.encoding_check import certify_report
             certificate=certify_report(report,project,request['inputs'])
@@ -275,6 +275,15 @@ def compare_built(request, folder, source, receipt=None):
             result.update(status='encoding_equivalent',match_kind='encoding_equivalent',encoding_equivalence=certificate,encoding_equivalence_sha256=sha(proof_bytes))
         except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
             result['encoding_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    if result['status']=='mismatch' and request.get('recipe',{}).get('architecture')=='x86-bits32-terminal-aware-abi-effects-v1':
+        try:
+            from tools.replayable.abi_effects_check import certify_report
+            certificate=certify_report(report,project,request['inputs'])
+            proof_bytes=json.dumps(certificate,sort_keys=True,separators=(',',':')).encode()
+            (folder/'abi-effects-diagnostic.json').write_bytes(proof_bytes)
+            result.update(abi_effects_diagnostic=certificate,abi_effects_diagnostic_sha256=sha(proof_bytes),abi_effects_acceptance_enabled=False,abi_effects_policy_blocker='pending_user_observation_scope;ordinary_exception_unwinding_not_proved')
+        except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
+            result['abi_effects_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
     return result
 
 
@@ -283,14 +292,18 @@ def verify_encoding_cache(request,folder):
     # Fresh host-only validation. Never rewrite retained reports or launch cl.
     from tools.replayable.encoding_check import parse
     import adapter as retained_adapter
-    require(request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1'),'encoding_cache_recipe')
+    require(request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'),'encoding_cache_recipe')
     result=parse((folder/'result.json').read_bytes());retained=parse((folder/'retained-check-request.json').read_bytes())
-    require(result['status'] in ('full_match','encoding_equivalent') and retained['project']==request['project'] and retained['build']['config']['rva']==request['rva'] and retained['build']['config'].get('allow_encoding_equivalence') is True,'encoding_cache_request_binding')
-    if result['status']=='encoding_equivalent':
-        raw=(folder/'encoding-equivalence.json').read_bytes()
-        require(sha(raw)==result['encoding_equivalence_sha256'] and parse(raw)==result['encoding_equivalence'],'encoding_cache_certificate_binding')
+    require(result['status'] in ('full_match','encoding_equivalent','abi_trace_equivalent') and retained['project']==request['project'] and retained['build']['config']['rva']==request['rva'] and retained['build']['config'].get('allow_encoding_equivalence') is True,'encoding_cache_request_binding')
+    field=None
+    if result['status'] in ('encoding_equivalent','abi_trace_equivalent'):
+        abi=result['status']=='abi_trace_equivalent'
+        require(not abi or request['recipe']['architecture']=='x86-bits32-terminal-aware-abi-effects-v1' and retained['build']['config'].get('allow_abi_effects_equivalence') is True,'abi_effects_cache_recipe_binding')
+        field='abi_effects_equivalence' if abi else 'encoding_equivalence'
+        raw=(folder/('abi-effects-equivalence.json' if abi else 'encoding-equivalence.json')).read_bytes()
+        require(sha(raw)==result[field+'_sha256'] and parse(raw)==result[field],'equivalent_cache_certificate_binding')
     compact,report=retained_adapter.run(retained)
-    require(compact['status']==result['status'] and (result['status']!='encoding_equivalent' or compact.get('encoding_equivalence')==result['encoding_equivalence']),'encoding_cache_fresh_certificate_disagreement')
+    require(compact['status']==result['status'] and (field is None or compact.get(field)==result[field]),'equivalent_cache_fresh_certificate_disagreement')
     return dict(status=compact['status'],fresh_comparison=True,compilation_performed=False,proof=False)
 
 

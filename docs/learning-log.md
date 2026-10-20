@@ -2050,3 +2050,33 @@ frontier advance follows from these recovery capabilities. Other identities were
 not scanned or compiled under this composition; historical835 accepted identities
 remain bound to their prior releases. CI and broad suites were not run under the
 user's representative-validation policy.
+
+### Typed receiver slots expose a real compiler scheduling difference
+
+The next development iteration lowered observed, fixed receiver word accesses
+into actual C++ members, such as `this->field_0014` and `this->field_0018`.
+These offset names describe observed access carriers, not recovered original
+field declarations. A packed VC8 layout and compile-time offset checks avoid
+adding an alignment premise. Overlapping fixed accesses, unaligned relative
+slots and dynamic indices retain the raw memory fallback; no array bound or
+allocation extent is inferred. Byte access and memcpy fallbacks remain able to
+alias the members. Receiver lineage, widths, path guards and instruction origins
+remain in the shared recovered representation.
+
+For the complete `0x1210` function, this source change reduced the compiled
+candidate from 132 to 130 bytes, against the original 131 bytes. More usefully,
+it restored the original post-call capacity-load scheduling, stack cleanup,
+comparison and size-store sequence. The remaining differing block prepares
+outgoing arguments with a reassociated modular sum and moves a register
+subtraction. The complete strict comparison still rejects this candidate.
+The initial attempt to include `stddef.h` failed because the deliberately small
+compiler environment has no include search path; that failed attempt is retained.
+The profile now emits a local VC8 compile-time offset idiom with no header input.
+
+Separately, fresh actual typed lifts support a bounded diagnostic relation for
+ordered memory events and selected boundary state, but a stricter fault-context
+query finds a counterexample. That result is diagnostic only: saved exception
+state and ordinary exception propagation/unwinding are different questions.
+Acceptance remains disabled while the observation-scope decision is pending.
+No function or game proof, new accepted match, source export, or frontier advance
+follows from this diagnostic.

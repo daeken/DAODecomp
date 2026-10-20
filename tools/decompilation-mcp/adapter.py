@@ -127,7 +127,8 @@ def run(request):
                   'inconclusive')
     strict_status=status
     certificate=None
-    if not needs_eh and status=='mismatch' and target.get('allow_encoding_equivalence') is True:
+    abi_certificate=None
+    if not needs_eh and status=='mismatch' and (target.get('allow_encoding_equivalence') is True or target['profile']=='abi_effects'):
         try:
             from tools.replayable.encoding_check import certify_report
             certificate=certify_report(report,project,inputs)
@@ -137,7 +138,15 @@ def run(request):
             # No ambiguous compiler action occurs in this host-only checker. A
             # refused optional lane preserves its fresh strict nonmatch outcome.
             report['encoding_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
-    compact = dict(schema_version=1, status=status, strict_status=strict_status, match_kind='encoding_equivalent' if certificate is not None else 'exact' if status=='full_match' else 'none', backend=report['backend'],
+    if not needs_eh and status=='mismatch' and (target.get('allow_abi_effects_equivalence') is True or target['profile']=='abi_effects'):
+        try:
+            from tools.replayable.abi_effects_check import certify_report
+            abi_certificate=certify_report(report,project,inputs)
+            report['abi_effects_diagnostic']=abi_certificate
+            report['abi_effects_policy_blocker']='pending_user_observation_scope;ordinary_exception_unwinding_not_proved'
+        except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
+            report['abi_effects_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    compact = dict(schema_version=1, status=status, strict_status=strict_status, match_kind=status if status in ('encoding_equivalent','abi_trace_equivalent') else 'exact' if status=='full_match' else 'none', backend=report['backend'],
                    requested_rva=target['rva'], module_sha256=module_hash, source_sha256=sha(source),
                    object_sha256=sha(obj), compiler_sha256=sha(compiler),
                    input_snapshot_sha256=sha(json.dumps(inputs, sort_keys=True).encode()),
@@ -149,6 +158,7 @@ def run(request):
                    scope='pinned retained compiled artifacts and supported full ranges/graphs; external semantics unmodeled',
                    compiler_provenance='retained receipt plus actual registered compiler hash; complete compiler installation closure not attested')
     if certificate is not None:compact['encoding_equivalence']=certificate
+    if abi_certificate is not None:compact.update(abi_effects_diagnostic=abi_certificate,abi_effects_acceptance_enabled=False,abi_effects_policy_blocker='pending_user_observation_scope;ordinary_exception_unwinding_not_proved')
     return compact, report
 
 

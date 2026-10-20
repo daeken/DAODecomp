@@ -59,3 +59,10 @@ TerminalCallTests = load_shared('test_replayable_terminal_calls').TerminalCallTe
 RuntimeBindingTests = load_shared('test_replayable_terminal_calls').RuntimeBindingTests
 MutableFlowTests = load_shared('test_replayable_terminal_calls').MutableFlowTests
 ReceiverLayoutTests = load_shared('test_replayable_terminal_calls').ReceiverLayoutTests
+
+EffectRelationTests = load_shared('test_replayable_effect_relation').EffectRelationTests
+EffectCfgTests = load_shared('test_replayable_effect_relation').EffectCfgTests
+EffectCertificateBoundaryTests = load_shared('test_replayable_effect_relation').EffectCertificateBoundaryTests
+AbiEffectsPipelineTests = load_shared('test_replayable_abi_effects').AbiEffectsPipelineTests
+
+TypedReceiverTests = load_shared('test_replayable_receiver_fields').TypedReceiverTests

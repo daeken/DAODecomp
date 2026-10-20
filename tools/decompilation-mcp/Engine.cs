@@ -179,6 +179,7 @@ public sealed partial class Engine
         }
         // Bind adapter/comparator implementations too; an update cannot silently reuse old work.
         foreach(var file in Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,"rapid_object"),"*.py").Append(Path.Combine(AppContext.BaseDirectory,"adapter.py")).Append(Assembly.GetExecutingAssembly().Location)) inputs[file]=Hash(File.ReadAllBytes(file));
+        if(build.Config.Profile=="abi_effects")foreach(var input in PipelineInputs(p,PipelineRecipe.AbiEffects))inputs[input.Key]=input.Value;
         job=Guid.NewGuid().ToString("N"); var request=new CheckRequest(p.Config,build,inputs,p.Revision);
         using var insert=db.CreateCommand();insert.Transaction=tx;insert.CommandText="INSERT INTO jobs(id,project,token,request,state,created) VALUES($i,$p,$t,$r,'queued',$c)";
         insert.Parameters.AddWithValue("$i",job);insert.Parameters.AddWithValue("$p",projectId);insert.Parameters.AddWithValue("$t",token);insert.Parameters.AddWithValue("$r",Json(request));insert.Parameters.AddWithValue("$c",DateTimeOffset.UtcNow.ToString("O"));insert.ExecuteNonQuery();tx.Commit();
@@ -283,7 +284,8 @@ public sealed class Snapshot
     void AddBuild(BuildConfig build,string? sha=null)
     {
         if(!Functions.Any(f=>f.Rva==build.Rva))throw new ArgumentException("Retained build identity outside inventory");
-        if(build.Profile is not ("ordinary" or "eh")) throw new ArgumentException("Unknown check profile");
+        if(build.Profile is not ("ordinary" or "eh" or "abi_effects")) throw new ArgumentException("Unknown check profile");
+        if(build.Profile=="abi_effects"&&sha==null)sha=Engine.Hash(File.ReadAllBytes(Path.Combine(Engine.Safe(Config,build.Folder),"candidate.cpp")));
         Engine.Safe(Config,build.Folder);var id=Engine.HashText(Engine.Json(new{Config.ModuleSha256,build.Folder,build.Rva,build.Profile,sha}));Builds.TryAdd(id,new BuildRef(id,build,sha));
     }
     public IEnumerable<string> InputPaths(BuildRef b)

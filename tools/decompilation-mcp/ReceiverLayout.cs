@@ -25,6 +25,16 @@ public static class ReceiverLayoutRecovery
         var slots=intervals.Select(i=>new ReceiverSlot(i.Offset,i.Size,fixedSites.Where(a=>a.FixedOffset==i.Offset&&a.WidthBits/8==i.Size).Select(a=>a.WidthBits).Distinct().Order().ToArray(),fixedSites.Where(a=>a.FixedOffset==i.Offset&&a.WidthBits/8==i.Size).Select(a=>a.Pc).Distinct().Order().ToArray(),intervals.Any(j=>j!=i&&i.Offset<j.Offset+j.Size&&j.Offset<i.Offset+i.Size),indexed)).OrderBy(s=>s.Offset).ThenBy(s=>s.ObservedBytes).ToArray();
         return new("entry-x86-GPR1; type identity unknown",sites,slots,accesses.Where(a=>a.Address==null).Select(a=>a.Effect.Pc).Distinct().Count(),slots.Select(s=>s.Offset+(uint)s.ObservedBytes).DefaultIfEmpty(0u).Max(),Limitations:["minimum span is a fixed-access observation, never an allocation extent or array bound","overlaps retain union ambiguity; indexed accesses may overlap every slot","no type merging across methods without receiver/type evidence","raw byte access views preserve unknown padding and field types"]);
     }
+    // Neutral unsigned access carriers, not recovered original declarations.
+    // Pack1 avoids adding an unproved receiver-alignment premise on x86.
+    // Dynamic byte accesses and memcpy fallbacks may alias these fields.
+    public static ReceiverSlot[] TypedWordSlots(ReceiverLayout layout)=>layout.Slots.Where(s=>!s.OverlapAmbiguous&&s.ObservedBytes==4&&s.AccessWidths.SequenceEqual(new[]{32})&&s.Offset%4==0&&s.Offset<=4092).ToArray();
+    public static string[] TypedMembers(ReceiverSlot[] slots)
+    {
+        var lines=new List<string>();uint cursor=0;
+        foreach(var s in slots){if(s.Offset>cursor)lines.Add($"    unsigned char unknown_{cursor:x4}[{s.Offset-cursor}];");lines.Add($"    unsigned int field_{s.Offset:x4};");cursor=s.Offset+4;}
+        return lines.ToArray();
+    }
     public static string[] AccessView(ReceiverLayout layout)
     {
         var slots=layout.Slots.Where(s=>!s.OverlapAmbiguous).ToArray();if(slots.Length==0)return [];var lines=new List<string>{"// Observed access-slot view; actual field types, sizes and object extent remain unknown.","struct ReceiverAccessView {"};uint cursor=0;

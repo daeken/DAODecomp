@@ -1018,3 +1018,22 @@ those contexts/cohorts, not proof of a unique original compiler or universal CU
 invariance. Preserve the unsuccessful configurations, separate library/utility
 provenance from game-build provenance, and avoid adopting unsafe object bounds or
 arbitrary source spellings just to influence an interchangeable SIB choice.
+
+The experimental `x86-bits32-terminal-aware-typed-receiver-v1` recipe adds
+`lower-vc8-packed-observed-receiver-word-fields-v1` to the terminal-aware
+composition. Its initial implementation covers mutable forward memory paths:
+fixed nonoverlapping, relatively word-aligned 32-bit receiver slots become
+neutral `unsigned int field_<offset>` members with unknown-byte gaps. Packed
+layout and compile-time offset checks are compiler-profile hypotheses; observed
+width is not an original declared type, field extent, allocation size, or array
+bound. Dynamic accesses and ambiguous slots use the existing raw fallback.
+Original memory effects and ordering remain in IR, and complete native comparison
+still determines the result. The original recipes remain available unchanged.
+
+The separate ABI-event experiment is currently nonaccepting. It retains the
+strict mismatch and reports a conditional diagnostic; queue selection and match
+counts cannot accept that result. Its ordered-memory/boundary-state obligations
+do not establish full fault CONTEXT equality or ordinary exception unwinding.
+The pending user observation-scope decision does not itself authorize excluding
+ordinary propagation/unwinding. The installed release and accepted frontier stay
+unchanged until an exact reviewed acceptance policy is actually authorized.
