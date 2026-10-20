@@ -145,7 +145,7 @@ def lift_callees(request):
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
     terminal={}
-    if request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'):
+    if request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1'):
         from tools.replayable.terminal_calls import derive
         project=request['project'];terminal['runtime_terminal_evidence']=derive(Path(project['original']).read_bytes(),Path(project['inventory']).read_bytes(),{name:Path(path).read_bytes() for name,path in project['libraries'].items()})
     return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
@@ -266,7 +266,7 @@ def compare_built(request, folder, source, receipt=None):
                 source_sha256=sha(source.encode()), object_sha256=sha(obj), comparison_sha256=sha((folder / 'comparison.json').read_bytes()), build=receipt, proof=False,
                 publication='draft_only_pending_independent_machinery_review', provider_calls=0,
                 scope='fresh VC8 x86 object and pinned complete original function range; no game execution')
-    if status=='mismatch' and request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'):
+    if status=='mismatch' and request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1'):
         try:
             from tools.replayable.encoding_check import certify_report
             certificate=certify_report(report,project,request['inputs'])
@@ -292,7 +292,7 @@ def verify_encoding_cache(request,folder):
     # Fresh host-only validation. Never rewrite retained reports or launch cl.
     from tools.replayable.encoding_check import parse
     import adapter as retained_adapter
-    require(request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1'),'encoding_cache_recipe')
+    require(request.get('recipe',{}).get('architecture') in ('x86-bits32-composed-memory-encoding-equivalence-v1','x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1'),'encoding_cache_recipe')
     result=parse((folder/'result.json').read_bytes());retained=parse((folder/'retained-check-request.json').read_bytes())
     require(result['status'] in ('full_match','encoding_equivalent','abi_trace_equivalent') and retained['project']==request['project'] and retained['build']['config']['rva']==request['rva'] and retained['build']['config'].get('allow_encoding_equivalence') is True,'encoding_cache_request_binding')
     field=None

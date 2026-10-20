@@ -1037,3 +1037,20 @@ do not establish full fault CONTEXT equality or ordinary exception unwinding.
 The pending user observation-scope decision does not itself authorize excluding
 ordinary propagation/unwinding. The installed release and accepted frontier stay
 unchanged until an exact reviewed acceptance policy is actually authorized.
+
+The opt-in `x86-bits32-terminal-aware-scalar-source-v1` recipe extends the typed
+receiver composition with
+`compact-captured-instruction-local-unsigned-scalars-v1`. This compiler-profile
+source pass uses typed definitions/uses, rather than textual substitutions. It
+inlines single-use pure 1/32/64-bit expressions only when every transitive use
+precedes any dependent register/flag overwrite and no intervening memory/control
+event occurs. Multiple uses remain captured, bounding expansion. Loads, undefined
+values, subword captures, unfamiliar operators and shifts are not selected for
+inlining. Supported low-32 unsigned cast identities simplify views without
+changing the shared recovered IR or moving effects across instructions. Original
+recipes and sources remain available. Source simplification is not match credit;
+complete native comparison and the existing strict/SIB outcome labels still apply.
+Deferred source predicates also count as uses. The zero-branch renderer can retain
+a captured TEST operand beyond its defining instruction, so the scalar plan
+explicitly keeps those captures materialized. A register write that preserves
+flags must never change the later branch's captured operand.

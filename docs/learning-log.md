@@ -2080,3 +2080,37 @@ state and ordinary exception propagation/unwinding are different questions.
 Acceptance remains disabled while the observation-scope decision is pending.
 No function or game proof, new accepted match, source export, or frontier advance
 follows from this diagnostic.
+
+### Preserve captures while making scalar source readable
+
+The typed-member candidate already retained the original left-associated
+unsigned argument sum and the subtraction's instruction provenance. The compiler
+can still reassociate modular arithmetic and move an independent subtraction
+whose intermediate flags have no later use. No missing memory observation or
+justified pointer/object-bound fact explained the remaining native difference.
+Adding an artificial side effect to force scheduling would change the recovery
+model rather than recover source evidence.
+
+A bounded source pass now compacts instruction-local unsigned scalar captures.
+It inlines only supported pure, single-use expressions, follows transitive uses,
+and keeps captures across register/flag writes, memory events or control edges.
+Loads, undefined values, unsupported operations, subword captures and multiple-use
+expressions remain materialized or refused by the existing emitter. Explicit
+low-32 views remove redundant widening/narrowing casts; no cross-instruction
+motion, alias assumption or signature inference is introduced.
+
+For `0x1210`, this reduced generated C++ from 191 to 115 lines and cast occurrences
+from 156 to 18. Three controlled native variants emitted exactly the same complete
+130-byte function body and relocations as the preceding typed-member candidate,
+against the original 131-byte body. The source is clearer, but the strict result
+remains a mismatch. The pending fault-observation policy is separate; the ABI
+diagnostic remains nonaccepting and ordinary unwinding remains unproved.
+
+Independent review rejected the first scalar pass because source rendering also
+held a deferred TEST-operand fact for a later zero-branch spelling. That implicit
+use was absent from the typed temporary-use list: inlining it as a live register
+could change the branch after a register overwrite. The correction explicitly
+retains storage for these deferred predicate captures. The original open
+counterexample and a no-overwrite positive case check this boundary; the rejected
+freeze and report remain preserved. Rendering metadata is part of capture
+liveness, even when it is not an architectural IR use.

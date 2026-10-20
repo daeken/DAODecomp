@@ -66,3 +66,5 @@ EffectCertificateBoundaryTests = load_shared('test_replayable_effect_relation').
 AbiEffectsPipelineTests = load_shared('test_replayable_abi_effects').AbiEffectsPipelineTests
 
 TypedReceiverTests = load_shared('test_replayable_receiver_fields').TypedReceiverTests
+
+ScalarSourceTests = load_shared('test_replayable_scalar_source').ScalarSourceTests
