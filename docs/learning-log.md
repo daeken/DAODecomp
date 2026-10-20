@@ -1531,3 +1531,28 @@ barrier release commit atomically; the original unknown request/result stay
 unchanged. A later compiler request must be explicit. The older approved execution
 runtime can continue its unchanged binding set, rather than transferring its
 completed matches to a new generator runtime.
+
+
+### Completed affected-corpus continuation
+
+After independent review and all-three-host CI, the exact frozen transport
+runtime recorded a fresh **nonaccepting abandonment** observation for the old
+dispatch. Its original request/result remain external-outcome-unknown. Fresh
+installed ordered controls again matched 22/22 and 11/11 bytes. The unchanged
+earlier execution runtime then checked the 169 remaining candidates explicitly;
+39 completed results were verified and retained without recompilation or credit
+transfer to the new runtime. No further uncertain outcome occurred.
+
+The complete affected set is **203 full matches and five mismatches out of 208**,
+with **zero unrun**. Rejected RVAs are `0x13cc50`, `0x4e0da6`, `0x4e893a`,
+`0x4e8bda` and `0x57b780`; neither checker accepted a prefix or changed its gates.
+All 27,555 inventory rows are accounted for: 208 compared candidates and 27,347
+outside this affected domain. Including the first control gives **204 unique
+native object matches**, a gain of 202 over the initial two. These are pinned
+compiled-object observations, not source exports or game-execution evidence.
+
+The continuation retained 169 confirmed compiler exits totaling 230.621 measured
+compiler seconds. The recovery frontier remains `0x1040`. The separate addressable
+stack-argument prototype has only offline generation evidence and was excluded
+from this reviewed transport release. Private receipts and complete rejected
+results remain under `local/replayable-transport-001/`.
