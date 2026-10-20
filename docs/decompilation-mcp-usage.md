@@ -311,3 +311,13 @@ regression results require their own compiler and comparison receipts; a scan
 grants no matching credit. See the
 [replayable methodology](replayable-decompilation.md) for the measured bootstrap
 and the distinction between implementation, reviewed installation and publication.
+
+
+The reviewed targeted regression pilot stopped safely after 39 complete matches,
+one external-outcome-unknown dispatch and 168 unrun candidates out of 208 affected
+hypotheses. Its missing compiler exit marker was not interpreted as a compile
+failure or a success. The project barrier remains active across modes/keys;
+recovery's unresolved identity remains `0x1040`. Including the ordered control
+outside the tail rule gives 40 unique current native object matches, zero new
+source exports. These are measured pinned-artifact results, not a complete corpus
+check or game-execution claim.

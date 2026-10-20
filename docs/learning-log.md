@@ -1491,3 +1491,22 @@ existing Windows 11 VC8 compiler. A wrong regenerated-source digest refused befo
 compilation. The unchanged retained adapter additionally checked each actual
 object and its ordinary/EH gate; no object check can upgrade an earlier failed
 comparison. These controls are not the affected-corpus result.
+
+
+The reviewed targeted operation was published and installed after both exact-head
+CI workflows passed on Linux, macOS and Windows. Fresh installed ordered controls
+again matched 22/22 and 11/11 bytes. The affected batch then matched **39 of 208**
+hypotheses completely before its 40th dispatch, at RVA `0x000d5890`, returned a
+Parallels transport error without a compiler exit marker. That attempt remains
+**external outcome unknown**; **168 hypotheses are unrun**. It was not retried.
+The project-wide barrier refused subsequent generation requests in both modes.
+
+Combining the 39 regression matches with the two compiling controls gives **40
+unique current native object matches**, a gain of 38 ahead identities in this
+new pipeline. Recovery still stops at `0x1040`; no source was exported and no
+historical source count was added to these results. All 27,555 scan rows are
+accounted for separately from these comparisons. The affected batch retained 39
+confirmed compiler exits; the failed dispatch does not establish whether its
+remote compiler ran. Raw evidence remains private under
+`local/replayable-regression-001/`. Reconciliation of the existing unknown attempt
+requires separate authorization and must preserve its history.
