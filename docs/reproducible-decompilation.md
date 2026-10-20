@@ -693,3 +693,24 @@ no new-runtime credit to the 204 retained earlier object matches. The final
 630-test suite (33 skips), standalone 65 tests (two skips), seven CTest checks and
 both 59-case synthetic demonstrations passed; the negative demo detected six
 mismatches. These generic tests do not establish game equivalence.
+
+
+After cumulative independent approval and exact-head CI on all three hosts, the
+frozen runtime was installed immutably. Fresh ordered checks passed at 22/22,
+11/11 and 25/25 bytes. Both added-rule candidates have now passed complete native
+object comparison: the same-binding ordered stack control was retained without
+recompilation and the other candidate used the public targeted operation with its
+expected regenerated-source hash. The 204 earlier matches were independently
+checked for unchanged input/artifact bindings and retained under their original
+runtime; no matching credit was transferred to the new recipe.
+
+There are now **206 unique pinned native object matches**, a gain of two in this
+stack-argument iteration. The selected recipe has three ordered matches and one
+ahead regression match. Its first unresolved function is `0x1070`: original-derived
+callee CFG evidence has an external or misaligned exit, so generation refused and
+no compiler was launched. The function also contains conditional caller control
+flow outside this added linear rule. No further rule was implemented. The prior
+five tail-call mismatches remain rejected. Both added-rule candidates are checked,
+with zero unrun or new uncertain compiler outcomes; seven discontiguous-callee
+analyses remain unresolved. All 27,555 rows have explicit applicability/accounting
+records. There are still zero new source exports and no game-execution claim.
