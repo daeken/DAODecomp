@@ -136,6 +136,109 @@ Extract these boundaries incrementally as operations are added. Initially the
 profile delegates to the already reviewed Python compiler/comparison machinery;
 do not port or refactor a running sweep just to satisfy a directory diagram.
 
+### Binary-backed, replayable decompilation
+
+Long-term, the durable project is the **original binary plus versioned analysis,
+knowledge and transformation history**. Generated C++ is a reproducible output
+of that project, with accepted source snapshots retained for publication and
+regression comparison. Improving an analysis pass should permit re-decompilation
+without discarding names, types or previously established corrections.
+
+The proposed SharpRetro route is:
+
+```text
+Pinned binary and inventory/range hypotheses
+  → decoded instructions and typed machine effects
+  → function CFG, cross-instruction value flow and memory effects
+  → recovered variables, calls, types and structured control flow
+  → C++ representation
+  → compiler-profile lowering/spelling choices
+  → emitted C++, historical compiler build and complete comparison
+```
+
+Preserve instruction-origin mappings and unresolved facts across every stage.
+The intermediate representation above machine effects should be shared across
+compiler profiles. Profiles contribute ABI recovery, helper/EH recognition,
+object-model interpretation and emission choices at the stages that need them.
+Compiler peculiarities cannot all be repaired in a final text writer.
+
+Start with one shared C++ representation/emitter and profile-specific passes.
+A separate writer is an option when real compiler differences justify it, while
+still sharing analysis, variable identities, transformations and source maps.
+Profile investment is reusable across projects using compatible toolchain/runtime
+settings; it is not automatically a one-time cost for an entire compiler family.
+
+The inspected SharpRetro pin `ec8344102af8b495e5de1a869188b91bc3d4d756`
+exposes per-instruction `IlBlock` effects through `XFusionCpu.X86Lifter`, with
+typed registers, memory, arithmetic, branches and explicit opaque/unimplemented
+nodes. Our [current integration](../tools/sharpretro/README.md) compares these
+trees diagnostically. It does not yet provide the structured C++ reconstruction
+described above. Control-flow recovery, cross-instruction definitions/uses,
+stack/call recovery, aliasing, C++ integer semantics and exceptions are substantive
+work between lifting and emission. Rendering a sufficiently recovered C++ tree
+can be straightforward; getting to that tree is not established by lift coverage.
+
+Ghidra remains an available discovery/draft frontend and a retained baseline.
+Add SharpRetro as a selectable generation backend for a supported subset first.
+Use the same original/function identities, compiler profiles, job system and
+comparison machinery for both. No reset of existing source or requirement to
+finish a new whole-program decompiler before further recovery.
+
+### Names and corrections survive regeneration
+
+Names, comments, type/layout hypotheses and overrides belong in a versioned
+project knowledge layer, with links to the evidence and transformation that
+introduced them. This is automatically managed project state, not a new authored
+contract or metadata file for each function.
+
+Function identities remain tied to the original module/range model. Recovered
+variable identities need more than a register or generated temporary number:
+registers and stack slots are reused. Record origin instructions, definition/use
+relationships, storage where known and the containing function, then track
+lineage as values merge or split. Types and field definitions have independent
+stable IDs; display spellings are not their identities.
+
+On regeneration, replay bindings against those origins and transformation
+lineages. Preserve a name automatically only when the binding is unambiguous.
+A new analysis that splits one variable into two, merges values or changes a
+boundary can leave an unresolved migration. Expose it in the work queue instead
+of silently attaching an old name or type to the wrong value. Analysis-local
+SSA/temp IDs and line numbers are not durable anchors.
+
+Fine-grained user/model edits can target typed IR or AST nodes through the JSON
+recipe, with expected base hashes and preconditions. Capture a source edit as a
+replayable semantic operation when the binding is understood. Otherwise retain
+it as an explicit candidate/body override with a base revision and conflict
+status. Regeneration must neither discard hand-written C++ nor pretend an
+unreplayable textual edit has been semantically rebased.
+
+Recipe steps therefore declare a phase: machine analysis, recovered IR, C++ AST
+or emission. Named dependencies and schema versions constrain their order.
+Reject a recipe that uses a recovered-variable operation before variable recovery,
+or an old node schema against a new IR. Edits to names/types invalidate the
+appropriate downstream views or builds; a new lifter need not erase unaffected
+knowledge, but it does require re-establishing affected bindings.
+
+### First SharpRetro generation experiment
+
+Take one previously inspected median-sized function with a supported instruction
+subset and retain its Ghidra/C++/object baseline. Implement the smallest reusable
+raising/emission steps needed for that shape, then compile and compare through
+the existing independent original-byte checker. Unknown instructions, calls,
+alias effects or EH remain explicit blockers; no successful placeholder output.
+
+Exercise generic instruction/IR tests and independent evidence for new semantics.
+Generating C++ and judging it with the same lifter can reproduce the same defect
+on both sides, so lifted-tree agreement is not the acceptance oracle. Record
+compile outcome, complete match outcome, diagnostics and elapsed cost separately.
+Apply the tested steps to all applicable inventory entries, report outside-example
+gains/regressions/unsupported cases, then choose the next shape.
+
+The experiment also needs a regeneration check: attach a name and type decision,
+rerun after a supported pass change, and demonstrate both preserved unambiguous
+bindings and explicit refusal of an ambiguous split/merge. This tests the durable
+workflow benefit rather than merely producing another one-off C++ file.
+
 ### MCP covers the complete workflow
 
 Every pipeline operation must be available through the same engine API used by
@@ -151,6 +254,7 @@ helpers may still run as managed subprocesses.
 | Deterministic iteration | `rewrite_plan`, `rewrite_apply`, `corpus_recheck` | Candidate revisions, complete applicability accounting and affected builds/checks |
 | Difficult source repairs | `work_claim`, `candidate_submit`, `work_update` | Independently owned work, submitted C++ and retained outcomes |
 | Fine-grained reconstruction and documentation | `rewrite_plan`, `rewrite_apply` | Resolved renames, typedefs, comments, signatures, fields and class proposals with change history |
+| Persistent knowledge and regeneration | `knowledge_edit`, `decompile_start` | Named/typed entity decisions, replayed transformations and explicit binding conflicts |
 | Compile, compare and publish | `candidate_check`, `source_export` | Compiler products, complete supported comparison results and source/provenance publication |
 | Linked/run milestones | `integration_check` | Named build/launch observations with actual covered scenarios and unresolved dependencies |
 | Follow or stop any long operation | `job_get`, `job_cancel` | Durable progress, cancellation and interrupted/unknown outcomes |
@@ -292,6 +396,7 @@ examples, not installed operations or content hashes:
     {
       "id": "orient-branches",
       "kind": "registered_rule",
+      "phase": "cpp_ast",
       "rule": "generic.ast.condition-orientation",
       "version": "example-v1",
       "parameters": { "form": "guard-first" }
@@ -299,6 +404,7 @@ examples, not installed operations or content hashes:
     {
       "id": "try-copy-spelling",
       "kind": "registered_rule",
+      "phase": "cpp_ast",
       "rule": "compiler.vc8.copy-loop-spelling",
       "version": "example-v1",
       "parameters": { "form": "indexed" }
@@ -381,6 +487,7 @@ interfaces. Protocol support is negotiated rather than assumed.
 | `project_open` | Registered project/path → project ID, revision, adapter capabilities and current jobs; does not start paid work |
 | `project_analyze` | Registered module, architecture/frontend profiles, analysis limits → discovery/index job with coverage and versioned range hypotheses |
 | `decompile_start` | Inventory snapshot, identities/group selector, registered frontend, limits → draft C++ generation job; retain failed/unsupported outcomes |
+| `knowledge_edit` | Expected revision, resolved entity IDs, names/type/comment decisions and evidence references → versioned knowledge change, affected stages and unresolved conflicts |
 | `function_query` | Project, explicit filters/order/cursor → identities and separate build/check/publication states |
 | `function_inspect` | Identity, evidence views, byte/item limits → source, callers/callees, ABI hypotheses, mismatch excerpts and artifact links |
 | `corpus_find_related` | Identity or typed pattern, index kind/scope → ranked related functions, selection reasons and coverage |
@@ -539,6 +646,7 @@ adapters, not already portable implementations of the proposed API.
 | Full object comparison and strict symbol identity | [`compare.py`](../rapid_object/compare.py), [`symbol_identity.py`](../rapid_object/symbol_identity.py) | Stable adapter result schema; retain unknowns and full-range requirements |
 | Bounded EH graph acceptance | [`eh_native.py`](../rapid_object/eh_native.py), [`eh_graph_compare.py`](../rapid_object/eh_graph_compare.py) | Advertise actual supported profiles, not generic EH support |
 | Mismatch diagnosis and paired IL | [`mismatch.py`](../rapid_object/mismatch.py), [SharpRetro adapter](../tools/sharpretro/README.md) | Queryable indexes and incremental diagnostic jobs; IL remains diagnostic |
+| SharpRetro-generated C++ | Existing typed instruction effects and paired-lift diagnostics | Shared recovered IR, variable/call/control-flow reconstruction, compiler hooks and source emission; evaluate a supported subset first |
 | AST proposals and reusable repairs | [`ast_match.py`](../rapid_object/ast_match.py) and individual reviewed rules | Uniform rule interface and Clang helper; project-wide refactors are new work |
 | Durable model work queue | [`queue.py`](../rapid_object/queue.py), [`store.py`](../rapid/store.py) | Separate general work ownership from provider-specific execution |
 | Whole-inventory rule propagation | Active `local/rule-recheck-001` work | Measure/test/review current work before treating it as an adopted adapter |
@@ -560,7 +668,9 @@ frontend, transform and compiler-profile interfaces while adapting existing
 Ghidra and VC8 operations. Expose discovery/decompilation, candidate submission
 and new compilation through jobs. Demonstrate draft C++ becoming a freshly built,
 fully compared object entirely through MCP, without private operator scripts
-between stages. Preserve nonmatches for iteration.
+between stages. Preserve nonmatches for iteration. Add the bounded SharpRetro
+generation/regeneration experiment through the same frontend interface; broader
+support follows measured results, not an up-front replacement of Ghidra.
 
 **Third slice: one fix reaches the corpus.** Adopt the reviewed recheck adapter,
 register existing generic/profile-scoped rules, and expose them as JSON recipe
@@ -612,6 +722,9 @@ game binaries or assets as part of the toolkit.
 - Recipe trials are reproducible and isolated; removing/reordering/changing a
   step invalidates downstream results. Whole-inventory reports retain losses,
   unknowns and unrun work alongside gains, and default to no promotion.
+- Re-decompilation preserves unambiguous names/types through recorded entity
+  lineage, reports ambiguous binding changes and preserves source overrides.
+  Results generated from SharpRetro are checked independently of its lifted trees.
 - A clean installation can exercise the open fixture without DAO paths, private
   binaries, proprietary compiler redistribution or a model API credential.
 

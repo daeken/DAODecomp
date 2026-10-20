@@ -266,6 +266,14 @@ unrun work. Preserve accepted source until explicit promotion. This provides a
 reproducible way to measure whether a targeted fix generalizes, without hand-editing
 functions or treating partial experiment coverage as universal success.
 
+The longer-term SharpRetro path makes the binary plus recorded analysis decisions
+and transformations the durable input, with C++ regenerated from a shared recovered
+IR and compiler-specific passes. Keep names/types attached to persistent entities
+and their origin/definition-use lineage; ambiguous changes require reconciliation.
+Current SharpRetro integration is diagnostic lifting, so structured recovery and
+source emission remain an incremental experiment alongside the Ghidra baseline.
+See [binary-backed regeneration](decompilation-mcp.md#binary-backed-replayable-decompilation).
+
 ## How to add a learning
 
 Append a concise entry to [the learning log](learning-log.md) when an experiment

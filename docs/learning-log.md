@@ -1360,3 +1360,19 @@ This update changes documentation only: no new tools, compiler attempts, provide
 calls, matches or execution claims. Existing read/check capabilities and reviewed
 in-progress recovery artifacts are unchanged. Portability remains to be measured
 against further real compiler profiles; this architecture alone does not prove it.
+
+The follow-on direction is binary-backed replayable decompilation: keep analysis
+decisions, entity names/types and transformation history as durable project state,
+and regenerate C++ from it. Inspection of the pinned SharpRetro `LiftIl/Il.cs`
+and `XFusionCpu/X86Lifter.cs` confirms typed per-instruction effects, not the
+structured C++ recovery required by this proposal. A shared recovered IR and
+compiler hooks during both reconstruction and emission are planned. Variable
+names need origin/definition-use lineage; regenerated temporary numbers cannot
+serve as persistent identities, and ambiguous rebinding must remain unresolved.
+
+The proposed first experiment uses one supported median-sized function, retains
+the existing Ghidra baseline, checks emitted C++ through the independent original
+comparison, and tests name preservation across regeneration before wider rollout.
+No SharpRetro writer, new lift semantics or regeneration mechanism was implemented
+by this design update. Independent validation remains necessary when a lifter is
+used to generate code; comparing its own output alone can hide shared defects.
