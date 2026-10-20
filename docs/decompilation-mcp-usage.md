@@ -1,17 +1,19 @@
-# Decompilation MCP: implemented first slice
+# Decompilation MCP: implemented operations
 
-The C# engine in `tools/decompilation-mcp` provides inventory/source browsing,
+The C# engine in `tools/decompilation-mcp` retains inventory/source browsing,
 deterministic related-function search, and **fresh checking of retained compiler
-artifacts** through the existing Python comparators. It makes no model calls and
-does not compile, change production queues, publish sources or grant historical
-registry credit. A full object/graph match describes pinned compiled artifacts;
+artifacts** through the existing Python comparators. The replayable branch adds
+a bounded SharpRetro-to-C++ generation and compile/check loop, described below.
+It makes no model calls, does not publish sources or grant historical registry
+credit, and keeps its frontier separate from old recovery queues.
+A full object/graph match describes pinned compiled artifacts;
 it is not a whole-game or universal C++ semantics proof.
 
 The [architecture and full-workflow roadmap](decompilation-mcp.md#two-parts-of-the-manipulation-pipeline)
 separates reusable x86/source transformations from compiler-specific profiles.
-Initial decompilation, new compilation, pattern propagation and source refactoring
-are intended to be available through MCP; they remain future capabilities, not
-tools added by this documentation update.
+Initial decompilation and new compilation now have a deliberately narrow
+supported domain. General pattern propagation, recipe trials, durable naming,
+type refactoring and source publication remain future capabilities.
 
 ## Build and launch
 
@@ -225,7 +227,61 @@ suite at that checkpoint ran 618 tests with 33 skips on macOS ARM64. Independent
 review inspected the exact implementation and receipts; Windows/Linux results
 are established separately by the `decompilation-mcp` CI workflow.
 
-Deferred: new candidate submission/compilation, cancellation, source publication,
+Deferred: arbitrary candidate submission, cancellation, source publication,
 rule propagation, AST rewriting, work leasing for model workers, richer CFG/IL
 indexes and cross-project reuse. The open fixture establishes protocol/index
 portability only. It does not demonstrate arbitrary Windows app decompilation.
+
+## Replayable linear frontier
+
+The additional tools on `codex/replayable-decompilation` use original instructions
+and typed SharpRetro effects rather than importing recovered bodies.
+
+| Tool | Arguments and behavior |
+| --- | --- |
+| `replayable_run_next` | `project_id`, `idempotency_key`, optional `recipe_json`, `compile` (default true). Submit the lowest unresolved RVA to lift, reconstruct, emit, compile and compare; set `compile: false` to stop at a draft. |
+| `replayable_inspect` | `job_id`, optional `source_limit`. Read retained stage output and generated C++. |
+| `replayable_status` | `project_id`. Inspect the current frontier and matches with current input/artifact bindings. |
+| `job_get` | Read the submitted job's durable outcome without rerunning it. |
+
+The current recipe accepts only this versioned sequence; other steps or ordering
+are rejected. This is a foundation for trials, not an arbitrary rewrite language.
+
+```json
+{
+  "schema_version": 1,
+  "architecture": "x86-bits32-linear-v1",
+  "frontend": "sharpretro-typed-v1",
+  "compiler_profile": "vc8-x86-thiscall-stores-v1",
+  "steps": ["raise-linear-effects-v1", "emit-thiscall-stores-v1"]
+}
+```
+
+Register `original`, compiler identity/flags and a project-level `replayable`
+object with absolute `lifter_config`, `vm_build_lock` and `output_root` paths.
+The lock must be the existing shared VM lock across all clients/worktrees.
+The lifter configuration provides `sharp_retro_checkout`, `adapter_dll`,
+`build_manifest` and optionally `dotnet`. Its manifest binds the revision, tracked
+source, assemblies and runtime files. Corrected dependencies require a new
+attestation; an old clean-source pin cannot authorize a patched assembly.
+
+The supported domain is a single contiguous Bits32 straight-line body with
+explicit register/constant arithmetic, supported stack effects, direct external
+member calls, constant receiver stores and a receiver return. The x86 layer
+records effects; an explicit compiler ABI profile selects argument, volatile,
+preserved and return registers. Stack addressing retains symbolic SS and wrapped
+SP. Unknown effects, arbitrary loads, indirect calls, general control flow and EH
+remain unsupported. External calls remain real unresolved declarations.
+
+An unsupported body or mismatch retains the same frontier. Active or ambiguous
+external execution requires reconciliation before retry. Idempotent reads never
+replay a compiler operation. `compile: false` produces only a draft. Current
+full matches require the full original range and the existing independent object
+comparator; source/object/report changes invalidate cached credit. Historical
+published functions are not imported as successes in this new queue.
+
+Run the standalone MCP tests after a Release build; they include the shared
+generic IR/frontier tests. Private real-binary results and current ownership live
+in `local/replayable-bootstrap-001/`. See the
+[replayable methodology](replayable-decompilation.md) for the measured bootstrap
+and the distinction between implementation, reviewed installation and publication.

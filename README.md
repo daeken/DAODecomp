@@ -6,10 +6,19 @@ whole executable is not required. Complete reccmp matches from native x86 C++
 are an automatic acceptance path; nonmatching functions remain available for
 iteration or other checking. Observable function behavior is the overall goal.
 
+**Active development: [replayable SharpRetro decompilation](docs/replayable-decompilation.md)**
+on `codex/replayable-decompilation`. We are building a binary-to-IL-to-C++ pipeline
+with reusable architecture/compiler passes and a queue in ascending RVA order.
+The previous committed workflow is preserved on `codex/ghidra-mainline`.
+Its existing source and measurements below remain historical evidence; the new
+pipeline does not inherit matching credit. Current bootstrap results are tracked
+separately, and a 100% match or runnable replacement has not been demonstrated.
+
 **[Browse the recovered native C++ and matching-function index](src/native/recovered/README.md).**
 This published source snapshot tracks the new reccmp/object workflow separately
-from the historical emulator-validated registry below. The recovery harness and
-source snapshot currently live on the `codex/rapid-recovery` branch.
+from the historical emulator-validated registry below. The previous recovery
+harness and source snapshot remain on `codex/rapid-recovery` and are inherited
+here for reference and independent checks.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful
@@ -55,7 +64,7 @@ ARM64 VM is available for translated reference experiments; native x86 hardware
 corroboration remains unavailable. Symbolic proofs and a full game executable
 loader remain planned. The synthetic example below is separate infrastructure testing.
 
-New recovery uses an [all-function object-file loop](docs/object-recovery.md).
+The preserved workflow uses an [all-function object-file loop](docs/object-recovery.md).
 DeepSeek writes C++ with inline address markers and dependency declarations;
 the historical x86 compiler builds individual COFF objects without linking.
 Missing dependency implementations therefore do not prevent compilation.

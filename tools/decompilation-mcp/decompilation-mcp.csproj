@@ -12,6 +12,7 @@
     <PackageReference Include="ModelContextProtocol" Version="[2.2.0]" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="[10.0.10]" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="[10.0.13]" />
+    <None Include="replayable_adapter.py" CopyToOutputDirectory="PreserveNewest" />
     <None Include="adapter.py" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

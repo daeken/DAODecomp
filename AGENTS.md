@@ -1,11 +1,31 @@
 # DAODecomp working rules
 
+- Active direction on `codex/replayable-decompilation`: original binary ->
+  SharpRetro typed effects -> shared recovered IR -> compiler-profile C++ ->
+  historical compiler -> independent complete comparison. Read
+  `docs/replayable-decompilation.md` and current local handoff first.
+  `codex/ghidra-mainline` preserves the previous committed workflow.
+- Progress through the pinned inventory in ascending RVA order, beginning at
+  `0x1000`. The earliest unresolved function is the frontier. No ease/size
+  filtering or silent skip; dependency analysis and whole-inventory regression
+  checks do not themselves advance the frontier.
+- Recover reusable architecture/compiler rules with explicit preconditions.
+  Do not encode target RVAs, expected output bytes or copied recovered bodies
+  as transformation logic. Fix incorrect lifter semantics at the correct layer;
+  unsupported semantics remain blockers, never ignored effects.
+- The binary, versioned knowledge and transformation history are durable inputs;
+  generated C++ is reproducible output. Names/types bind to tracked entities.
+  JSON recipes/trials must preserve prior candidates and report regressions,
+  unknowns and pending work. Introduce these operations through the C# MCP/core.
 - Goal: function-level behavioral equivalence to the pinned original build, then
   a replacement executable using original assets. A byte-identical whole game is
   not required. Complete reccmp matches are an authorized automatic acceptance
   path for native x86 C++ built with the selected historical compiler; retain
   nonmatches for later iteration or other checking. Keep this evidence distinct
   from a universal proof of C++ semantics or whole-game behavior.
+  The new pipeline targets complete matches across the inventory, but 100%
+  coverage is an aspiration, not an assumed achievable result or a whole-game
+  execution claim. Keep its counts separate from inherited published source.
 - Read README.md and docs/validation.md before changing validation or recovered code.
 - Never describe synthetic tests, guessed signatures, emulator-only results or a
   passing corpus as a proof of the game. Distinguish observation from inference.

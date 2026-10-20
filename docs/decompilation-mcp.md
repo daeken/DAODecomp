@@ -4,7 +4,9 @@ Status: design and roadmap, updated 2026-10-20. The first C# slice implements
 inventory/source browsing, related-function search and fresh comparison of
 retained compiler artifacts; see [implemented tools and setup](decompilation-mcp-usage.md).
 The remaining capabilities below are planned, not implied by installing the
-server. The existing whole-inventory rule recheck continues independently.
+server. The [replayable branch](replayable-decompilation.md) is implementing the
+next slice. The prior Ghidra workflow and its unfinished recheck remain preserved;
+they do not run automatically on this branch.
 
 The product is a local engine for turning binaries into maintainable source.
 An agent supplies judgment and difficult code; the engine supplies indexing,

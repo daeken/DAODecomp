@@ -6,6 +6,12 @@ not yet a turnkey framework for arbitrary games. Our implementation currently
 targets one pinned Windows x86 executable, and we have **not** demonstrated a
 runnable replacement for the whole game or completion within $200.
 
+**Current direction:** [replayable SharpRetro decompilation](replayable-decompilation.md)
+on `codex/replayable-decompilation`, processing the original inventory in ascending
+RVA order with reusable reconstruction/compiler passes. The Ghidra workflow and
+measurements below remain preserved on `codex/ghidra-mainline`; they are historical
+results and comparison baselines, not inherited acceptance for the new pipeline.
+
 The goal is functional recovery and a replacement using the original assets.
 Exact compiled-function matches are a useful automatic acceptance shortcut; a
 byte-identical whole executable is not required. Read the

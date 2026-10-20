@@ -1376,3 +1376,57 @@ comparison, and tests name preservation across regeneration before wider rollout
 No SharpRetro writer, new lift semantics or regeneration mechanism was implemented
 by this design update. Independent validation remains necessary when a lifter is
 used to generate code; comparing its own output alone can hide shared defects.
+
+## 2026-10-20 — New branch and a linear binary-first frontier
+
+The user selected the replayable SharpRetro approach as active development.
+The previous committed workflow is preserved as `codex/ghidra-mainline` at
+`2b95feb309ff1a6f783e7508b7f4f91f798f69f8`; a separate worktree on
+`codex/replayable-decompilation` starts from that history. Old uncommitted tooling
+and interrupted experiment records remain intact, with an additional ignored
+archive. The old 2,258 published functions are retained as historical evidence.
+
+Recovery now starts at the earliest original inventory RVA (`0x1000`) and
+advances only over consecutively accepted functions. The next entries are
+`0x1030`, `0x1040`, `0x1070` and `0x10c0`. No size/ease filter chooses the
+discovery examples. Rules still undergo applicability and regression checks
+across the entire inventory; matches ahead of the frontier are counted separately.
+
+The first function already produced a general lifter counterexample: the pinned
+Bits32 near-CALL effects model an eight-byte return-address push, while its
+surrounding PUSH/POP/RET use four-byte entries. This is an instruction-semantics
+dependency to repair with generic tests and independent evidence. It must not
+be hidden by dropping the faulty effects when generating C++. The branch/bootstrap
+decision itself adds no new matching functions or game-execution evidence.
+## 2026-10-20: First replayable original-to-object pilot
+
+The new ascending-RVA pipeline reconstructed the first inventory function,
+`0x1000`, from actual SharpRetro typed effects, generated C++, and obtained a
+complete 22/22-byte object match with the selected VC8 compiler. This used one
+actual compiler invocation in the Windows 11 ARM64 VM under x86 translation and
+zero provider calls. It did not read an old recovered body or execute the game.
+Independent review reproduced the generated source and complete comparison.
+Source publication and a runnable replacement remain separate milestones.
+
+The first function exposed real shared lifter defects. Correcting near-CALL
+widths exposed related stack-segment/return behavior; independent review then
+found 32-bit return-target truncation in 16-bit code. The final bounded repair
+passed 329 XFusion and 14 Jit tests and was pushed directly to SharpRetro main as
+`ce590d0a2f2a7e231e0529e30f2fd0d4252ca769`. Independent reference probes agreed
+57/61, with four documented Intel64-prefix differences retained rather than
+counted as passes. The older failing freezes and review remain available locally.
+
+Next in order, `0x1030` exposes an unconditional tail jump. The runner leaves it
+unresolved instead of choosing an easier function. The next rule should recover
+tail calls generically, preserving their target and effects, then let the compiler
+profile emit them. This is the intended feedback loop: each function identifies
+a missing general behavior, rather than accumulating a hand-written answer.
+
+Independent review also found an operational issue: a changed pipeline key
+could bypass an earlier unknown compiler outcome. The corrected queue checks
+unfinished operations across the entire project before selecting work, while
+keeping cache validity specific to exact inputs. Fifteen focused tests and the
+24-test MCP suite (two private-input skips) passed; the full tooling suite ran
+585 tests with 33 skips on macOS ARM64. Installing an unchanged runtime at a new
+path still changes its execution bindings and requires a fresh first-function
+check. Prior results remain historical rather than receiving migrated credit.

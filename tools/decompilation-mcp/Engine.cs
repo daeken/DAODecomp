@@ -12,12 +12,12 @@ public sealed record BuildConfig(string Name, string Folder, uint Rva, string Pr
 public sealed record ProjectConfig(string Id, string Module, string ModuleSha256, string Inventory, string[] AllowedRoots,
     string? PublishedIndex = null, string? Original = null, string? Compiler = null, string? CompilerSha256 = null,
     string[]? CompilerFlags = null, BuildConfig[]? Builds = null, string? RetainedDatabase = null,
-    string? EhPolicy = null, Dictionary<string,string>? Libraries = null);
+    string? EhPolicy = null, Dictionary<string,string>? Libraries = null, ReplayableConfig? Replayable = null);
 public sealed record BuildRef(string Id, BuildConfig Config, string? ExpectedSourceSha256 = null);
 public sealed record Identity(string Id, uint Rva, JsonElement Entry);
 public sealed record CheckRequest(ProjectConfig Project, BuildRef Build, Dictionary<string,string> Inputs, string Revision);
 
-public sealed class Engine
+public sealed partial class Engine
 {
     public static readonly JsonSerializerOptions Options = new() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower, PropertyNameCaseInsensitive = true };
     public static string Json(object? value) => JsonSerializer.Serialize(value, Options);
@@ -85,7 +85,7 @@ public sealed class Engine
         return new { schema_version=1, project_id=id, revision=p.Revision, module=p.Config.Module, module_sha256=p.Config.ModuleSha256,
             inventory_identities=p.Functions.Length, published_identities=p.Published.Count, retained_builds=p.Builds.Count, jobs=JobCounts(id),
             capabilities=new[]{"inventory_query","published_source_inspect","structural_similarity_v1","retained_object_check","durable_local_jobs"},
-            comparison="unchecked; publication index is historical evidence", compilation="unsupported", publication="read_only", proof=false };
+            comparison="unchecked; publication index is historical evidence", compilation=p.Config.Replayable==null?"unsupported":"bounded_replayable_profile", publication="read_only", proof=false };
     }
     static void Limit(int limit, int max) { if (limit < 1 || limit > max) throw new ArgumentException($"Limit must be 1..{max}"); }
     object Row(Snapshot p, Identity f) => new { function_id=f.Id, rva=$"0x{f.Rva:x8}", name=f.Entry.GetProperty("name").GetString(), body_bytes=f.Entry.GetProperty("body_bytes").GetInt32(), publication=p.Published.ContainsKey(f.Rva)?"published_historical":"unpublished", comparison="unchecked", retained_build_count=p.Builds.Values.Count(b=>b.Config.Rva==f.Rva) };
@@ -225,6 +225,7 @@ public sealed class Engine
                 using var update=db.CreateCommand();update.CommandText="UPDATE jobs SET state='running',started=$s WHERE id=$i AND state='queued'";update.Parameters.AddWithValue("$s",DateTimeOffset.UtcNow.ToString("O"));update.Parameters.AddWithValue("$i",id);if(update.ExecuteNonQuery()!=1)return;
                 using var get=db.CreateCommand();get.CommandText="SELECT request FROM jobs WHERE id=$i";get.Parameters.AddWithValue("$i",id);request=(string)get.ExecuteScalar()!;
             }
+            if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var operation) && operation.GetString()=="replayable") { await RunReplayable(id,JsonDocument.Parse(request).RootElement);return; }
             try
             {
                 var pi=new ProcessStartInfo(registry.Python){UseShellExecute=false,RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,WorkingDirectory=registry.AdapterRoot};
