@@ -463,3 +463,26 @@ the failed variants and measure compiler latency separately from analysis time.
 Use the existing fresh snapshot exporter; instruction distance, source recognition
 or a matching main alone cannot publish a function. The POSIX Clang source-generation
 workflow and the portable complete native graph checker retain distinct host limits.
+
+### Restore receiver context and observed flag widths conservatively
+
+The next sequential median experiment recovered two ordinary 109-byte functions
+with `rapid_object.copy_loop_receiver` and `rapid_object.lookup_receiver_flags`.
+Both recognize complete retained Ghidra source/AST shapes and complete original
+instruction profiles, bind the source and original ranges, and inspect complete
+callee control flow and stack cleanup before restoring explicit thiscall receiver
+arguments. A direct receiver capture or unchanged forwarding to an unknown nested
+call is evidence of context only. Any ECX, CX, CL or CH write before that evidence
+refuses. Unknown callees receive declarations, never invented implementations.
+The copy-loop destination advance uses defined unsigned 32-bit wrap. Explicit byte
+casts on shifted flags preserve the observed byte tests rather than combining them
+into wider masks. These are bounded source hypotheses, checked through real VC8
+output by the unchanged complete object comparator.
+
+`rapid_object.numeric_loop_spelling` retains a useful numeric-parser hypothesis:
+unsigned accumulation and a condition-based next-character lookup recover the
+observed register roles. Its retained 100-byte candidate still differs from the
+109-byte original in radix materialization and loop alignment. It is a nonmatch,
+not eligible for export. Preserve the failed variants and unresolved table layout;
+source recognition and shorter code cannot confer acceptance. The sequential
+experiment used fourteen compiler variants and exports only the two full matches.

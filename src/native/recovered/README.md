@@ -1,6 +1,6 @@
 # Recovered native C++
 
-**2,251 matching functions** in this published snapshot: 807 reccmp matches and 1,437 exact COFF object matches and 7 complete main/EH graph matches.
+**2,253 matching functions** in this published snapshot: 807 reccmp matches and 1,439 exact COFF object matches and 7 complete main/EH graph matches.
 
 Snapshot: 2026-10-19T21:54:26.193241+00:00. The running local queue may be further ahead.
 
@@ -164,6 +164,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x00039930` | Exact object | [00039930-22041bf4f61b92ad.cpp](units/00039930-22041bf4f61b92ad.cpp#L27) |
 | `0x0003aea0` | Exact object | [0003aea0-733cb691efe58672.cpp](units/0003aea0-733cb691efe58672.cpp#L25) |
 | `0x0003aeb0` | Exact object | [0003aeb0-99f337cd3f05c9e3.cpp](units/0003aeb0-99f337cd3f05c9e3.cpp#L25) |
+| `0x0003cb70` | Exact object | [0003cb70-713bd0b09f6cf6d1.cpp](units/0003cb70-713bd0b09f6cf6d1.cpp#L27) |
 | `0x0003cef0` | Exact object | [0003cef0-c9cee9f3e191f3d8.cpp](units/0003cef0-c9cee9f3e191f3d8.cpp#L27) |
 | `0x0003fd20` | Exact object | [0003fd20-2ab291443b25aef5.cpp](units/0003fd20-2ab291443b25aef5.cpp#L25) |
 | `0x00040880` | Exact object | [00040880-6b52963515f8250d.cpp](units/00040880-6b52963515f8250d.cpp#L27) |
@@ -288,6 +289,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x00075040` | Exact main/EH graph | [00075040-af36f42f7594e7b5.cpp](units/00075040-af36f42f7594e7b5.cpp#L37) |
 | `0x00075980` | Exact main/EH graph | [00075980-bfa14509204d86a1.cpp](units/00075980-bfa14509204d86a1.cpp#L37) |
 | `0x000780a0` | reccmp | [0006f080-89c7dd55291100b8.cpp](units/0006f080-89c7dd55291100b8.cpp#L193) |
+| `0x000783b0` | Exact object | [000783b0-5a5a43fdbe0f7f0a.cpp](units/000783b0-5a5a43fdbe0f7f0a.cpp#L28) |
 | `0x00078490` | Exact object | [00078490-2b4d112cc71a154e.cpp](units/00078490-2b4d112cc71a154e.cpp#L27) |
 | `0x000784c0` | Exact object | [000784c0-d36c6930298c0e4b.cpp](units/000784c0-d36c6930298c0e4b.cpp#L26) |
 | `0x000785e0` | reccmp | [0006f080-89c7dd55291100b8.cpp](units/0006f080-89c7dd55291100b8.cpp#L212) |

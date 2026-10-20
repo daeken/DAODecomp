@@ -5,10 +5,10 @@
   "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
   "counts": {
     "exact_eh_graph_match": 7,
-    "exact_object_match": 1437,
+    "exact_object_match": 1439,
     "reccmp_matched": 807
   },
-  "matched_functions": 2251,
+  "matched_functions": 2253,
   "translation_units": [
     {
       "id": "exact_object_match:3c0778a4da4a0ad821f7312cabd252995ac4a4fc85a629385d5f2eabbdfd0d94",
@@ -45378,6 +45378,64 @@
       },
       "all_graph_bytes": 193,
       "exporter_sha256": "9c3f3bac39621b469df5dee9f58566a4a8293156b9c03112379c54fec76a9253"
+    },
+    {
+      "id": "exact_object_match:713bd0b09f6cf6d15359e5ed46dcb184e1f01d1cbd03f55cb990cd0600ee80eb",
+      "source": "units/0003cb70-713bd0b09f6cf6d1.cpp",
+      "source_sha256": "713bd0b09f6cf6d15359e5ed46dcb184e1f01d1cbd03f55cb990cd0600ee80eb",
+      "comparison_report_sha256": "c3269273032e0869aa89f1c2e53fb832c2318af08d3617244e21450b99b65fbe",
+      "compiled_artifact_sha256": "2cc1d208f586898f22ec0d3facca91ee72717efe76df76659fab838da29f75cb",
+      "matched_rvas": [
+        "0x0003cb70"
+      ],
+      "comparator_modules": {
+        "coff.py": "31fcd4705ad7357e1d8dfd1ca63156f4d65d7d8d13df041de9c61c56596d4157",
+        "compare.py": "aa7a13edd3a72f0c76906b8764f119c43d5bdf9a1bb5867637e6e19d0da4891a"
+      },
+      "compiler_version": "14.00.50727.762 (SP.050727-7600)",
+      "compiler_sha256": "5f6489b0d211b14ae09d93d3fb58a7bce84d070287f008e06416c9baa5564219",
+      "compiler_flags": [
+        "/c",
+        "/O2",
+        "/Ob1",
+        "/Oy",
+        "/Gy",
+        "/Z7",
+        "/Zl",
+        "/GS-",
+        "/GR-",
+        "/EHsc"
+      ],
+      "provenance": "retained_free_report_recompared"
+    },
+    {
+      "id": "exact_object_match:5a5a43fdbe0f7f0aa97a002dd43e4e37a639f7ffde6dd75e20d99063fd7e836a",
+      "source": "units/000783b0-5a5a43fdbe0f7f0a.cpp",
+      "source_sha256": "5a5a43fdbe0f7f0aa97a002dd43e4e37a639f7ffde6dd75e20d99063fd7e836a",
+      "comparison_report_sha256": "610e90b99945f84af6f574c54244bbf2f6a4a459eb0269e415349fb46b25fbea",
+      "compiled_artifact_sha256": "93613a115fd498d14d08071591afb05424480a502eb0b4c1b4e0622400cafbc9",
+      "matched_rvas": [
+        "0x000783b0"
+      ],
+      "comparator_modules": {
+        "coff.py": "31fcd4705ad7357e1d8dfd1ca63156f4d65d7d8d13df041de9c61c56596d4157",
+        "compare.py": "aa7a13edd3a72f0c76906b8764f119c43d5bdf9a1bb5867637e6e19d0da4891a"
+      },
+      "compiler_version": "14.00.50727.762 (SP.050727-7600)",
+      "compiler_sha256": "5f6489b0d211b14ae09d93d3fb58a7bce84d070287f008e06416c9baa5564219",
+      "compiler_flags": [
+        "/c",
+        "/O2",
+        "/Ob1",
+        "/Oy",
+        "/Gy",
+        "/Z7",
+        "/Zl",
+        "/GS-",
+        "/GR-",
+        "/EHsc"
+      ],
+      "provenance": "retained_free_report_recompared"
     }
   ],
   "functions": [
@@ -47027,6 +47085,21 @@
       "original_bytes_sha256": "86d650cb3b53b4be3ec76f71e3e8fe0a4f2d510d733004f5eb14068093553e3b"
     },
     {
+      "rva": "0x0003cb70",
+      "status": "exact_object_match",
+      "unit": "exact_object_match:713bd0b09f6cf6d15359e5ed46dcb184e1f01d1cbd03f55cb990cd0600ee80eb",
+      "source": "units/0003cb70-713bd0b09f6cf6d1.cpp",
+      "source_sha256": "713bd0b09f6cf6d15359e5ed46dcb184e1f01d1cbd03f55cb990cd0600ee80eb",
+      "annotation_line": 27,
+      "original_ranges": [
+        {
+          "start_rva": 248688,
+          "end_rva_inclusive": 248796
+        }
+      ],
+      "original_bytes_sha256": "100600fdec00f59430ea90d67907e77837f16d10ac0fd0326c828a5aa4e71d9f"
+    },
+    {
       "rva": "0x0003cef0",
       "status": "exact_object_match",
       "unit": "exact_object_match:c9cee9f3e191f3d8065e33b578316bf088b144725d276de18f858f3088220d9b",
@@ -48608,6 +48681,21 @@
       "source": "units/0006f080-89c7dd55291100b8.cpp",
       "source_sha256": "89c7dd55291100b85727c123e73e331b972aae5d3b804259b7d2b777136d22f3",
       "annotation_line": 193
+    },
+    {
+      "rva": "0x000783b0",
+      "status": "exact_object_match",
+      "unit": "exact_object_match:5a5a43fdbe0f7f0aa97a002dd43e4e37a639f7ffde6dd75e20d99063fd7e836a",
+      "source": "units/000783b0-5a5a43fdbe0f7f0a.cpp",
+      "source_sha256": "5a5a43fdbe0f7f0aa97a002dd43e4e37a639f7ffde6dd75e20d99063fd7e836a",
+      "annotation_line": 28,
+      "original_ranges": [
+        {
+          "start_rva": 492464,
+          "end_rva_inclusive": 492572
+        }
+      ],
+      "original_bytes_sha256": "4dcc00da0f24129272f38092f47f1c3a1808f30618321a6d1da5a1f4e317f2ac"
     },
     {
       "rva": "0x00078490",

@@ -1108,5 +1108,59 @@ against the actual original, inventory, compiler and static library; extend the
 current snapshot through `tools/export_native_sources.py` and fresh trusted inputs.
 The ignored `local/median-function-001` checkpoint retains selection, all attempts,
 exact source/object/original bindings, independent review and publication receipts.
-The next sequential median candidates are `0x3cb70`, `0x44430` and `0x783b0`; their
-retained reports still require inspection before new attempts.
+That checkpoint selected `0x3cb70`, `0x44430` and `0x783b0` for the following
+sequential experiment below.
+
+### Sequential median functions: receivers, flag widths and a numeric plateau
+
+The next three 109-byte functions were investigated in order. Two complete ordinary
+object comparisons passed; the numeric parser remains unaccepted. Byte counts below
+are complete offset comparisons, not an instruction-distance acceptance rule.
+
+| RVA | Initial candidate / equal / different / missing / extra | Retained candidate / equal / different / missing / extra | Result |
+| --- | --- | --- | --- |
+| `0x3cb70` | 102 / 17 / 85 / 7 / 0 | 109 / 109 / 0 / 0 / 0 | Complete match |
+| `0x44430` | 110 / 15 / 94 / 0 / 1 | 100 / 15 / 85 / 9 / 0 | Nonmatch |
+| `0x783b0` | 88 / 10 / 78 / 21 / 0 | 109 / 109 / 0 / 0 / 0 | Complete match |
+
+`copy_loop_receiver` restores three observed thiscall receivers in a bulk-copy
+loop and spells the destination advance with unsigned 32-bit wrap. Its evidence
+includes the complete caller profile and complete callee ranges, control flow and
+return cleanup. `lookup_receiver_flags` restores three receivers and the observed
+byte-width tests after shifts by 31, 29 and 30. An unknown nested call remains
+unknown; forwarding an unchanged receiver establishes calling context only.
+Both rules require the complete retained body, target-aware AST, pinned identities
+and original/source/range bindings. They emit C++ calls, with no supplied unknown
+callee implementations. Review caught partial ECX-register writes being overlooked
+by the context evidence check; writes to ECX, CX, CL or CH now conservatively refuse.
+
+`numeric_loop_spelling` widens the lookup digit and accumulator to unsigned 32-bit
+values and moves the next-character lookup into the loop condition. This improves
+correspondence of the pointer and radix registers but does not pass the full
+comparison. VC8 derives radix ten with `lea esi,[edi+9]`, where the original loads
+ten directly; the shorter candidate also lacks the original seven-byte alignment
+instruction. Initialization order, a guarded initialization and a disabled global
+optimizer were tested and retained as failed attempts. The lookup table's complete
+layout and negative-index semantics remain unknown. No source was published for
+this function, and its smaller candidate is not evidence of equivalence.
+
+Fourteen actual VC8 14.00.50727.762 variants took 21.093 seconds in compiler receipts
+(3, 8 and 3 variants respectively), on Windows 11 ARM64 through x86 translation,
+controlled from macOS ARM64. The generic sources regenerate byte-identically from
+the retained inputs. All 218 single-byte mutations of the two actual matched main
+bodies refused under the unchanged comparator. No original execution or direct
+paid provider calls occurred; author and independent-review assignments were
+separately accounted Codex work. The ignored `local/median-function-002` checkpoint
+preserves every attempt, the numeric blocker, source lineage and review history.
+These function-level compiler comparisons do not establish a replacement game.
+
+Independent review approved the corrected six-file freeze after all 514 project
+tests (33 skips), three unchanged regenerations, 218 real-byte mutation refusals,
+forged-report and partial-register controls, eight old object matches and 585 prior
+EH graph bytes. The fresh export preserves all 2,251 previous entries, units and
+source bytes and adds only the two complete matches, for 2,253 total. CMake and
+CTest passed all seven checks on macOS ARM64 with the configured environment; the
+synthetic positive control had 59 passes and the negative control had 53 passes
+and six expected mismatches. These are synthetic results, not game execution.
+The next retained sequential candidates are `0x78420`, `0x799e0` and `0x91960`;
+their newest source/compiler evidence must be inspected before any new attempts.
