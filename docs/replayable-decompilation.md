@@ -22,9 +22,11 @@ already been resolved, or that matching functions establish a runnable game.
    the frontier, and a small relevant set of previously matching controls.
 6. On a complete match, continue to the next consecutive identity within the
    current bounded implementation batch. Keep development results provisional.
-7. At each stable rule version, recheck applicability across the entire inventory
-   and build/recompare affected distinct outputs. Run this in the background when
-   possible; preserve exact valid caches, failures and unrun work.
+7. Check a representative sample, initially at most 16 identities, rather than
+   scanning or recompiling the whole inventory. Include the frontier, relevant
+   previously matching domains, changed-rule boundaries and known failures.
+   Record the selected identities and exact inputs in existing job records;
+   preserve valid caches, failures and unrun work.
 
 The user requested this tighter cadence on 2026-10-20. A small rule or successful
 function does not require a new author assignment, a full test suite, independent
@@ -32,6 +34,15 @@ review, a release or an installation. An author can own several consecutive
 frontiers in one bounded batch. Regressions in previously matching controls
 require investigation; an unsupported next identity remains the development
 frontier and must not be skipped.
+
+The user's later instruction on the same date also pauses CI and routine full
+sweeps. Choose the sample deterministically from existing evidence, covering
+straight-line code, tail calls, stack arguments, conditionals and EH where relevant
+to the change. For transport changes, the existing 16-source ordinary/EH pilot is
+a useful starting sample. This is coverage across known cases, not a statistical
+estimate of the entire inventory. Add cases when a concrete failure exposes a
+gap; run broader scans or suites only when needed to resolve that finding or when
+the user requests them. There is no automatic full-sweep release gate.
 
 The development frontier records consecutive complete comparisons under an
 experimental pipeline version. The released frontier and reviewed match totals
@@ -43,15 +54,24 @@ are reported explicitly, using existing job results and the compact handoff.
 
 At a coherent capability milestone or the end of a bounded implementation batch:
 
-1. Finish affected regression checks and record their deltas.
-2. Run the required full repository, standalone MCP and applicable harness/demo
-   checks once for the cumulative changes.
+1. Finish the representative regression sample and record its deltas and coverage.
+   Outside-sample identities remain unverified under changed rules. Preserve older
+   observations under their original bindings without transferring match credit.
+2. Build changed components and run focused generic boundary/negative tests.
+   Run harness demos when the harness changes. Full repository/standalone suites,
+   CTest and inventory sweeps are available on demand, not routine release gates.
 3. Obtain one independent review of the new transformation, lift, export or
    acceptance machinery, with attention to any changed comparison or binding
    rules. Fix concrete findings and test the affected delta.
 4. Publish code, methodology and results available so far in one checkpoint;
-   verify exact-head CI, then install the reviewed immutable release and run a
-   small installed smoke check. Reuse unchanged evidence under exact bindings.
+   install the reviewed immutable release and run a small installed smoke check,
+   preserving rollback. CI is disabled and is not a publication or installation
+   gate. Reuse unchanged evidence under exact bindings.
+
+GitHub workflows `validation-infrastructure` and `decompilation-mcp` are disabled
+using their reversible repository settings; their workflow files are preserved.
+Do not enable or dispatch them until the user asks to restore CI. Restore with
+`gh workflow enable ci.yml` and `gh workflow enable decompilation-mcp.yml`.
 
 Do not start another documentation-only release/CI/install cycle merely to
 describe completion of this checkpoint. Save final receipts in the local handoff
@@ -173,9 +193,9 @@ Account model assignments in the existing global ledger and preserve paid budget
 Reuse the actual shared VM build lock across worktrees. Compiler execution in
 Windows 11 ARM64 under x86 translation is not native x86 hardware evidence.
 
-Use focused checks during development and run the required broader checks at
-combined checkpoints. Retain exact reviewed dependencies, push tested checkpoints
-and verify their actual CI results. Update the installed MCP only from
+Use focused tests and representative complete comparisons during development and
+combined checkpoints. Retain exact reviewed dependencies and push tested changes;
+record CI as disabled, not passed. Update the installed MCP only from
 tested/reviewed releases, keeping its old installation recoverable.
 Publish useful generated source without binaries, compiler files, assets or
 private captures. Keep the learning log and reproducible methodology current.

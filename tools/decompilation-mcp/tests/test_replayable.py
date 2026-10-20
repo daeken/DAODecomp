@@ -36,3 +36,7 @@ EhDependencyTests = load_shared('test_replayable_flow_eh').EhDependencyTests
 TailAdapterTests = load_shared('test_replayable_tail_adapters').TailAdapterTests
 TailAdapterDependencyTests = load_shared('test_replayable_tail_adapters').TailAdapterDependencyTests
 TailAdapterIntegrationTests = load_shared('test_replayable_tail_adapters').TailAdapterIntegrationTests
+
+BatchPipelineTests = load_shared('test_replayable_batch_pipeline').BatchPipelineTests
+BatchDispatchTests = load_shared('test_replayable_batch_pipeline').BatchDispatchTests
+GuestBatchTests = load_shared('test_replayable_guest_batch').GuestBatchTests

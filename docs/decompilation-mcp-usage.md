@@ -242,6 +242,7 @@ and typed SharpRetro effects rather than importing recovered bodies.
 | --- | --- |
 | `replayable_run_next` | `project_id`, `idempotency_key`, optional `recipe_json`, `compile` (default true). Submit the lowest unresolved RVA to lift, reconstruct, emit, compile and compare; set `compile: false` to stop at a draft. |
 | `replayable_regression_check` | `project_id`, opaque inventory `function_id`, `idempotency_key`, optional lowercase `expected_source_sha256`, `recipe_json`, `compile` (default true). Use the same generation/build/check worker for an explicit regression identity. A supplied source hash must match regenerated C++ before any compilation. |
+| `replayable_regression_batch` | `project_id`, ordered unique `function_ids` (1–16 inventory identities), `idempotency_key`, optional `recipe_json` and `expected_sources_json` (identity→lowercase generated-source SHA-256). Claim one durable regression group and serial compiler envelope; sources are regenerated from pinned original inputs. |
 | `replayable_abandon_unknown` | `project_id`, `unknown_job_id`, `idempotency_key`. Submit a durable nonaccepting abandonment of one completed missing-exit-marker dispatch. It never retries or accepts that attempt. Only the registered synchronous transport with absent launch input/workspace and quiescent host is supported. |
 | `replayable_inspect` | `job_id`, optional `source_limit`. Read retained stage output and generated C++. |
 | `replayable_status` | `project_id`. Inspect the current frontier and matches with current input/artifact bindings. |
@@ -440,3 +441,32 @@ retained. This profile is not yet installed. It uses the same durable operations
 original-derived dependency binding and complete comparator. Calls to effectful
 tail adapters retain the original target and unknown effects; normal-return
 cleanup evidence is not a recovered input-arity or success contract.
+
+### Durable grouped compiler transport
+
+`replayable_regression_batch` shares the existing generator, global project barrier,
+VM lock, per-function jobs and complete ordinary/EH comparison gates. It compiles
+up to 16 independently generated sources in one guest dispatch. It accepts inventory
+identities and optional expected generated-source hashes, never arbitrary C++.
+The ascending recovery selector remains separate; ahead-of-frontier regression
+matches do not resolve an earlier unsupported function.
+
+The parent and member claims persist before dispatch. A complete bound envelope
+and explicit per-item compiler exits are required before comparison. A known
+compiler failure remains a failure; a copied object alone cannot pass. Missing,
+partial or uncertain dispatch preserves unfinished members as unknown barriers
+across restart and runtime changes. There is no automatic retry or new group
+reconciliation shortcut. Reusing the same idempotency key retrieves the original
+request; changing its ordered identities, source expectations or input bindings
+is rejected.
+
+The development representative sample used eight identities: six previous ordinary
+and EH controls matched completely, `0x1150` retained its generation refusal, and
+`0x476650` retained its mismatch. Seven compiles used one dispatch: 13.211 seconds
+through generation and both comparison gates, 2.418 seconds of transport dispatch,
+and 0.483 seconds of guest compiler time. This is a small measured sample, not a
+whole-inventory validation or a game-execution claim. Historical matches retain
+their original bindings; outputs outside the sample are unverified under the
+changed transport/runtime binding. CI is disabled by explicit user instruction;
+focused tests, a changed-component build and this representative sample support
+the cumulative independent machinery review and immutable release checkpoint.

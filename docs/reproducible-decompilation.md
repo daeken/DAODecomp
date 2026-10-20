@@ -12,6 +12,14 @@ RVA order with reusable reconstruction/compiler passes. The Ghidra workflow and
 measurements below remain preserved on `codex/ghidra-mainline`; they are historical
 results and comparison baselines, not inherited acceptance for the new pipeline.
 
+During this early phase, development uses focused tests and a representative
+sample initially capped at 16 functions, with complete comparisons for each
+selected function. CI is temporarily disabled; full suites and inventory sweeps
+are on demand rather than release gates. Historical broader measurements below
+remain valid for their recorded inputs. Sample results do not establish coverage
+of the rest of the inventory. See the current
+[iteration and checkpoint policy](replayable-decompilation.md#the-development-loop).
+
 The goal is functional recovery and a replacement using the original assets.
 Exact compiled-function matches are a useful automatic acceptance shortcut; a
 byte-identical whole executable is not required. Read the

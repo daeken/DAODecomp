@@ -197,11 +197,11 @@ public sealed partial class Engine
         if(!Guid.TryParseExact(id,"N",out _)) throw new ArgumentException("Invalid job id");
         using var db=Db();using var cmd=db.CreateCommand();cmd.CommandText="SELECT project,state,created,started,finished,result FROM jobs WHERE id=$i";cmd.Parameters.AddWithValue("$i",id);
         using var reader=cmd.ExecuteReader();if(!reader.Read()) throw new ArgumentException("Unknown job");
-        string status=reader.GetString(1);string? started=reader.IsDBNull(3)?null:reader.GetString(3);
+        string status=reader.GetString(1);EnsureTerminalBatchMembers(id,status);string? started=reader.IsDBNull(3)?null:reader.GetString(3);
         // A running job with no lock holder is a crashed attempt. Never replay it.
         if(status=="running")
         {
-            try { using var probe=new FileStream(Path.Combine(state,id+".lock"),FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None); Finish(id,"interrupted_unknown",new{status="inconclusive",reason="worker_interrupted; external outcome unknown",proof=false});return JobGet(id); }
+            try { using var probe=new FileStream(Path.Combine(state,id+".lock"),FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None); if(!InterruptReplayableBatch(id,"group_worker_interrupted; external outcome unknown"))Finish(id,"interrupted_unknown",new{status="inconclusive",reason="worker_interrupted; external outcome unknown",proof=false});return JobGet(id); }
             catch(IOException) { }
         }
         if(status=="queued" && DateTimeOffset.UtcNow-DateTimeOffset.Parse(reader.GetString(2))>TimeSpan.FromSeconds(5)) StartWorker(id);
@@ -225,6 +225,7 @@ public sealed partial class Engine
                 using var update=db.CreateCommand();update.CommandText="UPDATE jobs SET state='running',started=$s WHERE id=$i AND state='queued'";update.Parameters.AddWithValue("$s",DateTimeOffset.UtcNow.ToString("O"));update.Parameters.AddWithValue("$i",id);if(update.ExecuteNonQuery()!=1)return;
                 using var get=db.CreateCommand();get.CommandText="SELECT request FROM jobs WHERE id=$i";get.Parameters.AddWithValue("$i",id);request=(string)get.ExecuteScalar()!;
             }
+            if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var batchOperation)&&batchOperation.GetString()=="replayable_batch"){await RunReplayableBatch(id,JsonDocument.Parse(request).RootElement);return;}
             if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var recoveryOperation)&&recoveryOperation.GetString()=="replayable_abandon_unknown"){await RunReplayableAbandonUnknown(id,JsonDocument.Parse(request).RootElement);return;}
             if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var operation) && operation.GetString()=="replayable") { await RunReplayable(id,JsonDocument.Parse(request).RootElement);return; }
             try

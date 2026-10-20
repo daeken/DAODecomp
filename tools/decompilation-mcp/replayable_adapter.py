@@ -200,6 +200,20 @@ def build(request, folder, source):
             receipt=compile_eh(source_path,build_folder,project['compiler_flags'],json.loads(Path(project['replayable']['transport_config']).read_text()))
         else:
             receipt = compile_object(source_path, build_folder)
+    return compare_built(request, folder, source, receipt)
+
+
+def compare_built(request, folder, source, receipt=None):
+    from rapid_object.build import symbol_bindings
+    from rapid_object.compare import PE, compare_bytes
+    from rapid_object.symbol_identity import source_identity
+    from rapid_object.coff import Coff
+    project=request['project'];build_folder=folder/'build'
+    require((folder/'candidate.cpp').read_text()==source,'generated_source_changed')
+    original=Path(project['original']).read_bytes();inventory=json.loads(Path(project['inventory']).read_text())
+    require(sha(original)==project['module_sha256']==inventory['module_sha256'],'original_inventory_binding')
+    if receipt is None:receipt=json.loads((build_folder/'run.json').read_text())
+    if 'batch' in receipt:verify_batch_build(request,folder,receipt)
     if not (build_folder / 'build-exit.txt').is_file():
         return dict(status='external_outcome_unknown', blocker='compiler_exit_marker_missing_no_automatic_retry', build=receipt, proof=False)
     compile_exit = int((build_folder / 'build-exit.txt').read_text(encoding='utf-8-sig').strip())
@@ -250,6 +264,70 @@ def build(request, folder, source):
                 scope='fresh VC8 x86 object and pinned complete original function range; no game execution')
 
 
+def batch_build(request, folder, members):
+    """Transport only. Durable C# claims/decision and both comparison gates remain external."""
+    import shutil
+    from tools.replayable import guest_batch as transport
+    from rapid_native.pipeline import vm
+    project=request['project'];group=request['group_id']
+    require(re.fullmatch('[0-9a-f]{32}',group) is not None and folder.name==group,'batch_group_identity')
+    decision=transport.read_json(folder/'dispatch-decision.json')
+    require(decision['group_id']==group and decision['members']==members,'batch_dispatch_decision_changed')
+    require(1<=len(members)<=transport.MAX_ITEMS,'batch_size')
+    profile=json.loads(Path(project['replayable']['transport_config']).read_text())
+    profile['shared_vm_lock']=project['replayable']['vm_build_lock']
+    for path in (Path(transport.__file__),Path(profile['vm_helper'])):
+        require(request['inputs'].get(str(path))==sha(path.read_bytes()),'batch_helper_unbound')
+    require(profile['vm_helper_sha256']==sha(Path(profile['vm_helper']).read_bytes()),'batch_vm_helper_changed')
+    roots={m['job_id']:m for m in request['members']}
+    require(len(roots)==len(request['members']),'batch_duplicate_root_identity')
+    items=[]
+    for member in members:
+        child=member['request'];child_folder=Path(member['folder']);identity=child['job_id']
+        require(re.fullmatch('[0-9a-f]{32}',identity) is not None and child_folder==Path(project['replayable']['output_root'])/identity,'batch_member_folder')
+        require(child['group_parent']==group and child['project']==project and child['inputs']==request['inputs'] and child['recipe']==request['recipe'] and child['pipeline_key']==request['pipeline_key'],'batch_member_binding')
+        root=roots.get(identity);require(root is not None and root['rva']==child['rva'] and root.get('expected_source_sha256')==child.get('expected_source_sha256') and root['function_id']==sha((project['module_sha256']+':'+str(child['rva'])).encode()),'batch_member_original_identity_changed')
+        require(member['source_sha256']==sha((child_folder/'candidate.cpp').read_bytes()),'batch_member_source_changed')
+        items.append(transport.Item('job-'+identity,child_folder/'candidate.cpp',member['source_sha256'],tuple(project['compiler_flags'])))
+    lock_path=Path(profile['shared_vm_lock']);require(lock_path.is_file(),'shared_vm_lock_missing')
+    with lock_path.open('r+') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX)
+        for path,digest in request['inputs'].items():require(sha(Path(path).read_bytes())==digest,'batch_input_changed_before_dispatch')
+        prepared=transport.prepare(items,folder/'batch',profile,project['compiler_sha256'])
+        outcome=transport.execute(prepared,lock_fd=lock.fileno(),authorization=group,run_vm=vm,timeout=300)
+        compiler=transport.read_json(prepared.output/'compiler.json');mapped=[]
+        require([x['id'] for x in outcome['items']]==[x.id for x in items],'batch_member_order_changed')
+        for member,item,result in zip(members,items,outcome['items']):
+            child_folder=Path(member['folder']);build_folder=child_folder/'build';build_folder.mkdir(exist_ok=False)
+            returned=Path(result['folder']);raw_exit=transport.read_json(returned/'exit.json')
+            for name in ('candidate.cpp','candidate.obj','candidate.asm','build.log','start.json','exit.json'):
+                if (returned/name).is_file():shutil.copy2(returned/name,build_folder/name)
+            (build_folder/'compiler.json').write_text(json.dumps(compiler,sort_keys=True))
+            # This compatibility marker comes only from an explicitly confirmed item exit.
+            (build_folder/'build-exit.txt').write_text(str(result['exit_code'])+'\n')
+            batch=dict(group_id=group,item_id=item.id,nonce=prepared.nonce,manifest_sha256=prepared.manifest_sha256,envelope_sha256=sha((prepared.output/'completed.json').read_bytes()),dispatch_sha256=sha((prepared.output/'dispatch-start.json').read_bytes()),item_exit_sha256=sha((returned/'exit.json').read_bytes()),transport_exit_code=outcome['transport_exit_code'])
+            receipt=dict(schema_version=1,source_sha256=item.source_sha256,module_sha256=project['module_sha256'],object_sha256=raw_exit['object_sha256'],compiler=compiler,flags=list(item.flags),linked=False,original_executed=False,vm=prepared.vm_name,vm_workspace=prepared.guest+'\\'+item.id,elapsed_seconds=raw_exit['cl_seconds'],timing_scope='confirmed guest serial compiler time; batch dispatch measured separately',exit_code=result['exit_code'],batch=batch)
+            (build_folder/'run.json').write_text(json.dumps(receipt,sort_keys=True));mapped.append(dict(job_id=member['request']['job_id'],receipt=receipt))
+    return dict(status='batch_completed',members=mapped,host_dispatch_seconds=outcome['host_dispatch_seconds'],envelope_sha256=sha((prepared.output/'completed.json').read_bytes()),batch_manifest_sha256=prepared.manifest_sha256,proof=False)
+
+
+def verify_batch_build(request,folder,receipt):
+    from tools.replayable import guest_batch as transport
+    b=receipt['batch'];group=request['group_parent'];identity=request['job_id'];project=request['project']
+    require(re.fullmatch('[0-9a-f]{32}',group) is not None and group==b['group_id'] and b['item_id']=='job-'+identity,'batch_member_identity')
+    output=Path(project['replayable']['output_root'])/group/'batch';m=transport.read_json(output/'manifest.json');profile=json.loads(Path(project['replayable']['transport_config']).read_text())
+    require(sha((output/'manifest.json').read_bytes())==b['manifest_sha256'] and sha((output/'completed.json').read_bytes())==b['envelope_sha256'] and sha((output/'dispatch-start.json').read_bytes())==b['dispatch_sha256'],'batch_provenance_changed')
+    start=transport.read_json(output/'dispatch-start.json');require(start['nonce']==b['nonce'] and start['authorization']==group,'batch_dispatch_binding')
+    prepared=transport.PreparedBatch(output,Path(profile['host_transfer_root'])/('coff-batch-'+b['nonce']),b['manifest_sha256'],b['nonce'],m['guest'],m['shared'],m['vm_name'],Path(project['replayable']['vm_build_lock']))
+    validated=transport.collect(prepared,b['transport_exit_code']);matched=[x for x in validated['items'] if x['id']==b['item_id']];require(len(matched)==1,'batch_member_missing')
+    item=matched[0];raw=transport.read_json(Path(item['folder'])/'exit.json');build=folder/'build'
+    require(sha((Path(item['folder'])/'exit.json').read_bytes())==b['item_exit_sha256'] and (Path(item['folder'])/'exit.json').read_bytes()==(build/'exit.json').read_bytes(),'batch_item_exit_changed')
+    require(raw['source_sha256']==receipt['source_sha256']==sha((folder/'candidate.cpp').read_bytes()) and raw['flags']==receipt['flags']==project['compiler_flags'] and raw['compiler_sha256']==receipt['compiler']['sha256']==project['compiler_sha256'],'batch_build_binding')
+    require(raw['exit_code']==receipt['exit_code'] and raw['object_sha256']==receipt['object_sha256'] and (build/'build-exit.txt').read_text().strip()==str(raw['exit_code']),'batch_build_exit_binding')
+    require(receipt['compiler']==transport.read_json(output/'compiler.json') and receipt['elapsed_seconds']==raw['cl_seconds'] and receipt['vm']==m['vm_name'] and receipt['vm_workspace']==m['guest']+'\\'+b['item_id'],'batch_compiler_timing_workspace_binding')
+    if item['object'] is not None:require(Path(item['object']).read_bytes()==(build/'candidate.obj').read_bytes(),'batch_build_object_changed')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--adapter-root', required=True)
@@ -260,12 +338,12 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build'), 'unsupported_pipeline_action')
-        result = lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build'), 'unsupported_pipeline_action')
+        result = batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:
-        unknown = data['action'] == 'build' and not (Path(data['folder']) / 'build/build-exit.txt').is_file()
+        unknown = (data['action']=='build_batch' and (Path(data['folder'])/'batch/dispatch-start.json').exists()) or (data['action'] == 'build' and not (Path(data['folder']) / 'build/build-exit.txt').is_file())
         result = dict(status='external_outcome_unknown' if unknown else 'inconclusive', error=type(exc).__name__ + ':' + str(exc), proof=False)
     print(json.dumps(result))
 

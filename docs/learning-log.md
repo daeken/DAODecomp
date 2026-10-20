@@ -1804,3 +1804,35 @@ controls and added candidates, 53 compiler attempts have confirmed outcomes and
 four uncertain attempts remain preserved. Each safe continuation used the existing
 nonaccepting abandonment operation with fresh bound evidence. No queue, comparator
 or uncertainty policy changed.
+
+### Early iteration: representative validation and CI paused
+
+On 2026-10-20 the user removed CI and routine full-corpus validation from the
+early development loop. Both GitHub workflows, `validation-infrastructure` and
+`decompilation-mcp`, are disabled through reversible repository settings; their
+definitions remain checked in. The preceding checkpoint had already completed
+CI, so no live run needed cancellation. Subsequent checkpoints must report CI as
+disabled, not passed.
+
+Routine work now builds changed components, runs focused generic tests and checks
+at most 16 representative real functions initially: the frontier, relevant prior
+matching domains, changed-rule boundaries and known failures. Each selected
+function still receives complete range, relocation and required EH comparison.
+The existing ordinary/EH transport pilot supplies a ready sample for batching
+changes. A passing sample makes no claim about untested identities; older results
+retain their original bindings and new match credit requires actual comparisons.
+Broader scans and suites remain available for a concrete diagnostic need or user
+request. Independent cumulative machinery review and immutable rollback remain,
+without a CI wait or an automatic whole-inventory release gate.
+
+
+The durable guest-batch integration keeps the C# queue authoritative and amortizes
+only compiler transport. An eight-identity development sample generated six
+unchanged ordinary/EH controls, retained the `0x1150` refusal and retained the
+`0x476650` mismatch. Its seven serial compiles took one dispatch (2.418 seconds),
+with 13.211 seconds through source generation and both unchanged comparison gates.
+No unknown or retry occurred. This supports the transport mechanism on that sample;
+it adds no distinct recovered identity and extrapolates no credit to other inputs.
+Partial receipts and restarts are exercised by open failure fixtures. Unknown group
+outcomes remain barriers; the existing single-job reconciliation is not silently
+reused for the new envelope protocol.
