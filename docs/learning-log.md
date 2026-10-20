@@ -986,3 +986,51 @@ implementation was invented or downloaded. The constructor generator's existing
 link-safety limitations remain unchanged. Private bindings, old NEEDS_FIX review,
 replacement freeze, independent approval and replay reports remain under
 `local/eh-graph-comparison-003/`.
+
+### Unique constructor wrappers and complete native EH matches
+
+A separately accounted linkage experiment replaced repeated global constructor
+wrapper types and global allocation/deallocation overrides with deterministic
+RVA-named types and class-specific forwarding. Its two generic and four new real
+VC8-SP1 `/c /GS /EHsc` invocations all compiled, including one translation unit
+containing the exact four candidate bodies. COFF retained four distinct class
+delete helpers and no global new/delete definitions. The original allocation
+size, actual RET0/RET4 arguments, allocation-null branch, vptr write, unconditional
+exception cleanup and absence of normal-path cleanup remain reflected in the
+compiled bytes. No link or game execution was performed. The four-byte nominal
+class remains a source hypothesis. The old class-new transport-255 result and
+all earlier failed spellings remain immutable.
+
+Read-only discovery in the already-retained SDK archive found actual static CRT
+COFF definitions. Unique original-span and shared relocation constraints identify
+the roots and immediate support targets, followed by complete root byte comparisons.
+This establishes bounded artifact identities, not original compiler provenance or
+transitive runtime semantics. A new complete main/EH backend and source-export
+bridge were reviewed together with the constructor generator by an independent
+reviewer who authored neither implementation. The checker resolves every byte and
+relocation across the full main, checked handler, FuncInfo, unwind map, action
+and delete helper. Public diagnostics remain nonaccepting and the ordinary
+comparator remains unchanged.
+
+The integration consumed no new compiler or provider calls. Replaying 14 retained
+objects preserved six original-entry forwarder nonmatches (four different helper
+relocation bytes each) and one placement object's two inconclusive larger-action
+bodies. Seven positive objects include duplicate observations: only **four unique
+class-specific function identities** gain source credit. Their complete graphs
+contain 179 bytes for each of two RET0 cases and 184 bytes for each of two RET4
+cases, **726 bytes total**. Eight cached old exact controls remain exact. Fresh
+export rechecks all inputs, rejects stale/forged/partial summaries and extends
+**2,244 to 2,248** published functions while preserving every prior entry, unit
+and source byte. Re-importing the combined object adds zero duplicate credit;
+a combined-only preview has four functions and one translation unit. SDK runtime
+objects and shared helpers add no recovered-function count.
+
+Before adoption, the author and independent reviewer each passed 428 tests
+(357 existing plus 71 new, 33 skips); 276 rapid-object tests also passed locally
+on macOS ARM64. The earlier compiler runs used VC8-SP1 14.00.50727.762 under
+Windows 11 ARM64 translation. Final adopted-code and exact-head CI receipts are
+retained separately in ignored `local/eh-source-integration-001/`. Public metadata
+contains artifact/provenance hashes, versions and graph measurements; raw original
+and library bytes remain local. The historical 94-function emulator registry,
+fixed 6,487 residual cohort and six new plus nine older transport unknowns are
+unchanged. No larger constructor batch is launched by this checkpoint.

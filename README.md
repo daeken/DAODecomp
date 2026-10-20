@@ -21,6 +21,9 @@ and the $200 completion target have not yet been demonstrated.
 compiler differences; [paired SharpRetro IL diagnostics](tools/sharpretro/README.md)
 compare lifted original/candidate instructions. Both guide repairs without
 changing source acceptance.
+[Complete native EH graph matching](docs/reproducible-decompilation.md#compare-complete-native-main-and-exception-graphs)
+provides a separate bounded source-acceptance path for supported compiler-generated
+exception dependencies, with fresh runtime/artifact checks before export.
 
 <!-- progress:start -->
 ## Progress

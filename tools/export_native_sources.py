@@ -206,7 +206,7 @@ def retained_free_match(row, original):
     return function, unit, source
 
 
-def extend_snapshot(index, files, reports, original_path):
+def extend_snapshot(index, files, reports, original_path, *, eh_inputs=None):
     """Keep the existing snapshot first; deterministically add verified identities.
 
     Every reported match is checked, including duplicates. Rejected rows are
@@ -225,12 +225,17 @@ def extend_snapshot(index, files, reports, original_path):
         for row in read_json(path)["records"]:
             audit["rows"] += 1
             status = row.get("measurement", {}).get("status", row.get("matching_status") or row.get("conversion_status") or row.get("repair_status"))
-            if status != "exact_object_match":
+            if status not in ("exact_object_match", "exact_eh_graph_match"):
                 skipped[status or "missing_status"] += 1
                 continue
             audit["reported_matches"] += 1
             try:
-                function, unit, source = retained_free_match(row, original)
+                if status == "exact_eh_graph_match":
+                    require(eh_inputs is not None, "EH export requires trusted input paths")
+                    from rapid_object.eh_source_export import retained_match
+                    function, unit, source = retained_match(row, original, eh_inputs)
+                else:
+                    function, unit, source = retained_free_match(row, original)
             except (OSError, ValueError, KeyError, TypeError) as exc:
                 audit["rejected"].append({"report": str(path), "rva": row.get("rva"), "reason": str(exc)})
                 continue
@@ -241,7 +246,12 @@ def extend_snapshot(index, files, reports, original_path):
             require(function["source"] not in files or files[function["source"]] == source, "source_filename_collision")
             files[function["source"]] = source
             index["functions"].append(function)
-            index["translation_units"].append(unit)
+            existing_units = [u for u in index["translation_units"] if u["id"] == unit["id"]]
+            require(len(existing_units) <= 1, "duplicate_translation_unit_identity")
+            if existing_units:
+                require(existing_units[0] == unit, "translation_unit_binding_collision")
+            else:
+                index["translation_units"].append(unit)
             seen.add(function["rva"])
             audit["added"] += 1
     index["functions"].sort(key=lambda f: f["rva"])
@@ -263,7 +273,8 @@ def publish(index, files, output):
         "# Recovered native C++", "",
         f"**{index['matched_functions']:,} matching functions** in this published snapshot: "
         f"{counts.get('reccmp_matched', 0):,} reccmp matches and "
-        f"{counts.get('exact_object_match', 0):,} exact COFF object matches.", "",
+        f"{counts.get('exact_object_match', 0):,} exact COFF object matches and "
+        f"{counts.get('exact_eh_graph_match', 0):,} complete main/EH graph matches.", "",
         f"Snapshot: {index['exported_at']}. The running local queue may be further ahead.", "",
         "Browse the functions below, or use the [machine-readable index](index.json). "
         "The C++ files are byte-for-byte copies of the compared translation units. "
@@ -287,7 +298,7 @@ def publish(index, files, output):
         "| Function RVA | Comparison | C++ source |", "| --- | --- | --- |",
     ]
     for function in index["functions"]:
-        kind = "reccmp" if function["status"] == "reccmp_matched" else "Exact object"
+        kind = {"reccmp_matched": "reccmp", "exact_object_match": "Exact object", "exact_eh_graph_match": "Exact main/EH graph"}[function["status"]]
         anchor = f"#L{function['annotation_line']}" if function["annotation_line"] else ""
         lines.append(f"| `{function['rva']}` | {kind} | [{Path(function['source']).name}]({function['source']}{anchor}) |")
     (output / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -300,6 +311,7 @@ def main():
     parser.add_argument("--output", type=Path, default=REPO / "src/native/recovered")
     parser.add_argument("--free-report", type=Path, action="append", default=[])
     parser.add_argument("--original", type=Path)
+    parser.add_argument("--eh-inputs", type=Path, help="Coordinator-owned inventory/compiler/static-library paths for full EH export")
     parser.add_argument("--audit", type=Path, help="Private import accounting, outside the publication tree")
     args = parser.parse_args()
     index, files = snapshot(args.native_root, args.object_root)
@@ -308,7 +320,7 @@ def main():
             parser.error("--free-report requires --original and --audit")
         if args.audit.resolve().is_relative_to(args.output.resolve()):
             parser.error("private audit must be outside the publication tree")
-        index, files, audit = extend_snapshot(index, files, args.free_report, args.original)
+        index, files, audit = extend_snapshot(index, files, args.free_report, args.original, eh_inputs=read_json(args.eh_inputs) if args.eh_inputs else None)
         args.audit.parent.mkdir(parents=True, exist_ok=True)
         args.audit.write_text(json.dumps(audit, indent=2) + "\n")
     publish(index, files, args.output)

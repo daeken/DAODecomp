@@ -364,3 +364,65 @@ passes generated-symbol aliases into the existing comparator, and every report
 keeps `acceptance_supported=False`. It consumes existing bytes/metadata and
 requires no authored per-function packet. Synthetic regressions run with
 `python -m unittest discover -s tests -p test_eh_graph_compare.py -v`.
+
+### Compare complete native main and exception graphs
+
+The separately named `i386_coff_eh_graph_v1` backend adds a bounded acceptance path
+for complete MSVC x86 main/EH graphs. `rapid_object.eh_native.check` consumes the
+original, pinned inventory, actual selected compiler/static-library bytes, C++,
+COFF and retained compiler receipt. It derives runtime identities from actual
+archive definitions and unique full-span literal/relocation constraints, then
+compares the complete runtime roots including every relocation. Candidate main,
+checked handler, 36-byte FuncInfo, eight-byte unwind map, cleanup action and delete
+helper must all agree byte-for-byte under actual reference-edge correspondence.
+There is no address-field masking, source-supplied placement map or missing-node
+success. Unsupported larger actions, metadata states, boundaries and ambiguous
+identities remain inconclusive. Original helper boundaries use fully decoded,
+entry-rooted supported terminal profiles; main boundaries use the pinned inventory.
+These are explicit supported-format assumptions, not arbitrary EH CFG support.
+
+The trusted DAO intake in `rapid_object.eh_source_export.DAO_POLICY` binds module,
+inventory, compiler, complete static library and retained SDK package hashes plus
+compiler flags. Configuration supplies only inventory/compiler/library paths;
+it cannot substitute policy hashes or desired original addresses. The selected
+static CRT routines are comparison dependencies, never extra recovered C++ rows.
+Their immediate dependency identities are independently constrained; transitive
+runtime semantics remain external. The original game's compiler patch is unknown.
+Compiler receipt trust remains the same limitation as ordinary object matching:
+a retained receipt is not cryptographic proof that compilation ran.
+
+Generate a fresh private comparison without rebuilding:
+
+```sh
+python tools/check_eh_native.py --original ORIGINAL_EXE --inputs local/eh-inputs.json \
+  --build-folder RETAINED_BUILD --output NEW_PRIVATE_CHECK
+```
+
+The inputs JSON has `inventory`, `compiler` and `libraries` fields; the last maps
+`libcmt.lib` to its retained path. The exporter API
+`extend_snapshot(index, files, reports, original_path, eh_inputs=inputs)` accepts
+these reports while preserving the supplied existing snapshot. Load the current
+published index and its source bytes as the base; do not replace it with an older
+queue snapshot. `publish` writes only the resulting C++ and public metadata.
+Every EH export reopens all inputs and recomputes the complete comparison. Stale,
+forged, malformed or partial reports cannot authorize publication. Input keys bind
+source, object, original, inventory, compiler, library, build, policy, implementation,
+Python and decoder versions; even a matching cache key does not reuse a verdict.
+
+Published `exact_eh_graph_match` rows keep a distinct status and backend. Metadata
+contains hashes, versions, sizes and stable source/RVA identities; private game
+bytes, libraries, objects, raw reports and local paths stay ignored. Multiple
+functions in one compared translation unit share one source/unit, and duplicate
+objects cannot add function credit. The ordinary checker and nonaccepting graph
+diagnostics keep their existing behavior.
+
+The constructor spelling is separately implemented in
+`rapid_object.eh_construction`: a deterministic unique class per RVA owns its
+static new/delete forwarding, preserving the observed allocator, argument
+expressions, return convention, vptr store and direct cleanup-tail destination.
+It emits no global allocator overrides. Four-byte layout/nominal C++ lifetime
+remain hypotheses tested through the historical compiler's complete output;
+complete comparisons are the acceptance shortcut. This narrow source generator
+is not authorization for a broader rollout. Focused tests cover source binding,
+unknown effects, type/context refusal and composition. Compiling the four bodies
+together demonstrates same-unit composition, not a linked replacement game.

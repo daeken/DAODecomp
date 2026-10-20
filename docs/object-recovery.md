@@ -45,3 +45,22 @@ python -m unittest tests.test_rapid_object_coff -v
 ```
 
 The original executable, generated catalog, source attempts, object files and reports remain ignored local artifacts. Historical portable registry counts are unchanged.
+
+## Repairing supported native exception construction
+
+The ordinary object comparator still refuses unexamined generated dependencies.
+For supported one-state VC8 construction output, the separate
+`i386_coff_eh_graph_v1` checker can establish `exact_eh_graph_match` by comparing
+complete main, handler, descriptor, map, action and helper bytes, including runtime
+references recognized independently from the pinned static CRT archive. Partial
+matches and unresolved dependencies cannot enter this backend's source export.
+The [reusable methodology](reproducible-decompilation.md#compare-complete-native-main-and-exception-graphs)
+records intake, reproduction, export freshness and supported-format limits.
+
+The narrow source hypothesis uses unique RVA wrapper types with class-specific
+allocation/deallocation forwarding. Preserve the original allocator/arguments,
+null behavior and observed cleanup-tail destination rather than introducing a
+global operator override or suppressing exception cleanup. Types and lifetime are
+hypotheses until checking the complete compiled output. Larger cleanup actions,
+extra states/effects and ambiguous contexts remain unsupported. No broader queue
+or sweep is enabled by publishing the first four complete graph matches.

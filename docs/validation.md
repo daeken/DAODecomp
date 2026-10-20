@@ -274,3 +274,19 @@ Unsupported interpreters refuse batched execution before launching a process;
 their real-process batch tests are explicitly skipped while refusal tests still
 run. Local production batch evidence used macOS ARM64 with Python 3.14.7;
 Windows CI and unsupported macOS interpreters do not establish batch support.
+
+## Bounded native EH compiled-artifact matching
+
+The separate `i386_coff_eh_graph_v1` backend accepts only complete supported native
+main/EH graphs after static CRT identity recognition and byte/relocation comparison.
+It is distinct from the normal-return execution protocol above and from ordinary
+main-only COFF checking. The pinned inventory, compiler, library, source, object,
+build and implementation/version identities accompany every result. Unknown,
+partial, stale and nonunique graph/runtime evidence cannot pass. Source export
+freshly recomputes the complete result; stored experimental verdicts are not
+acceptance evidence. See the [supported domain and reproduction](reproducible-decompilation.md#compare-complete-native-main-and-exception-graphs).
+
+An exact native graph match is evidence for that compiled artifact and pinned
+original graph, not universal portable C++ semantics, a new runtime implementation,
+a linked replacement or game execution. Existing historical execution validators
+and their counts are unchanged.
