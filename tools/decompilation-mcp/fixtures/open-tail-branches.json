@@ -1,0 +1,444 @@
+{
+  "cases": [
+    {
+      "input": {
+        "hex": "b840305000ffe0",
+        "id": "open-known-register-indirect",
+        "pc": 5251072
+      },
+      "lift": {
+        "byte_length": 7,
+        "decode_complete": true,
+        "decoded_bytes": 7,
+        "id": "open-known-register-indirect",
+        "instructions": [
+          {
+            "decoded": {
+              "DefId": 177,
+              "Imm0": 5255232,
+              "Imm1": 0,
+              "Len": 5,
+              "M": {
+                "BaseReg": 0,
+                "Disp": 0,
+                "IndexReg": 0,
+                "IsReg": false,
+                "Mod": 0,
+                "Reg": 0,
+                "RipRelative": false,
+                "Rm": 0,
+                "Scale": 0,
+                "type": "XFusionCpu.ModRm"
+              },
+              "Op": 184,
+              "P": {
+                "AdSize": false,
+                "EvexB": false,
+                "EvexMask": 0,
+                "EvexRp": false,
+                "EvexValid": false,
+                "EvexZ": false,
+                "Lock": false,
+                "OpSize": false,
+                "Rep": false,
+                "RepNz": false,
+                "Rex": 0,
+                "RexB": false,
+                "RexR": false,
+                "RexW": false,
+                "RexX": false,
+                "Segment": 0,
+                "VecLen": 0,
+                "VexL": false,
+                "VexMap": 0,
+                "VexValid": false,
+                "VexVvvv": 0,
+                "type": "XFusionCpu.PrefixState"
+              },
+              "type": "XFusionCpu.DecodedInsn"
+            },
+            "def_name": "MOV-Zv-Iv",
+            "length": 5,
+            "lift_error": null,
+            "offset": 0,
+            "opaque_markers": [],
+            "pc": 5251072,
+            "raw_hex": "b840305000",
+            "tree": {
+              "Body": [
+                {
+                  "Idx": 0,
+                  "Kind": {
+                    "name": "X86",
+                    "type": "LiftIl.RegKind",
+                    "value": 10
+                  },
+                  "Ty": {
+                    "type": "LiftIl.IlType+Void"
+                  },
+                  "Val": {
+                    "Kind": {
+                      "name": "Zext",
+                      "type": "LiftIl.CastKind",
+                      "value": 0
+                    },
+                    "Ty": {
+                      "Bits": 64,
+                      "Signed": false,
+                      "type": "LiftIl.IlType+I"
+                    },
+                    "X": {
+                      "Bits": {
+                        "decimal": "5255232",
+                        "type": "System.UInt128"
+                      },
+                      "Ty": {
+                        "Bits": 32,
+                        "Signed": false,
+                        "type": "LiftIl.IlType+I"
+                      },
+                      "type": "LiftIl.IlConst"
+                    },
+                    "type": "LiftIl.IlCast"
+                  },
+                  "type": "LiftIl.IlWriteReg"
+                }
+              ],
+              "Ty": {
+                "type": "LiftIl.IlType+Void"
+              },
+              "type": "LiftIl.IlBlock"
+            }
+          },
+          {
+            "decoded": {
+              "DefId": 396,
+              "Imm0": 0,
+              "Imm1": 0,
+              "Len": 2,
+              "M": {
+                "BaseReg": -1,
+                "Disp": 0,
+                "IndexReg": -1,
+                "IsReg": true,
+                "Mod": 3,
+                "Reg": 4,
+                "RipRelative": false,
+                "Rm": 0,
+                "Scale": 1,
+                "type": "XFusionCpu.ModRm"
+              },
+              "Op": 255,
+              "P": {
+                "AdSize": false,
+                "EvexB": false,
+                "EvexMask": 0,
+                "EvexRp": false,
+                "EvexValid": false,
+                "EvexZ": false,
+                "Lock": false,
+                "OpSize": false,
+                "Rep": false,
+                "RepNz": false,
+                "Rex": 0,
+                "RexB": false,
+                "RexR": false,
+                "RexW": false,
+                "RexX": false,
+                "Segment": 0,
+                "VecLen": 0,
+                "VexL": false,
+                "VexMap": 0,
+                "VexValid": false,
+                "VexVvvv": 0,
+                "type": "XFusionCpu.PrefixState"
+              },
+              "type": "XFusionCpu.DecodedInsn"
+            },
+            "def_name": "JMP-Ev",
+            "length": 2,
+            "lift_error": null,
+            "offset": 5,
+            "opaque_markers": [],
+            "pc": 5251077,
+            "raw_hex": "ffe0",
+            "tree": {
+              "Body": [
+                {
+                  "Cond": null,
+                  "Kind": {
+                    "name": "Jmp",
+                    "type": "LiftIl.BranchKind",
+                    "value": 0
+                  },
+                  "Target": {
+                    "Kind": {
+                      "name": "Trunc",
+                      "type": "LiftIl.CastKind",
+                      "value": 2
+                    },
+                    "Ty": {
+                      "Bits": 32,
+                      "Signed": false,
+                      "type": "LiftIl.IlType+I"
+                    },
+                    "X": {
+                      "Idx": 0,
+                      "Kind": {
+                        "name": "X86",
+                        "type": "LiftIl.RegKind",
+                        "value": 10
+                      },
+                      "Ty": {
+                        "Bits": 64,
+                        "Signed": false,
+                        "type": "LiftIl.IlType+I"
+                      },
+                      "type": "LiftIl.IlReadReg"
+                    },
+                    "type": "LiftIl.IlCast"
+                  },
+                  "Ty": {
+                    "type": "LiftIl.IlType+Void"
+                  },
+                  "type": "LiftIl.IlBranch"
+                }
+              ],
+              "Ty": {
+                "type": "LiftIl.IlType+Void"
+              },
+              "type": "LiftIl.IlBlock"
+            }
+          }
+        ],
+        "lift_errors": 0,
+        "mode": "Bits32",
+        "opaque_instructions": 0,
+        "pc": 5251072,
+        "range_stop": null,
+        "schema": "sharpretro_instruction_lift_v1",
+        "unprocessed_hex": ""
+      }
+    },
+    {
+      "input": {
+        "hex": "e93b100000",
+        "id": "open-direct-external",
+        "pc": 5251072
+      },
+      "lift": {
+        "byte_length": 5,
+        "decode_complete": true,
+        "decoded_bytes": 5,
+        "id": "open-direct-external",
+        "instructions": [
+          {
+            "decoded": {
+              "DefId": 369,
+              "Imm0": 4155,
+              "Imm1": 0,
+              "Len": 5,
+              "M": {
+                "BaseReg": 0,
+                "Disp": 0,
+                "IndexReg": 0,
+                "IsReg": false,
+                "Mod": 0,
+                "Reg": 0,
+                "RipRelative": false,
+                "Rm": 0,
+                "Scale": 0,
+                "type": "XFusionCpu.ModRm"
+              },
+              "Op": 233,
+              "P": {
+                "AdSize": false,
+                "EvexB": false,
+                "EvexMask": 0,
+                "EvexRp": false,
+                "EvexValid": false,
+                "EvexZ": false,
+                "Lock": false,
+                "OpSize": false,
+                "Rep": false,
+                "RepNz": false,
+                "Rex": 0,
+                "RexB": false,
+                "RexR": false,
+                "RexW": false,
+                "RexX": false,
+                "Segment": 0,
+                "VecLen": 0,
+                "VexL": false,
+                "VexMap": 0,
+                "VexValid": false,
+                "VexVvvv": 0,
+                "type": "XFusionCpu.PrefixState"
+              },
+              "type": "XFusionCpu.DecodedInsn"
+            },
+            "def_name": "JMP-Jz",
+            "length": 5,
+            "lift_error": null,
+            "offset": 0,
+            "opaque_markers": [],
+            "pc": 5251072,
+            "raw_hex": "e93b100000",
+            "tree": {
+              "Body": [
+                {
+                  "Cond": null,
+                  "Kind": {
+                    "name": "Jmp",
+                    "type": "LiftIl.BranchKind",
+                    "value": 0
+                  },
+                  "Target": {
+                    "Bits": {
+                      "decimal": "5255232",
+                      "type": "System.UInt128"
+                    },
+                    "Ty": {
+                      "Bits": 64,
+                      "Signed": false,
+                      "type": "LiftIl.IlType+I"
+                    },
+                    "type": "LiftIl.IlConst"
+                  },
+                  "Ty": {
+                    "type": "LiftIl.IlType+Void"
+                  },
+                  "type": "LiftIl.IlBranch"
+                }
+              ],
+              "Ty": {
+                "type": "LiftIl.IlType+Void"
+              },
+              "type": "LiftIl.IlBlock"
+            }
+          }
+        ],
+        "lift_errors": 0,
+        "mode": "Bits32",
+        "opaque_instructions": 0,
+        "pc": 5251072,
+        "range_stop": null,
+        "schema": "sharpretro_instruction_lift_v1",
+        "unprocessed_hex": ""
+      }
+    },
+    {
+      "input": {
+        "hex": "e900000000",
+        "id": "open-direct-at-range-end",
+        "pc": 5251072
+      },
+      "lift": {
+        "byte_length": 5,
+        "decode_complete": true,
+        "decoded_bytes": 5,
+        "id": "open-direct-at-range-end",
+        "instructions": [
+          {
+            "decoded": {
+              "DefId": 369,
+              "Imm0": 0,
+              "Imm1": 0,
+              "Len": 5,
+              "M": {
+                "BaseReg": 0,
+                "Disp": 0,
+                "IndexReg": 0,
+                "IsReg": false,
+                "Mod": 0,
+                "Reg": 0,
+                "RipRelative": false,
+                "Rm": 0,
+                "Scale": 0,
+                "type": "XFusionCpu.ModRm"
+              },
+              "Op": 233,
+              "P": {
+                "AdSize": false,
+                "EvexB": false,
+                "EvexMask": 0,
+                "EvexRp": false,
+                "EvexValid": false,
+                "EvexZ": false,
+                "Lock": false,
+                "OpSize": false,
+                "Rep": false,
+                "RepNz": false,
+                "Rex": 0,
+                "RexB": false,
+                "RexR": false,
+                "RexW": false,
+                "RexX": false,
+                "Segment": 0,
+                "VecLen": 0,
+                "VexL": false,
+                "VexMap": 0,
+                "VexValid": false,
+                "VexVvvv": 0,
+                "type": "XFusionCpu.PrefixState"
+              },
+              "type": "XFusionCpu.DecodedInsn"
+            },
+            "def_name": "JMP-Jz",
+            "length": 5,
+            "lift_error": null,
+            "offset": 0,
+            "opaque_markers": [],
+            "pc": 5251072,
+            "raw_hex": "e900000000",
+            "tree": {
+              "Body": [
+                {
+                  "Cond": null,
+                  "Kind": {
+                    "name": "Jmp",
+                    "type": "LiftIl.BranchKind",
+                    "value": 0
+                  },
+                  "Target": {
+                    "Bits": {
+                      "decimal": "5251077",
+                      "type": "System.UInt128"
+                    },
+                    "Ty": {
+                      "Bits": 64,
+                      "Signed": false,
+                      "type": "LiftIl.IlType+I"
+                    },
+                    "type": "LiftIl.IlConst"
+                  },
+                  "Ty": {
+                    "type": "LiftIl.IlType+Void"
+                  },
+                  "type": "LiftIl.IlBranch"
+                }
+              ],
+              "Ty": {
+                "type": "LiftIl.IlType+Void"
+              },
+              "type": "LiftIl.IlBlock"
+            }
+          }
+        ],
+        "lift_errors": 0,
+        "mode": "Bits32",
+        "opaque_instructions": 0,
+        "pc": 5251072,
+        "range_stop": null,
+        "schema": "sharpretro_instruction_lift_v1",
+        "unprocessed_hex": ""
+      }
+    }
+  ],
+  "provenance": {
+    "adapter_sha256": "be56a45460d34d2415fa489d7237585494f99b71f359343e82645b3f7b9f5cd8",
+    "description": "Authored open x86 instruction snippets lifted by actual pinned SharpRetro adapter; no original-game bytes or IL.",
+    "revision": "ce590d0a2f2a7e231e0529e30f2fd0d4252ca769"
+  },
+  "schema": "open_sharpretro_tail_branch_regressions_v1"
+}

@@ -558,3 +558,20 @@ test while preserving defined unsigned32 wrap. Its current output still fails th
 complete comparator because register assignment and bounds-check scheduling differ.
 Keep it private and retain the failed helper/type/orientation experiments. A source
 recognizer, a shorter candidate or a plausible calling convention cannot export it.
+
+### Preserve instruction form through symbolic recovery
+
+A resolved value and its original instruction form answer different questions.
+For a deliberately direct-only tail-call rule, checking that the evaluated jump
+target is constant is insufficient: loading a constant into a register and
+jumping through that register also resolves to a constant. Preserve the original
+typed operand or independently decoded branch form and enforce the domain before
+constant propagation. Test both unknown and known indirect targets.
+
+Whole-inventory applicability classification must use the same domain as the
+actual transformation. If the scanner excludes indirect jumps while the
+transformation admits some of them, the scan cannot claim complete coverage of
+affected outputs. Account for every identity, keep generated hypotheses separate
+from compiler/comparison outcomes, and run affected output checks after the
+machinery is reviewed. A successful discovery example does not replace those
+checks.

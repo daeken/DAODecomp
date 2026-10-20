@@ -250,10 +250,10 @@ are rejected. This is a foundation for trials, not an arbitrary rewrite language
 ```json
 {
   "schema_version": 1,
-  "architecture": "x86-bits32-linear-v1",
+  "architecture": "x86-bits32-linear-tail-v2",
   "frontend": "sharpretro-typed-v1",
-  "compiler_profile": "vc8-x86-thiscall-stores-v1",
-  "steps": ["raise-linear-effects-v1", "emit-thiscall-stores-v1"]
+  "compiler_profile": "vc8-x86-thiscall-stores-tail-v2",
+  "steps": ["raise-linear-effects-tail-v2", "emit-thiscall-stores-tail-v2"]
 }
 ```
 
@@ -267,11 +267,17 @@ attestation; an old clean-source pin cannot authorize a patched assembly.
 
 The supported domain is a single contiguous Bits32 straight-line body with
 explicit register/constant arithmetic, supported stack effects, direct external
-member calls, constant receiver stores and a receiver return. The x86 layer
+member calls, constant receiver stores, a receiver return, and a terminal direct
+external tail jump with restored stack and profile-preserved registers. The tail
+effect retains its target, ordered ABI inputs and unknown callee result. The
+direct-only boundary checks the original typed branch operand before symbolic
+constant propagation; a known register-indirect jump remains unsupported. The x86 layer
 records effects; an explicit compiler ABI profile selects argument, volatile,
 preserved and return registers. Stack addressing retains symbolic SS and wrapped
 SP. Unknown effects, arbitrary loads, indirect calls, general control flow and EH
-remain unsupported. External calls remain real unresolved declarations.
+remain unsupported. Stack-passed arguments and unknown callee cleanup, including
+the next sequential `0x1040` example, are not inferred away. External calls remain
+real unresolved declarations.
 
 An unsupported body or mismatch retains the same frontier. Active or ambiguous
 external execution requires reconciliation before retry. Idempotent reads never
@@ -282,6 +288,11 @@ published functions are not imported as successes in this new queue.
 
 Run the standalone MCP tests after a Release build; they include the shared
 generic IR/frontier tests. Private real-binary results and current ownership live
-in `local/replayable-bootstrap-001/`. See the
+in `local/replayable-bootstrap-001/` and `local/replayable-tailcall-001/`.
+The tail-call development pilot obtained complete 22/22-byte control and 11/11-byte
+tail matches. Its whole-inventory scan generated 208 hypotheses, of which 207
+additional examples had no comparison evidence at scan time. Later affected
+regression results require their own compiler and comparison receipts; a scan
+grants no matching credit. See the
 [replayable methodology](replayable-decompilation.md) for the measured bootstrap
 and the distinction between implementation, reviewed installation and publication.

@@ -1430,3 +1430,43 @@ keeping cache validity specific to exact inputs. Fifteen focused tests and the
 585 tests with 33 skips on macOS ARM64. Installing an unchanged runtime at a new
 path still changes its execution bindings and requires a fresh first-function
 check. Prior results remain historical rather than receiving migrated credit.
+
+## 2026-10-20: Tail-call recovery and an applicability boundary
+
+The next function in address order, `0x1030`, motivated a general terminal
+external tail-call effect and a VC8 emission profile. Two actual VM compilations
+produced a 22/22-byte match for the existing `0x1000` control and an 11/11-byte
+match for `0x1030`, taking 2.872 compiler seconds combined. This is one unique
+matching gain in the development pipeline, with no provider calls. The original
+game was not executed; development and review still consume Codex resources.
+
+An applicability scan accounted for all 27,555 inventory identities. Of 845
+linear direct-terminal-jump shapes checked through actual typed lifting, 208
+generated C++ hypotheses and 637 remained unsupported. The baseline frontend
+refused all 208 generated hypotheses. At this initial scan, only the frontier tail-call example had
+been compiled and compared: 207 additional hypotheses remained unchecked. The
+scan performed no compilations or comparisons and does not establish regression
+coverage or confer acceptance.
+
+Independent review found a useful boundary counterexample: `MOV EAX,constant;
+JMP EAX` passed the declared direct-only rule after constant propagation.
+Evaluating an expression to a constant does not preserve whether the instruction
+was direct. The first freeze was rejected pending a check of the original branch
+form and a known-register-indirect regression. The strict object comparator was
+unchanged; no false object match was established. Preserve this failed freeze
+and its counterexample when correcting the shared rule.
+
+The corrected freeze checks an actual typed constant target before evaluation.
+Actual open SharpRetro fixtures verify that a known register-indirect jump is
+refused while direct external and range-end jumps remain supported. The same
+independent reviewer approved this bounded correction. The author tooling suite
+passed 593 tests with 33 skips; 23 focused and 28 standalone MCP tests (two skips)
+passed on macOS ARM64. Replaying both original typed lifts reproduced their C++
+exactly, and fresh unchanged comparisons of the retained objects reconfirmed
+22/22 and 11/11 bytes without another VM compilation. The corrected whole-inventory
+scan reproduced all 27,555 rows exactly and still grants no comparison credit.
+
+The next sequential identity, `0x1040`, remains unsupported. It passes a stack
+argument to an external callee and returns with immediate stack cleanup. Neither
+the callee's cleanup nor the caller's argument interpretation may be guessed
+away to balance the stack. This is the next shared ABI-recovery problem.

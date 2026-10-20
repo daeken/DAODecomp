@@ -5,8 +5,8 @@ namespace Decompilation;
 public sealed record ReplayableConfig(string LifterConfig,string VmBuildLock,string OutputRoot);
 public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string Frontend,string CompilerProfile,string[] Steps)
 {
-    public static PipelineRecipe Default=>new(1,"x86-bits32-linear-v1","sharpretro-typed-v1",Vc8Profile.Version,["raise-linear-effects-v1","emit-thiscall-stores-v1"]);
-    public void Validate() { if(SchemaVersion!=1||Architecture!="x86-bits32-linear-v1"||Frontend!="sharpretro-typed-v1"||CompilerProfile!=Vc8Profile.Version||!Steps.SequenceEqual(Default.Steps))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public static PipelineRecipe Default=>new(1,"x86-bits32-linear-tail-v2","sharpretro-typed-v1",Vc8Profile.Version,["raise-linear-effects-tail-v2","emit-thiscall-stores-tail-v2"]);
+    public void Validate() { if(SchemaVersion!=1||Architecture!="x86-bits32-linear-tail-v2"||Frontend!="sharpretro-typed-v1"||CompilerProfile!=Vc8Profile.Version||!Steps.SequenceEqual(Default.Steps))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {

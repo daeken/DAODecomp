@@ -70,6 +70,13 @@ def fixture(call_width=None):
                 lift=dict(mode='Bits32', decode_complete=True, lift_errors=0, opaque_instructions=0, instructions=rows))
 
 
+def tail_fixture():
+    payload = fixture()
+    payload['lift']['instructions'] = payload['lift']['instructions'][:1]
+    payload['lift']['instructions'].append(dict(pc=0x502001, length=5, decoded=dict(P=dict(Lock=False, Rep=False, RepNz=False)), tree=node('IlBlock', Body=[node('IlBranch', Kind=dict(name='Jmp'), Cond=None, Target=const(0x503040, 64))])))
+    return payload
+
+
 @unittest.skipUnless(DLL.exists(), 'build C# component first')
 class RecoveredIrTests(unittest.TestCase):
     def recover(self, payload):
@@ -148,6 +155,63 @@ class RecoveredIrTests(unittest.TestCase):
         self.assertEqual(result['status'], 'recovered')
         self.assertEqual(result['ir']['stack_effects'][0]['value']['value'], 9)
         self.assertFalse(result['ir']['stack_effects'][0]['within_allocated_frame'])
+
+    def test_terminal_tail_call_preserves_store_target_inputs_and_unknown_return(self):
+        result = self.recover(tail_fixture())
+        self.assertEqual(result['status'], 'generated', result)
+        ir = result['ir']
+        self.assertEqual(ir['exit_kind'], 'tail_call')
+        self.assertEqual([e['kind'] for e in ir['effects']], ['store', 'tail_call'])
+        self.assertEqual(ir['effects'][0]['value']['value'], 7)
+        self.assertEqual(ir['effects'][1]['value']['value'], 0x503040)
+        self.assertEqual(ir['effects'][1]['inputs'], [dict(kind='register_input', index=1)])
+        self.assertEqual(ir['return']['kind'], 'unknown')
+        self.assertIn('void Recovered::fn_00002000()', result['source'])
+        self.assertIn('void fn_00003040();', result['source'])
+        self.assertNotIn('return this', result['source'])
+
+    def test_tail_call_abi_arguments_are_explicit_policy(self):
+        payload = tail_fixture()
+        payload.update(emit=False, abi=dict(id='open-tail-abi', return_register=2, argument_registers=[7, 2], volatile_registers=[2], preserved_registers=[6]))
+        result = self.recover(payload)
+        self.assertEqual(result['status'], 'recovered')
+        self.assertEqual(result['ir']['effects'][-1]['inputs'], [dict(kind='register_input', index=7), dict(kind='register_input', index=2)])
+        self.assertEqual(result['ir']['return']['kind'], 'unknown')
+
+    def test_tail_call_rejects_internal_conditional_indirect_and_unbalanced_exits(self):
+        for target, condition in [(const(0x502000, 64), None), (reg(2), None), (const(0x503040, 64), const(1, 8))]:
+            payload = tail_fixture()
+            payload['lift']['instructions'][-1]['tree']['Body'][-1].update(Target=target, Cond=condition)
+            with self.subTest(target=target, condition=condition):
+                self.assertEqual(self.recover(payload)['status'], 'unsupported')
+        payload = tail_fixture()
+        payload['lift']['instructions'][0]['tree']['Body'].insert(0, write(4, binary('Sub', reg(4), const(4, 64))))
+        self.assertEqual(self.recover(payload)['blocker'], 'unbalanced_tail_call_stack')
+        payload = tail_fixture()
+        payload['lift']['instructions'].append(copy.deepcopy(payload['lift']['instructions'][0]))
+        self.assertEqual(self.recover(payload)['status'], 'unsupported')
+        payload = tail_fixture()
+        payload['lift']['instructions'][0]['tree']['Body'].append(write(6, const(9)))
+        self.assertEqual(self.recover(payload)['blocker'], 'profile_preserved_register_not_restored')
+
+    def test_actual_known_register_indirect_refused_and_direct_boundary_preserved(self):
+        fixtures = json.loads((ROOT / 'tools/decompilation-mcp/fixtures/open-tail-branches.json').read_text())
+        expected = {'open-known-register-indirect': 'unsupported', 'open-direct-external': 'generated', 'open-direct-at-range-end': 'generated'}
+        for case in fixtures['cases']:
+            payload = dict(lift=case['lift'], rva=0x2000, image_base=0x500000, image_end=0x600000)
+            result = self.recover(payload)
+            with self.subTest(case=case['input']['id']):
+                self.assertEqual(result['status'], expected[case['input']['id']], result)
+                if result['status'] == 'unsupported':
+                    self.assertEqual(result['blocker'], 'unsupported_indirect_tail_call')
+                else:
+                    self.assertEqual(result['ir']['exit_kind'], 'tail_call')
+        # Also cover symbolic propagation directly: an unknown-register-only test
+        # would miss the boundary violation above.
+        payload = tail_fixture()
+        payload['lift']['instructions'][0]['tree']['Body'].append(write(0, const(0x503040, 32)))
+        payload['lift']['instructions'][-1]['tree']['Body'][-1]['Target'] = reg(0)
+        self.assertEqual(self.recover(payload)['blocker'], 'unsupported_indirect_tail_call')
 
     def test_original_sharpretro_wrong_call_width_is_rejected(self):
         self.assertEqual(self.recover(fixture(8))['blocker'], 'incorrect_Bits32_call_stack_width')

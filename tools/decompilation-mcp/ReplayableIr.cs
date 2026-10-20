@@ -20,7 +20,7 @@ public sealed record SegmentedAddress(SegmentInput Segment, RecoveredValue Offse
 public sealed record RecoveredEffect(string Kind, RecoveredValue? Address, RecoveredValue? Value, int Bits, ulong Pc, RecoveredValue[]? Inputs=null);
 public sealed record RecoveryAbi(string Id,int ReturnRegister,int[] ArgumentRegisters,int[] VolatileRegisters,int[] PreservedRegisters);
 public sealed record RecoveredStackEffect(RecoveredValue Address,RecoveredValue Value,int Bits,ulong Pc,bool WithinAllocatedFrame);
-public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects);
+public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return");
 public static class X86Recovery
 {
     static string Tag(JsonElement n) => n.GetProperty("type").GetString()!.Split('+').Last().Split('.').Last();
@@ -39,14 +39,16 @@ public static class X86Recovery
         Need(abi.Id is {Length: >0 and <=128} && abi.ReturnRegister is >=0 and <16 && abi.ReturnRegister!=4 && new[]{abi.ArgumentRegisters,abi.VolatileRegisters,abi.PreservedRegisters}.All(a=>a!=null&&a.Distinct().Count()==a.Length&&a.All(r=>r is >=0 and <16&&r!=4)),"unsupported_ABI_contract");
         Need(lift.GetProperty("mode").GetString()=="Bits32" && lift.GetProperty("decode_complete").GetBoolean() && lift.GetProperty("lift_errors").GetInt32()==0 && lift.GetProperty("opaque_instructions").GetInt32()==0,"incomplete_or_opaque_lift");
         var regs=Enumerable.Range(0,16).ToDictionary(i=>i,i=>(RecoveredValue)new RegisterInput(i));
-        var stack=new Dictionary<long,RecoveredValue>{{0,new UnknownValue("entry_return_address")}};long sp=0;bool returned=false;var effects=new List<RecoveredEffect>();var notes=new List<string>();var stackEffects=new List<RecoveredStackEffect>();
+        var stack=new Dictionary<long,RecoveredValue>{{0,new UnknownValue("entry_return_address")}};long sp=0;bool returned=false;bool tailExit=false;var effects=new List<RecoveredEffect>();var notes=new List<string>();var stackEffects=new List<RecoveredStackEffect>();
         bool segmentedStack=UsesStackSegment(lift);notes.Add(segmentedStack?"Stack slots retain symbolic SS base plus wrapped32 SP; SS is never replaced by zero.":"Stack accesses follow the lifter's unsegmented flat-stack representation.");
         long? StackOffset(RecoveredValue address) => address switch {
             SegmentedAddress {Segment: {Index:2},Offset:AddValue {Left:RegisterInput {Index:4}} a} when segmentedStack=>a.Offset,
             AddValue {Left:RegisterInput {Index:4}} a when !segmentedStack=>a.Offset,
             _=>null
         };
-        foreach(var ins in lift.GetProperty("instructions").EnumerateArray())
+        var instructions=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(instructions.Length>0,"empty_instruction_range");
+        var rangeStart=instructions[0].GetProperty("pc").GetUInt64();var rangeEnd=instructions[^1].GetProperty("pc").GetUInt64()+(ulong)instructions[^1].GetProperty("length").GetInt32();
+        foreach(var ins in instructions)
         {
             Need(!returned,"instructions_after_return");
             var prefix=ins.GetProperty("decoded").GetProperty("P");
@@ -95,39 +97,54 @@ public static class X86Recovery
                     case "IlLet":tmp[n.GetProperty("Id").GetInt32()]=Eval(n.GetProperty("Val"));break;
                     case "IlWriteReg":Need(n.GetProperty("Kind").GetProperty("name").GetString()=="X86","non_x86_register");var idx=n.GetProperty("Idx").GetInt32();var value=Eval(n.GetProperty("Val"));if(idx==4){Need(value is AddValue {Left:RegisterInput {Index:4}},"unsupported_stack_pointer");sp=((AddValue)value).Offset;}else regs[idx]=value;break;
                     case "IlStore":var address=Eval(n.GetProperty("Addr"));var val=Eval(n.GetProperty("Val"));var bits=Bits(n.GetProperty("Val"));var slot=StackOffset(address);if(slot!=null){Need(bits==32,"unsupported_stack_width");stack[slot.Value]=val;stackEffects.Add(new(address,val,bits,pc,slot.Value>=sp && slot.Value<0 && slot.Value+bits/8<=0));}else effects.Add(new("store",address,val,bits,pc));break;
-                    case "IlBranch":Need(n.GetProperty("Kind").GetProperty("name").GetString()=="Ret"&&n.GetProperty("Cond").ValueKind==JsonValueKind.Null,"unsupported_control_flow");Need(sp==4&&Eval(n.GetProperty("Target"))==new UnknownValue("entry_return_address"),"unbalanced_return");returned=true;break;
+                    case "IlBranch":
+                        var branchKind=n.GetProperty("Kind").GetProperty("name").GetString();Need(n.GetProperty("Cond").ValueKind==JsonValueKind.Null,"unsupported_conditional_control_flow");
+                        if(branchKind=="Jmp") {
+                            // Directness is an instruction/IL property, not a result of propagation.
+                            // A known register value must not turn JMP reg into a supported direct JMP.
+                            var targetNode=n.GetProperty("Target");Need(Tag(targetNode)=="IlConst","unsupported_indirect_tail_call");
+                            var target=Eval(targetNode);Need(target is Constant {Value:<=uint.MaxValue},"unsupported_indirect_tail_call");var direct=(Constant)target;
+                            Need(direct.Value<rangeStart||direct.Value>=rangeEnd,"unsupported_internal_jump");Need(sp==0,"unbalanced_tail_call_stack");
+                            effects.Add(new("tail_call",null,target,32,pc,abi.ArgumentRegisters.Select(r=>regs[r]).ToArray()));
+                            notes.Add("Terminal direct jump retains external target and ordered inputs under explicit ABI profile "+abi.Id+"; return and callee effects remain external.");tailExit=true;returned=true;break;
+                        }
+                        Need(branchKind=="Ret","unsupported_control_flow");Need(sp==4&&Eval(n.GetProperty("Target"))==new UnknownValue("entry_return_address"),"unbalanced_return");returned=true;break;
                     default:throw new ArgumentException("unsupported_effect:"+Tag(n));
                 }
             }
         }
         Need(returned,"missing_return");foreach(var r in abi.PreservedRegisters)Need(regs[r]==new RegisterInput(r),"profile_preserved_register_not_restored");
-        return new(effects,regs[abi.ReturnRegister],notes,stackEffects);
+        return new(effects,tailExit?new UnknownValue("tail_callee_result:"+abi.Id):regs[abi.ReturnRegister],notes,stackEffects,tailExit?"tail_call":"return");
     }
 }
 
 public static class Vc8Profile
 {
-    public const string Version="vc8-x86-thiscall-stores-v1";
+    public const string Version="vc8-x86-thiscall-stores-tail-v2";
     public static RecoveryAbi Abi=>new(Version,0,[1],[0,1,2],[3,5,6,7]);
     public static string Emit(RecoveredFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
     {
         if(module.Length is <1 or >128 || module.Any(c=>!(char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-')))throw new ArgumentException("unsupported_module_annotation");
         if(ir.StackEffects.Any(e=>!e.WithinAllocatedFrame))throw new ArgumentException("caller_or_unallocated_stack_write_not_emittable");
-        if(ir.Return!=new RegisterInput(1))throw new ArgumentException("unsupported_return_ABI");
+        bool tail=ir.ExitKind=="tail_call";
+        if(tail) {if(ir.Effects.Count==0||ir.Effects[^1].Kind!="tail_call"||ir.Effects.Count(e=>e.Kind=="tail_call")!=1)throw new ArgumentException("unsupported_tail_exit");}
+        else if(ir.ExitKind!="return"||ir.Return!=new RegisterInput(1))throw new ArgumentException("unsupported_return_ABI");
         var decl=new List<string>();var statements=new List<string>();
         foreach(var e in ir.Effects)
         {
-            if(e.Kind=="call")
+            if(e.Kind is "call" or "tail_call")
             {
                 if(e.Inputs is not {Length:1} || e.Inputs[0]!=new RegisterInput(1)||e.Value is not Constant target||target.Value<imageBase||target.Value>=imageEnd)throw new ArgumentException("unsupported_call_ABI");
                 var name=$"fn_{target.Value-imageBase:x8}";decl.Add($"    void {name}();");statements.Add($"    {name}();");continue;
             }
+            if(e.Kind!="store")throw new ArgumentException("unsupported_emitted_effect");
             long offset=e.Address switch {RegisterInput {Index:1}=>0,AddValue {Left:RegisterInput {Index:1}} a=>a.Offset,_=>throw new ArgumentException("unsupported_store_address")};
             if(offset<0||offset>int.MaxValue||e.Value is not Constant c)throw new ArgumentException("unsupported_store_value");
             string expr;if(c.Value>=imageBase&&c.Value<imageEnd&&e.Bits==32){var name=$"g_{c.Value-imageBase:x8}";decl.Insert(0,$"GLOBAL:{name}");expr=$"&{name}";statements.Add($"    *reinterpret_cast<void**>(reinterpret_cast<char*>(this) + {offset}) = {expr};");}
             else {var type=e.Bits switch {8=>"unsigned char",16=>"unsigned short",32=>"unsigned int",_=>throw new ArgumentException("unsupported_store_width")};statements.Add($"    *reinterpret_cast<{type}*>(reinterpret_cast<char*>(this) + {offset}) = {c.Value}u;");}
         }
         var globals=decl.Where(d=>d.StartsWith("GLOBAL:")).Distinct().Select(d=>"extern unsigned char "+d[7..]+";");
-        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    void* fn_{rva:x8}();\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\nvoid* Recovered::fn_{rva:x8}() {{\n"+string.Join("\n",statements)+"\n    return this;\n}\n";
+        var returnType=tail?"void":"void*";
+        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}();\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}() {{\n"+string.Join("\n",statements)+(tail?"":"\n    return this;")+"\n}\n";
     }
 }
