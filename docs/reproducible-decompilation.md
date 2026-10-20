@@ -12,6 +12,11 @@ byte-identical whole executable is not required. Read the
 [learning log](learning-log.md) for dated observations and the
 [cost plan](cost-target.md) for measurements and budget assumptions.
 
+The first [C# MCP implementation](decompilation-mcp-usage.md) exposes inventory,
+retained C++ and fresh checks of existing compiler artifacts to agent clients.
+It shares the current comparison backends; installing it does not yet add new
+compilation, automatic source rewriting or a game-independent decompiler.
+
 ## The inexpensive order of work
 
 ```mermaid

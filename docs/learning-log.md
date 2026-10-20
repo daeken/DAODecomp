@@ -1282,3 +1282,46 @@ all 2,256 old entries, units and source bytes and adds only the two complete mat
 for 2,258 total. A separately authorized conditional round may inspect the retained
 next candidates `0x106e40`, `0x171ac0` and `0x1dfb00` only after this checkpoint's
 publication, exact-head CI and settlement complete.
+
+## 2026-10-20 — First C# MCP slice over retained artifacts
+
+The [implemented MCP tools](decompilation-mcp-usage.md) separate agent transport
+from project indexing and durable checking. C#/.NET 10 hosts the official MCP SDK
+2.2.0; a narrow Python adapter reuses the existing object/EH comparators. No
+comparator port, per-function authored artifact or model call was needed to add
+inventory browsing, source inspection, metadata-based related search and fresh
+comparison of retained compiler products. New compilation, AST rewriting and
+publication remain deferred.
+
+The macOS ARM64 stdio pilot enumerated all 27,555 inventory identities and 2,258
+historically published functions. Fresh checks reproduced one 109-byte ordinary
+match, one nonmatch (105 candidate bytes against 109 original bytes, not a
+similarity score), and one supported EH graph accounting for all 179 bytes across
+six nodes. These are artifact checks, not new matches or game execution. The
+actual original/compiler/library inputs were read; receipts do not attest the
+complete compiler installation closure.
+
+Eight real-input stdio tests passed in 7.392 seconds. The portable run passed six
+and skipped two private-input tests in 1.947 seconds. The dependency-equipped
+repository suite ran 604 tests with 33 skips in 60.633 seconds; an initial system
+Python run failed on missing dependencies and remains recorded locally. Copied
+source/object tampering, missing objects, changed flags/compiler receipts and
+incomplete EH coverage could not yield full matches. Idempotency, concurrent
+clients, reconnects and interrupted workers have generic controls. SDK10.0.101,
+NuGet lockfile and exact source hashes are retained with the private pilot.
+
+A real Codex discovery probe found all seven tools without a model turn or an
+application restart. A separate fresh app-server process could not call a tool
+on the already-open chat because it did not own that chat; direct stdio calls
+established tool behavior instead. Zero direct provider, compiler or game calls
+in this slice does not mean zero Codex author/reviewer development cost.
+
+Independent review caught one inventory/revision drift bug in that first slice:
+a project opened on one inventory could submit a check using later inventory
+bytes. A generic test reproduced it, then verified rejection before job creation
+and import under a new revision after restarting. The repair passed nine real
+stdio tests, seven portable tests with two skips, and 618 repository tests with
+33 skips. An independent read-only delta approved the exact correction. Codex
+then discovered all seven tools from its saved registration of a versioned local
+build. Opening a server connection and discovering tools are separate from an
+existing chat gaining that connection; the running app was not restarted.
