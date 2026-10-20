@@ -11,6 +11,9 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     public static PipelineRecipe CallAdapters=>new(1,"x86-bits32-composed-call-adapters-v1","sharpretro-typed-v1",Vc8CallAdaptersProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-call-adapters-v1"]);
     public static PipelineRecipe ByValueCalls=>new(1,"x86-bits32-composed-byvalue-calls-v1","sharpretro-typed-v1",Vc8ByValueCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","raise-initialized-private-subword-copies-v1","observe-outgoing-push-and-private-cleanup-regions-v1","emit-vc8-composed-byvalue-calls-v1"]);
+    public static PipelineRecipe EncodingEquivalence=>new(1,"x86-bits32-composed-memory-encoding-equivalence-v1","sharpretro-typed-v1",Vc8StructuredMemoryProfile.Version,[..OrderedMemory.Steps,"compare-complete-x86-encoding-equivalence-v1"]);
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesEncodingEquivalence=>Architecture==EncodingEquivalence.Architecture;
     public static PipelineRecipe OrderedMemory=>new(1,"x86-bits32-composed-ordered-memory-control-v1","sharpretro-typed-v1",Vc8StructuredMemoryProfile.Version,[..CountedLoops.Steps[..^1],"raise-aliasable-forward-memory-effects-v1","emit-vc8-composed-ordered-memory-control-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
     public bool UsesOrderedMemory=>CompilerProfile==Vc8StructuredMemoryProfile.Version;
@@ -27,7 +30,7 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
     public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory,EncodingEquivalence}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -71,9 +74,9 @@ public sealed partial class Engine
         // also see its project-wide barrier. A changed compiler/lifter cannot clear uncertainty.
         using var barrier=db.CreateCommand();barrier.Transaction=tx;barrier.CommandText="SELECT job FROM replayable_frontier WHERE project=$p AND status IN ('running','external_outcome_unknown') ORDER BY rva,input_key LIMIT 1";barrier.Parameters.AddWithValue("$p",projectId);
         if(barrier.ExecuteScalar() is string unresolvedJob)throw new ArgumentException("frontier_job_active_or_unknown_reconciliation_required:"+unresolvedJob);
-        var complete=new HashSet<uint>();using var q=db.CreateCommand();q.Transaction=tx;q.CommandText="SELECT rva,status,job FROM replayable_frontier WHERE project=$p AND input_key=$k";q.Parameters.AddWithValue("$p",projectId);q.Parameters.AddWithValue("$k",key);
-        using(var r=q.ExecuteReader())while(r.Read()){if(r.GetString(1)=="full_match" && ValidPipelineMatch(p,r.GetString(2)))complete.Add((uint)r.GetInt64(0));}
-        var f=target??p.Functions.FirstOrDefault(f=>!complete.Contains(f.Rva));if(f==null)return new{status="inventory_complete",new_pipeline_full_matches=complete.Count};
+        var complete=new HashSet<uint>();int completeExact=0,completeEquivalent=0;using var q=db.CreateCommand();q.Transaction=tx;q.CommandText="SELECT rva,status,job FROM replayable_frontier WHERE project=$p AND input_key=$k";q.Parameters.AddWithValue("$p",projectId);q.Parameters.AddWithValue("$k",key);
+        using(var r=q.ExecuteReader())while(r.Read()){if(AcceptedMatch(r.GetString(1)) && ValidPipelineMatch(p,r.GetString(2),r.GetString(1))){complete.Add((uint)r.GetInt64(0));if(r.GetString(1)=="full_match")completeExact++;else completeEquivalent++;}}
+        var f=target??p.Functions.FirstOrDefault(f=>!complete.Contains(f.Rva));if(f==null)return new{status="inventory_complete",new_pipeline_full_matches=completeExact,new_pipeline_encoding_equivalent_matches=completeEquivalent,new_pipeline_accepted_matches=complete.Count};
         var job=Guid.NewGuid().ToString("N");var request=Json(new{operation="replayable",purpose,expected_source_sha256=expectedSourceSha256,project=p.Config,recipe,inputs,pipeline_key=key,rva=f.Rva,entry=f.Entry,compile});
         using var insert=db.CreateCommand();insert.Transaction=tx;insert.CommandText="INSERT INTO jobs(id,project,token,request,state,created) VALUES($i,$p,$t,$r,'queued',$c); INSERT INTO replayable_frontier(project,input_key,rva,status,job) VALUES($p,$k,$v,'running',$i) ON CONFLICT(project,input_key,rva) DO UPDATE SET status='running',job=$i";
         foreach(var (n,v) in new[]{("$i",job),("$p",projectId),("$t",token),("$r",request),("$c",DateTimeOffset.UtcNow.ToString("O")),("$k",target==null?key:"regression:"+key)})insert.Parameters.AddWithValue(n,v);insert.Parameters.AddWithValue("$v",(long)f.Rva);insert.ExecuteNonQuery();tx.Commit();StartWorker(job);
@@ -83,19 +86,36 @@ public sealed partial class Engine
     {
         var p=Open(projectId);var recipe=recipeJson==null?PipelineRecipe.Default:JsonSerializer.Deserialize<PipelineRecipe>(recipeJson,Options)!;var inputs=PipelineInputs(p,recipe);var key=HashText(Json(new{inputs,recipe,p.Config}));
         using var db=Db();using var cmd=db.CreateCommand();cmd.CommandText=ReplayableSchema+" SELECT rva,status,job FROM replayable_frontier WHERE project=$p AND input_key=$k ORDER BY rva";cmd.Parameters.AddWithValue("$p",projectId);cmd.Parameters.AddWithValue("$k",key);
-        var complete=new HashSet<uint>();var rows=new List<object>();using(var r=cmd.ExecuteReader())while(r.Read()){var rva=(uint)r.GetInt64(0);var status=r.GetString(1);var current=status=="full_match"&&ValidPipelineMatch(p,r.GetString(2));if(current)complete.Add(rva);rows.Add(new{rva,status,job_id=r.GetString(2),current_full_match=current});}
+        var complete=new HashSet<uint>();var rows=new List<object>();int exact=0,equivalent=0;
+        using(var r=cmd.ExecuteReader())while(r.Read()){var rva=(uint)r.GetInt64(0);var status=r.GetString(1);var current=AcceptedMatch(status)&&ValidPipelineMatch(p,r.GetString(2),r.GetString(1));if(current){complete.Add(rva);if(status=="full_match")exact++;else equivalent++;}rows.Add(new{rva,status,job_id=r.GetString(2),current_full_match=current&&status=="full_match",current_encoding_equivalent_match=current&&status=="encoding_equivalent",current_accepted_match=current});}
         var frontier=p.Functions.FirstOrDefault(f=>!complete.Contains(f.Rva))?.Rva;
         using var regression=db.CreateCommand();regression.CommandText="SELECT rva,status,job FROM replayable_frontier WHERE project=$p AND input_key=$k ORDER BY rva";regression.Parameters.AddWithValue("$p",projectId);regression.Parameters.AddWithValue("$k","regression:"+key);
-        var regressions=new List<object>();int regressionMatches=0,aheadMatches=0;
-        using(var r=regression.ExecuteReader())while(r.Read()){var rva=(uint)r.GetInt64(0);var status=r.GetString(1);var current=status=="full_match"&&ValidPipelineMatch(p,r.GetString(2));if(current){regressionMatches++;if(frontier.HasValue&&rva>frontier.Value)aheadMatches++;}regressions.Add(new{rva,status,job_id=r.GetString(2),current_full_match=current});}
-        return new{schema_version=1,pipeline_key=key,recipe,inventory_identities=p.Functions.Length,new_pipeline_full_matches=complete.Count,first_unresolved_rva=p.Functions.FirstOrDefault(f=>!complete.Contains(f.Rva))?.Rva,regression_full_matches=regressionMatches,ahead_regression_full_matches=aheadMatches,regression_row_count=regressions.Count,regression_rows=regressions.Take(100),regression_rows_truncated=regressions.Count>100,attempted_frontiers=rows.Take(100),frontier_row_count=rows.Count,frontier_rows_truncated=rows.Count>100,provider_calls=0,publication="draft_only",proof=false};
+        var regressions=new List<object>();int regressionExact=0,regressionEquivalent=0,aheadExact=0,aheadEquivalent=0;
+        using(var r=regression.ExecuteReader())while(r.Read()){var rva=(uint)r.GetInt64(0);var status=r.GetString(1);var current=AcceptedMatch(status)&&ValidPipelineMatch(p,r.GetString(2),r.GetString(1));if(current){if(status=="full_match"){regressionExact++;if(frontier.HasValue&&rva>frontier.Value)aheadExact++;}else{regressionEquivalent++;if(frontier.HasValue&&rva>frontier.Value)aheadEquivalent++;}}regressions.Add(new{rva,status,job_id=r.GetString(2),current_full_match=current&&status=="full_match",current_encoding_equivalent_match=current&&status=="encoding_equivalent",current_accepted_match=current});}
+        return new{schema_version=1,pipeline_key=key,recipe,inventory_identities=p.Functions.Length,new_pipeline_full_matches=exact,new_pipeline_encoding_equivalent_matches=equivalent,new_pipeline_accepted_matches=complete.Count,first_unresolved_rva=frontier,regression_full_matches=regressionExact,regression_encoding_equivalent_matches=regressionEquivalent,regression_accepted_matches=regressionExact+regressionEquivalent,ahead_regression_full_matches=aheadExact,ahead_regression_encoding_equivalent_matches=aheadEquivalent,regression_row_count=regressions.Count,regression_rows=regressions.Take(100),regression_rows_truncated=regressions.Count>100,attempted_frontiers=rows.Take(100),frontier_row_count=rows.Count,frontier_rows_truncated=rows.Count>100,provider_calls=0,publication="draft_only",proof=false};
     }
-    bool ValidPipelineMatch(Snapshot p,string job)
+    static bool AcceptedMatch(string? status)=>status is "full_match" or "encoding_equivalent";
+    bool ValidPipelineMatch(Snapshot p,string job,string expectedStatus)
     {
         try {
             var folder=Path.Combine(Safe(p.Config,p.Config.Replayable!.OutputRoot),job);var result=Read<JsonElement>(Path.Combine(folder,"result.json"));
             // Batch classification is durable request state, never optional result metadata.
             var request=BatchChildRequest(job);var isBatch=request.TryGetProperty("group_parent",out var parent);
+            var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();
+            var status=result.GetProperty("status").GetString();if(status!=expectedStatus||!AcceptedMatch(status)||(status=="encoding_equivalent"&&!recipe.UsesEncodingEquivalence))return false;
+            if(recipe.UsesEncodingEquivalence) {
+                // The file cannot downgrade an equivalent result to an exact cache hit.
+                using var durable=Db();using var stored=durable.CreateCommand();stored.CommandText="SELECT state,result FROM jobs WHERE id=$j";stored.Parameters.AddWithValue("$j",job);using var row=stored.ExecuteReader();
+                if(!row.Read()||row.GetString(0)!="completed"||!JsonElement.DeepEquals(JsonDocument.Parse(row.GetString(1)).RootElement,result))return false;
+                if(!result.TryGetProperty("retained_request_sha256",out var retainedRequest)||Hash(File.ReadAllBytes(Path.Combine(folder,"retained-check-request.json")))!=retainedRequest.GetString())return false;
+                if(status=="encoding_equivalent") {
+                    if(result.GetProperty("strict_status").GetString()!="mismatch"||result.GetProperty("match_kind").GetString()!="encoding_equivalent"||result.GetProperty("proof").ValueKind!=JsonValueKind.False)return false;
+                    if(!result.TryGetProperty("encoding_equivalence_sha256",out var proof)||Hash(File.ReadAllBytes(Path.Combine(folder,"encoding-equivalence.json")))!=proof.GetString())return false;
+                    var gate=result.GetProperty("retained_check");if(gate.GetProperty("status").GetString()!="encoding_equivalent"||gate.GetProperty("strict_status").GetString()!="mismatch"||gate.GetProperty("proof").ValueKind!=JsonValueKind.False||!JsonElement.DeepEquals(gate.GetProperty("encoding_equivalence"),result.GetProperty("encoding_equivalence")))return false;
+                }
+                var fresh=ReplayableAdapter(request,"verify_encoding_cache",folder).GetAwaiter().GetResult();
+                if(fresh.GetProperty("status").GetString()!=status||!fresh.GetProperty("fresh_comparison").GetBoolean())return false;
+            }
             if(isBatch) {
                 if(!result.TryGetProperty("batch_provenance",out var provenance)||!Guid.TryParseExact(parent.GetString(),"N",out _)||request.GetProperty("job_id").GetString()!=job)return false;
                 var allowed=new[]{"build/run.json","build/compiler.json","build/start.json","build/exit.json","build/build-exit.txt"};
@@ -107,8 +127,8 @@ public sealed partial class Engine
                 foreach(var(name,key)in new[]{("manifest.json","manifest_sha256"),("completed.json","envelope_sha256"),("dispatch-start.json","dispatch_sha256")})if(Hash(File.ReadAllBytes(Path.Combine(batchFolder,name)))!=batch.GetProperty(key).GetString())return false;
             }
             else if(result.TryGetProperty("batch_provenance",out _)||result.TryGetProperty("group_job_id",out _)||(result.TryGetProperty("build",out var ordinaryBuild)&&ordinaryBuild.TryGetProperty("batch",out _)))return false;
-            return result.GetProperty("status").GetString()=="full_match" && Hash(File.ReadAllBytes(Path.Combine(folder,"candidate.cpp")))==result.GetProperty("source_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"build/candidate.obj")))==result.GetProperty("object_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"comparison.json")))==result.GetProperty("comparison_sha256").GetString() && (!result.TryGetProperty("retained_comparison_sha256",out var retained)||Hash(File.ReadAllBytes(Path.Combine(folder,"retained-comparison.json")))==retained.GetString()) && (!result.TryGetProperty("callee_lifts_sha256",out var dependencies)||Hash(File.ReadAllBytes(Path.Combine(folder,"callee-lifts.json")))==dependencies.GetString()) && (!result.TryGetProperty("eh_evidence_sha256",out var eh)||Hash(File.ReadAllBytes(Path.Combine(folder,"eh-evidence.json")))==eh.GetString());
-        } catch(Exception e) when(e is IOException or JsonException or KeyNotFoundException or InvalidOperationException or FormatException) {return false;}
+            return AcceptedMatch(result.GetProperty("status").GetString()) && Hash(File.ReadAllBytes(Path.Combine(folder,"candidate.cpp")))==result.GetProperty("source_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"build/candidate.obj")))==result.GetProperty("object_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"comparison.json")))==result.GetProperty("comparison_sha256").GetString() && (!result.TryGetProperty("retained_comparison_sha256",out var retained)||Hash(File.ReadAllBytes(Path.Combine(folder,"retained-comparison.json")))==retained.GetString()) && (!result.TryGetProperty("callee_lifts_sha256",out var dependencies)||Hash(File.ReadAllBytes(Path.Combine(folder,"callee-lifts.json")))==dependencies.GetString()) && (!result.TryGetProperty("eh_evidence_sha256",out var eh)||Hash(File.ReadAllBytes(Path.Combine(folder,"eh-evidence.json")))==eh.GetString());
+        } catch(Exception e) when(e is IOException or JsonException or KeyNotFoundException or InvalidOperationException or FormatException or ArgumentException) {return false;}
     }
     public object ReplayableInspect(string id,int limit)
     {
@@ -132,7 +152,7 @@ public sealed partial class Engine
         var project=request.GetProperty("project").Deserialize<ProjectConfig>(Options)!;
         var buildFolder=Path.Combine(folder,"build");var inputs=request.GetProperty("inputs").Deserialize<Dictionary<string,string>>(Options)!;
         foreach(var name in new[]{"candidate.cpp","candidate.obj","run.json","compiler.json"}){var path=Path.Combine(buildFolder,name);inputs[path]=Hash(File.ReadAllBytes(path));}
-        var retained=new{project,build=new{config=new{folder=buildFolder,rva=request.GetProperty("rva").GetUInt32(),profile="ordinary"},expected_source_sha256=built.GetProperty("source_sha256").GetString()},inputs};
+        var retained=new{project,build=new{config=new{folder=buildFolder,rva=request.GetProperty("rva").GetUInt32(),profile="ordinary",allow_encoding_equivalence=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!.UsesEncodingEquivalence},expected_source_sha256=built.GetProperty("source_sha256").GetString()},inputs};
         File.WriteAllText(Path.Combine(folder,"retained-check-request.json"),Json(retained));
         var report=Path.Combine(folder,"retained-comparison.json");
         var pi=new ProcessStartInfo(registry.Python){UseShellExecute=false,RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,WorkingDirectory=registry.AdapterRoot};
@@ -144,7 +164,11 @@ public sealed partial class Engine
         // Preserve the first full-range comparison and the existing adapter's independent
         // ordinary/EH gate report. Neither a generated source nor an unrun gate earns credit.
         var result=built.Deserialize<Dictionary<string,JsonElement>>(Options)!;
-        result["status"]=built.GetProperty("status").GetString()=="full_match"?checkedResult.GetProperty("status").Clone():built.GetProperty("status").Clone();result["retained_check"]=checkedResult.Clone();
+        var firstStatus=built.GetProperty("status").GetString();var secondStatus=checkedResult.GetProperty("status").GetString();
+        var merged=AcceptedMatch(firstStatus)?(firstStatus==secondStatus?firstStatus:AcceptedMatch(secondStatus)?"inconclusive":secondStatus):firstStatus;
+        if(merged=="encoding_equivalent"&&(!built.TryGetProperty("encoding_equivalence",out var firstProof)||!checkedResult.TryGetProperty("encoding_equivalence",out var secondProof)||!JsonElement.DeepEquals(firstProof,secondProof)||built.GetProperty("strict_status").GetString()!="mismatch"||checkedResult.GetProperty("strict_status").GetString()!="mismatch"||built.GetProperty("proof").ValueKind!=JsonValueKind.False||checkedResult.GetProperty("proof").ValueKind!=JsonValueKind.False))merged="inconclusive";
+        result["status"]=JsonSerializer.SerializeToElement(merged);result["retained_check"]=checkedResult.Clone();
+        result["retained_request_sha256"]=JsonSerializer.SerializeToElement(Hash(File.ReadAllBytes(Path.Combine(folder,"retained-check-request.json"))));
         result["retained_comparison_sha256"]=JsonSerializer.SerializeToElement(Hash(File.ReadAllBytes(report)));
         return JsonSerializer.SerializeToElement(result,Options);
     }

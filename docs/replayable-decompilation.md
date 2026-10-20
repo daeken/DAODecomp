@@ -52,6 +52,14 @@ are reported explicitly, using existing job results and the compact handoff.
 
 ## Checkpoints
 
+A checkpoint has one cumulative machinery review, rather than per-function
+audits. Its bounded author may fix concrete findings and dispatch up to two
+focused same-reviewer deltas, separately accounting each request at dispatch.
+Completed requests stay consumed. Those repairs and an approved release need no
+new director permission; disagreement, exhausted deltas or new external scope
+still require escalation. This clarification joins source checkpoints and never
+requires a policy-only release.
+
 At a coherent capability milestone or the end of a bounded implementation batch:
 
 1. Finish the representative regression sample and record its deltas and coverage.
@@ -199,3 +207,33 @@ record CI as disabled, not passed. Update the installed MCP only from
 tested/reviewed releases, keeping its old installation recoverable.
 Publish useful generated source without binaries, compiler files, assets or
 private captures. Keep the learning log and reproducible methodology current.
+
+
+### Bounded encoding equivalence
+
+Exact full-function matching remains available. The additional user-authorized
+opt-in checking pass distinguishes a verified architectural encoding relation
+from byte equality. Its first rule permits one scale-one default-DS base/index
+swap in a MOV immediate memory store, only when all remaining relocated bytes,
+full boundaries, values, widths and targets agree. Fresh pinned SharpRetro typed
+IL must independently agree on the wrapped address and ordered store. Prefix,
+segment, special-register, control-target, relocation and unknown-effect guards
+refuse unsupported cases. EH continues through its complete existing graph gate.
+
+The recipe appends `compare-complete-x86-encoding-equivalence-v1` to the existing
+ordered-memory composition and uses architecture
+`x86-bits32-composed-memory-encoding-equivalence-v1`. It changes checking policy,
+not generated source. `full_match` remains exact; `encoding_equivalent` is a
+separate outcome with its strict nonmatch retained. Queue/status totals expose
+both counts and their accepted union. The project-wide uncertainty barrier and
+ascending selector still apply. Cache reads for this opt-in policy freshly
+recheck the bound artifacts and accepted mode; a saved diagnostic certificate
+or edited result label is insufficient.
+
+This is bounded compiled-artifact evidence under common architectural context,
+not a universal function-contract or game proof. External calls retain their
+original targets and unknown effects. Code-byte observations, debugger/fetch
+side channels and arbitrary entry into instruction interiors are outside this
+relation. Source exports remain separate. The current local release/handoff
+records identify which exact reviewed runtime is installed; development sample
+results do not silently transfer into another input key.

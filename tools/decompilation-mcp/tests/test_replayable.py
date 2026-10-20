@@ -1,4 +1,4 @@
-"""Exercise the shared portable IR/frontier suite in the standalone .NET CI job."""
+"""Exercise shared portable recovery/frontier/encoding checks in the standalone runner."""
 import importlib.util
 from pathlib import Path
 
@@ -48,3 +48,9 @@ BatchDecisionDocumentTests = load_shared('test_replayable_byvalue').BatchDecisio
 
 LoopTests = load_shared('test_replayable_loops').LoopTests
 OrderedMemoryTests = load_shared('test_replayable_ordered_memory').OrderedMemoryTests
+
+# The bounded encoding lane keeps its exact comparator and typed crosscheck tests.
+sys.path.insert(0,str(ROOT))
+EncodingEquivalenceTests = load_shared('test_encoding_equivalence').EncodingEquivalenceTests
+EncodingPipelineTests = load_shared('test_replayable_encoding').EncodingPipelineTests
+EncodingBridgeTests = load_shared('test_replayable_encoding').EncodingBridgeTests

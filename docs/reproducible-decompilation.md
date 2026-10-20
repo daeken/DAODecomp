@@ -968,3 +968,53 @@ while an untruncated word does not. The current forward-memory source profile
 refuses halfword inputs rather than silently widening them. The first batch-003
 review's rejected freeze and both open counterexamples remain part of its
 transformation history; a passing native sample did not waive those repairs.
+
+### Check encoding relations without erasing semantic differences
+
+A strict full-range comparison is a useful first gate even when byte identity is
+not the goal. Keep its actual nonmatch and resolved relocation evidence, then
+apply a separately versioned, explicit architectural relation. Do not silently
+rewrite the original bytes or accept a broad effective-match flag. Equivalent
+looking instruction counts or unconstrained IR equality can hide changed values.
+A standalone pinned reccmp helper probe, for example, accepted both a safe address
+operand swap and an unsafe incoming-register substitution; it was not a full
+linked-image/PDB validation run.
+
+The first bounded relation in this implementation covers one Bits32 MOV immediate
+store with scale1 and default DS, whose distinct base/index registers exchange
+roles. Both registers must avoid ESP/EBP and no-base/no-index encodings; widths,
+immediate, displacement, prefixes, instruction boundaries and all other relocated
+bytes must agree. Refuse unresolved/overlapping relocation, incomplete range,
+changed effect or control target, and direct instruction-interior or unknown
+indirect edges. Existing complete EH requirements stay in force; a main-only
+relation cannot repair missing exception dependencies.
+
+Independently lift both actual changed instructions with the attested frontend.
+Accept only the explicit capture of `Zext64(Trunc32(affine unsigned addition))`
+followed by the same constant-width store through that capture. Canonicalize its
+register coefficients and constant modulo2^32. Preserve ordered effects, unknown
+values and flags; do not use diagnostic strings as value identities or zero an
+unsupported expression. Retain raw typed trees, normalized relation and complete
+input hashes automatically. The paired store uses the same effective address,
+width/value and DS/fault context. This does not prove object validity, unmodeled
+calls, code-byte observations, asynchronous behavior or arbitrary interior entry.
+
+The replayable pipeline uses an opt-in checking recipe with unchanged source
+emission and independently runs its first and retained-artifact gates. Both must
+agree on the accepted mode. `full_match` and `encoding_equivalent` have separate
+queue/status counts, and only current bound recovery results advance the ascending
+selector. A result JSON or saved proof flag is never sufficient: compare it with
+the durable job, verify source/object/compiler/envelope and retained-request
+bindings, then freshly recompute the comparison and typed relation. Missing or
+stale evidence remains nonaccepting across restart or version changes. Keep
+`proof=false` for universal function-contract and game claims.
+
+Compiler diagnosis is useful alongside this checking work. Holding one target
+body fixed across12 CU/name contexts produced identical target code, and authentic
+VC8 RTM/SP1 cohorts produced identical fully relocated bodies in24 paired sampled
+observations across a bounded flag matrix. One additional pair stayed inconclusive
+because an outlined dependency was not bound. These are measured negatives for
+those contexts/cohorts, not proof of a unique original compiler or universal CU
+invariance. Preserve the unsuccessful configurations, separate library/utility
+provenance from game-build provenance, and avoid adopting unsafe object bounds or
+arbitrary source spellings just to influence an interchangeable SIB choice.

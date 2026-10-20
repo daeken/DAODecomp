@@ -39,6 +39,12 @@
   Do not add a second release cycle solely to publish the first cycle's results;
   keep those results in the local handoff and the next combined checkpoint.
   Full range, relocation, EH and unknown-outcome requirements remain unchanged.
+- One cumulative review means one machinery review at a coherent checkpoint,
+  not an audit per function. Within a bounded author batch, fix concrete review
+  findings and dispatch up to two focused same-reviewer delta requests after
+  separately accounting each at actual dispatch. Completed review requests remain
+  consumed; no new director permission is needed for these repairs or an approved
+  release. Escalate disagreement, exhausted deltas or genuinely new external scope.
 - Goal: function-level behavioral equivalence to the pinned original build, then
   a replacement executable using original assets. A byte-identical whole game is
   not required. Complete reccmp matches are an authorized automatic acceptance
@@ -48,6 +54,11 @@
   The new pipeline targets complete matches across the inventory, but 100%
   coverage is an aspiration, not an assumed achievable result or a whole-game
   execution claim. Keep its counts separate from inherited published source.
+- The user also authorizes a separately reviewed opt-in native encoding-equivalence
+  lane for bounded architectural rewrites. Preserve the exact comparator verdict,
+  full ranges/relocations/EH gates, fresh typed-IL evidence and input bindings;
+  report exact and encoding-equivalent results separately. Unsupported or unknown
+  cases cannot pass through an effective-match heuristic or arbitrary IR equality.
 - Read README.md and docs/validation.md before changing validation or recovered code.
 - Never describe synthetic tests, guessed signatures, emulator-only results or a
   passing corpus as a proof of the game. Distinguish observation from inference.

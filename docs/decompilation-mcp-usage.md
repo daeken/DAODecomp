@@ -529,3 +529,73 @@ adds `raise-reducible-ordered-memory-graph-v1`,
 supported recovery passes. Generation alone grants no match credit. The narrow
 loop profile and forward effect tree refuse unsupported cycles, stack joins,
 argument state and expressions; the complete comparator remains unchanged.
+
+
+### Opt-in bounded encoding-equivalent checking
+
+Use the existing recipe-aware `replayable_run_next`,
+`replayable_regression_check` and `replayable_regression_batch` operations. Supply
+all existing ordered-memory passes, followed by the new checking pass:
+
+```json
+{
+  "schema_version": 1,
+  "architecture": "x86-bits32-composed-memory-encoding-equivalence-v1",
+  "frontend": "sharpretro-typed-v1",
+  "compiler_profile": "vc8-x86-flat32-ordered-memory-control-v1",
+  "steps": [
+    "raise-linear-effects-tail-v2",
+    "derive-original-normal-return-stack-v1",
+    "resolve-pure-forwarding-normal-return-v1",
+    "resolve-transparent-effectful-tail-ABI-v1",
+    "raise-one-forward-conditional-v1",
+    "raise-bounded-two-exit-effects-v1",
+    "derive-original-VC8-EH-frame-v1",
+    "raise-initialized-private-subword-copies-v1",
+    "observe-outgoing-push-and-private-cleanup-regions-v1",
+    "raise-reducible-ordered-memory-graph-v1",
+    "raise-guarded-counted-loop-v1",
+    "raise-aliasable-forward-memory-effects-v1",
+    "emit-vc8-composed-ordered-memory-control-v1",
+    "compare-complete-x86-encoding-equivalence-v1"
+  ]
+}
+```
+
+The compiler/source composition is unchanged. The checking rule requires one
+supported MOV immediate-store SIB base/index swap with scale1, default DS, equal
+width/value/displacement, complete equal-length decoded ranges and every other
+relocated byte identical. ESP/EBP, segment/address/LOCK/REP prefixes, unsupported
+operand forms, ambiguous relocations and interior/indirect control targets refuse.
+Both actual changed instructions are freshly lifted by the attested frontend;
+only explicit fixed-width affine address addition and the same captured store
+are normalized. Missing, stale or unknown typed semantics cannot pass. The EH
+backend still requires its complete original/candidate graph; this pass cannot
+salvage a missing handler or runtime binding.
+
+| Result | Meaning |
+| --- | --- |
+| `full_match` | Existing exact full-range/relocation or complete EH match |
+| `encoding_equivalent` | Strict nonmatch retained, plus the narrow relation checked by both fresh gates |
+| `mismatch` | Neither permitted lane accepts |
+| `inconclusive` / `external_outcome_unknown` | No acceptance; external uncertainty retains its project barrier |
+
+`replayable_status` keeps `new_pipeline_full_matches` and
+`regression_full_matches` as exact counts. It adds
+`new_pipeline_encoding_equivalent_matches`,
+`regression_encoding_equivalent_matches`, their corresponding `accepted_matches`
+union fields, and `ahead_regression_encoding_equivalent_matches`. Per-row flags
+also distinguish exact, equivalent and accepted. Only current bound recovery
+results advance the ascending selector; ahead regression checks do not skip an
+earlier unresolved identity. A new checking/runtime input key starts without
+transferred credit.
+
+The strict `comparison.json` remains intact. Automatically derived certificates
+retain the changed bytes, full-range/relocation accounting, actual typed trees,
+canonical wrapped-address/store relation and source/object/lifter/checker hashes.
+Cache validation recomputes the relation and verifies the durable completed job,
+receipt/envelope and result mode; it never trusts a cached proof flag. These
+records have `proof=false` for universal function/game claims. Old recipes and
+immutable releases remain available for rollback. Public `candidate_check` keeps
+its existing exact policy; the explicit replayable recipe opts its internal
+retained-artifact gate into the additional lane.

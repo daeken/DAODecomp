@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import subprocess
 
 
 def sha(data):
@@ -124,7 +125,19 @@ def run(request):
         status = ('full_match' if all(f['status'] == 'exact_object_match' for f in rows) else
                   'mismatch' if all(f['status'] in ('nonmatch', 'exact_object_match') for f in rows) else
                   'inconclusive')
-    compact = dict(schema_version=1, status=status, backend=report['backend'],
+    strict_status=status
+    certificate=None
+    if not needs_eh and status=='mismatch' and target.get('allow_encoding_equivalence') is True:
+        try:
+            from tools.replayable.encoding_check import certify_report
+            certificate=certify_report(report,project,inputs)
+            report['encoding_equivalence']=certificate
+            status='encoding_equivalent'
+        except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
+            # No ambiguous compiler action occurs in this host-only checker. A
+            # refused optional lane preserves its fresh strict nonmatch outcome.
+            report['encoding_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    compact = dict(schema_version=1, status=status, strict_status=strict_status, match_kind='encoding_equivalent' if certificate is not None else 'exact' if status=='full_match' else 'none', backend=report['backend'],
                    requested_rva=target['rva'], module_sha256=module_hash, source_sha256=sha(source),
                    object_sha256=sha(obj), compiler_sha256=sha(compiler),
                    input_snapshot_sha256=sha(json.dumps(inputs, sort_keys=True).encode()),
@@ -135,6 +148,7 @@ def run(request):
                    cached_verdict_reused=False, proof=False,
                    scope='pinned retained compiled artifacts and supported full ranges/graphs; external semantics unmodeled',
                    compiler_provenance='retained receipt plus actual registered compiler hash; complete compiler installation closure not attested')
+    if certificate is not None:compact['encoding_equivalence']=certificate
     return compact, report
 
 

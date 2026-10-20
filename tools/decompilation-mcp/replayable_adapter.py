@@ -258,10 +258,36 @@ def compare_built(request, folder, source, receipt=None):
     rows = report.get('functions', [])
     status = ('full_match' if not report.get('error') and len(rows) == 1 and rows[0]['rva'] == request['rva'] and rows[0]['status'] == 'exact_object_match' else
               'mismatch' if len(rows) == 1 and rows[0]['status'] == 'nonmatch' else 'inconclusive')
-    return dict(status=status, functions=[{k: r[k] for k in ('rva', 'status', 'original_size', 'object_size', 'all_bytes_accounted', 'blockers') if k in r} for r in rows],
+    result = dict(status=status, strict_status=status, match_kind="exact" if status=="full_match" else "none", functions=[{k: r[k] for k in ('rva', 'status', 'original_size', 'object_size', 'all_bytes_accounted', 'blockers') if k in r} for r in rows],
                 source_sha256=sha(source.encode()), object_sha256=sha(obj), comparison_sha256=sha((folder / 'comparison.json').read_bytes()), build=receipt, proof=False,
                 publication='draft_only_pending_independent_machinery_review', provider_calls=0,
                 scope='fresh VC8 x86 object and pinned complete original function range; no game execution')
+    if status=='mismatch' and request.get('recipe',{}).get('architecture')=='x86-bits32-composed-memory-encoding-equivalence-v1':
+        try:
+            from tools.replayable.encoding_check import certify_report
+            certificate=certify_report(report,project,request['inputs'])
+            proof_bytes=json.dumps(certificate,sort_keys=True,separators=(',',':')).encode()
+            (folder/'encoding-equivalence.json').write_bytes(proof_bytes)
+            result.update(status='encoding_equivalent',match_kind='encoding_equivalent',encoding_equivalence=certificate,encoding_equivalence_sha256=sha(proof_bytes))
+        except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
+            result['encoding_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    return result
+
+
+
+def verify_encoding_cache(request,folder):
+    # Fresh host-only validation. Never rewrite retained reports or launch cl.
+    from tools.replayable.encoding_check import parse
+    import adapter as retained_adapter
+    require(request.get('recipe',{}).get('architecture')=='x86-bits32-composed-memory-encoding-equivalence-v1','encoding_cache_recipe')
+    result=parse((folder/'result.json').read_bytes());retained=parse((folder/'retained-check-request.json').read_bytes())
+    require(result['status'] in ('full_match','encoding_equivalent') and retained['project']==request['project'] and retained['build']['config']['rva']==request['rva'] and retained['build']['config'].get('allow_encoding_equivalence') is True,'encoding_cache_request_binding')
+    if result['status']=='encoding_equivalent':
+        raw=(folder/'encoding-equivalence.json').read_bytes()
+        require(sha(raw)==result['encoding_equivalence_sha256'] and parse(raw)==result['encoding_equivalence'],'encoding_cache_certificate_binding')
+    compact,report=retained_adapter.run(retained)
+    require(compact['status']==result['status'] and (result['status']!='encoding_equivalent' or compact.get('encoding_equivalence')==result['encoding_equivalence']),'encoding_cache_fresh_certificate_disagreement')
+    return dict(status=compact['status'],fresh_comparison=True,compilation_performed=False,proof=False)
 
 
 def read_batch_dispatch_decision(path):
@@ -347,8 +373,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build'), 'unsupported_pipeline_action')
-        result = batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache'), 'unsupported_pipeline_action')
+        result = batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

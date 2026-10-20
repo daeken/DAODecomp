@@ -1941,3 +1941,70 @@ aligned byte/word input domain. Both counterexamples and the rejected freeze are
 preserved. Focused tests cover the refusals and supported boundaries; these
 refusal corrections require source replay, not another VM compilation of
 unchanged sampled C++.
+
+### Separate byte equality from a bounded encoding relation
+
+Batch003 was subsequently reviewed, published and installed. Fresh ordered
+controls through `0x1180` retained eight exact comparisons and a distinct
+historical total of834 native object matches; the `0x11c0` SIB difference stayed
+rejected. Source exports and whole-game evidence remained zero.
+
+A controlled compilation-unit experiment then held the generated target body,
+compiler and flags fixed across12 sources. Unrelated prefix/suffix functions,
+loop/branch code, unused globals/types, declaration/helper order and two separately
+labeled class-name changes all produced the identical complete74-byte target.
+The compiler time summed0.914s in one2.612s dispatch. This refutes those tested CU
+contexts as the explanation; it does not prove CU context can never affect MSVC.
+Eleven earlier address-emission spellings and a uniform size-preference sample
+also failed to repair the difference. The size preference regressed controls,
+so speculative pointer/layout/option rules were retained locally and not adopted.
+
+An isolated, user-requested calibration compared authentic VC8 RTM
+14.00.50727.42 with SP1.762 using a frozen210-byte ordinary function, the74-byte
+case and a49-byte loop control. Across50 explicit successful compiler exits and
+12 requested flag profiles per cohort, all24 completely relocated paired bodies
+were identical. One no-inline pair remained inconclusive because an outlined
+helper dependency was unexamined; its raw bytes and symbolic relocations also
+agreed. `/Oa` was an ignored alias, not an effective additional configuration.
+Compiler time summed5.055s and dispatch time15.221s. Neither cohort nor these
+flags explained the SIB choice, and no production compiler/flag change followed.
+The original game PE exposes linker8.0 without exact backend/option provenance;
+a separate configuration utility's compiler-family metadata is not proof of the
+game's compiler patch level. Further compiler calibration remains a separate lane.
+
+The user explicitly authorized an additional encoding-equivalence check rather
+than requiring exact byte equality in this case. The first rule preserves the
+strict comparison and permits only one supported default-DS, scale-one base/index
+swap in a MOV immediate store, with complete otherwise-identical relocated range.
+It excludes ESP/EBP, unsupported prefixes/scales, changed values/widths, ambiguous
+relocations and interior/indirect control targets. Fresh attested SharpRetro
+output must contain the same captured store and an explicit wrapped32-bit affine
+address; register coefficients and constants normalize in the fixed-width ring.
+Independent undefined values, wrong incoming registers and arbitrary IR equality
+are not normalized into agreement.
+
+This is narrower than trusting a general effective-match heuristic. A standalone
+probe of pinned reccmp's `find_effective_match` returned true both for the actual
+swap and for an unsafe `mov eax,ecx` versus `mov eax,edx` example. The probe used
+the helper with annotation imports substituted, not the complete linked-PE/PDB
+CLI. It motivates a bounded rule with negative controls, not a claim that all of
+reccmp is unsound or that its heuristic is an architectural proof.
+
+The final development sample reused ten identities with fresh bound compilation:
+eight prior exact matches including the complete197-byte EH graph, one separately
+reported encoding-equivalent result at `0x11c0`, and the retained `0x476650`
+mismatch, in17.79s with no uncertain compiler outcome. A prior18.63s run was
+retained before tightening result-label/cache guards. Both fresh comparison gates
+agree on accepted mode; the strict nonmatch remains in the report. Cache reads
+recompute comparison and typed evidence, verify the durable result and compiler
+envelope, and refuse missing, stale, forged or relabeled certificates. Fifty-five
+focused tests passed; synthetic protocol fixtures grant no game/native credit.
+The other27,545 identities remain unverified under the additional checking mode.
+
+The new outcome is `encoding_equivalent`, distinct from `full_match`. This is
+compiled-artifact evidence under paired architectural context, with code-byte
+observations and arbitrary interior entry excluded; original external calls and
+unknown effects remain aligned, not stubbed or proved. Reports keep `proof=false`
+for universal function/game claims. Review/adoption and fresh installed ordered
+checks are recorded locally; no development result silently transfers into a
+released input key or source export.
