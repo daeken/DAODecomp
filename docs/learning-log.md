@@ -1470,3 +1470,24 @@ The next sequential identity, `0x1040`, remains unsupported. It passes a stack
 argument to an external callee and returns with immediate stack cleanup. Neither
 the callee's cleanup nor the caller's argument interpretation may be guessed
 away to balance the stack. This is the next shared ABI-recovery problem.
+
+
+### Durable targeted regression checks
+
+The tail-rule scan exposed an execution gap: its 207 additional hypotheses could
+not be compiled through the ascending frontier operation without skipping the
+unresolved earlier function. The bounded correction adds explicit inventory-ID
+target selection to the same durable submission and execution path. Regression
+rows use a reserved key namespace in the existing queue table; old clients still
+observe their active/unknown barriers. Current artifact-bound counts remain
+separate from recovery rows. Both
+modes retain the project-wide running/unknown barrier, exact input bindings,
+idempotency and shared compiler lock. An optional generated-source digest refuses
+a changed scan hypothesis before compilation. This operation adds no new
+transformation semantics; publication and measured affected-corpus outcomes are
+recorded separately after independent review. Two development targeted MCP checks
+passed complete 22/22-byte and 11/11-byte comparisons on macOS ARM64 driving the
+existing Windows 11 VC8 compiler. A wrong regenerated-source digest refused before
+compilation. The unchanged retained adapter additionally checked each actual
+object and its ordinary/EH gate; no object check can upgrade an earlier failed
+comparison. These controls are not the affected-corpus result.

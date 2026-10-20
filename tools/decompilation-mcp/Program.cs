@@ -64,6 +64,9 @@ public sealed class DecompilationTools(Engine engine)
     [McpServerTool(Name = "replayable_run_next"), Description("Generate and optionally compile/check the lowest inventory RVA without a current pipeline full match. Unsupported frontiers remain active. Versioned JSON recipes are bounded; no provider calls or source publication.")]
     public string ReplayableRunNext(string project_id,string idempotency_key,string? recipe_json=null,bool compile=true) => Engine.Json(engine.ReplayableNext(project_id,idempotency_key,recipe_json,compile));
 
+    [McpServerTool(Name = "replayable_regression_check"), Description("Generate and optionally compile/check one explicit registered inventory identity through the durable replayable worker. Separate regression results never advance the ascending recovery frontier. Optional source hash is checked before compilation; no source injection.")]
+    public string ReplayableRegressionCheck(string project_id,string function_id,string idempotency_key,string? expected_source_sha256=null,string? recipe_json=null,bool compile=true) => Engine.Json(engine.ReplayableRegression(project_id,function_id,idempotency_key,recipe_json,compile,expected_source_sha256));
+
     [McpServerTool(Name = "replayable_status"), Description("Inspect the current exact pipeline key, ascending unresolved frontier, inventory denominator and current artifact-bound match count. Historical imported sources do not count.")]
     public string ReplayableStatus(string project_id) => Engine.Json(engine.ReplayableStatus(project_id));
 

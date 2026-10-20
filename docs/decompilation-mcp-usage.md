@@ -181,7 +181,8 @@ state root therefore share idempotency and cannot execute the same job twice.
 A disconnected frontend does not cancel a worker. Queued local checks can be
 redispatched after a missed spawn; a running job whose owner disappeared becomes
 `interrupted_unknown`, never an automatic successful replay. No external
-compiler/provider operations are performed by this release.
+compiler operations occur for retained checks; replayable compilation is explicit.
+No provider operations are performed.
 
 Submission hashes actual original/inventory/compiler/source/object/receipt/policy/
 library files plus adapter/comparator/engine implementations. Input contents are
@@ -240,6 +241,7 @@ and typed SharpRetro effects rather than importing recovered bodies.
 | Tool | Arguments and behavior |
 | --- | --- |
 | `replayable_run_next` | `project_id`, `idempotency_key`, optional `recipe_json`, `compile` (default true). Submit the lowest unresolved RVA to lift, reconstruct, emit, compile and compare; set `compile: false` to stop at a draft. |
+| `replayable_regression_check` | `project_id`, opaque inventory `function_id`, `idempotency_key`, optional lowercase `expected_source_sha256`, `recipe_json`, `compile` (default true). Use the same generation/build/check worker for an explicit regression identity. A supplied source hash must match regenerated C++ before any compilation. |
 | `replayable_inspect` | `job_id`, optional `source_limit`. Read retained stage output and generated C++. |
 | `replayable_status` | `project_id`. Inspect the current frontier and matches with current input/artifact bindings. |
 | `job_get` | Read the submitted job's durable outcome without rerunning it. |
@@ -279,11 +281,24 @@ remain unsupported. Stack-passed arguments and unknown callee cleanup, including
 the next sequential `0x1040` example, are not inferred away. External calls remain
 real unresolved declarations.
 
+Targeted regression attempts have separate durable rows and match counts. They
+use a reserved input-key namespace in the existing queue table, so older clients
+also observe active/unknown regression jobs. They never satisfy the ascending
+recovery selector, including when an ahead identity
+fully matches. `replayable_status` reports `regression_full_matches`,
+`ahead_regression_full_matches`, a bounded row view and its total separately from
+`new_pipeline_full_matches`. A new token explicitly requests a new observation;
+the old request and result remain retained. Changing the identity, mode, expected
+source hash, compiler or runtime refuses reuse of the same token. Both modes
+share the project-wide running/unknown barrier across every input key.
+
 An unsupported body or mismatch retains the same frontier. Active or ambiguous
 external execution requires reconciliation before retry. Idempotent reads never
 replay a compiler operation. `compile: false` produces only a draft. Current
 full matches require the full original range and the existing independent object
-comparator; source/object/report changes invalidate cached credit. Historical
+comparator. Generated objects also pass through the unchanged retained adapter,
+including its native-EH/FS:[0] gate; this additional check cannot upgrade a failed
+ordinary comparison. Source/object/either-report changes invalidate cached credit. Historical
 published functions are not imported as successes in this new queue.
 
 Run the standalone MCP tests after a Release build; they include the shared
