@@ -14,3 +14,6 @@ def load_shared(name):
 
 RecoveredIrTests = load_shared('test_replayable_ir').RecoveredIrTests
 PipelineBoundaryTests = load_shared('test_replayable_pipeline').PipelineBoundaryTests
+
+TransportGuardTests = load_shared('test_replayable_transport').TransportGuardTests
+TransportBoundaryTests = load_shared('test_replayable_transport').TransportBoundaryTests

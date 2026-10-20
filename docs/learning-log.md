@@ -1510,3 +1510,24 @@ confirmed compiler exits; the failed dispatch does not establish whether its
 remote compiler ran. Raw evidence remains private under
 `local/replayable-regression-001/`. Reconciliation of the existing unknown attempt
 requires separate authorization and must preserve its history.
+
+### Preserving an uncertain compiler dispatch
+
+The failed Parallels dispatch retained no exit marker, object or compiler receipt.
+Read-only inspection found its exact guest workspace and shared launch input
+absent, while both parent directories were reachable and no other compiler or
+command shell was active. The old production runner was already paused with no
+in-flight requests and was left untouched. These observations do not establish
+whether the old compiler ran or why the transport returned its SDK error.
+
+The bounded recovery operation supports **nonaccepting abandonment**, not inferred
+failure or artifact acceptance. It verifies the original request/input/source
+bindings and the registered synchronous copy-before-compile launch protocol,
+holds the old worker claim and existing shared VM lock, and requires the exact
+launch prefix and workspace to remain absent with only its own diagnostic shell
+present. Present artifacts, active launchers, changed files, inaccessible bases
+or ambiguous transport results retain the barrier. A new durable observation and
+barrier release commit atomically; the original unknown request/result stay
+unchanged. A later compiler request must be explicit. The older approved execution
+runtime can continue its unchanged binding set, rather than transferring its
+completed matches to a new generator runtime.

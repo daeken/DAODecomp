@@ -615,3 +615,23 @@ confirmed compiler exits; the failed dispatch does not establish whether its
 remote compiler ran. Raw evidence remains private under
 `local/replayable-regression-001/`. Reconciliation of the existing unknown attempt
 requires separate authorization and must preserve its history.
+
+### A nonaccepting transport boundary
+
+Missing output is insufficient evidence of compiler failure. At the interrupted
+affected-corpus dispatch, the exact guest workspace and host/shared launch input
+were absent, the mapped parent directories were reachable, and no other compiler
+or command shell was active. The registered launch protocol synchronously copies
+that input before compilation and stops on a failed copy. These checks support a
+bounded quiescence observation while leaving the original compiler outcome
+unknown; they do not recover or accept a candidate.
+
+The durable abandonment operation requires those observations under the existing
+shared VM lock, ownership of the old worker claim, exact retained source/request
+bindings and an attested synchronous transport profile. It atomically records a
+new **nonaccepting** result and releases only that attempt's barrier. The old
+unknown history remains unchanged. It refuses existing artifacts or workspaces,
+other launchers, changed inputs, inaccessible directories and transport ambiguity.
+It never retries compilation automatically. Continued corpus checks can use the
+unchanged approved execution runtime and retain completed results under their
+original bindings; a different generator runtime receives no transferred credit.

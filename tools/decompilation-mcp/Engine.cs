@@ -225,6 +225,7 @@ public sealed partial class Engine
                 using var update=db.CreateCommand();update.CommandText="UPDATE jobs SET state='running',started=$s WHERE id=$i AND state='queued'";update.Parameters.AddWithValue("$s",DateTimeOffset.UtcNow.ToString("O"));update.Parameters.AddWithValue("$i",id);if(update.ExecuteNonQuery()!=1)return;
                 using var get=db.CreateCommand();get.CommandText="SELECT request FROM jobs WHERE id=$i";get.Parameters.AddWithValue("$i",id);request=(string)get.ExecuteScalar()!;
             }
+            if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var recoveryOperation)&&recoveryOperation.GetString()=="replayable_abandon_unknown"){await RunReplayableAbandonUnknown(id,JsonDocument.Parse(request).RootElement);return;}
             if(JsonDocument.Parse(request).RootElement.TryGetProperty("operation",out var operation) && operation.GetString()=="replayable") { await RunReplayable(id,JsonDocument.Parse(request).RootElement);return; }
             try
             {

@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 namespace Decompilation;
-public sealed record ReplayableConfig(string LifterConfig,string VmBuildLock,string OutputRoot);
+public sealed record ReplayableConfig(string LifterConfig,string VmBuildLock,string OutputRoot,string? TransportConfig=null);
 public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string Frontend,string CompilerProfile,string[] Steps)
 {
     public static PipelineRecipe Default=>new(1,"x86-bits32-linear-tail-v2","sharpretro-typed-v1",Vc8Profile.Version,["raise-linear-effects-tail-v2","emit-thiscall-stores-tail-v2"]);

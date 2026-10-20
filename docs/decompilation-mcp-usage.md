@@ -242,6 +242,7 @@ and typed SharpRetro effects rather than importing recovered bodies.
 | --- | --- |
 | `replayable_run_next` | `project_id`, `idempotency_key`, optional `recipe_json`, `compile` (default true). Submit the lowest unresolved RVA to lift, reconstruct, emit, compile and compare; set `compile: false` to stop at a draft. |
 | `replayable_regression_check` | `project_id`, opaque inventory `function_id`, `idempotency_key`, optional lowercase `expected_source_sha256`, `recipe_json`, `compile` (default true). Use the same generation/build/check worker for an explicit regression identity. A supplied source hash must match regenerated C++ before any compilation. |
+| `replayable_abandon_unknown` | `project_id`, `unknown_job_id`, `idempotency_key`. Submit a durable nonaccepting abandonment of one completed missing-exit-marker dispatch. It never retries or accepts that attempt. Only the registered synchronous transport with absent launch input/workspace and quiescent host is supported. |
 | `replayable_inspect` | `job_id`, optional `source_limit`. Read retained stage output and generated C++. |
 | `replayable_status` | `project_id`. Inspect the current frontier and matches with current input/artifact bindings. |
 | `job_get` | Read the submitted job's durable outcome without rerunning it. |
@@ -321,3 +322,23 @@ recovery's unresolved identity remains `0x1040`. Including the ordered control
 outside the tail rule gives 40 unique current native object matches, zero new
 source exports. These are measured pinned-artifact results, not a complete corpus
 check or game-execution claim.
+
+
+For this narrow recovery path, register optional `replayable.transport_config`
+with an absolute operator-owned JSON profile path. Protocol
+`prlctl-sync-copy-v1` binds `vm_name`, absolute host `executable`, `vcvars`,
+`guest_root`, `guest_transfer_root`, physical `host_transfer_root`, plus
+`build_helper`/`build_helper_sha256` and `vm_helper`/`vm_helper_sha256`. This attests
+the existing synchronous copy-before-compile wrapper with stop-on-error behavior,
+and assumes managed compiler callers share the registered VM lock. The profile,
+transport executable, Python executable, current reconciliation implementation,
+original pipeline inputs and exact retained request/source/launch artifacts are
+bound to each new observation.
+
+Only a completed `compiler_exit_marker_missing_no_automatic_retry` attempt is
+eligible. The original job/result remain unknown and unchanged. A successful
+observation has `status: "abandoned_nonaccepting"`, `match: false` and
+`automatic_retry: false`; it cannot increase either match count. A new explicit
+request is required to try compilation again. Every unsupported observation
+returns inconclusive and retains the project-wide barrier. Reusing an idempotency
+key reads its historical observation, never replays the probe or compiler.

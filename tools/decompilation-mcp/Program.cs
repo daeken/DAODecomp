@@ -67,6 +67,9 @@ public sealed class DecompilationTools(Engine engine)
     [McpServerTool(Name = "replayable_regression_check"), Description("Generate and optionally compile/check one explicit registered inventory identity through the durable replayable worker. Separate regression results never advance the ascending recovery frontier. Optional source hash is checked before compilation; no source injection.")]
     public string ReplayableRegressionCheck(string project_id,string function_id,string idempotency_key,string? expected_source_sha256=null,string? recipe_json=null,bool compile=true) => Engine.Json(engine.ReplayableRegression(project_id,function_id,idempotency_key,recipe_json,compile,expected_source_sha256));
 
+    [McpServerTool(Name = "replayable_abandon_unknown"), Description("Durably abandon one completed missing-exit-marker attempt without accepting it or retrying. Requires a registered synchronous transport profile, exact retained bindings, absent launch prefix/workspace and quiescent isolated compiler host. Original unknown result remains unchanged; unsafe or unsupported observations retain the project barrier.")]
+    public string ReplayableAbandonUnknown(string project_id,string unknown_job_id,string idempotency_key) => Engine.Json(engine.ReplayableAbandonUnknown(project_id,unknown_job_id,idempotency_key));
+
     [McpServerTool(Name = "replayable_status"), Description("Inspect the current exact pipeline key, ascending unresolved frontier, inventory denominator and current artifact-bound match count. Historical imported sources do not count.")]
     public string ReplayableStatus(string project_id) => Engine.Json(engine.ReplayableStatus(project_id));
 
