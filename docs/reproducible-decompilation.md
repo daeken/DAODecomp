@@ -234,7 +234,7 @@ negative cases on the new target, then expand. Keep the per-game differences
 explicit; a reusable configuration interface can follow demonstrated second-game
 requirements instead of being designed speculatively now.
 
-## Reusable core and eventual MCP interface
+## Reusable core and MCP interface
 
 Keep deterministic operations callable without a model: inspect an identity,
 compile its C++, compare the complete range, classify differences, lift both
@@ -243,14 +243,28 @@ make these operations reusable across CLI tools and model providers. Discovery,
 compilation, exact comparison, diagnostic agreement and publication are separate
 states; an MCP wrapper must preserve those distinctions.
 
-An eventual MCP can expose these existing operations and a durable review queue.
-It should carry compact results and artifact references rather than reimplement
+The [first MCP slice](decompilation-mcp-usage.md) exposes inventory/source browsing
+and fresh checks of retained compiler artifacts. The
+[full-workflow design](decompilation-mcp.md) extends this to initial decompilation,
+new compilation, deterministic iteration, refactoring and a durable work queue.
+It carries compact results and artifact references rather than reimplementing
 the compiler, comparator or decompiler in prompts. AST operations such as renaming,
 introducing a typedef or extracting a class need explicit symbol/type scope,
-previewable edits and recompilation; they are future refactoring capabilities,
-not features delivered by the current diagnostic tool. Per-game configuration
-belongs in the backend boundary. Keep developing and measuring the core before
-adding a broad protocol or plugin layer.
+previewable edits and recompilation; they remain future capabilities.
+
+Keep generic x86 effects/source manipulation separate from compiler-specific
+ABI/runtime interpretations, build recipes and matching rules. Decompiler syntax
+conversion is a frontend adapter and per-game identities/paths are project data.
+A rule demonstrated for VC8 does not automatically apply to other compilers.
+All stages should be available through the same engine operations via MCP or CLI,
+including names, types and explanatory source edits after initial matching.
+
+The planned experiment interface uses a versioned JSON stack of transformations.
+Trial a recipe against a frozen baseline over the complete inventory, reuse only
+exact unchanged stages and inspect gains, regressions, unsupported outcomes and
+unrun work. Preserve accepted source until explicit promotion. This provides a
+reproducible way to measure whether a targeted fix generalizes, without hand-editing
+functions or treating partial experiment coverage as universal success.
 
 ## How to add a learning
 

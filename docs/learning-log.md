@@ -1332,3 +1332,31 @@ connection. Four test-owned connections kept temporary database handles alive,
 so Windows refused file removal after the assertions. Explicit `closing(...)`
 now surrounds those transaction contexts. No assertions, server behavior or
 comparison rules changed; the failed CI run remains part of the experiment.
+
+## 2026-10-20 — Portable pipeline boundaries and full MCP coverage
+
+Design decision, not a new recovery or runtime result: separate generic x86
+effects and source manipulation from compiler-specific ABI/runtime interpretation,
+build recipes and matching rules. Frontend syntax conversion remains a versioned
+adapter, and DAO-specific identities/paths remain project data. A rule discovered
+under VC8 is not automatically a generic x86 rule. Its demonstrated compiler and
+option scope must be recorded before reuse.
+
+The [MCP roadmap](decompilation-mcp.md#mcp-covers-the-complete-workflow) now covers
+initial decompilation, deterministic pattern iteration, model source submissions,
+fine-grained names/types/comments, compiler checks, source export and later linked
+execution milestones. All use the same engine operations, source revisions and
+durable jobs. The next implementation slice is a complete draft-to-check path,
+followed by corpus propagation and transactional source refactoring.
+
+Pipeline enhancements should be trialed as versioned JSON stacks of typed AST
+edits and registered rules. Experiments branch from a fixed baseline, account
+for every inventory identity, reuse only unchanged bound stages, and report gains,
+regressions, inconclusive outcomes and pending work before any explicit promotion.
+This is a reusable experiment description, not an extra per-function artifact.
+The recipe interpreter and trial operations are still proposed capabilities.
+
+This update changes documentation only: no new tools, compiler attempts, provider
+calls, matches or execution claims. Existing read/check capabilities and reviewed
+in-progress recovery artifacts are unchanged. Portability remains to be measured
+against further real compiler profiles; this architecture alone does not prove it.

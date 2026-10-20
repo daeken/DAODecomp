@@ -7,6 +7,12 @@ does not compile, change production queues, publish sources or grant historical
 registry credit. A full object/graph match describes pinned compiled artifacts;
 it is not a whole-game or universal C++ semantics proof.
 
+The [architecture and full-workflow roadmap](decompilation-mcp.md#two-parts-of-the-manipulation-pipeline)
+separates reusable x86/source transformations from compiler-specific profiles.
+Initial decompilation, new compilation, pattern propagation and source refactoring
+are intended to be available through MCP; they remain future capabilities, not
+tools added by this documentation update.
+
 ## Build and launch
 
 Install .NET SDK **10.0.101**. The component's `global.json` pins that SDK; the

@@ -16,6 +16,13 @@ C++ remains the only authored per-function artifact. Identity records, build
 inputs, dependency maps and reports are generated. The design does not restore
 the historical per-function contract/corpus/approval-packet workflow.
 
+The 2026-10-20 architecture decision is to separate reusable **x86 semantics and
+source manipulation** from **compiler-specific reconstruction and matching**.
+The entire project workflow, starting with initial decompilation and continuing
+through pattern repair and source refactoring, must be available through MCP.
+These are requirements for subsequent slices; the installed read/check slice
+does not yet implement them.
+
 ## Implementation decision
 
 Use **C# for the core engine, job runner, CLI and MCP server**. This follows the
@@ -76,6 +83,99 @@ Batch small analyses and reuse loaded binary indexes/helper processes where safe
 Measure startup, decoding, hashing, AST parsing, compilation and comparison
 separately before optimizing. A language change alone does not establish speed.
 
+### Two parts of the manipulation pipeline
+
+| Part | Owns | Must not assume |
+| --- | --- | --- |
+| Reusable x86 analysis and source manipulation | Instruction effects, register aliases, flags, memory widths, CFG/data flow, supported SharpRetro lifts, paired diagnostics, Clang symbol/AST operations and generic rule application | A particular C++ calling convention, exception layout, CRT helper, compiler flag, game address or code-generation preference |
+| Compiler profile | Toolchain/build recipe, target ABI and language extensions, object-symbol conventions, runtime/helper identities, exception/unwind layouts, compiler idioms, and candidate spellings/options for matching | That an idiom seen in one version/flag set holds for another, or that improved similarity establishes acceptance |
+
+The core handles x86 facts such as an instruction reading ECX, updating ESP or
+returning with stack cleanup. A compiler profile interprets those facts as a
+possible receiver, argument convention or compiler-generated frame. Unresolved
+interpretations stay explicit. C++ signedness, aliasing and undefined behavior
+still constrain any rewrite; equivalent machine expressions alone do not license
+an unsafe C++ transformation.
+
+PE/COFF parsing and relocation records belong to reusable format adapters;
+compiler-specific symbol decoration and EH interpretation belong to the profile.
+Ghidra export/conversion is a versioned frontend adapter: its pseudocode syntax
+is not a property of x86 or of VC8. Clang is the source-analysis/edit backend,
+not the authority for the selected compiler's emitted code.
+
+Project configuration supplies the binary, asset paths, symbol/type knowledge,
+selected profiles and local tool installations. DAO addresses and historical
+compiler paths do not enter generic rule implementations. Reuse of a profile
+across games does not imply reuse of a game's inferred signatures or layouts.
+
+Proposed internal interfaces, **not implemented APIs**:
+
+- `IArchitectureAnalysis`: decode/lift effects, compare supported structures and
+  report coverage plus unsupported operations.
+- `ICompilerProfile`: describe supported ABI/runtime features, create build
+  recipes, interpret compiler-specific evidence and provide matching rules.
+- `ISourceTransform`: plan bounded symbol/AST edits against a source revision,
+  with explicit preconditions, affected dependencies and a candidate result.
+- `IDecompilerFrontend`: discover/import functions and emit draft C++ plus
+  automatically captured provenance for selected identities or groups.
+
+Compiler profiles consume core analysis and contribute rules through the same
+transform interface. The core has no dependency on a VC8 implementation.
+Rule metadata records its architecture/frontend/compiler requirements, version
+and demonstrated scope. A VC8-derived rule remains profile-scoped until evidence
+justifies moving it into the generic layer. This metadata is authored once per
+reusable rule, never once per recovered function.
+
+The first compiler profile is the actual selected VC8 x86 toolchain and its
+supported options, not a claim of support for every MSVC version. Changing a
+profile invalidates the affected proposals/builds/checks. Unsupported profiles
+may still permit browsing, drafting and generic diagnosis; they cannot silently
+fall back to VC8 behavior or claim a full match.
+
+Extract these boundaries incrementally as operations are added. Initially the
+profile delegates to the already reviewed Python compiler/comparison machinery;
+do not port or refactor a running sweep just to satisfy a directory diagram.
+
+### MCP covers the complete workflow
+
+Every pipeline operation must be available through the same engine API used by
+MCP and the CLI. After one-time trusted installation and local path registration,
+an agent should not need repository-specific shell scripts to move a function
+from discovery to published source. External decompilers, compilers and analysis
+helpers may still run as managed subprocesses.
+
+| Stage | Planned MCP operations | Persisted output |
+| --- | --- | --- |
+| Initial discovery and decompilation | `project_analyze`, `decompile_start` | Versioned inventory, draft C++ and frontend provenance, including missing/unsupported results |
+| Triage across the corpus | `function_query`, `function_inspect`, `corpus_find_related`, `mismatch_summarize` | Compact evidence views and reproducible selections |
+| Deterministic iteration | `rewrite_plan`, `rewrite_apply`, `corpus_recheck` | Candidate revisions, complete applicability accounting and affected builds/checks |
+| Difficult source repairs | `work_claim`, `candidate_submit`, `work_update` | Independently owned work, submitted C++ and retained outcomes |
+| Fine-grained reconstruction and documentation | `rewrite_plan`, `rewrite_apply` | Resolved renames, typedefs, comments, signatures, fields and class proposals with change history |
+| Compile, compare and publish | `candidate_check`, `source_export` | Compiler products, complete supported comparison results and source/provenance publication |
+| Linked/run milestones | `integration_check` | Named build/launch observations with actual covered scenarios and unresolved dependencies |
+| Follow or stop any long operation | `job_get`, `job_cancel` | Durable progress, cancellation and interrupted/unknown outcomes |
+
+Tool names are illustrative except for the seven installed tools documented in
+the usage guide. The future `candidate_check` accepts newly submitted candidates;
+today it only rechecks registered retained builds. The compiler, decompiler and
+rule profiles are selectable registered capabilities, not arbitrary shell
+commands in tool arguments.
+
+The full loop is `project_analyze` → `decompile_start` → `candidate_check` →
+diagnose → `rewrite_plan`/`rewrite_apply` → `corpus_recheck` → `source_export`.
+Naming, type reconstruction and explanatory source comments use those same
+revision-aware edits and checks. Aliases and annotations retain their evidence
+or hypothesis status; a guessed friendly name must not become a verified fact.
+Language models can submit proposals through any harness; no built-in paid model
+service is required.
+
+An unattended workflow can compose these operations with limits and stop reasons,
+but must not have a private acceptance path unavailable to MCP clients. Long jobs
+return handles; the agent does not drive each function with repeated tool calls.
+Installing custom executable adapters/rules remains an operator action, while
+using their typed capabilities belongs in MCP. This avoids making arbitrary code
+execution part of routine project requests.
+
 ## Project and evidence model
 
 Register originals, source roots, compiler recipes and available adapters once
@@ -91,6 +191,8 @@ configuration and imported discovery results, not handwritten function packets.
 | Build | Candidate, compiler/toolchain files, flags, headers/libraries, environment, object artifacts |
 | Check | Original/range version, build/object, resolved identities, checker version, complete result |
 | Rewrite plan | Base revision, rule/version, edits, affected identities, preconditions and check scope |
+| Pipeline recipe | Versioned ordered steps, typed parameters, architecture/compiler requirements and resource limits |
+| Trial | Frozen baseline, baseline/proposed recipe hashes, input snapshot, stage deltas and unresolved work |
 | Work item | Scope, reason, prerequisites, priority, owner lease, attempts, result references |
 
 An RVA identifies an inventory hypothesis, not a certified function boundary.
@@ -149,6 +251,121 @@ cycles and exhausted variant budgets leave explicit retained outcomes.
 Report unique new matches outside the rule's discovery examples. This is the
 primary measure of whether a targeted fix actually generalized.
 
+## Declarative recipes and trial runs
+
+Represent the pipeline as a **versioned JSON recipe: an ordered stack of changes**.
+Recipe edits can add/remove/reorder a step or change its typed parameters. Steps
+refer to architecture-generic or compiler-profile rules explicitly. The same
+recipe is usable from MCP, CLI and unattended execution; there is no parallel
+prompt-only description whose behavior drifts from the engine.
+
+Two step forms keep small experiments inexpensive:
+
+- A declarative AST pattern and replacement built from a supported typed node
+  vocabulary. Captures refer to resolved symbols/nodes, not matching text.
+  Preconditions can constrain types, constants, effects, alias evidence and scope.
+  The interpreter must reject unknown nodes, incomplete binding and unsupported
+  effects; it cannot guess the intended C++.
+- A call to a registered versioned rule with typed parameters for more complex
+  analysis or compiler-specific reconstruction. Its implementation and dependency
+  hashes are bound to the recipe's execution, not merely its friendly name.
+
+The exact AST vocabulary is implementation work. For example, a local rename
+must select a resolved symbol and its uses, not all instances of a spelling.
+Changing an integer expression must account for width, promotions and effects,
+not assume an algebraic identity is safe C++. Rules that merely propose a
+different spelling can emit unvalidated alternatives; JSON is not evidence that
+an edit preserves behavior. Arbitrary scripts, shell commands and executable
+plugin installation are outside the recipe language.
+
+An illustrative **future** recipe follows. The rule IDs and revision labels are
+examples, not installed operations or content hashes:
+
+```json
+{
+  "schema_version": 1,
+  "baseline": "source-snapshot-example",
+  "architecture": "x86-32",
+  "compiler_profile": "vc8-x86-profile-example",
+  "scope": { "inventory": "inventory-snapshot-example", "select": "all" },
+  "steps": [
+    {
+      "id": "orient-branches",
+      "kind": "registered_rule",
+      "rule": "generic.ast.condition-orientation",
+      "version": "example-v1",
+      "parameters": { "form": "guard-first" }
+    },
+    {
+      "id": "try-copy-spelling",
+      "kind": "registered_rule",
+      "rule": "compiler.vc8.copy-loop-spelling",
+      "version": "example-v1",
+      "parameters": { "form": "indexed" }
+    }
+  ],
+  "limits": { "variants_per_identity": 4, "compiler_concurrency": 1 },
+  "promotion": "none"
+}
+```
+
+`pipeline_trial` takes the proposed recipe, an exact baseline recipe/source
+snapshot, an explicit candidate-selection policy and an idempotency key. It
+resolves supported capabilities and freezes actual implementation/input hashes
+before scheduling. The result is an isolated candidate branch and durable job.
+The default is no source promotion and no model/provider calls.
+
+Steps consume the preceding step's result. Record before/after source hashes,
+applicability, precondition failures, generated edits and diagnostics per step.
+Keep provenance when multiple steps produce identical output. Bound branching
+and composition; exhausted work is pending or budget-limited, not inapplicable.
+A removed/reordered step restarts computation from the first invalidated stage;
+no later output can retain dependencies on a step that no longer exists.
+
+Trials account for the **entire inventory**, including previous matches,
+nonmatches and unsupported identities. All cheap applicability/invalidation
+checks run; expensive work runs only for affected distinct outputs or stale
+bindings. A compiler/lifter/checker change can invalidate work even if C++ stays
+identical. Missing artifacts require work rather than a claimed cache hit.
+Explicit budgets can stop a trial, but its report must show what remains untested.
+
+Compare baseline and trial under a named, compatible measurement policy:
+
+| Result | Report |
+| --- | --- |
+| New full match | Unique identity and complete required scope, including gains outside discovery examples |
+| Lost baseline full match | Exact previous candidate and changed result; retain the accepted version |
+| Build regression or improvement | Newly failing/compiling identities and diagnostics; include previously compiling nonmatches |
+| Mismatch change | Separate diagnostic dimensions such as bytes, ranges, references, CFG/effects and supported EH; do not turn them into acceptance |
+| Inconclusive/newly unsupported | Coverage or dependencies lost, timeouts, parse/lift errors and unknown outcomes |
+| Cost and coverage | Identities scanned, candidates/attempts, cache reuse, actual compiler time, pending work and measured provider calls |
+
+A stale baseline is not a valid control: revalidate it when the current measurement
+requires different bindings, or label that comparison unavailable. A trial that
+changes the comparator must not use its own more-permissive verdict as evidence
+of an improvement; acceptance changes retain the existing independent tests and
+review process. Diagnostic metrics include their versions and incomparable values
+remain separate.
+
+`trial_compare` returns aggregate transitions, representative examples and a
+paginated identity/step breakdown. It can compare two sibling experiments sharing
+the same baseline. Stage records identify where source changed; attributing a
+match to one particular step requires checking that intermediate result or an
+explicit bounded ablation, not inferring causality from the final output.
+
+The agent can inspect regressions, change the JSON and launch another trial.
+`trial_promote` explicitly selects an exact trial revision and scope and rechecks
+current publication preconditions. A whole-trial clean result and cherry-picking
+individually accepted gains are different actions; neither silently drops
+regressions from the report. Keep partial/inconclusive trials and useful nonmatches
+available, and never overwrite accepted source with failed experiments.
+
+This is the development loop for pipeline enhancements as well as recovery:
+discover a small improvement, encode it once, run it over the corpus, examine
+actual deltas, then retain, refine or discard it. A new engine/lifter/plugin build
+can be selected by an immutable registered version for a trial; it is not loaded
+by mutating the engine used by a live job.
+
 ## Proposed MCP surface
 
 These are proposed tool names, not installed commands. Keep structured results
@@ -162,6 +379,8 @@ interfaces. Protocol support is negotiated rather than assumed.
 | Tool | Inputs and useful result |
 | --- | --- |
 | `project_open` | Registered project/path → project ID, revision, adapter capabilities and current jobs; does not start paid work |
+| `project_analyze` | Registered module, architecture/frontend profiles, analysis limits → discovery/index job with coverage and versioned range hypotheses |
+| `decompile_start` | Inventory snapshot, identities/group selector, registered frontend, limits → draft C++ generation job; retain failed/unsupported outcomes |
 | `function_query` | Project, explicit filters/order/cursor → identities and separate build/check/publication states |
 | `function_inspect` | Identity, evidence views, byte/item limits → source, callers/callees, ABI hypotheses, mismatch excerpts and artifact links |
 | `corpus_find_related` | Identity or typed pattern, index kind/scope → ranked related functions, selection reasons and coverage |
@@ -171,11 +390,15 @@ interfaces. Protocol support is negotiated rather than assumed.
 | `rewrite_plan` | Candidate/project revision, registered rule or structured refactor, scope → generated edits, preconditions, affected set and check plan |
 | `rewrite_apply` | Plan ID and expected revision → isolated candidate revision plus check job; optional promotion on complete success |
 | `corpus_recheck` | Rule/input change, inventory snapshot, limits → incremental whole-inventory job and measurable outside-discovery yield |
+| `pipeline_trial` | Baseline snapshot/recipe, proposed JSON recipe, candidate-selection policy and limits → isolated experiment job with whole-inventory accounting |
+| `trial_compare` | Trial(s), baseline, result filters/cursor → gains, regressions, diagnostic changes, costs, coverage and pending work |
+| `trial_promote` | Exact trial revision, selected scope, expected publication revision → current-check-gated promotion; no implicit adoption of all experimental rules |
 | `work_claim` | Capabilities, scope/priority preferences, lease duration → atomically owned work with compact context |
 | `work_update` | Claim/fencing token, operation (`heartbeat`, `submit`, `block`, `release`) → durable transition; cannot assert a match |
 | `job_get` | Job ID, event cursor, bounded wait → current counts, new events, errors and result links |
 | `job_cancel` | Job ID → cancellation requested; eventual status distinguishes stopped, completed and unknown external outcome |
 | `source_export` | Accepted revision/set, expected publication revision → source/provenance export or precise current-binding refusal |
+| `integration_check` | Source revision, registered build/launch profile, execution limits → linked or observed-run milestone; no implicit success for unresolved calls/assets |
 
 Selectors and rewrite operations have typed, bounded schemas. Do not expose
 arbitrary SQL, shell commands or code evaluation as the public query interface.
@@ -321,28 +544,45 @@ adapters, not already portable implementations of the proposed API.
 | Whole-inventory rule propagation | Active `local/rule-recheck-001` work | Measure/test/review current work before treating it as an adopted adapter |
 | Verified source export | [`export_ast_matches.py`](../tools/export_ast_matches.py) and EH exporter | One publication interface preserving backend-specific checks |
 | Corpus families / cross-project reuse | Partial instruction, reference and mismatch information | New indexed search and explicit uncertainty; no inherited match credit |
-| Portable C# core and MCP | This proposal | Implement, package and test |
+| Portable C# core and MCP | [`tools/decompilation-mcp`](../tools/decompilation-mcp) | Extend the implemented retained-artifact read/check slice with the operations above |
+| JSON pipeline trials | Revision/job model and existing rule interfaces | Typed recipe interpreter, isolated stage cache, comparative reports and explicit promotion |
 
 ## Delivery sequence
 
-**First slice: a usable read/check loop.** A C# CLI and stdio MCP open the existing
-DAO project, query/inspect candidates, run the current build/check adapters and
-return durable compact results. Import retained data without duplicating live
-queue ownership. Establish second-client/restart behavior early.
+**First slice, implemented: a usable retained-artifact read/check loop.** The C#
+CLI and stdio MCP open the existing DAO project, query/inspect candidates, run
+current comparison adapters and return durable compact results. This slice
+does not perform new compilation. It imports retained data without taking
+production queue ownership and tests second-client/restart behavior.
 
-**Second slice: one fix reaches the corpus.** Adopt the reviewed recheck adapter,
-register existing rules, cache stage results and export verified gains. Add
-related-function search and mismatch summaries over those same records.
-Measure new matches outside discovery cases and cache savings.
+**Second slice: a complete draft-to-check loop.** Introduce the architecture,
+frontend, transform and compiler-profile interfaces while adapting existing
+Ghidra and VC8 operations. Expose discovery/decompilation, candidate submission
+and new compilation through jobs. Demonstrate draft C++ becoming a freshly built,
+fully compared object entirely through MCP, without private operator scripts
+between stages. Preserve nonmatches for iteration.
 
-**Third slice: maintainable source.** Add transactional rename and typedef
+**Third slice: one fix reaches the corpus.** Adopt the reviewed recheck adapter,
+register existing generic/profile-scoped rules, and expose them as JSON recipe
+steps. Add isolated `pipeline_trial`/`trial_compare` over the same incremental
+recheck engine before automatic recipe rollout. Cache stage results and export
+verified selected gains. Add richer related-function search and mismatch summaries
+over those same records. Measure regressions, pending work, new matches outside
+discovery cases and cache savings.
+
+**Fourth slice: maintainable source.** Add transactional rename and typedef
 refactors through Clang, then evidence-backed signature/layout/class operations.
-Keep unvalidated refactors available without replacing accepted source.
+Keep unvalidated refactors available without replacing accepted source. Link/run
+profiles expose integration milestones through the same job interface as actual
+reconstruction permits; none is implied by a successful function check.
 
 **Portability check throughout.** Exercise a small openly distributable Windows
 C++ fixture project with known symbols and several function/ABI/EH shapes.
 Remove DAO constants from adapter configuration. The fixture tests the machinery;
-it is not a claim that arbitrary Windows applications are supported.
+it is not a claim that arbitrary Windows applications are supported. Generic
+analysis/transform tests must run without loading VC8. Separately verify rejection
+of unsupported profiles and profile-driven invalidation. A second real compiler
+profile is a later portability test, not an assumed capability of the first one.
 
 Do not make a new decompiler, universal equivalence solver, whole-game loader,
 distributed cluster, vector database or bundled model provider prerequisites.
@@ -362,6 +602,16 @@ game binaries or assets as part of the toolkit.
   unresolved uses and conflicting edits; failed checks preserve accepted source.
 - One complete demonstrated path goes from targeted rule to outside-discovery
   full matches and exported C++, with reproducible measurements.
+- A protocol-level workflow starts from registered binary inputs, produces
+  drafts, submits/rebuilds/checks candidates, applies a reusable rule, rechecks
+  the corpus and exports source without hand-running intermediate scripts.
+- Compiler-profile assumptions are absent from generic transforms; unsupported
+  ABI/runtime features and incompatible profile changes cannot reuse acceptance.
+- Source naming, type edits and documentation use the same recorded transactions
+  as matching repairs, with failed edits retained and accepted source preserved.
+- Recipe trials are reproducible and isolated; removing/reordering/changing a
+  step invalidates downstream results. Whole-inventory reports retain losses,
+  unknowns and unrun work alongside gains, and default to no promotion.
 - A clean installation can exercise the open fixture without DAO paths, private
   binaries, proprietary compiler redistribution or a model API credential.
 
