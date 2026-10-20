@@ -44,6 +44,17 @@ class Rules(unittest.TestCase):
  def test_original_sign_branch_required(self):
   with self.assertRaises(p.Unsupported):self.run_rule(r=report('85c07400c3'))
  def test_original_cmp_memory_zero_supported(self):self.run_rule(r=report('8338007c00c3'))
+ def test_sub_copy_sign_observed(self):
+  _,meta=self.run_rule(r=report('2bd78bf27200c3'.replace('72','78')));self.assertIn('wrapped32',meta['original_zero_sign_branches'][0]['evidence'])
+ def test_sub_copy_non_sign_branches_refused(self):
+  for branch in ['7c','7d','74','75']:
+   with self.subTest(branch=branch),self.assertRaises(p.Unsupported):self.run_rule(r=report('2bd78bf2'+branch+'00c3'))
+ def test_sub_copy_partial_width_refused(self):
+  with self.assertRaises(p.Unsupported):self.run_rule(r=report('2bd7668bf27800c3'))
+ def test_sub_copy_wrong_source_refused(self):
+  with self.assertRaises(p.Unsupported):self.run_rule(r=report('2bd78bf17800c3'))
+ def test_sub_copy_flag_clobber_refused(self):
+  with self.assertRaises(p.Unsupported):self.run_rule(r=report('2bd78bf283c2017800c3'))
  def test_incomplete_original_refused(self):
   with self.assertRaises(p.Unsupported):self.run_rule(r=report('85c07c00c30f'))
  def test_wrong_function_identity(self):

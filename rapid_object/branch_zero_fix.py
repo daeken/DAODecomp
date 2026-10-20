@@ -27,6 +27,15 @@ def zero_sign_evidence(f):
   test=a.mnemonic=='test' and len(ops)==2 and ops[0].type==ops[1].type==X86_OP_REG and ops[0].reg==ops[1].reg and ops[0].size==4
   cmp=a.mnemonic=='cmp' and len(ops)==2 and ops[1].type==X86_OP_IMM and ops[1].imm==0 and ops[0].size==4
   if (test or cmp) and b.mnemonic in ('jl','jge','js','jns'):observations.append({'test_va':a.address,'test_bytes':a.bytes.hex(),'test':a.mnemonic+' '+a.op_str,'branch_va':b.address,'branch_bytes':b.bytes.hex(),'branch':b.mnemonic+' '+b.op_str})
+ # A 32-bit SUB defines the sign of its wrapped result. A single fullword MOV
+ # preserves flags and may copy that result before JS/JNS; signed JL/JGE is
+ # deliberately excluded here because subtraction overflow changes SF xor OF.
+ for a,copy,b in zip(ins,ins[1:],ins[2:]):
+  ops=a.operands;cs=copy.operands
+  if (a.mnemonic=='sub' and len(ops)==2 and all(o.type==X86_OP_REG and o.size==4 for o in ops)
+      and copy.mnemonic=='mov' and len(cs)==2 and all(o.type==X86_OP_REG and o.size==4 for o in cs)
+      and cs[1].reg==ops[0].reg and b.mnemonic in ('js','jns')):
+   observations.append({'test_va':a.address,'test_bytes':a.bytes.hex(),'test':a.mnemonic+' '+a.op_str,'copy_va':copy.address,'copy_bytes':copy.bytes.hex(),'copy':copy.mnemonic+' '+copy.op_str,'branch_va':b.address,'branch_bytes':b.bytes.hex(),'branch':b.mnemonic+' '+b.op_str,'evidence':'wrapped32_sub_result_sign_through_one_fullword_flag_preserving_copy'})
  if not observations:raise Unsupported('no_original_signed_zero_branch_evidence')
  return observations
 

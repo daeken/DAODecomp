@@ -25,7 +25,16 @@ class LookupSpellingTests(unittest.TestCase):
  def test_local_size(self):self.no(FIXTURE.replace('local_10 [16]','local_10 [8]'),'body_shape')
  def test_changed_null_guard(self):self.no(FIXTURE.replace('iVar2 != 0','iVar2 == 0'),'body_shape')
  def test_changed_bit(self):self.no(FIXTURE.replace('>> 0x1d','>> 0x1c'),'body_shape')
- def test_changed_type_tag(self):self.no(FIXTURE.replace('== 5','== 6'),'body_shape')
+ def test_zero_type_tag(self):self.no(FIXTURE.replace('== 5','== 0'),'body_shape')
+ def test_nonshort_type_tag(self):self.no(FIXTURE.replace('== 5','== 128'),'positive_short_type_tag')
+ def test_octal_type_tag(self):self.no(FIXTURE.replace('== 5','== 05'),'body_shape')
+ def test_positive_tag_reaches_original_profile(self):
+  from unittest.mock import patch
+  original=b'invalid synthetic PE: only proving source preconditions here'
+  for tag in [1,4,5,6,10,127,'0xe','0x7f']:
+   source=FIXTURE.replace('== 5','== '+str(tag))
+   with self.subTest(tag=tag),patch('rapid_object.lookup_receiver_flags.g.Original',side_effect=RuntimeError('original_profile_required')),self.assertRaisesRegex(RuntimeError,'original_profile_required'):
+    propose(source,parse(source,self.out/('tag'+str(tag))),0x1100,dict(source_sha256=sha(source.encode()),module_sha256=sha(original)),original,b'{}')
  def test_changed_argument(self):self.no(FIXTURE.replace('fn_00003300(param_2)','fn_00003300(param_3)'),'body_shape')
  def test_unknown_call(self):self.no('void unknown();\n'+FIXTURE.replace('  return;','  unknown(); return;'),'body_shape')
  def test_signed_byte(self):self.no(FIXTURE.replace('typedef unsigned char    byte;','typedef signed char byte;'),'unsigned_byte_type')

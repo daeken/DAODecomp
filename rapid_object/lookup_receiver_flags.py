@@ -70,20 +70,25 @@ def propose(source,ast,rva,bound,original,inventory):
  for n in [f]+list(m.fix.walk(body)):
   if 'range'in n:span(n)
  def text(n):a,b=span(n);return raw[a:b].decode()
- compact=re.sub(r'\s+','',text(body));pat=r'\{uintuVar1;intiVar2;undefined1local_10\[16\];fn_([0-9a-f]{8})\(local_10,\*\(undefined4\*\)\(\(\(int\)this\)\+8\)\);iVar2=fn_([0-9a-f]{8})\(param_2\);if\(\(\(\(iVar2!=0\)&&\(uVar1=\*\(uint\*\)\(iVar2\+4\),-1<\(int\)uVar1\)\)&&\(\(uVar1>>0x1d&1\)==0\)\)&&\(\(\(uVar1>>0x1e&1\)==0&&\(\(uVar1&0xffff\)==5\)\)\)\)\{fn_([0-9a-f]{8})\(\*\(int\*\)\(iVar2\+8\)\+\*\(int\*\)\(\(\(int\)this\)\+4\),param_3\);\}return;\}'
+ compact=re.sub(r'\s+','',text(body));pat=r'\{uintuVar1;intiVar2;undefined1local_10\[16\];fn_([0-9a-f]{8})\(local_10,\*\(undefined4\*\)\(\(\(int\)this\)\+8\)\);iVar2=fn_([0-9a-f]{8})\(param_2\);if\(\(\(\(iVar2!=0\)&&\(uVar1=\*\(uint\*\)\(iVar2\+4\),-1<\(int\)uVar1\)\)&&\(\(uVar1>>0x1d&1\)==0\)\)&&\(\(\(uVar1>>0x1e&1\)==0&&\(\(uVar1&0xffff\)==(0x[1-9a-f][0-9a-f]*|[1-9][0-9]{0,2})\)\)\)\)\{fn_([0-9a-f]{8})\(\*\(int\*\)\(iVar2\+8\)\+\*\(int\*\)\(\(\(int\)this\)\+4\),param_3\);\}return;\}'
  match=re.fullmatch(pat,compact)
  if not match:raise Unsupported('complete_retained_body_shape')
- names=list(match.groups());params=[n for n in f['inner'] if n.get('kind')=='ParmVarDecl']
+ groups=match.groups();type_tag=int(groups[2],16 if groups[2].startswith('0x') else 10);names=[groups[0],groups[1],groups[3]]
+ if type_tag>127:raise Unsupported('positive_short_type_tag')
+ params=[n for n in f['inner'] if n.get('kind')=='ParmVarDecl']
  if [(n.get('name'),n['type'].get('desugaredQualType')) for n in params]!=[('param_2','unsigned int'),('param_3','unsigned int')]:raise Unsupported('parameters')
  if f['type']['qualType']!='void (undefined4, undefined4) __attribute__((thiscall))':raise Unsupported('method_type')
  byte=[n for n in nodes if n.get('kind')=='TypedefDecl' and n.get('name')=='byte']
  if len(byte)!=1 or byte[0]['type']['qualType']!='unsigned char':raise Unsupported('unsigned_byte_type')
- reader=g.Original(original);va=reader.pe.image_base+rva;spec=bound['requested'].get(str(rva),bound['requested'].get(rva))
+ reader=g.Original(original);va=reader.pe.image_base+rva
+ markers=re.findall(r'^// FUNCTION: DAO (0x[0-9a-fA-F]+)$',source,re.M)
+ if markers!=[f'0x{va:08x}']:raise Unsupported('unique_source_marker')
+ spec=bound['requested'].get(str(rva),bound['requested'].get(rva))
  if not spec or len(spec['ranges'])!=1 or spec['ranges'][0]['start_rva']!=rva:raise Unsupported('original_range')
  ran=spec['ranges'][0];code=reader.read(va,ran['end_rva_inclusive']-rva+1,True)
  if len(code)!=109 or sha(code)!=spec['bytes_sha256'] or sha(code)!=ran['bytes_sha256']:raise Unsupported('original_range_hash')
  xs=list(capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32).disasm(code,va));dest=hex(va+102)
- expected=[('sub','esp, 0x10'),('push','esi'),('mov','esi, ecx'),('mov','eax, dword ptr [esi + 8]'),('mov','edx, dword ptr [esi]'),('push','eax'),('lea','ecx, [esp + 8]'),('push','ecx'),('mov','ecx, dword ptr [edx]'),('call',hex(reader.pe.image_base+int(names[0],16))),('mov','eax, dword ptr [esp + 0x18]'),('push','eax'),('lea','ecx, [esp + 8]'),('call',hex(reader.pe.image_base+int(names[1],16))),('test','eax, eax'),('je',dest),('mov','ecx, dword ptr [eax + 4]'),('mov','edx, ecx'),('shr','edx, 0x1f'),('test','dl, 1'),('jne',dest),('mov','edx, ecx'),('shr','edx, 0x1d'),('test','dl, 1'),('jne',dest),('mov','edx, ecx'),('shr','edx, 0x1e'),('test','dl, 1'),('jne',dest),('movzx','ecx, cx'),('cmp','ecx, 5'),('jne',dest),('mov','eax, dword ptr [eax + 8]'),('mov','edx, dword ptr [esp + 0x1c]'),('add','eax, dword ptr [esi + 4]'),('mov','ecx, dword ptr [esi]'),('push','edx'),('push','eax'),('call',hex(reader.pe.image_base+int(names[2],16))),('pop','esi'),('add','esp, 0x10'),('ret','8')]
+ expected=[('sub','esp, 0x10'),('push','esi'),('mov','esi, ecx'),('mov','eax, dword ptr [esi + 8]'),('mov','edx, dword ptr [esi]'),('push','eax'),('lea','ecx, [esp + 8]'),('push','ecx'),('mov','ecx, dword ptr [edx]'),('call',hex(reader.pe.image_base+int(names[0],16))),('mov','eax, dword ptr [esp + 0x18]'),('push','eax'),('lea','ecx, [esp + 8]'),('call',hex(reader.pe.image_base+int(names[1],16))),('test','eax, eax'),('je',dest),('mov','ecx, dword ptr [eax + 4]'),('mov','edx, ecx'),('shr','edx, 0x1f'),('test','dl, 1'),('jne',dest),('mov','edx, ecx'),('shr','edx, 0x1d'),('test','dl, 1'),('jne',dest),('mov','edx, ecx'),('shr','edx, 0x1e'),('test','dl, 1'),('jne',dest),('movzx','ecx, cx'),('cmp','ecx, '+(str(type_tag) if type_tag<10 else hex(type_tag))),('jne',dest),('mov','eax, dword ptr [eax + 8]'),('mov','edx, dword ptr [esp + 0x1c]'),('add','eax, dword ptr [esi + 4]'),('mov','ecx, dword ptr [esi]'),('push','edx'),('push','eax'),('call',hex(reader.pe.image_base+int(names[2],16))),('pop','esi'),('add','esp, 0x10'),('ret','8')]
  if sum(x.size for x in xs)!=109 or [(x.mnemonic,x.op_str) for x in xs]!=expected:raise Unsupported('complete_original_instruction_profile')
  inv=json.loads(inventory)
  if inv['module_sha256']!=sha(original) or inv['image_base']!=reader.pe.image_base:raise Unsupported('inventory_binding')
@@ -110,4 +115,4 @@ def propose(source,ast,rva,bound,original,inventory):
   edits.append((found[0].start(),found[0].start()+len('extern "C" '),''))
  candidate=raw
  for a,b,t in sorted(edits,reverse=True):candidate=candidate[:a]+t.encode()+candidate[b:]
- return candidate.decode(),dict(rva=rva,source_sha256=sha(raw),candidate_sha256=sha(candidate),original_sha256=sha(original),original_range_sha256=sha(code),inventory_sha256=sha(inventory),original_instructions=len(xs),callees=captures,byte_tests=[31,29,30],arithmetic='explicit unsigned32 final address add',hypothesis_only=True,unknowns=['callee and nested-call formal semantics','nominal local16 type and object-field layouts'],preserved='source explicit arguments and null/type tests; original byte-observed receiver values, extraction widths and32bit wrap')
+ return candidate.decode(),dict(rva=rva,source_sha256=sha(raw),candidate_sha256=sha(candidate),original_sha256=sha(original),original_range_sha256=sha(code),inventory_sha256=sha(inventory),original_instructions=len(xs),callees=captures,byte_tests=[31,29,30],type_tag=type_tag,arithmetic='explicit unsigned32 final address add',hypothesis_only=True,unknowns=['callee and nested-call formal semantics','nominal local16 type and object-field layouts'],preserved='source explicit arguments and null/type tests; original byte-observed receiver values, extraction widths and32bit wrap')

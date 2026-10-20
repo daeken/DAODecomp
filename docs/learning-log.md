@@ -1164,3 +1164,61 @@ synthetic positive control had 59 passes and the negative control had 53 passes
 and six expected mismatches. These are synthetic results, not game execution.
 The next retained sequential candidates are `0x78420`, `0x799e0` and `0x91960`;
 their newest source/compiler evidence must be inspected before any new attempts.
+
+### Sequential median functions: reuse and a bounded copy window
+
+The next bounded round investigated `0x78420`, `0x799e0` and `0x91960` in order,
+after inspecting all retained drafts and compiler reports. All three candidates
+matched their entire 109-byte original ranges through the unchanged comparator.
+
+| RVA | Initial candidate / equal / different / missing / extra | Final candidate / equal / different / missing / extra | Actual variants |
+| --- | --- | --- | --- |
+| `0x78420` | 88 / 10 / 78 / 21 / 0 | 109 / 109 / 0 / 0 / 0 | 1 |
+| `0x799e0` | 88 / 10 / 78 / 21 / 0 | 109 / 109 / 0 / 0 / 0 | 1 |
+| `0x91960` | 112 / 47 / 62 / 0 / 3 | 109 / 109 / 0 / 0 / 0 | 5 |
+
+The two lookup callers reuse the previous receiver/byte-flag machinery. The type
+comparison now accepts a positive short decimal or hexadecimal literal only when
+the complete original profile has the same immediate. Values zero, above 127,
+octal spellings, changed call context and mismatched original comparisons refuse.
+The prior tag-five source still regenerates byte-identically; these two use four
+and fourteen. The original/source marker is unique and bound to the current RVA.
+
+The copy-window caller increments a position, chooses at most 4,096 bytes, checks
+an optional source pointer and calls an external copy routine. Its formal callee
+semantics and buffer/object extents remain unknown. `bounded_copy_window` requires
+the complete retained body, target-aware AST, source/original/range hashes and full
+39-instruction original profile before proposing C++. Unsigned 32-bit arithmetic
+preserves field advancement, page multiplication, address addition and subtraction;
+explicit conversions retain the selected compiler's signed interpretation.
+
+The existing signed-threshold rule now recognizes a 32-bit register subtraction,
+one fullword register copy of its result, then JS/JNS. MOV preserves the flags;
+JL/JGE are deliberately excluded because signed subtraction overflow changes
+SF xor OF. Replacing the minus-one comparison alone produced 109 bytes but changed
+saved-register assignments. Declaration order made no difference. An explicit
+early negative return followed by the optional-copy block recovered the original
+allocation and complete bytes. A signed-count experiment failed and is retained.
+The final source regenerates from the generic rule without another compiler run.
+
+Seven actual VC8 14.00.50727.762 variants took 10.621 seconds in compiler receipts
+on Windows 11 ARM64 under x86 translation, controlled from macOS ARM64. All 327
+single-byte mutations of the three real matched objects refused, as did nine
+real-source marker/tag/null-path precondition mutations. The ignored
+`local/median-function-003` checkpoint binds every source, object, original range,
+compiler attempt and review. No original game execution or direct paid provider
+calls occurred; author and independent reviewer are separately accounted Codex
+assignments. These complete compiler comparisons do not prove a whole game or
+supply missing callee semantics.
+
+On macOS ARM64 the final local suite passed 528 tests with 33 skips, the 64 focused
+source/sign controls passed, and CMake/CTest passed all seven checks with the
+configured environment. Synthetic controls produced 59 passes, then 53 passes and
+six expected mismatches; these are infrastructure checks rather than game proof.
+
+Independent review approved the exact six-file freeze after reproducing all three
+full matches, freshly checking all seven attempts (three exact and four nonmatches),
+and preserving eight prior object controls and 585 prior EH graph bytes. The fresh
+export preserves all 2,253 old entries, units and source bytes and adds these three,
+for 2,256 total. The next retained median candidates are `0xb63f0`, `0xc57a0` and
+`0xe6f50`; no additional round was started or authorized by this checkpoint.

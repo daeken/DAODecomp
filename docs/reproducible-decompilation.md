@@ -486,3 +486,18 @@ observed register roles. Its retained 100-byte candidate still differs from the
 not eligible for export. Preserve the failed variants and unresolved table layout;
 source recognition and shorter code cannot confer acceptance. The sequential
 experiment used fourteen compiler variants and exports only the two full matches.
+
+The lookup rule also supports positive short decimal/hexadecimal type literals
+only when the complete original CMP immediate agrees; it refuses zero, values
+above 127 and octal spellings. This permits reuse across retained siblings while
+preserving full instruction-profile, callee-context and unique marker checks.
+
+`rapid_object.bounded_copy_window` recognizes one complete page-window source
+shape and original profile, then emits defined unsigned32 arithmetic and a direct
+negative early return before the optional copy block. The existing signed-threshold
+rule can observe a 32-bit SUB followed by one fullword copy and JS/JNS; JL/JGE do
+not establish the wrapped result's sign when subtraction overflows. A signed-zero
+rewrite can improve the branch encoding while still changing register assignment.
+Only a complete successful comparison can export the final structured spelling.
+All original calls and their unresolved semantics remain external. Preserve failed
+source and type-order experiments alongside the successful generic regeneration.
