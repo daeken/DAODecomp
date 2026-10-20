@@ -11,17 +11,23 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     public static PipelineRecipe CallAdapters=>new(1,"x86-bits32-composed-call-adapters-v1","sharpretro-typed-v1",Vc8CallAdaptersProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-call-adapters-v1"]);
     public static PipelineRecipe ByValueCalls=>new(1,"x86-bits32-composed-byvalue-calls-v1","sharpretro-typed-v1",Vc8ByValueCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","raise-initialized-private-subword-copies-v1","observe-outgoing-push-and-private-cleanup-regions-v1","emit-vc8-composed-byvalue-calls-v1"]);
+    public static PipelineRecipe OrderedMemory=>new(1,"x86-bits32-composed-ordered-memory-control-v1","sharpretro-typed-v1",Vc8StructuredMemoryProfile.Version,[..CountedLoops.Steps[..^1],"raise-aliasable-forward-memory-effects-v1","emit-vc8-composed-ordered-memory-control-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesByValueCalls=>CompilerProfile==Vc8ByValueCallsProfile.Version;
+    public bool UsesOrderedMemory=>CompilerProfile==Vc8StructuredMemoryProfile.Version;
+    public static PipelineRecipe CountedLoops=>new(1,"x86-bits32-composed-counted-loops-v1","sharpretro-typed-v1",Vc8LoopsProfile.Version,[..ByValueCalls.Steps[..^1],"raise-reducible-ordered-memory-graph-v1","raise-guarded-counted-loop-v1","emit-vc8-composed-counted-loops-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesCallAdapters=>CompilerProfile is Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
+    public bool UsesCountedLoops=>CompilerProfile is Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
+    public bool UsesByValueCalls=>CompilerProfile is Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
+    public bool UsesCallAdapters=>CompilerProfile is Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version;
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -164,7 +170,13 @@ public sealed partial class Engine
                         var evidence=await ReplayableAdapter(request,"lift_eh",folder);if(evidence.TryGetProperty("error",out var ehError))throw new ArgumentException(ehError.GetString());File.WriteAllText(Path.Combine(folder,"eh-evidence.json"),evidence.GetRawText());
                         if(evidence.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("EH_caller_binding_changed");
                         var recovered=Vc8EhProfile.Raise(lifted.GetProperty("lift"),callees,evidence);ir=recovered;File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));source=Vc8EhProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);
-                        } else {var recovered=Vc8ByValueCallsProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8ByValueCallsProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
+                        } else {
+                            try {var recovered=Vc8ByValueCallsProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8ByValueCallsProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
+                            catch(ArgumentException) when(recipe.UsesCountedLoops) {
+                                try {var recovered=Vc8LoopsProfile.Raise(lifted.GetProperty("lift"));ir=recovered;source=Vc8LoopsProfile.Emit(recovered,rva,imageBase,project.Module);}
+                                catch(ArgumentException) when(recipe.UsesOrderedMemory) {var recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
+                            }
+                        }
                     }
                 }
             }

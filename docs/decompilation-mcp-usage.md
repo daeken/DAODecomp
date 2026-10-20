@@ -519,3 +519,13 @@ the ordered dispatch decision can contain up to 16 complete input closures. It
 now has a separate 16 MiB document budget with strict duplicate-key rejection.
 The compiler receipt budget, complete envelope requirements and comparison policy
 are unchanged. Oversized or invalid decisions fail before any VM dispatch.
+
+The opt-in `vc8-x86-flat32-ordered-memory-control-v1` composition adds bounded
+natural-loop/ordered-memory recovery after the existing by-value-call domains.
+It keeps the existing MCP operations and durable batching protocol. Its recipe
+adds `raise-reducible-ordered-memory-graph-v1`,
+`raise-guarded-counted-loop-v1`, `raise-aliasable-forward-memory-effects-v1` and
+`emit-vc8-composed-ordered-memory-control-v1` in that order after the previously
+supported recovery passes. Generation alone grants no match credit. The narrow
+loop profile and forward effect tree refuse unsupported cycles, stack joins,
+argument state and expressions; the complete comparator remains unchanged.

@@ -1872,3 +1872,72 @@ with no routine full suite, whole-inventory sweep or CI. A larger input closure
 also exposed misuse of a small receipt reader for the dispatch decision. Separating
 the bounded decision-document budget from strict small receipts fixes that
 pre-dispatch failure without weakening compiler outcomes or comparisons.
+
+### Ordered memory and a first natural loop (development batch 003)
+
+The next original identity, `0x1180`, required a cyclic representation rather
+than path enumeration. The new x86 pass builds block-local register/flag SSA,
+explicit edges and simultaneous register joins, checks SP consistency, computes
+dominators, and records a bounded reducible natural loop. Loads and stores stay
+ordered events. In particular, a later POP or RET remains a memory read when an
+incoming pointer might alias the private frame or entry return address; a slot
+map must not manufacture an unchanged return target.
+
+The bounded VC8 profile derives a zero-count bypass, repeated destination-null
+guard, decrement-by-one termination, wrapped destination stride and alternating
+word loads/stores from those effects. It does not recognize an opcode byte
+sequence, function RVA, bulk-copy routine or nonoverlapping buffers. Each word
+access uses a four-byte intrinsic copy; these are separate ordered accesses,
+not a memcpy/memmove interpretation of the loop. Unsigned guest addresses wrap
+before conversion at the selected i386 native memory boundary. Compiler-private
+register saves and void return spelling remain hypotheses, with their original
+architectural effects retained in the graph.
+
+The first compiler attempt failed with a known exit because the selected portable
+VC8 environment has no header search path. Declaring the standard 32-bit memcpy
+intrinsic directly removed that dependency. A 49-byte candidate then failed the
+complete comparison because a destination-input load moved ahead of the zero
+count guard. Keeping pointer preparation inside that guard and using volatile
+parameter accesses to preserve their observed load order produced a provisional
+complete **49/49-byte** comparison. Volatile is an emission constraint here, not
+a discovered qualification of the caller's storage. Open tests include zero,
+one, exhausted large-count budgets, address wrapping, sequential overlap and
+return-address aliasing; exhausted execution remains unknown.
+
+The following `0x11c0` exercised forward branches, original external calls and
+ordered word/byte object stores. A shared forward effect tree now retains those
+operations and explicit unknown call results/effects. Arbitrary stores invalidate
+private-stack forwarding; later stack reads become fresh memory observations.
+Calls after such invalidation are refused until their outgoing argument state
+can be recovered safely. A candidate compiles to the full 74-byte length, but the
+strict checker still rejects a different base/index encoding in the final byte
+store. The equivalent-looking instruction is **not** promoted to a match, and
+`0x11c0` remains the development frontier. Rejected integer-address and memory
+primitive spelling variants are retained locally; pointer-arithmetic undefined
+behavior, inline assembly and comparison-policy changes were not used to force
+acceptance. This is a useful CFG/memory capability checkpoint, not three new
+consecutive matches or a game-execution result.
+
+The representative native batch covered ten distinct identities in **16.45 s**:
+seven prior controls plus `0x1180` passed complete comparison; `0x11c0` and the
+retained `0x476650` negative remained mismatches. Final-runtime source replay
+reproduced all ten sources exactly without another compiler dispatch. A later
+IR refinement makes wrapped SP addresses explicit; it does not transfer native
+credit to the new runtime key. Fourteen final focused checks passed, including
+host syntax checking of open generated C++ with multiple memory transfers. The
+representative observations leave the other **27,545 identities unverified**
+under this new composition. CI, broad scans and full suites were not run under
+the current sampling policy.
+
+The first cumulative machinery review rejected two generation-domain defects
+without overturning the retained native comparisons. Two independent typed
+undefined flag values with the same diagnostic reason could collapse to an
+invented constant equality in the graph. The corrected bounded pass refuses
+`IlUndefined`, as the earlier symbolic consumers do; diagnostic text never
+establishes value identity. A separate open halfword-input counterexample showed
+that a 16-bit read could become an untruncated 32-bit formal parameter. The
+structured profile now explicitly refuses that unsupported width, retaining its
+aligned byte/word input domain. Both counterexamples and the rejected freeze are
+preserved. Focused tests cover the refusals and supported boundaries; these
+refusal corrections require source replay, not another VM compilation of
+unchanged sampled C++.

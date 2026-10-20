@@ -16,7 +16,13 @@ namespace Decompilation;
 [JsonDerivedType(typeof(IncomingStackRead),"incoming_stack_read")]
 [JsonDerivedType(typeof(MemoryReadValue),"memory_read")]
 [JsonDerivedType(typeof(ExternalRegisterValue),"external_register")]
+[JsonDerivedType(typeof(BlockRegisterValue),"block_register")]
+[JsonDerivedType(typeof(BlockFlagValue),"block_flag")]
+[JsonDerivedType(typeof(WrappedStackAddress),"wrapped_stack_address")]
 public abstract record RecoveredValue;
+public sealed record BlockRegisterValue(ulong Block,int Register):RecoveredValue;
+public sealed record BlockFlagValue(ulong Block,int Flag):RecoveredValue;
+public sealed record WrappedStackAddress(long Offset,int Bits=32):RecoveredValue;
 public sealed record Constant(ulong Value, int Bits) : RecoveredValue;
 public sealed record RegisterInput(int Index) : RecoveredValue;
 public sealed record AddValue(RecoveredValue Left, long Offset) : RecoveredValue;

@@ -45,3 +45,6 @@ ByValueTests = load_shared('test_replayable_byvalue').ByValueTests
 UndefinedWireTests = load_shared('test_replayable_byvalue').UndefinedWireTests
 
 BatchDecisionDocumentTests = load_shared('test_replayable_byvalue').BatchDecisionDocumentTests
+
+LoopTests = load_shared('test_replayable_loops').LoopTests
+OrderedMemoryTests = load_shared('test_replayable_ordered_memory').OrderedMemoryTests

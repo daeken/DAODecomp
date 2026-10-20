@@ -917,3 +917,54 @@ background processes, while implementation continues where independent work is
 available. The cumulative review includes dependency adoption, source rules and
 any concrete binding/transport fixes together; final installation receipts stay
 local and join the next combined public checkpoint.
+
+### Keep cyclic memory observations explicit
+
+A bounded x86 graph pass can recover loops without unrolling them or treating
+memory as a dictionary of independent words. Split actual typed instructions
+into blocks, retain ordered loads/stores and width-bearing expressions, require
+consistent wrapped SP at joins, then find dominance backedges and their natural
+loops. Refuse external/misaligned edges, irreducible cycles, unsupported effects,
+unknown consumed predicates and budget exhaustion. Register joins and memory
+histories are separate: an arbitrary pointer store may change saved words or the
+entry return target, even when its address does not syntactically mention SP.
+
+The first compiler profile over this graph supports one bounded guarded
+count-down loop with an invariant source address, wrapped destination stride and
+alternating word reads/writes. The stride, offsets and transfer count are derived
+from the graph. A null destination can skip one iteration and become nonnull
+after wrapped advancement, so the null guard remains inside the loop. Count zero
+must bypass pointer preparation. No bulk-copy, nonalias, formal-arity or universal
+termination fact follows from this recognition. Source return spelling, register
+allocation and ABI frame layout remain compiler hypotheses checked by complete
+original/native comparison.
+
+For bounded forward control, factor only identical ordered effects at a common
+original instruction point into a structured tree. Original call targets and
+all per-path entry snapshots remain in shared IR. A cdecl source signature based
+on observed outgoing words is a compiler candidate, not a proof that a callee
+has no other dependencies. After potentially aliasing stores, retain fresh
+private-stack/return-target reads; do not reuse an abstract saved value. Refuse
+later calls when their outgoing stack state would otherwise come from stale
+forwarding. Word accesses can use small memcpy intrinsics to avoid alignment and
+C++ effective-type assumptions, with guest-address arithmetic remaining unsigned
+32-bit arithmetic before the selected native boundary.
+
+Compiler differences still matter to the automatic native acceptance path.
+Batch 003 obtained a provisional complete 49-byte loop comparison after retaining
+failed scheduling variants. Its next 74-byte function still differs in one
+base/index address encoding and remains rejected. Neither an equal instruction
+count nor an equivalent-looking disassembly is a complete match. Representative
+checks remain bound to their exact runtime and inputs; outside-sample identities
+are unverified under new rules, and no source export or whole-game claim follows.
+
+An undefined value's diagnostic reason is provenance, not identity. Independent
+undefined occurrences must not compare equal merely because their descriptions
+match. Give occurrences explicit identities with correct capture semantics, or
+refuse the operation conservatively; never let ordinary equality simplification
+invent a known predicate. Similarly, source formal types must preserve every
+observed incoming read width. Reading the low halfword of `0x10000` yields zero,
+while an untruncated word does not. The current forward-memory source profile
+refuses halfword inputs rather than silently widening them. The first batch-003
+review's rejected freeze and both open counterexamples remain part of its
+transformation history; a passing native sample did not waive those repairs.

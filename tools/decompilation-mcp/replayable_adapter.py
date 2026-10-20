@@ -129,7 +129,7 @@ def lift_callees(request):
     # are durable request inputs; exact slice and entry evidence are retained too.
     caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
     selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
-    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1')
+    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1')
     dependencies={};chains=[]
     for original_target,initial in selected:
         target=original_target;entry=initial;seen=set();chain=[]
@@ -140,7 +140,7 @@ def lift_callees(request):
                 require(derived['image_base']==caller['image_base'] and derived['image_end']==caller['image_end'],'callee_module_boundary_changed')
                 dependencies[target]=dict(target=target,rva=entry['rva'],entry=entry,binary_slice_sha256=derived['binary_slice_sha256'],lifter_manifest_sha256=derived['lifter_manifest_sha256'],lift=derived['lift'])
             next_target=pure_forwarding_target(dependencies[target]) if follow else None
-            if next_target is None and request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1'):next_target=effectful_tail_dependency_target(dependencies[target])
+            if next_target is None and request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1'):next_target=effectful_tail_dependency_target(dependencies[target])
             if next_target is None:break
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
