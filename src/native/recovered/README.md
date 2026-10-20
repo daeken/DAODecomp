@@ -1,6 +1,6 @@
 # Recovered native C++
 
-**2,256 matching functions** in this published snapshot: 807 reccmp matches and 1,442 exact COFF object matches and 7 complete main/EH graph matches.
+**2,258 matching functions** in this published snapshot: 807 reccmp matches and 1,444 exact COFF object matches and 7 complete main/EH graph matches.
 
 Snapshot: 2026-10-19T21:54:26.193241+00:00. The running local queue may be further ahead.
 
@@ -355,6 +355,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000b54e0` | reccmp | [00097560-f07232961998f854.cpp](units/00097560-f07232961998f854.cpp#L110) |
 | `0x000b5530` | reccmp | [000b5530-d8d4b908aa53faba.cpp](units/000b5530-d8d4b908aa53faba.cpp#L35) |
 | `0x000b58d0` | reccmp | [000b58d0-c60eec0912472f1d.cpp](units/000b58d0-c60eec0912472f1d.cpp#L114) |
+| `0x000b63f0` | Exact object | [000b63f0-a83eba49689e5119.cpp](units/000b63f0-a83eba49689e5119.cpp#L28) |
 | `0x000b6b10` | Exact object | [000b6b10-5cd89213efedcfb4.cpp](units/000b6b10-5cd89213efedcfb4.cpp#L27) |
 | `0x000b6b50` | Exact object | [000b6b50-4a26a2fdbedcdf70.cpp](units/000b6b50-4a26a2fdbedcdf70.cpp#L28) |
 | `0x000b6c00` | Exact object | [000b6c00-887ad7ffd57dabbf.cpp](units/000b6c00-887ad7ffd57dabbf.cpp#L28) |
@@ -441,6 +442,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000e5210` | Exact object | [000e5210-91d877ca6cdd321b.cpp](units/000e5210-91d877ca6cdd321b.cpp#L27) |
 | `0x000e6380` | Exact object | [000e6380-cc64a7d8b8889bce.cpp](units/000e6380-cc64a7d8b8889bce.cpp#L27) |
 | `0x000e6e30` | Exact object | [000e6e30-bd69a1ef832e0413.cpp](units/000e6e30-bd69a1ef832e0413.cpp#L27) |
+| `0x000e6f50` | Exact object | [000e6f50-9f9eef9f4e1266b5.cpp](units/000e6f50-9f9eef9f4e1266b5.cpp#L28) |
 | `0x000e7030` | Exact object | [000e7030-0c9985d4dc4ce4e0.cpp](units/000e7030-0c9985d4dc4ce4e0.cpp#L25) |
 | `0x000e7050` | reccmp | [00002910-c2fe6f45beef2273.cpp](units/00002910-c2fe6f45beef2273.cpp#L137) |
 | `0x000e71d0` | Exact object | [000e71d0-b7047f325272b381.cpp](units/000e71d0-b7047f325272b381.cpp#L28) |

@@ -1222,3 +1222,63 @@ and preserving eight prior object controls and 585 prior EH graph bytes. The fre
 export preserves all 2,253 old entries, units and source bytes and adds these three,
 for 2,256 total. The next retained median candidates are `0xb63f0`, `0xc57a0` and
 `0xe6f50`; no additional round was started or authorized by this checkpoint.
+
+### Sequential median functions: list receivers and a callback-array plateau
+
+The next bounded round inspected `0xb63f0`, `0xc57a0` and `0xe6f50` in order.
+Two complete 109-byte function comparisons passed; the callback-array caller is
+retained as a nonmatch. Counts below compare the entire original and relocated
+candidate ranges at their offsets, and grant no partial-match credit.
+
+| RVA | Initial candidate / equal / different / missing / extra | Retained candidate / equal / different / missing / extra | Variants |
+| --- | --- | --- | --- |
+| `0xb63f0` | 108 / 50 / 58 / 1 / 0 | 109 / 109 / 0 / 0 / 0 | 1 |
+| `0xc57a0` | 108 / 47 / 61 / 1 / 0 | 105 / 48 / 57 / 4 / 0 | 7 |
+| `0xe6f50` | 114 / 19 / 90 / 0 / 5 | 109 / 109 / 0 / 0 / 0 | 2 |
+
+`copy_chain_receivers` restores three direct receiver contexts and a virtual
+receiver during a field copy and list traversal. `checked_list_receivers` restores
+two direct contexts and a virtual receiver loaded once, matching the original
+single field load before its null check. All three calls to the original error
+helper remain present. Its behavior is unknown; it is not declared noreturn or
+replaced by a successful value. Address additions use unsigned32 arithmetic.
+Both rules require complete retained bodies, target-aware ASTs, pinned source/
+original/range/inventory hashes and complete original instruction profiles.
+
+The shared context reporter retains its strict default refusal for indirect calls.
+An explicit option can record an unknown 32-bit register/memory call after prior
+observed receiver context, while still checking the complete recorded normal CFG
+and return cleanup instructions. Targets, effects and nonlocal/exception outcomes
+remain unknown; this is instruction evidence, not a semantic callee contract.
+An indirect call alone cannot establish receiver context. Partial ECX-register
+clobbers, wrong cleanup and incomplete control flow continue to refuse.
+
+`callback_array_spelling` preserves a useful unaccepted hypothesis. The caller's
+two pushes and lack of a matching stack adjustment suggest a callee-cleaned callback
+spelling, while the reviewed unsigned ordered-zero rule restores its JBE. The
+actual callback implementation and semantics remain unknown. The 105-byte output
+still assigns the saved registers differently and hoists an address calculation
+before the bounds branch. An implicit receiver hypothesis worsened it; inline,
+typed and reference helper forms did not improve it. Comparison orientation changed
+the branch spelling but did not pass. The retained variant has unsigned32 address/
+subtraction wrap and the selected VC8 signed reinterpretation/arithmetic shift.
+No artificial optimizer barrier or instruction emission was used to force a match.
+
+Ten real VC8 14.00.50727.762 variants took 14.176 seconds in compiler receipts on
+Windows 11 ARM64 under x86 translation, controlled from macOS ARM64. All three
+sources regenerate byte-identically, and all 218 single-byte mutations of the two
+matched objects refuse. Nine actual marker/external-identity mutations refuse.
+Local checks passed 570 project tests (33 skips), 65 focused tests, CTest 7/7 and
+both synthetic controls (59 passes; then 53 passes/six expected mismatches).
+No original execution or direct paid provider calls occurred; Codex author/review
+work remains separately accounted. The ignored `local/median-function-004` scope
+preserves every attempt, full source/object bindings and the precise plateau.
+
+Independent review approved the exact six-file freeze, reproduced all ten attempts,
+and retained the callback-array candidate as a nonmatch. Extra unknown-call/context,
+forged-report and misreported-nonmatch controls refused. Eight prior ordinary
+controls and 585 prior EH graph bytes remained intact. The fresh exporter preserves
+all 2,256 old entries, units and source bytes and adds only the two complete matches,
+for 2,258 total. A separately authorized conditional round may inspect the retained
+next candidates `0x106e40`, `0x171ac0` and `0x1dfb00` only after this checkpoint's
+publication, exact-head CI and settlement complete.

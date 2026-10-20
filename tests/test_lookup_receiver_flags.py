@@ -44,7 +44,7 @@ if __name__=='__main__':unittest.main()
 
 from rapid_object.lookup_receiver_flags import capture
 class MultiRangeCalleeControls(unittest.TestCase):
- def cap(self,parts,cleanup=4):
+ def cap(self,parts,cleanup=4,allow_indirect=False):
   class Reader:
    class pe:image_base=0x400000
    def read(self,va,n,code=False):
@@ -52,7 +52,7 @@ class MultiRangeCalleeControls(unittest.TestCase):
     if va not in parts or len(parts[va])!=n:raise ValueError('unknown synthetic code range')
     return parts[va]
   ranges=[dict(start_rva=v-0x400000,end_rva_inclusive=v-0x400000+len(b)-1) for v,b in sorted(parts.items())]
-  return capture(Reader(),dict(rva=ranges[0]['start_rva'],body_ranges=ranges),cleanup)
+  return capture(Reader(),dict(rva=ranges[0]['start_rva'],body_ranges=ranges),cleanup,allow_indirect_calls=allow_indirect)
  def test_multirange_gap_not_silently_filled(self):
   # Full direct receiver read, JMP over a gap, separate RET4 range.
   r=self.cap({0x401000:bytes.fromhex('8b4108e908000000'),0x401010:bytes.fromhex('c20400')});self.assertEqual(len(r['ranges']),2);self.assertEqual(r['return_cleanup_bytes'],4)
@@ -72,5 +72,17 @@ class MultiRangeCalleeControls(unittest.TestCase):
     with self.subTest(prefix=prefix,tail=tail),self.assertRaisesRegex(Unsupported,'ECX_context_unknown'):self.cap({0x401000:p+tail})
  def test_unknown_indirect_call(self):
   with self.assertRaisesRegex(Unsupported,'indirect_call'):self.cap({0x401000:bytes.fromhex('8b4108ffd0c20400')})
+ def test_optional_unknown_register_call_retains_unknown(self):
+  r=self.cap({0x401000:bytes.fromhex('8b4108ffd0c20400')},allow_indirect=True);self.assertEqual(r['indirect_calls'][0]['target'],'unknown');self.assertIn('unknown',r['formal_semantics'])
+ def test_optional_unknown_memory_call_retains_unknown(self):
+  r=self.cap({0x401000:bytes.fromhex('8b4108ff10c20400')},allow_indirect=True);self.assertEqual(r['indirect_calls'][0]['target'],'unknown')
+ def test_indirect_call_without_prior_context_refused(self):
+  with self.assertRaisesRegex(Unsupported,'ECX_context_unknown'):self.cap({0x401000:bytes.fromhex('ffd0c20400')},allow_indirect=True)
+ def test_optional_call_still_checks_cleanup(self):
+  with self.assertRaisesRegex(Unsupported,'cleanup'):self.cap({0x401000:bytes.fromhex('8b4108ffd0c20800')},allow_indirect=True)
+ def test_optional_call_still_checks_partial_clobber(self):
+  with self.assertRaisesRegex(Unsupported,'ECX_context_unknown'):self.cap({0x401000:bytes.fromhex('b100ffd0c20400')},allow_indirect=True)
+ def test_nonboolean_call_policy_refused(self):
+  with self.assertRaisesRegex(Unsupported,'indirect_call_policy'):self.cap({0x401000:bytes.fromhex('8b4108c20400')},allow_indirect='yes')
  def test_unreachable_tail(self):
   with self.assertRaisesRegex(Unsupported,'cleanup'):self.cap({0x401000:bytes.fromhex('8b4108c2040090')})

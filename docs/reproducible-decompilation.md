@@ -501,3 +501,27 @@ rewrite can improve the branch encoding while still changing register assignment
 Only a complete successful comparison can export the final structured spelling.
 All original calls and their unresolved semantics remain external. Preserve failed
 source and type-order experiments alongside the successful generic regeneration.
+
+### Keep unknown list and callback effects explicit
+
+`rapid_object.copy_chain_receivers` and `rapid_object.checked_list_receivers`
+recognize complete retained field-copy/list and checked-list source shapes. Their
+complete original caller profiles and complete recorded callee ranges support
+restoring direct and virtual receiver contexts. A repeated source expression can
+compile into a second field load; explicitly retaining the one observed receiver
+value can recover the original load/test/call sequence. Preserve every original
+error-handler edge without supplying missing error or virtual-call semantics.
+
+The shared callee-context reporter has an explicit optional mode for recording
+unknown 32-bit indirect calls after prior observed receiver context. The default
+still refuses them; an indirect call alone cannot prove context. Recorded return
+instructions and a complete normal CFG do not establish effects or termination of
+unknown nested calls. All targets and semantic outcomes stay unknown.
+
+A callback-array caller can suggest an ABI spelling from its pushes and caller
+cleanup pattern, but that remains a source hypothesis. The retained
+`callback_array_spelling` rule restores that spelling and an unsigned ordered-zero
+test while preserving defined unsigned32 wrap. Its current output still fails the
+complete comparator because register assignment and bounds-check scheduling differ.
+Keep it private and retain the failed helper/type/orientation experiments. A source
+recognizer, a shorter candidate or a plausible calling convention cannot export it.

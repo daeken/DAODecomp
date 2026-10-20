@@ -5,10 +5,10 @@
   "module_sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3",
   "counts": {
     "exact_eh_graph_match": 7,
-    "exact_object_match": 1442,
+    "exact_object_match": 1444,
     "reccmp_matched": 807
   },
-  "matched_functions": 2256,
+  "matched_functions": 2258,
   "translation_units": [
     {
       "id": "exact_object_match:3c0778a4da4a0ad821f7312cabd252995ac4a4fc85a629385d5f2eabbdfd0d94",
@@ -45523,6 +45523,64 @@
         "/EHsc"
       ],
       "provenance": "retained_free_report_recompared"
+    },
+    {
+      "id": "exact_object_match:a83eba49689e5119c3ffcd655be79e0b1c37e5149531b919db077ef6f490b183",
+      "source": "units/000b63f0-a83eba49689e5119.cpp",
+      "source_sha256": "a83eba49689e5119c3ffcd655be79e0b1c37e5149531b919db077ef6f490b183",
+      "comparison_report_sha256": "6244ad3605113e5fc8ab61301dad1fcd4d7aba02a15742e07802a3b5208dba6e",
+      "compiled_artifact_sha256": "086ce7bcc38f05402b302bc653777581a89767eb78feb075d0be94ef18496f14",
+      "matched_rvas": [
+        "0x000b63f0"
+      ],
+      "comparator_modules": {
+        "coff.py": "31fcd4705ad7357e1d8dfd1ca63156f4d65d7d8d13df041de9c61c56596d4157",
+        "compare.py": "aa7a13edd3a72f0c76906b8764f119c43d5bdf9a1bb5867637e6e19d0da4891a"
+      },
+      "compiler_version": "14.00.50727.762 (SP.050727-7600)",
+      "compiler_sha256": "5f6489b0d211b14ae09d93d3fb58a7bce84d070287f008e06416c9baa5564219",
+      "compiler_flags": [
+        "/c",
+        "/O2",
+        "/Ob1",
+        "/Oy",
+        "/Gy",
+        "/Z7",
+        "/Zl",
+        "/GS-",
+        "/GR-",
+        "/EHsc"
+      ],
+      "provenance": "retained_free_report_recompared"
+    },
+    {
+      "id": "exact_object_match:9f9eef9f4e1266b505abe87b1e934bf4c6cb08750fd6a83bc57bfd278c8aaa1a",
+      "source": "units/000e6f50-9f9eef9f4e1266b5.cpp",
+      "source_sha256": "9f9eef9f4e1266b505abe87b1e934bf4c6cb08750fd6a83bc57bfd278c8aaa1a",
+      "comparison_report_sha256": "85cae7605d30e82b3b81d75033b331ed339fbb45437e51f45f582140cb7a34fe",
+      "compiled_artifact_sha256": "418d1024e9526fd4fe564e2222b0c5b3ead55e02c2a40d812e56dae0f9dc00fc",
+      "matched_rvas": [
+        "0x000e6f50"
+      ],
+      "comparator_modules": {
+        "coff.py": "31fcd4705ad7357e1d8dfd1ca63156f4d65d7d8d13df041de9c61c56596d4157",
+        "compare.py": "aa7a13edd3a72f0c76906b8764f119c43d5bdf9a1bb5867637e6e19d0da4891a"
+      },
+      "compiler_version": "14.00.50727.762 (SP.050727-7600)",
+      "compiler_sha256": "5f6489b0d211b14ae09d93d3fb58a7bce84d070287f008e06416c9baa5564219",
+      "compiler_flags": [
+        "/c",
+        "/O2",
+        "/Ob1",
+        "/Oy",
+        "/Gy",
+        "/Z7",
+        "/Zl",
+        "/GS-",
+        "/GR-",
+        "/EHsc"
+      ],
+      "provenance": "retained_free_report_recompared"
     }
   ],
   "functions": [
@@ -49600,6 +49658,21 @@
       "annotation_line": 114
     },
     {
+      "rva": "0x000b63f0",
+      "status": "exact_object_match",
+      "unit": "exact_object_match:a83eba49689e5119c3ffcd655be79e0b1c37e5149531b919db077ef6f490b183",
+      "source": "units/000b63f0-a83eba49689e5119.cpp",
+      "source_sha256": "a83eba49689e5119c3ffcd655be79e0b1c37e5149531b919db077ef6f490b183",
+      "annotation_line": 28,
+      "original_ranges": [
+        {
+          "start_rva": 746480,
+          "end_rva_inclusive": 746588
+        }
+      ],
+      "original_bytes_sha256": "8dcce3261defaaae67445afebfdf47d48121a656813d43a691b9f406b1b45b17"
+    },
+    {
       "rva": "0x000b6b10",
       "status": "exact_object_match",
       "unit": "exact_object_match:5cd89213efedcfb47e4b0dba1ac1a51d6d22a9dc14d65e9f0e7b70d165940971",
@@ -50657,6 +50730,21 @@
         }
       ],
       "original_bytes_sha256": "c58df58fbf091c39f9e1c873e5e2f5196c5e80039d1653b9cefb75ed4482dbd2"
+    },
+    {
+      "rva": "0x000e6f50",
+      "status": "exact_object_match",
+      "unit": "exact_object_match:9f9eef9f4e1266b505abe87b1e934bf4c6cb08750fd6a83bc57bfd278c8aaa1a",
+      "source": "units/000e6f50-9f9eef9f4e1266b5.cpp",
+      "source_sha256": "9f9eef9f4e1266b505abe87b1e934bf4c6cb08750fd6a83bc57bfd278c8aaa1a",
+      "annotation_line": 28,
+      "original_ranges": [
+        {
+          "start_rva": 946000,
+          "end_rva_inclusive": 946108
+        }
+      ],
+      "original_bytes_sha256": "df7d0131c3900ca0b9fdd990dd28c7c99bcaa0920eb2d84c9ffa545ba3c041bc"
     },
     {
       "rva": "0x000e7030",

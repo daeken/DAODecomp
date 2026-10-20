@@ -11,7 +11,8 @@ from .conditional_construction import Unsupported,sha
 
 _ECX_WRITES={capstone.x86.X86_REG_ECX,capstone.x86.X86_REG_CX,capstone.x86.X86_REG_CL,capstone.x86.X86_REG_CH}
 
-def capture(reader,entry,cleanup):
+def capture(reader,entry,cleanup,allow_indirect_calls=False):
+ if type(allow_indirect_calls) is not bool:raise Unsupported('indirect_call_policy')
  ranges=entry['body_ranges'];by={};hashes=[]
  if not ranges or ranges[0]['start_rva']!=entry['rva']:raise Unsupported('callee_ranges')
  md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);md.detail=True
@@ -22,13 +23,15 @@ def capture(reader,entry,cleanup):
  pc=reader.pe.image_base+entry['rva'];context=None;prefix_seen=set()
  while pc in by and pc not in prefix_seen:
   prefix_seen.add(pc);x=by[pc];reads,writes=x.regs_access()
-  if x.mnemonic=='call':context='unwritten_ECX_forwarded_to_unknown_nested_call';break
+  if x.mnemonic=='call':
+   if len(x.operands)==1 and x.operands[0].type==capstone.x86.X86_OP_IMM:context='unwritten_ECX_forwarded_to_unknown_nested_call'
+   break
   if x.mnemonic.startswith('j') or _ECX_WRITES.intersection(writes):break
   if any(o.type==capstone.x86.X86_OP_MEM and o.mem.base==capstone.x86.X86_REG_ECX for o in x.operands):context='direct_original_ECX_memory_operand_before_clobber';break
   if x.mnemonic=='mov' and len(x.operands)==2 and x.operands[1].type==capstone.x86.X86_OP_REG and x.operands[1].reg==capstone.x86.X86_REG_ECX:context='fullword_original_ECX_copy_before_clobber';break
   pc+=x.size
  if context is None:raise Unsupported('callee_ECX_context_unknown')
- seen=set();todo=[reader.pe.image_base+entry['rva']];returns=[];calls=[]
+ seen=set();todo=[reader.pe.image_base+entry['rva']];returns=[];calls=[];indirect=[]
  branch={'jmp','je','jne','js','jns','ja','jae','jb','jbe','jg','jge','jl','jle','jo','jno','jp','jnp'}
  while todo:
   pc=todo.pop()
@@ -39,14 +42,19 @@ def capture(reader,entry,cleanup):
    returns.append(0 if not x.operands else x.operands[0].imm if len(x.operands)==1 and x.operands[0].type==capstone.x86.X86_OP_IMM else -1);continue
   if any(x.group(k) for k in [1,2,3,4,5,7]) and n not in branch|{'call'}:raise Unsupported('callee_control')
   if n=='call':
-   if len(x.operands)!=1 or x.operands[0].type!=capstone.x86.X86_OP_IMM:raise Unsupported('callee_indirect_call')
-   reader.read(x.operands[0].imm,1,True);calls.append(x.operands[0].imm)
+   if len(x.operands)!=1:raise Unsupported('callee_call_operand')
+   op=x.operands[0]
+   if op.type==capstone.x86.X86_OP_IMM:
+    reader.read(op.imm,1,True);calls.append(op.imm)
+   elif allow_indirect_calls and op.type in (capstone.x86.X86_OP_REG,capstone.x86.X86_OP_MEM) and op.size==4:
+    indirect.append(dict(site_va=x.address,operand=x.op_str,target='unknown',semantics='unknown; no successful return or callee behavior asserted'))
+   else:raise Unsupported('callee_indirect_call')
   if n in branch:
    if len(x.operands)!=1 or x.operands[0].type!=capstone.x86.X86_OP_IMM:raise Unsupported('callee_branch')
    todo.append(x.operands[0].imm)
   if n!='jmp':todo.append(pc+x.size)
  if seen!=set(by) or not returns or set(returns)!={cleanup}:raise Unsupported('callee_complete_cleanup')
- return dict(rva=entry['rva'],ranges=hashes,instructions=len(by),return_cleanup_bytes=cleanup,ECX_context=context,nested_calls=calls,formal_semantics='unknown; register context is an observation, not a callee contract')
+ return dict(rva=entry['rva'],ranges=hashes,instructions=len(by),return_cleanup_bytes=cleanup,ECX_context=context,nested_calls=calls,indirect_calls=indirect,formal_semantics='unknown; register context is an observation, not a callee contract')
 
 def propose(source,ast,rva,bound,original,inventory):
  raw=source.encode()
