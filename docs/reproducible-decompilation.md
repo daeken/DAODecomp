@@ -344,3 +344,23 @@ bytes, relocations and explicit unknowns are retained. This is a way to locate
 remaining differences, not an acceptance extension or proof of EH runtime
 behavior. Preserve comparator-level refusals as diagnostic errors too: an empty
 per-function result after a global refusal must not crash the diagnostic reader.
+
+
+### Account for every supported exception-graph byte
+
+`rapid_object.eh_graph_compare.compare_graphs(original_bytes, object_bytes,
+requested, symbols, module_sha256=...)` extends the bounded graph diagnostic
+through the complete main, checked handler, FuncInfo, unwind map, action and
+supported delete helper. Each byte is equal, different, absent or explicitly
+unresolved. Relocation indexes retain the actual COFF target identity: two
+same-name symbols in different sections must not share a placement. Uncompared
+defined dependencies remain incomplete.
+
+Node correspondences come from actual reference edges and supported candidate
+boundaries. Original inventory boundaries and compiler-runtime identities may
+still be missing; these remain blockers even when resolved bytes agree. Unknown
+relocation words retain all four byte records and their reasons. The tool never
+passes generated-symbol aliases into the existing comparator, and every report
+keeps `acceptance_supported=False`. It consumes existing bytes/metadata and
+requires no authored per-function packet. Synthetic regressions run with
+`python -m unittest discover -s tests -p test_eh_graph_compare.py -v`.

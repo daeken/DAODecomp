@@ -955,3 +955,34 @@ allocation/deallocation definitions need a consistent link-safe strategy.
 Complete EH graph/runtime bindings also remain unresolved. Preserve all eight
 sources and objects in `local/eh-construction-lowering-003/`; do not rerun its
 consumed build scripts. No candidate was published and no match count changed.
+
+
+### Complete EH graph byte accounting retains the extra jump
+
+A diagnostic comparison now accounts for every supported main/handler/metadata/
+action/delete-helper byte and relocation. Replaying eight retained construction
+variants found four different delete-helper bytes in each of six original-entry
+forwarders. Two tail-destination forwarders had 167 or 172 resolved equal bytes
+and twelve unresolved bytes each, covering all 179 or 184 captured graph bytes.
+The unresolved fields are the cookie global and two runtime references. Original
+inventory boundaries and runtime identities also remain unresolved. These are
+conditional byte observations, with zero complete matches or body credit.
+
+Independent review exposed a real diagnostic error: resolving by symbol name
+could confuse two different COFF definitions. The narrow repair retains actual
+relocation target indexes and marks an unpaired defined destination incomplete.
+The old freeze and exact counterexample remain retained. The independently
+approved replacement passes 23 focused regressions, including wrong targets,
+map/state/frame changes, missing/extra actions, helper boundaries and byte
+coverage. Eight cached exact controls remain exact; unsupported placement cleanup
+remains incomplete. Local checks passed 357 project tests (33 skips) and 276 rapid-object tests
+on macOS ARM64; the exact-head CI result is retained separately.
+
+No new compiler attempts, production inference, constructor-source adoption or
+change to the published 2,244-function count occurred. A read-only inventory
+query found no configured VC8-SP1 lib directory; matching CRT/cookie artifacts
+and complete original boundaries remain concrete evidence needs. No runtime
+implementation was invented or downloaded. The constructor generator's existing
+link-safety limitations remain unchanged. Private bindings, old NEEDS_FIX review,
+replacement freeze, independent approval and replay reports remain under
+`local/eh-graph-comparison-003/`.
