@@ -381,6 +381,8 @@ word/mask test, a common return and one conditional outgoing call. It tracks typ
 flags, live stack state, original call-entry registers/frame, memory epochs and
 explicit joins. Different live stacks or preserved registers, unknown predicates,
 back edges, nested branches and known private-frame pointer escapes refuse.
+Private word slots must be aligned and entirely inside the allocated negative
+frame; ordinary SP adjustments must remain aligned and nonpositive.
 
 Original-derived normal-return evidence may follow at most eight complete pure
 one-instruction direct near-JMP thunks, with exact inventory targets and cycle
@@ -392,3 +394,11 @@ zero arguments. The current source profile supports receiver-preserving member
 calls and one receiver word passed by value with separate caller cleanup. These
 are candidate ABI/profile assumptions, checked by complete compiled-object
 comparison, not a proof of callee semantics or globally consistent source types.
+
+The reviewed conditional release is installed at
+`~/.local/share/decompilation-mcp/releases/d2a6ea970751ead1`, with the private
+registry and recipe under `local/replayable-conditional-calls-001`. Fresh ordered
+checks reached `0x1070`; `0x10c0` remains unsupported. Its 577-candidate affected
+check produced 576 full matches and one retained mismatch, with zero unrun
+candidates. This does not claim equivalence for all 27,555 assessed identities,
+accepted source exports, or game execution. Existing recipes remain available.

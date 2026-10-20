@@ -748,15 +748,15 @@ seconds on macOS ARM64. Necessary static preconditions excluded 26,473 identitie
 actual typed checking generated 577 hypotheses and refused 389 cases. Another 116
 dependency analyses remain unresolved: 95 incomplete/opaque lifts and 21
 discontiguous callee ranges. The earlier profile generated none of those 577
-conditional hypotheses. One is the 36-byte pilot; the other 576 are still
-unchecked. Generated-candidate rows and C++ stayed identical across the final aliasing
+conditional hypotheses. At the pre-adoption freeze, one was the 36-byte pilot; the other 576 were
+unchecked. Generated-candidate rows and C++ stayed identical across the known-frame-address escape
 guard, which now refuses 12 known frame-address escapes earlier. This is
 applicability, not comparison credit. The final 652-test suite (33 skips),
 standalone 87 tests (two skips), seven CTest checks and both synthetic demos
 passed; the negative demo detected six of 59 case mismatches. Prior 206 native
 object matches remain under their exact original bindings, with zero source
-exports. The cumulative new machinery still requires independent approval and
-fresh installed checks before adoption.
+exports. That pre-adoption freeze required independent approval and fresh installed
+checks before adoption.
 
 The first cumulative review rejected a real private-frame alias defect: a word
 store at entry-SP minus one overlapped the saved return address, while the word
@@ -768,3 +768,31 @@ boundary tests and the actual counterexample now refuse; all four ordered native
 controls still match with unchanged generated C++. The corrected whole-inventory
 scan rows are byte-identical: 577 hypotheses, including 576 still unchecked.
 No full comparator was changed, and no false full match was claimed.
+
+The corrected freeze `064dbaf9...a1ccd5f` was independently approved and its exact
+source published at `46740b9`. Both CI workflows passed on macOS, Linux and
+Windows. Immutable runtime `d2a6ea970751ead1` then passed fresh installed ordered
+checks at `0x1000`, `0x1030`, `0x1040` and `0x1070` (22, 11, 25 and 36 bytes).
+The next ordered identity, `0x10c0`, remains inconclusive with
+`unsupported_conditional_input_extent`; no further rule or queue skip was added.
+
+The installed runtime regenerated and checked all 577 affected candidates through
+existing durable MCP jobs: 576 full native-object matches, one rejected mismatch,
+and zero unrun candidates. At `0x476650`, both unchanged full-range gates reject
+the 38-byte object against the complete 45-byte original. The prior five rejected
+tail-call candidates remain rejected. The 576 new distinct matches plus the 206
+retained identities give 782 distinct native-object matches under their recorded
+bindings; 579 matches use the current recipe (four ordered controls plus 575
+targeted jobs). Ahead regression results do not move the `0x10c0` frontier.
+
+Ten affected-batch transport-unknown attempts remain unchanged in history. Each
+continuation followed a separately invoked, reviewed nonaccepting recovery
+operation with fresh bound evidence; completed jobs were reused and no unknown
+attempt received match credit. Including author variants and installed controls,
+this scope retained 608 managed build attempts: 596 confirmed compiler exits
+(831.321 measured compiler-host seconds) and 12 uncertain attempts. No active
+uncertainty barrier remains. All 27,555 scan rows have explicit accounting;
+26,473 outside-domain rows, 389 typed refusals and 116 unresolved dependency
+analyses received no new conditional-match credit. Receipts are under ignored
+`local/replayable-conditional-calls-001`. Accepted source exports and game
+execution remain zero; these are compiled-artifact observations.
