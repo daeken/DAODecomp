@@ -1325,3 +1325,10 @@ stdio tests, seven portable tests with two skips, and 618 repository tests with
 then discovered all seven tools from its saved registration of a versioned local
 build. Opening a server connection and discovering tools are separate from an
 existing chat gaining that connection; the running app was not restarted.
+
+The first Windows CI run exposed a portable-test cleanup mistake: Python's
+`sqlite3.Connection` context manager manages transactions but does not close the
+connection. Four test-owned connections kept temporary database handles alive,
+so Windows refused file removal after the assertions. Explicit `closing(...)`
+now surrounds those transaction contexts. No assertions, server behavior or
+comparison rules changed; the failed CI run remains part of the experiment.

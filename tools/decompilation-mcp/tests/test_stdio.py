@@ -5,6 +5,7 @@ DECOMPILATION_MCP_REAL_CONFIG=/absolute/registry.json python3 -m unittest discov
 -s tools/decompilation-mcp/tests -v
 """
 import concurrent.futures
+from contextlib import closing
 import hashlib
 import importlib.util
 import struct
@@ -194,7 +195,7 @@ class StdioTests(unittest.TestCase):
         self.assertFalse(done['result']['fresh_comparison'])
         third = self.connect()
         self.assertEqual(third.call('job_get', job_id=jobs[0])['result'], done['result'])
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             self.assertEqual(db.execute('SELECT count(*) FROM jobs').fetchone()[0], 1)
 
     def test_inventory_drift_rejects_submission_until_snapshot_refresh(self):
@@ -211,7 +212,7 @@ class StdioTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.client.call('candidate_check', project_id='open', build_id=build,
                              idempotency_key='inventory-drift')
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             self.assertEqual(db.execute('SELECT count(*) FROM jobs').fetchone()[0], 0)
         # A new server imports the changed inventory under a new snapshot revision.
         refreshed = self.connect()
@@ -221,7 +222,7 @@ class StdioTests(unittest.TestCase):
         done = wait_job(refreshed, submitted['job_id'])
         self.assertEqual(done['state'], 'completed')
         self.assertEqual(done['result']['status'], 'inconclusive')  # Fixture has no compiler artifacts.
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             request = json.loads(db.execute('SELECT request FROM jobs').fetchone()[0])
         self.assertEqual(request['revision'], refreshed.call('project_open', project_id='open')['revision'])
         self.assertEqual(request['inputs'][str(inventory_path)], hashlib.sha256(inventory_path.read_bytes()).hexdigest())
@@ -229,7 +230,7 @@ class StdioTests(unittest.TestCase):
     def test_interrupted_job_is_unknown_without_replay(self):
         self.client.call('project_open', project_id='open')
         ident = 'a' * 32
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             db.execute("INSERT INTO jobs(id,project,token,request,state,created,started) VALUES(?,?,?,'{}','running',?,?)",
                        (ident, 'open', 'crashed', '2026-10-19T00:00:00+00:00', '2026-10-19T00:00:00+00:00'))
         result = self.client.call('job_get', job_id=ident)
