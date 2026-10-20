@@ -108,6 +108,9 @@ public sealed class DecompilationTools(Engine engine)
     [McpServerTool(Name = "replayable_inspect"), Description("Read bounded generated source and typed recovered IR from a replayable job. Identity and acceptance remain separate from source spelling.")]
     public string ReplayableInspect(string job_id,int source_limit=4000) => Engine.Json(engine.ReplayableInspect(job_id,source_limit));
 
+    [McpServerTool(Name = "source_export"), Description("Durably export 1..16 explicit accepted replayable jobs to a registered independent source namespace after current source regeneration and fresh complete ordinary/SIB/EH artifact checks. Expected project and publication revisions prevent stale writes. No compilation, ABI-diagnostic acceptance, linking or match-credit transfer; same token returns historical job.")]
+    public string SourceExport(string project_id,string[] job_ids,string expected_revision,string expected_publication_revision,string idempotency_key) => Engine.Json(engine.SourceExport(project_id,job_ids,expected_revision,expected_publication_revision,idempotency_key));
+
     [McpServerTool(Name = "job_get"), Description("Read compact persisted job result. Reading a completed result never revalidates it. An interrupted worker is conservatively interrupted_unknown.")]
     public string JobGet(string job_id) => Engine.Json(engine.JobGet(job_id));
 }

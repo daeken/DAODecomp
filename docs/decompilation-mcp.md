@@ -509,6 +509,14 @@ interfaces. Protocol support is negotiated rather than assumed.
 | `source_export` | Accepted revision/set, expected publication revision → source/provenance export or precise current-binding refusal |
 | `integration_check` | Source revision, registered build/launch profile, execution limits → linked or observed-run milestone; no implicit success for unresolved calls/assets |
 
+The current bounded implementation selects explicit completed replayable jobs
+(1–16 per snapshot) and expected project/publication revisions. It regenerates
+source, freshly reruns both existing artifact gates, preserves exact/SIB labels
+and publishes an independent C++/allowlisted-provenance namespace. General
+revision sets and whole-project integration remain roadmap work; see the
+[source-export usage](decompilation-mcp-usage.md#export-a-checked-replayable-source-snapshot).
+
+
 Selectors and rewrite operations have typed, bounded schemas. Do not expose
 arbitrary SQL, shell commands or code evaluation as the public query interface.
 Custom rules are versioned engine extensions developed and tested once, not

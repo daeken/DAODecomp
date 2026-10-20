@@ -142,7 +142,7 @@ class StdioTests(unittest.TestCase):
     def test_initialize_list_open_and_pagination(self):
         names = {t['name'] for t in self.client.rpc('tools/list', {})['tools']}
         self.assertEqual(names, {'project_list', 'project_open', 'function_query', 'function_inspect',
-                                'corpus_find_related', 'candidate_check', 'job_get', 'replayable_run_next', 'replayable_inspect', 'replayable_status', 'replayable_regression_check', 'replayable_abandon_unknown', 'replayable_regression_batch'})
+                                'corpus_find_related', 'candidate_check', 'job_get', 'replayable_run_next', 'replayable_inspect', 'replayable_status', 'replayable_regression_check', 'replayable_abandon_unknown', 'replayable_regression_batch', 'source_export'})
         opened = self.client.call('project_open', project_id='open')
         self.assertEqual(opened['inventory_identities'], 3)
         self.assertEqual(opened['compilation'], 'unsupported')

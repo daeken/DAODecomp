@@ -2114,3 +2114,26 @@ retains storage for these deferred predicate captures. The original open
 counterexample and a no-overwrite positive case check this boundary; the rejected
 freeze and report remain preserved. Rendering metadata is part of capture
 liveness, even when it is not an architectural IR use.
+
+
+### Export regenerated source through the retained artifact gates
+
+The first replayable export pilot selected the nine previously accepted ordered
+controls. Current source regeneration was byte-identical to their retained
+compiler input; both existing comparison gates ran again without compiling.
+The pilot produced eight exact entries, including the complete EH control, and
+one freshly checked bounded SIB-equivalent entry. The mismatching `0x1210` job
+was explicitly refused. The private pilot took about 15 seconds and launched no
+compiler or VM operation. These are export checks of existing bound artifacts,
+not additional distinct matches or game-execution evidence.
+
+The bridge initially exposed a configuration boundary: historical installed
+runtime inputs were outside the old project's allowed roots. The export route
+now uses the current registered read roots, with the immutable release directory
+explicitly registered, and still checks every historical input hash. A synthetic
+tamper test also caught a missing retained-request input check: semantically
+unchanged receipt whitespace had bypassed its original byte binding. Verifying
+that request's entire input closure fixed the gap. Both failed attempts remain
+local. Public output is an allowlisted projection; reports and their raw bytes
+stay private. The output remains independent translation units, with unresolved
+wrapper/type/signature integration stated explicitly.

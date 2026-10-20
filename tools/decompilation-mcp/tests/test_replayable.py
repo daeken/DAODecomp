@@ -68,3 +68,6 @@ AbiEffectsPipelineTests = load_shared('test_replayable_abi_effects').AbiEffectsP
 TypedReceiverTests = load_shared('test_replayable_receiver_fields').TypedReceiverTests
 
 ScalarSourceTests = load_shared('test_replayable_scalar_source').ScalarSourceTests
+
+SourceExportTests = load_shared('test_replayable_source_export').SourceExportTests
+SourceExportProgressTests = load_shared('test_replayable_source_export').SourceExportProgressTests

@@ -1054,3 +1054,23 @@ Deferred source predicates also count as uses. The zero-branch renderer can reta
 a captured TEST operand beyond its defining instruction, so the scalar plan
 explicitly keeps those captures materialized. A register write that preserves
 flags must never change the later branch's captured operand.
+
+
+Explicit replayable source export is a separate durable operation. It takes a
+bounded selection of completed accepted replayable job IDs and expected project/
+publication revisions, regenerates current source and requires byte equality with
+the historical compiler input. It then rechecks both retained comparison gates,
+including required EH dependencies and fresh typed SIB evidence. Old result
+labels, source text or diagnostic files cannot independently authorize export.
+Historical compiler/group receipts and exact input bindings remain mandatory;
+no compiler dispatch is needed for these source-equal artifacts.
+
+Publication projects C++ plus an allowlist of hashes, identity/ranges, recipe,
+frontend revision and checker versions. Private paths, original bytes/IL, full
+reports and compiler/object files remain local. An independent namespace keeps
+historical recovered sources intact. The latest index describes an explicit
+1–16-unit snapshot; earlier immutable export folders remain preserved. Index
+reads check source hashes and the completed durable export revision. Unknown or
+interrupted publication does not gain success through retry or version changes.
+These independently compiled wrappers still need type/symbol/ODR integration;
+export is neither new function-match credit nor a linked executable or game proof.

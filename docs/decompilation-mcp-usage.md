@@ -4,8 +4,9 @@ The C# engine in `tools/decompilation-mcp` retains inventory/source browsing,
 deterministic related-function search, and **fresh checking of retained compiler
 artifacts** through the existing Python comparators. The replayable branch adds
 a bounded SharpRetro-to-C++ generation and compile/check loop, described below.
-It makes no model calls, does not publish sources or grant historical registry
-credit, and keeps its frontier separate from old recovery queues.
+It makes no model calls or grants of historical registry credit. Explicit
+`source_export` publishes a freshly checked replayable source snapshot; its
+counts and frontier remain separate from old recovery queues.
 A full object/graph match describes pinned compiled artifacts;
 it is not a whole-game or universal C++ semantics proof.
 
@@ -13,7 +14,7 @@ The [architecture and full-workflow roadmap](decompilation-mcp.md#two-parts-of-t
 separates reusable x86/source transformations from compiler-specific profiles.
 Initial decompilation and new compilation now have a deliberately narrow
 supported domain. General pattern propagation, recipe trials, durable naming,
-type refactoring and source publication remain future capabilities.
+type refactoring and whole-project source integration remain future capabilities.
 
 ## Build and launch
 
@@ -190,7 +191,8 @@ retained under `state_root/artifacts/<sha256>`; workers reject missing or change
 live inputs before comparing an in-memory snapshot. Backend reports are created
 once at `state_root/<job_id>.report.json`; jobs record their digest. A completed
 result has timestamps and `historical_result: true`: old reports are never fresh
-validation. No automatic source acceptance or export is implemented.
+validation. Reading a job does not export it; the explicit `source_export` route
+below requires fresh checks before publishing.
 
 An opened project's inventory hash also binds new submissions to its revision.
 Changing or deleting that inventory refuses a new check before job creation;
@@ -613,3 +615,62 @@ terminal evidence is derived from pinned original inputs and bound CRT libraries
 Recovered reports include separate terminal paths and receiver access-layout
 observations, with unknown effects/types/extent retained. This composition has
 not made `0x1210` pass; its complete native mismatch remains the frontier.
+
+
+## Export a checked replayable source snapshot
+
+Register `source_export_root` on a project, for example
+`/absolute/repository/src/native/replayable`. The target must be inside its
+registered allowed roots and empty or an existing publication in this route's
+schema. It cannot reuse the historical recovered-source index. Historical
+immutable runtime/input locations used by selected jobs must also be inside the
+registered allowed roots. Keep the existing state and retained job folders.
+
+Call `project_open` and retain both `revision` and `source_export.revision`.
+The latter is `empty` initially, then the exact publication index SHA-256.
+Submit:
+
+```json
+{
+  "name": "source_export",
+  "arguments": {
+    "project_id": "registered-project",
+    "job_ids": ["completed-replayable-job-id"],
+    "expected_revision": "project-open-revision",
+    "expected_publication_revision": "empty",
+    "idempotency_key": "explicit-export-request"
+  }
+}
+```
+
+The tool returns a durable job. Use `job_get` for its compact result; a client
+poll timeout does not cancel or retry the worker. The same key returns that
+historical job. A different selection or expected revision cannot reuse its key.
+One export selects 1–16 unique completed compiled replayable jobs, with no duplicate
+inventory identity. The initial supported binding form uses the composed
+encoding-capable recipes and refuses the experimental ABI-effect recipe.
+Only `full_match` and freshly certified `encoding_equivalent` can export.
+Generated-only, failed, mismatching and unknown jobs refuse before publication.
+
+The worker regenerates C++ with the current registered original/lifter/recipe and
+requires exact equality with the selected compiler source. Historical request,
+report, object, compiler and build/group receipts must remain bound. Both existing
+comparison gates rerun without compiling, including the complete supported EH
+graph and fresh typed SIB check when applicable. Changed compiler/lifter/EH
+profiles, an active/unknown compiler barrier, changed inputs or inconclusive
+checks cannot export. ABI-event diagnostics remain nonaccepting.
+
+The output contains only unchanged generated C++, a JSON index/manifest and a
+README. Metadata projects allowlisted identity/ranges, hashes, recipe, frontend
+revision, checker hashes and reproduction guidance. Original bytes, IL, full
+reports, objects, compiler files and private absolute paths stay local.
+Each immutable `exports/<export-job-id>` folder is preserved; `index.json`
+identifies the latest explicit snapshot, not the union of all past exports.
+Publication reads bind that index to its completed durable export job and source
+hashes. An interrupted publication is not automatically reconciled or replayed.
+
+Compile each unit independently. Generated `Recovered` wrappers, signatures and
+external declarations remain profile hypotheses that need deliberate ODR/type/
+symbol integration before linking. Export is distinct from matching, source
+integration and game execution. The existing historical source collection is
+unchanged; the root README updater reports replayable source counts separately.

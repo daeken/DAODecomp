@@ -390,8 +390,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache'), 'unsupported_pipeline_action')
-        result = batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
+        result = __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

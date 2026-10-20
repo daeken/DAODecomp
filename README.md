@@ -20,6 +20,10 @@ from the historical emulator-validated registry below. The previous recovery
 harness and source snapshot remain on `codex/rapid-recovery` and are inherited
 here for reference and independent checks.
 
+The separate [replayable generated C++ snapshot](src/native/replayable/README.md)
+publishes freshly checked independent units from the new pipeline. It does not
+replace or merge the historical source collection and is not a linked game.
+
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful
 approaches, measurements, reproduction steps and changes needed for another game.
@@ -44,9 +48,12 @@ exception dependencies, with fresh runtime/artifact checks before export.
 | Function hypotheses in the initial main EXE inventory | 27,555 |
 | Functions in the recovery registry | 94 |
 | C++ implementations | 94 |
-| Implementations with current emulator corpus evidence | 94 |
-| Input cases across those functions (excluding repeat runs) | 57,510 |
+| Implementations with current emulator corpus evidence | 0 |
+| Input cases across those functions (excluding repeat runs) | 0 |
 | Implementations with current native Windows corpus evidence | 0 |
+| Exported replayable C++ units (separate snapshot) | 9 |
+| Replayable exports with exact artifact evidence | 8 |
+| Replayable exports with bounded encoding evidence | 1 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
 these counts are not a percentage of whole-game completion. Evidence counts require
