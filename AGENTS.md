@@ -17,6 +17,22 @@
   generated C++ is reproducible output. Names/types bind to tracked entities.
   JSON recipes/trials must preserve prior candidates and report regressions,
   unknowns and pending work. Introduce these operations through the C# MCP/core.
+- Use a tight development loop: focused generic tests, a complete real-compiler
+  comparison at the current frontier, and relevant previously matching controls.
+  Continue through consecutive functions within a bounded implementation batch;
+  do not require a director handoff, full suite, review, CI or installation after
+  every small rule. Development matches and the development frontier are
+  provisional until the batch passes release checks.
+- Recheck the whole inventory for applicability at each stable rule version and
+  compare affected outputs using exact caches. These checks may run in the
+  background while development continues; preserve every version's results and
+  investigate regressions in previously matching controls before proceeding.
+- At a coherent checkpoint, run required full checks once, obtain one cumulative
+  independent review of new machinery, and publish code plus documentation
+  together. Verify exact-head CI and install the reviewed immutable release.
+  Do not add a second release cycle solely to publish the first cycle's results;
+  keep those results in the local handoff and the next combined checkpoint.
+  Full range, relocation, EH and unknown-outcome requirements remain unchanged.
 - Goal: function-level behavioral equivalence to the pinned original build, then
   a replacement executable using original assets. A byte-identical whole game is
   not required. Complete reccmp matches are an authorized automatic acceptance
@@ -57,9 +73,12 @@
 - Keep the original install and captures under ignored local/, or the user's
   ignored installer/ and gamedata/ directories. Do not commit game
   executables, assets, memory dumps, generated analysis projects or credentials.
-- For tooling changes run `python3 -m unittest discover -s tests -v`. For C++ or
-  harness changes build with CMake and run both synthetic demo commands in README.
-  Report which host/build actually ran; CI definitions alone are not test results.
+- Before releasing a tooling checkpoint run
+  `python3 -m unittest discover -s tests -v`. For C++ or harness changes also build
+  with CMake and run both synthetic demo commands in README. Inner iterations use
+  relevant focused tests; documentation-only changes do not require rebuilding
+  unchanged tooling. Report which host/build actually ran; CI definitions alone
+  are not test results.
 - Maintain the public methodology in `docs/reproducible-decompilation.md` and
   `docs/learning-log.md` as work proceeds. Record reusable discoveries, failed
   approaches, transformation preconditions, measured costs/yields with denominators,

@@ -2,7 +2,8 @@ using System.Security.Cryptography;
 using System.Text.Json;
 namespace Decompilation;
 
-public sealed record ReturnEvidenceNode(ulong Target,string SliceSha256,int Bytes);
+public sealed record TailAdapterReturnEvidence(ulong Target,RecoveredFunction Function,RecoveryAbi Abi,int StackPointerDelta,RecoveredValue[] ArgumentMap,bool MemoryEffectsUnknown=true,bool ThrowBehaviorUnknown=true,bool TerminationUnknown=true,bool CallerFrameRetainedOnlyOnNormalContinuation=true,bool ObjectFrameDisjointnessProven=false);
+public sealed record ReturnEvidenceNode(ulong Target,string SliceSha256,int Bytes,TailAdapterReturnEvidence? TailAdapter=null);
 public sealed record ForwardedReturnEvidence(ulong OriginalTarget,NormalReturnStackEvidence NormalReturn,ReturnEvidenceNode[] Chain,bool Proof=false);
 public sealed record ConditionalEffect(string Kind,ulong Pc,RecoveredValue? Address=null,RecoveredValue? Value=null,int Bits=0,ConditionalCall? Call=null);
 public sealed record ConditionalCall(ulong OriginalTarget,RecoveredValue Receiver,RecoveredValue[] Arguments,int CalleeCleanupBytes,int CallerCleanupBytes,ForwardedReturnEvidence Evidence,ConditionalState EntryState,bool MemoryEffectsUnknown=true,bool TerminationUnknown=true);
@@ -27,13 +28,51 @@ public static class NormalReturnResolver
         var dest=branch.GetProperty("Target");Need(dest.GetProperty("Ty").GetProperty("Bits").GetInt32() is 32 or 64&&ulong.TryParse(dest.GetProperty("Bits").GetProperty("decimal").GetString(),out _),"unsupported_forwarding_target");
         ulong address=ulong.Parse(dest.GetProperty("Bits").GetProperty("decimal").GetString()!);Need(target<=uint.MaxValue&&address==unchecked((uint)((long)target+raw.Length+delta)),"forwarding_encoding_target_disagrees");return address;
     }
-    public static ForwardedReturnEvidence Resolve(ulong original,IEnumerable<CalleeStackLift> supplied,int maximumDepth=8)
+    static bool Contains(JsonElement node,string kind)
+    {
+        if(node.ValueKind==JsonValueKind.Object) {
+            if(node.TryGetProperty("type",out var type)&&type.ValueKind==JsonValueKind.String&&Tag(node)==kind)return true;
+            return node.EnumerateObject().Any(p=>Contains(p.Value,kind));
+        }
+        return node.ValueKind==JsonValueKind.Array&&node.EnumerateArray().Any(n=>Contains(n,kind));
+    }
+    public static TailAdapterReturnEvidence? TailAdapter(ulong target,JsonElement lift,RecoveryAbi abi)
+    {
+        var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();if(rows.Length<2)return null;
+        var last=rows[^1];var tail=last.GetProperty("tree");if(Tag(tail)!="IlBlock")return null;
+        var body=tail.GetProperty("Body").EnumerateArray().ToArray();
+        if(body.Length!=1||Tag(body[0])!="IlBranch"||body[0].GetProperty("Kind").GetProperty("name").GetString()!="Jmp")return null;
+        Need(abi.ArgumentRegisters.Length==1&&abi.ArgumentRegisters[0] is >=0 and <16&&abi.ArgumentRegisters[0]!=4,"tail_adapter_requires_explicit_receiver_ABI");
+        // Reuse the original encoding/typed direct-target check on the final row.
+        var single=lift.Deserialize<Dictionary<string,JsonElement>>()!;single["instructions"]=JsonSerializer.SerializeToElement(new[]{last});
+        var destination=PureForwardTarget(last.GetProperty("pc").GetUInt64(),JsonSerializer.SerializeToElement(single));Need(destination!=null,"tail_adapter_direct_exit_required");
+        ulong pc=target;
+        foreach(var row in rows) {
+            int size=row.GetProperty("length").GetInt32();var prefix=row.GetProperty("decoded").GetProperty("P");
+            Need(row.GetProperty("pc").GetUInt64()==pc&&size is >0 and <=15&&row.GetProperty("raw_hex").GetString()!.Length==size*2&&!prefix.GetProperty("Lock").GetBoolean()&&!prefix.GetProperty("Rep").GetBoolean()&&!prefix.GetProperty("RepNz").GetBoolean(),"tail_adapter_range_or_prefix");pc+=(ulong)size;
+        }
+        foreach(var row in rows[..^1]) {
+            var tree=row.GetProperty("tree");Need(Tag(tree)=="IlBlock"&&!Contains(tree,"IlLoad"),"tail_adapter_unknown_read");
+            Need(tree.GetProperty("Body").EnumerateArray().All(n=>Tag(n) is "IlLet" or "IlStore"),"tail_adapter_register_stack_flag_or_control_effect");
+        }
+        var recovered=X86Recovery.Raise(lift,abi);var receiver=new RegisterInput(abi.ArgumentRegisters[0]);
+        Need(recovered.ExitKind=="tail_call"&&recovered.StackEffects.Count==0&&recovered.Effects.Count is >=2 and <=9,"tail_adapter_complete_bounded_prefix_required");
+        var exit=recovered.Effects[^1];Need(exit.Kind=="tail_call"&&exit.Value is Constant c&&c.Value==destination&&exit.Inputs is {Length:1}&&exit.Inputs[0]==receiver,"tail_adapter_argument_mapping_changed");
+        foreach(var effect in recovered.Effects.Take(recovered.Effects.Count-1)) {
+            long? offset=effect.Address==receiver?0:effect.Address is AddValue a&&a.Left==receiver?a.Offset:null;
+            Need(effect.Kind=="store"&&effect.Bits is 8 or 16 or 32&&effect.Value is Constant value&&value.Bits==effect.Bits&&offset is >=0 and <=4096,"tail_adapter_requires_bounded_receiver_constant_stores");
+        }
+        return new(destination!.Value,recovered,abi,0,exit.Inputs!);
+    }
+    public static ForwardedReturnEvidence Resolve(ulong original,IEnumerable<CalleeStackLift> supplied,int maximumDepth=8,RecoveryAbi? adapterAbi=null)
     {
         Need(maximumDepth is >0 and <=16,"invalid_forwarding_budget");var map=new Dictionary<ulong,JsonElement>();foreach(var c in supplied)Need(map.TryAdd(c.Target,c.Lift),"duplicate_callee_evidence");var visited=new HashSet<ulong>();var chain=new List<ReturnEvidenceNode>();ulong target=original;
         for(int depth=0;depth<=maximumDepth;depth++) {
             Need(visited.Add(target),"forwarding_cycle");Need(map.TryGetValue(target,out var lift),"missing_forwarding_dependency");var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();
-            var bytes=rows.SelectMany(r=>Convert.FromHexString(r.GetProperty("raw_hex").GetString()!)).ToArray();chain.Add(new(target,Convert.ToHexStringLower(SHA256.HashData(bytes)),bytes.Length));
-            var next=PureForwardTarget(target,lift);if(next==null)return new(original,X86StackArgumentRecovery.InspectNormalReturn(target,lift),chain.ToArray());Need(depth<maximumDepth,"forwarding_depth_exhausted");target=next.Value;
+            var bytes=rows.SelectMany(r=>Convert.FromHexString(r.GetProperty("raw_hex").GetString()!)).ToArray();
+            var next=PureForwardTarget(target,lift);var adapter=next==null&&adapterAbi!=null?TailAdapter(target,lift,adapterAbi):null;next??=adapter?.Target;
+            chain.Add(new(target,Convert.ToHexStringLower(SHA256.HashData(bytes)),bytes.Length,adapter));
+            if(next==null)return new(original,X86StackArgumentRecovery.InspectNormalReturn(target,lift),chain.ToArray());Need(depth<maximumDepth,"forwarding_depth_exhausted");target=next.Value;
         }
         throw new ArgumentException("forwarding_depth_exhausted");
     }
@@ -109,7 +148,7 @@ public static class X86ConditionalRecovery
     }
     static JsonElement[] Nodes(JsonElement row)=>row.GetProperty("tree").GetProperty("Body").EnumerateArray().ToArray();
     static string? BranchKind(JsonElement row){var nodes=Nodes(row);return nodes.Length>0&&Tag(nodes[^1])=="IlBranch"?Name(nodes[^1],"Kind"):null;}
-    static void Call(JsonElement row,JsonElement? next,State s,List<ConditionalEffect> effects,int cleanup,bool flat,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees)
+    static void Call(JsonElement row,JsonElement? next,State s,List<ConditionalEffect> effects,int cleanup,bool flat,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees,bool tailAdapters)
     {
         ulong pc=row.GetProperty("pc").GetUInt64();var nodes=Nodes(row);Need(nodes.Length is 4 or 5,"unsupported_conditional_call_tree");var temp=new Dictionary<int,RecoveredValue>();int cursor=0;
         while(cursor<nodes.Length&&Tag(nodes[cursor])=="IlLet"){var node=nodes[cursor++];Need(temp.TryAdd(node.GetProperty("Id").GetInt32(),Eval(node.GetProperty("Val"),s,temp,pc,cleanup,flat)),"duplicate_conditional_call_temporary");}
@@ -119,18 +158,18 @@ public static class X86ConditionalRecovery
         Need(Tag(capture)=="IlConst"&&Eval(capture,s,temp,pc,cleanup,flat) is Constant,"indirect_conditional_call");var target=(Constant)Eval(capture,s,temp,pc,cleanup,flat);
         var before=s.Sp;Need(Eval(nodes[cursor].GetProperty("Val"),s,temp,pc,cleanup,flat)==new AddValue(new RegisterInput(4),before-4),"incorrect_Bits32_call_stack_width");s.Sp-=4;
         var store=nodes[cursor+1];Need(Offset(Eval(store.GetProperty("Addr"),s,temp,pc,cleanup,flat),flat)==s.Sp&&Bits(store.GetProperty("Val"))==32&&Eval(store.GetProperty("Val"),s,temp,pc,cleanup,flat) is Constant{Bits:32} ret&&ret.Value==pc+(ulong)row.GetProperty("length").GetInt32(),"conditional_call_return_address_mismatch");s.Sp=before;
-        var evidence=NormalReturnResolver.Resolve(target.Value,callees);int callee=evidence.NormalReturn.CleanupBytes;Need(callee is >=0 and <=16&&callee%4==0,"unsupported_conditional_callee_cleanup");int caller=CallerCleanup(next,s,cleanup,flat);int extent=checked(callee+caller);Need(extent<=16&&before+extent<=0,"outgoing_arguments_cross_return_slot");var args=new List<RecoveredValue>();
+        var evidence=NormalReturnResolver.Resolve(target.Value,callees,adapterAbi:tailAdapters?abi:null);int callee=evidence.NormalReturn.CleanupBytes;Need(callee is >=0 and <=16&&callee%4==0,"unsupported_conditional_callee_cleanup");int caller=CallerCleanup(next,s,cleanup,flat);int extent=checked(callee+caller);Need(extent<=16&&before+extent<=0,"outgoing_arguments_cross_return_slot");var args=new List<RecoveredValue>();
         for(int n=0;n<extent;n+=4){Need(s.Stack.TryGetValue(before+n,out var v),"missing_conditional_outgoing_argument");Need(!FramePointer(v!),"conditional_stack_address_escape");args.Add(v!);}
         Need(!FramePointer(s.Regs[abi.ArgumentRegisters.Single()]),"conditional_stack_address_escape");
         var entry=s.Copy();entry.Sp=before-4;entry.Stack[entry.Sp]=new Constant(pc+(ulong)row.GetProperty("length").GetInt32(),32);
         effects.Add(new("call",pc,Call:new(target.Value,s.Regs[abi.ArgumentRegisters.Single()],args.ToArray(),callee,caller,evidence,entry.Snapshot())));
         s.Sp+=callee;s.Prune();s.Epoch++;foreach(var r in abi.VolatileRegisters)s.Regs[r]=new UnknownValue("external_call_"+pc+"_reg_"+r);foreach(var r in s.Flags.Keys.ToArray())s.Flags[r]=new UnknownValue("external_call_"+pc+"_flag_"+r);
     }
-    static void Linear(JsonElement[] rows,int start,int end,State s,List<ConditionalEffect> effects,int cleanup,bool flat,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees,bool allowReturn)
+    static void Linear(JsonElement[] rows,int start,int end,State s,List<ConditionalEffect> effects,int cleanup,bool flat,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees,bool allowReturn,bool tailAdapters)
     {
         for(int i=start;i<end;i++) {
             var row=rows[i];var kind=BranchKind(row);
-            if(kind=="Call"){Call(row,i+1<end?rows[i+1]:null,s,effects,cleanup,flat,abi,callees);continue;}
+            if(kind=="Call"){Call(row,i+1<end?rows[i+1]:null,s,effects,cleanup,flat,abi,callees,tailAdapters);continue;}
             if(kind=="Ret") {
                 Need(allowReturn&&i==end-1,"conditional_path_early_return");X86StackArgumentRecovery.VerifyReturnTree(row,cleanup);var n=Nodes(row);var temp=new Dictionary<int,RecoveredValue>();ulong pc=row.GetProperty("pc").GetUInt64();RecoveredValue? target=null;
                 foreach(var node in n) {
@@ -143,20 +182,20 @@ public static class X86ConditionalRecovery
             Need(kind==null,"unsupported_nested_or_unconditional_control_flow");Simple(row,s,effects,cleanup,flat);
         }
     }
-    public static ConditionalFunction Raise(JsonElement lift,RecoveryAbi abi,IEnumerable<CalleeStackLift> supplied,bool flat32StackRelation)
+    public static ConditionalFunction Raise(JsonElement lift,RecoveryAbi abi,IEnumerable<CalleeStackLift> supplied,bool flat32StackRelation,bool tailAdapters=false)
     {
-        try{return RaiseChecked(lift,abi,supplied.ToArray(),flat32StackRelation);}catch(OverflowException){throw new ArgumentException("conditional_symbolic_offset_out_of_range");}
+        try{return RaiseChecked(lift,abi,supplied.ToArray(),flat32StackRelation,tailAdapters);}catch(OverflowException){throw new ArgumentException("conditional_symbolic_offset_out_of_range");}
     }
-    static ConditionalFunction RaiseChecked(JsonElement lift,RecoveryAbi abi,CalleeStackLift[] callees,bool flat)
+    static ConditionalFunction RaiseChecked(JsonElement lift,RecoveryAbi abi,CalleeStackLift[] callees,bool flat,bool tailAdapters)
     {
         Need(flat&&abi.ArgumentRegisters.Length==1&&abi.ArgumentRegisters[0]!=4&&abi.ReturnRegister is >=0 and <16&&abi.ReturnRegister!=4&&new[]{abi.ArgumentRegisters,abi.VolatileRegisters,abi.PreservedRegisters}.All(a=>a!=null&&a.Distinct().Count()==a.Length&&a.All(r=>r is >=0 and <16&&r!=4)),"conditional_profile_requires_explicit_flat32_ABI");Need(lift.GetProperty("mode").GetString()=="Bits32"&&lift.GetProperty("decode_complete").GetBoolean()&&lift.GetProperty("lift_errors").GetInt32()==0&&lift.GetProperty("opaque_instructions").GetInt32()==0,"incomplete_conditional_lift");var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length is >0 and <=128,"conditional_instruction_budget");ulong expected=rows[0].GetProperty("pc").GetUInt64();
         foreach(var row in rows){var p=row.GetProperty("decoded").GetProperty("P");Need(!p.GetProperty("Lock").GetBoolean()&&!p.GetProperty("Rep").GetBoolean()&&!p.GetProperty("RepNz").GetBoolean(),"unsupported_conditional_prefix");int len=row.GetProperty("length").GetInt32();Need(row.GetProperty("pc").GetUInt64()==expected&&len is >0 and <=15&&row.GetProperty("raw_hex").GetString()!.Length==2*len&&Tag(row.GetProperty("tree"))=="IlBlock","incomplete_conditional_range");expected+=(ulong)len;}
         var branches=Enumerable.Range(0,rows.Length).Where(i=>BranchKind(rows[i])=="CondJmp").ToArray();Need(branches.Length==1,"requires_one_forward_conditional");int at=branches.Single();var node=Nodes(rows[at]);Need(node.Length==1&&Tag(node[0].GetProperty("Target"))=="IlConst","unsupported_conditional_branch_tree");ulong destination=ulong.Parse(node[0].GetProperty("Target").GetProperty("Bits").GetProperty("decimal").GetString()!);int join=Array.FindIndex(rows,r=>r.GetProperty("pc").GetUInt64()==destination);Need(join>at+1&&join<rows.Length-1,"unsupported_backward_or_nonboundary_join");Need(BranchKind(rows[^1])=="Ret","conditional_requires_final_return");int cleanup=X86StackArgumentRecovery.RetCleanup(rows[^1]);Need(cleanup is >0 and <=16,"unsupported_conditional_input_extent");
-        var state=new State();var prefix=new List<ConditionalEffect>();Linear(rows,0,at,state,prefix,cleanup,flat,abi,callees,false);var condition=Eval(node[0].GetProperty("Cond"),state,[],rows[at].GetProperty("pc").GetUInt64(),cleanup,flat);Need(Bits(node[0].GetProperty("Cond"))==1&&condition is not UnknownValue,"unknown_conditional_predicate");var fall=state.Copy();var body=new List<ConditionalEffect>();Linear(rows,at+1,join,fall,body,cleanup,flat,abi,callees,false);
+        var state=new State();var prefix=new List<ConditionalEffect>();Linear(rows,0,at,state,prefix,cleanup,flat,abi,callees,false,tailAdapters);var condition=Eval(node[0].GetProperty("Cond"),state,[],rows[at].GetProperty("pc").GetUInt64(),cleanup,flat);Need(Bits(node[0].GetProperty("Cond"))==1&&condition is not UnknownValue,"unknown_conditional_predicate");var fall=state.Copy();var body=new List<ConditionalEffect>();Linear(rows,at+1,join,fall,body,cleanup,flat,abi,callees,false,tailAdapters);
         state.Prune();fall.Prune();Need(state.Sp==fall.Sp&&state.Stack.Count==fall.Stack.Count&&state.Stack.All(k=>fall.Stack.TryGetValue(k.Key,out var v)&&Same(k.Value,v)),"incompatible_live_stack_join");
         foreach(var r in state.Regs.Keys.ToArray())if(!Same(state.Regs[r],fall.Regs[r])){Need(abi.VolatileRegisters.Contains(r),"incompatible_preserved_register_join");state.Regs[r]=new UnknownValue("conditional_join_reg_"+r);}
         foreach(var r in state.Flags.Keys.ToArray())if(!Same(state.Flags[r],fall.Flags[r]))state.Flags[r]=new UnknownValue("conditional_join_flag_"+r);state.Epoch=Math.Max(state.Epoch,fall.Epoch)+1;
-        var joined=state.Snapshot();var suffix=new List<ConditionalEffect>();Linear(rows,join,rows.Length,state,suffix,cleanup,flat,abi,callees,true);foreach(var r in abi.PreservedRegisters)Need(state.Regs[r]==new RegisterInput(r),"conditional_preserved_register_not_restored");
+        var joined=state.Snapshot();var suffix=new List<ConditionalEffect>();Linear(rows,join,rows.Length,state,suffix,cleanup,flat,abi,callees,true,tailAdapters);foreach(var r in abi.PreservedRegisters)Need(state.Regs[r]==new RegisterInput(r),"conditional_preserved_register_not_restored");
         return new(prefix.ToArray(),new(condition,body.ToArray(),rows[at].GetProperty("pc").GetUInt64(),destination,joined),suffix.ToArray(),state.Regs[abi.ReturnRegister],cleanup,state.Snapshot(),["Explicit flat32 profile relates SS stack addresses to ordinary ESP-based incoming loads; segment state is not replaced by a guessed zero.","All typed flag writes and external calls are retained; unknown calls clobber volatile registers/flags and memory epochs. Normal-return evidence does not prove callee effects or termination.","Incoming loads refer to current stack storage at their recorded PC/memory epoch, not a cached pre-call value. Conditional live stacks/preserved registers join exactly; differing volatile state remains unknown."]);
     }
 }
@@ -194,4 +233,12 @@ public static class Vc8ConditionalCallsProfile
         var declarations=globals.Distinct().Concat(functions.Distinct());string comparison=condition.Operation=="Eq"?"!=":"==";
         return string.Join("\n",declarations)+"\nstruct Recovered {\n"+string.Join("\n",members.Distinct())+$"\n    void* fn_{rva:x8}(unsigned int arg_0);\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\nvoid* Recovered::fn_{rva:x8}(unsigned int arg_0) {{\n"+string.Join("\n",prefix)+$"\n    if ((arg_0 & {mask.Value}u) {comparison} 0u) {{\n"+string.Join("\n",body.Select(l=>"    "+l))+"\n    }\n"+string.Join("\n",suffix)+"\n    return this;\n}\n";
     }
+}
+
+public static class Vc8CallAdaptersProfile
+{
+    public const string Version="vc8-x86-flat32-call-adapters-v1";
+    public static RecoveryAbi Abi=>Vc8ConditionalCallsProfile.Abi with {Id=Version};
+    public static ConditionalFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees)=>X86ConditionalRecovery.Raise(lift,Abi,callees,true,true);
+    public static string Emit(ConditionalFunction ir,uint rva,uint imageBase,uint imageEnd,string module)=>Vc8ConditionalCallsProfile.Emit(ir,rva,imageBase,imageEnd,module);
 }

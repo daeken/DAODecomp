@@ -1711,15 +1711,96 @@ because an existing exact constructor-name recognizer supported only signed-int
 constructors. A separately authorized exact zero-argument spelling extension now
 passes generic positive, wrong-RVA/target and generated-name rejection tests. A
 fresh author pilot checks all 197 bytes and the earlier ordered controls. The
-unsupported-format report and failed candidate remain evidence; pending review,
-no installed match count or accepted source count changes.
+unsupported-format report and failed candidate remain evidence; at that author-only stage,
+no installed match count or accepted source count changed.
 
 The final added-rule scan accounted for all 27,555 original inventory identities:
 one generated EH hypothesis (`0x10c0`), 238 typed refusals, 54 unresolved dependency
 analyses and 27,262 rows outside the added necessary domain. It performed no VM
 compiles or comparisons and grants no credit. The single hypothesis is covered by
-the author pilot; installed checks remain pending review. Final local checks on
+the author pilot; installed checks initially awaited review. Final local checks on
 macOS ARM64 passed 678 Python tests (33 skipped), 107 standalone MCP tests (two
 skipped), all seven CTest checks and the two synthetic demonstrations (59 positive
 cases; six expected negative mismatches). Twenty retained author build attempts
 used 28.381 measured compiler-host seconds; no attempt in this scope was uncertain.
+
+The EH checkpoint is now independently approved and published as `86ccd2e`.
+Both exact-head CI workflows passed on macOS, Linux and Windows. The immutable
+`392438798beabd10` release is installed with the prior `d2a6ea970751ead1` release
+preserved. Fresh installed MCP checks passed `0x1000`, `0x1030`, `0x1040`,
+`0x1070` and `0x10c0`; the last accounts for all 197 required main/EH graph bytes.
+The one added-rule candidate was retained from that exact same-binding installed
+ordered job after source/object/report/dependency hash checks, avoiding a duplicate
+compile. The added set is one full match, zero mismatch/unknown/unrun. There are
+783 distinct historical bound native object matches (782 retained plus one gain),
+with five fresh matches under the selected EH recipe. No old binding credit was
+transferred: the constructor identity capability changed the checker/pipeline
+binding, and its previous source version and all old artifacts remain preserved.
+
+The installed ascending frontier is `0x1130`. Its final EH fallback reports an
+unbound handler prefix, but separate read-only characterization finds no FS root
+in the caller: the earlier conditional refusal is an unsupported callee exit.
+The called `0x1030` has an ordered store before a tail jump, so it cannot be treated
+as a pure forwarding thunk. No next-rule implementation or compiler attempt was
+made for that body. This checkpoint used 25 confirmed managed compiler attempts
+and 35.376 measured compiler-host seconds, with zero new uncertain attempts.
+Thirteen prior completed unknown attempts remain unchanged and no active project
+uncertainty barrier remains. Accepted source exports and game execution are zero.
+Receipts, the full 27,555-row accounting and rollback registration are under
+ignored `local/replayable-eh-frontier-001`.
+
+The next development batch recovers normal-return ABI evidence through a bounded
+store-and-tail adapter. It retains the adapter's ordered stores and original call
+target, follows only an actual direct terminal jump to a unique pinned inventory
+entry, and refuses changed registers/stack/flags, unknown reads, indirect exits,
+cycles or exhausted depth. The terminal return evidence remains a conditional ABI
+hypothesis; nested effects, throwing and termination remain unknown. An
+inapplicable EH fallback no longer hides the earlier refusal for callers without
+an actual FS-segment read. It does not grant an EH binding.
+
+The first development frontier, `0x1130`, generates from its complete original
+30-byte body and passes the unchanged full native-object checks. Fresh prior
+controls `0x1030`, `0x1070` and `0x10c0` still match, including all 197 required EH
+graph bytes. One transport attempt lacked a compiler exit marker; it remains
+unknown in history, and the reviewed fresh nonaccepting reconciliation allowed a
+separate attempt only after establishing its actual safety conditions. These are
+provisional development results; the installed reviewed total remains 783.
+
+Development stops at the next original identity, `0x1150`. Its complete 43-byte
+body initializes a partial private stack word, supplies six by-value outgoing
+arguments and performs caller cleanup. Its exact original 77-byte callee contains
+an opaque one-operand multiply in the current pinned lifter. The ABI resolver
+refuses this incomplete typed evidence. No later identity is substituted for the
+blocked frontier, and no multiplication, input arity or return semantics are
+guessed.
+
+Validation now runs against frozen source/runtime/config snapshots in ordinary
+background processes. The author consumes compact completion or exception
+receipts while doing useful work; models do not judge deterministic per-function
+checks. Full suites, independent machinery review and source/docs publication are
+batched at coherent milestones. A disjoint 16-source transport benchmark measured
+26.563 seconds for individual dispatches versus 5.607 and 5.463 seconds for two
+guest loops, including unchanged comparison. All 48 checks matched, including the
+EH case. That small-sample transport observation grants no new function credit
+and does not itself authorize switching the durable execution protocol.
+
+The stable call-adapter snapshot assessed all 27,555 identities in 135.979 seconds:
+626 generated conditional-domain hypotheses, comprising 577 already generated by
+the installed conditional frontend and 49 added by the new dependency rule.
+All 49 added candidates subsequently passed complete original/object comparison
+through durable targeted MCP jobs. Exact expected source hashes and every retained
+source/object/report/dependency binding were checked. This is a provisional gain
+of 49 distinct identities (832 including the 783 historical matches); review and
+adoption remain pending. No scan row itself grants a match, and earlier mismatches
+remain rejected under their original bindings.
+
+Frozen macOS ARM64 validation passed 692 Python tests (33 skipped), 121 standalone
+MCP tests (two skipped), all seven CTest checks and both README demonstrations
+(59 positive cases; six expected negative mismatches). A final focused 14-test run
+also covers the explicit Windows skip for POSIX-only dependency loading. The
+initial incorrect demo command is retained as an invocation failure; its corrected
+README commands passed without repeating the full suites. Across the frontier,
+controls and added candidates, 53 compiler attempts have confirmed outcomes and
+four uncertain attempts remain preserved. Each safe continuation used the existing
+nonaccepting abandonment operation with fresh bound evidence. No queue, comparator
+or uncertainty policy changed.

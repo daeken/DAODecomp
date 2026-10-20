@@ -11,6 +11,19 @@ public static class Vc8EhProfile
 {
     public const string Version="vc8-x86-flat32-EH-two-exit-v1";
     public static RecoveryAbi Abi=>new(Version,0,[1],[0,1,2],[3,5,6,7]);
+    // Necessary marker only; the original rooted EH graph is still independently derived.
+    public static bool MayHaveFrame(JsonElement lift)
+    {
+        bool Has(JsonElement n) {
+            if(n.ValueKind==JsonValueKind.Object) {
+                if(n.TryGetProperty("type",out var t)&&t.GetString()!.EndsWith("IlReadReg")&&n.GetProperty("Kind").GetProperty("name").GetString()=="X86Seg"&&n.GetProperty("Idx").GetInt32()==4)return true;
+                return n.EnumerateObject().Any(p=>Has(p.Value));
+            }
+            return n.ValueKind==JsonValueKind.Array&&n.EnumerateArray().Any(Has);
+        }
+        return Has(lift.GetProperty("instructions"));
+    }
+
     static void Need(bool b,string why){if(!b)throw new ArgumentException(why);}
     static bool Same(RecoveredValue a,RecoveredValue b)=>JsonSerializer.Serialize<RecoveredValue>(a)==JsonSerializer.Serialize<RecoveredValue>(b);
     static RecoveredValue U(RecoveredValue v){while(v is BitValue{Operands.Length:1} b&&b.Operation is "Trunc" or "Zext")v=b.Operands[0];return v;}

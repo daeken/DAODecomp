@@ -12,19 +12,59 @@ We target complete matches throughout the inventory. We do not assume that
 compiler version uncertainty, ambiguous boundaries or unsupported semantics have
 already been resolved, or that matching functions establish a runnable game.
 
-## The working loop
+## The development loop
 
 1. Select the earliest unresolved inventory identity by ascending RVA.
 2. Inspect original instructions and actual typed SharpRetro effects.
 3. Find the missing or incorrect general reconstruction/compiler behavior.
 4. Implement a reusable pass with explicit applicability and failure conditions.
-5. Exercise generic boundary/negative tests and a real-compiler example.
-6. Independently review new transformation, lift, export or acceptance machinery.
-7. Recheck applicability across the entire inventory; build/recompare affected
-   distinct outputs, preserving earlier matching controls and exact valid caches.
-8. Record gains, regressions, unsupported cases and unrun work; promote only
-   current complete matches and retain rejected candidates.
-9. Advance the frontier only across consecutively accepted identities.
+5. Run focused boundary/negative tests, a complete real-compiler comparison at
+   the frontier, and a small relevant set of previously matching controls.
+6. On a complete match, continue to the next consecutive identity within the
+   current bounded implementation batch. Keep development results provisional.
+7. At each stable rule version, recheck applicability across the entire inventory
+   and build/recompare affected distinct outputs. Run this in the background when
+   possible; preserve exact valid caches, failures and unrun work.
+
+The user requested this tighter cadence on 2026-10-20. A small rule or successful
+function does not require a new author assignment, a full test suite, independent
+review, a release or an installation. An author can own several consecutive
+frontiers in one bounded batch. Regressions in previously matching controls
+require investigation; an unsupported next identity remains the development
+frontier and must not be skipped.
+
+The development frontier records consecutive complete comparisons under an
+experimental pipeline version. The released frontier and reviewed match totals
+remain tied to a tested, reviewed checkpoint. Neither generation success nor an
+applicability scan grants match credit. Both frontiers and pending validation
+are reported explicitly, using existing job results and the compact handoff.
+
+## Checkpoints
+
+At a coherent capability milestone or the end of a bounded implementation batch:
+
+1. Finish affected regression checks and record their deltas.
+2. Run the required full repository, standalone MCP and applicable harness/demo
+   checks once for the cumulative changes.
+3. Obtain one independent review of the new transformation, lift, export or
+   acceptance machinery, with attention to any changed comparison or binding
+   rules. Fix concrete findings and test the affected delta.
+4. Publish code, methodology and results available so far in one checkpoint;
+   verify exact-head CI, then install the reviewed immutable release and run a
+   small installed smoke check. Reuse unchanged evidence under exact bindings.
+
+Do not start another documentation-only release/CI/install cycle merely to
+describe completion of this checkpoint. Save final receipts in the local handoff
+and include the public results update with the next combined checkpoint.
+Documentation-only edits do not invalidate unchanged execution evidence.
+Existing jobs, hashes and test reports provide provenance; avoid new manually
+authored per-function packets or repeated summaries of the same evidence.
+
+This changes when broad checks and releases run, not what a complete match means.
+Original full ranges, required EH dependencies, relocations and unknown outcomes
+still use the independent comparison requirements. Experimental compiler inputs
+remain bound to their actual version; no acceptance-policy relaxation, cached
+credit transfer or ambiguous execution replay is implied.
 
 The first five inventory entries are `0x1000`, `0x1030`, `0x1040`, `0x1070`,
 and `0x10c0`. Their signatures and boundaries are discovery hypotheses.
@@ -122,10 +162,10 @@ emission. No target-specific replacement body was installed to bypass this gap.
 
 ## Operations and records
 
-Use ignored `local/replayable-bootstrap-001/HANDOFF.json` and `STATUS.json` for
-current owners, evidence, frontier and next action. The original checkout's
-`local/rapid-current-handoff.json` points to the active worktree. Historical
-records remain available but must not restart the old sweeps/controllers.
+Read the original checkout's `local/rapid-current-handoff.json` and follow its
+current handoff and compact-status paths for owners, evidence, frontiers and next
+action. Bootstrap records are historical once the pointer advances. Preserve
+them without restarting old sweeps/controllers.
 
 Use at most two implementation lanes with disjoint files. Sol6.1 medium is the
 toolkit implementation/review default; DeepSeek production remains paused.
@@ -133,8 +173,9 @@ Account model assignments in the existing global ledger and preserve paid budget
 Reuse the actual shared VM build lock across worktrees. Compiler execution in
 Windows 11 ARM64 under x86 translation is not native x86 hardware evidence.
 
-Run the required tooling/harness checks, retain exact reviewed dependencies,
-push tested checkpoints and verify their actual CI results. Update the installed
-MCP only from tested/reviewed releases, keeping its old installation recoverable.
+Use focused checks during development and run the required broader checks at
+combined checkpoints. Retain exact reviewed dependencies, push tested checkpoints
+and verify their actual CI results. Update the installed MCP only from
+tested/reviewed releases, keeping its old installation recoverable.
 Publish useful generated source without binaries, compiler files, assets or
 private captures. Keep the learning log and reproducible methodology current.

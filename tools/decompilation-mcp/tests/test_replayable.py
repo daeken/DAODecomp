@@ -32,3 +32,7 @@ ConditionalIntegrationTests = load_shared('test_replayable_conditional').Conditi
 FlowEhTests = load_shared('test_replayable_flow_eh').FlowEhTests
 EhScanTests = load_shared('test_replayable_flow_eh').EhScanTests
 EhDependencyTests = load_shared('test_replayable_flow_eh').EhDependencyTests
+
+TailAdapterTests = load_shared('test_replayable_tail_adapters').TailAdapterTests
+TailAdapterDependencyTests = load_shared('test_replayable_tail_adapters').TailAdapterDependencyTests
+TailAdapterIntegrationTests = load_shared('test_replayable_tail_adapters').TailAdapterIntegrationTests

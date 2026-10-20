@@ -39,6 +39,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('request','runtime','baseline-runtime','output'):p.add_argument('--'+name,type=Path,required=True)
     args=p.parse_args();request=json.loads(args.request.read_text());project=request['project'];inputs=request['inputs']
+    call_adapters=request.get('recipe',{}).get('compiler_profile')=='vc8-x86-flat32-call-adapters-v1'
     def verify():
         for path,digest in inputs.items():
             if sha(Path(path).read_bytes())!=digest:raise ValueError('submitted_input_changed:'+path)
@@ -73,6 +74,7 @@ def main():
                 if target not in result:
                     value=lift(entry);result[target]=dict(target=target,lift=value['lift'],binary_slice_sha256=value['binary_slice_sha256'])
                 dest=adapter.pure_forwarding_target(result[target])
+                if dest is None and call_adapters:dest=adapter.effectful_tail_dependency_target(result[target])
                 if dest is None:break
                 if depth==8:raise ValueError('forwarding_depth_exhausted')
                 if dest-pe.image_base not in entries:raise ValueError('forwarding_target_not_inventory_entry')
@@ -95,10 +97,11 @@ def main():
                         if row['status']=='typed_check_required':
                             caller=lift(entry);deps,chains=dependencies(caller)
                             payload=dict(lift=caller['lift'],rva=rva,image_base=pe.image_base,image_end=image_end,module=project['module'],stack_arguments=True,conditional_calls=True,callee_lifts=deps)
+                            if call_adapters:payload['call_adapters']=True
                             candidate=frontend(args.runtime,payload);row.update(status='typed_unsupported',blocker=candidate.get('blocker'))
                             if candidate['status']=='generated':
-                                baseline=frontend(args.baseline_runtime,dict(payload,conditional_calls=False))
-                                row.update(status='generated_conditional_hypothesis',source_sha256=sha(candidate['source'].encode()),original_slice_sha256=caller['binary_slice_sha256'],dependencies=[dict(target=d['target'],binary_slice_sha256=d['binary_slice_sha256']) for d in deps],forwarding_chains=chains,baseline_status=baseline['status'],baseline_blocker=baseline.get('blocker'));row.pop('blocker',None)
+                                baseline=frontend(args.baseline_runtime,dict(payload,call_adapters=False,conditional_calls=call_adapters))
+                                row.update(status='generated_call_adapter_hypothesis' if call_adapters else 'generated_conditional_hypothesis',source_sha256=sha(candidate['source'].encode()),original_slice_sha256=caller['binary_slice_sha256'],dependencies=[dict(target=d['target'],binary_slice_sha256=d['binary_slice_sha256']) for d in deps],forwarding_chains=chains,baseline_status=baseline['status'],baseline_blocker=baseline.get('blocker'));row.pop('blocker',None)
                 except (ValueError,KeyError,OSError,subprocess.TimeoutExpired) as error:row.update(status='analysis_failure',blocker=type(error).__name__+':'+str(error))
                 counts[row['status']]+=1
                 if row.get('blocker'):blocked[row['blocker']]+=1
@@ -107,7 +110,7 @@ def main():
     finally:
         proc.stdin.close();proc.terminate();proc.wait(timeout=10);proc.stdout.close();proc.stderr.close()
     verify();assert sha(args.runtime.read_bytes())==binding['runtime_sha256'] and sha(args.baseline_runtime.read_bytes())==binding['baseline_runtime_sha256']
-    summary=dict(schema_version=1,binding=binding,inventory_identities=len(entries),accounted_identities=sum(counts.values()),counts=dict(counts),blockers=dict(blocked),elapsed_seconds=round(time.monotonic()-begin,3),comparisons=0,vm_compiles=0,source_exports=0,proof=False,scope='added conditional-rule applicability only; composed prior domains retained; scan is not equivalence')
+    summary=dict(schema_version=1,binding=binding,inventory_identities=len(entries),accounted_identities=sum(counts.values()),counts=dict(counts),blockers=dict(blocked),elapsed_seconds=round(time.monotonic()-begin,3),comparisons=0,vm_compiles=0,source_exports=0,proof=False,scope='call-adapter domain applicability; prior conditional baseline recorded; scan is not equivalence' if call_adapters else 'added conditional-rule applicability only; composed prior domains retained; scan is not equivalence')
     (args.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary),flush=True)
 
 if __name__=='__main__':main()

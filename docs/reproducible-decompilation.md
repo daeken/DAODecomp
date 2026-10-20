@@ -820,19 +820,72 @@ wrapped/generated names, other special members and conventions remain rejected.
 The changed shared checker creates a new pipeline binding; historical results
 retain their old bindings.
 
-A fresh author MCP pilot now reports complete checks for the four earlier
+An author MCP pilot reported complete checks for the four earlier
 controls and `0x10c0`, including all 197 EH graph bytes. Its failed variants and
 the prior unresolved report remain under ignored
-`local/replayable-eh-frontier-001`. This is pending cumulative independent review
-and installation; it grants no installed-release, source-export or game-execution
+`local/replayable-eh-frontier-001`. That pilot preceded cumulative independent review
+and installation; it granted no installed-release, source-export or game-execution
 credit. The prior 782 distinct bound object-match observations remain historical.
 
 The final added-rule scan accounted for all 27,555 original inventory identities:
 one generated EH hypothesis (`0x10c0`), 238 typed refusals, 54 unresolved dependency
 analyses and 27,262 rows outside the added necessary domain. It performed no VM
 compiles or comparisons and grants no credit. The single hypothesis is covered by
-the author pilot; installed checks remain pending review. Final local checks on
+the author pilot; installed checks initially awaited review. Final local checks on
 macOS ARM64 passed 678 Python tests (33 skipped), 107 standalone MCP tests (two
 skipped), all seven CTest checks and the two synthetic demonstrations (59 positive
 cases; six expected negative mismatches). Twenty retained author build attempts
 used 28.381 measured compiler-host seconds; no attempt in this scope was uncertain.
+
+The EH checkpoint is now independently approved and published as `86ccd2e`.
+Both exact-head CI workflows passed on macOS, Linux and Windows. The immutable
+`392438798beabd10` release is installed with the prior `d2a6ea970751ead1` release
+preserved. Fresh installed MCP checks passed `0x1000`, `0x1030`, `0x1040`,
+`0x1070` and `0x10c0`; the last accounts for all 197 required main/EH graph bytes.
+The one added-rule candidate was retained from that exact same-binding installed
+ordered job after source/object/report/dependency hash checks, avoiding a duplicate
+compile. The added set is one full match, zero mismatch/unknown/unrun. There are
+783 distinct historical bound native object matches (782 retained plus one gain),
+with five fresh matches under the selected EH recipe. No old binding credit was
+transferred: the constructor identity capability changed the checker/pipeline
+binding, and its previous source version and all old artifacts remain preserved.
+
+The installed ascending frontier is `0x1130`. Its final EH fallback reports an
+unbound handler prefix, but separate read-only characterization finds no FS root
+in the caller: the earlier conditional refusal is an unsupported callee exit.
+The called `0x1030` has an ordered store before a tail jump, so it cannot be treated
+as a pure forwarding thunk. No next-rule implementation or compiler attempt was
+made for that body. This checkpoint used 25 confirmed managed compiler attempts
+and 35.376 measured compiler-host seconds, with zero new uncertain attempts.
+Thirteen prior completed unknown attempts remain unchanged and no active project
+uncertainty barrier remains. Accepted source exports and game execution are zero.
+Receipts, the full 27,555-row accounting and rollback registration are under
+ignored `local/replayable-eh-frontier-001`.
+
+The current development composition adds guarded normal-return ABI evidence for
+effectful store-and-tail adapters. Complete pinned adapter bytes and typed effects
+remain dependencies; the emitted caller retains the original external call and
+unknown effects. Only bounded receiver-relative constant stores followed by an
+actual direct jump, with unchanged architectural stack and explicit ABI argument
+mapping, enter this domain. The terminal body must independently provide complete
+normal-return evidence. A non-FS caller keeps its actionable earlier recovery
+error instead of acquiring an unrelated EH-prefix error.
+
+The development pilot matches `0x1130` across its complete 30 bytes, with fresh
+prior controls including the 197-byte EH graph. This is provisional; reviewed
+released evidence remains 783 distinct native object matches. The next identity,
+`0x1150`, remains unsupported: its caller requires partial private-stack writes
+and multiple outgoing arguments, and the pinned original callee has an opaque
+multiply. The implementation does not skip that frontier or interpret missing
+callee semantics as success. Frozen background scans/tests separate applicability
+from actual comparison; a cumulative machinery checkpoint follows a coherent
+milestone, with final outcome receipts retained locally for the next checkpoint.
+
+For this stable version, all 27,555 inventory rows are accounted for. The frontend
+generates 626 conditional-domain hypotheses; 577 also generate under the installed
+baseline and 49 are added. The 49 added outputs pass the complete existing native
+object checks with exact source/dependency/artifact bindings. They remain
+provisional until cumulative machinery review and adoption: 832 provisional
+distinct observations versus 783 reviewed historical observations, zero accepted
+source exports and no game-execution claim. Earlier unchanged domains are retained
+with their original bindings; applicability is never substituted for comparison.

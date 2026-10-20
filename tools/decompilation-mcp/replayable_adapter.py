@@ -111,12 +111,25 @@ def pure_forwarding_target(derived):
     target=int(branch['Target']['Bits']['decimal']);require(target==decoded[0].operands[0].imm,'forwarding_encoding_target_disagrees');return target
 
 
+def effectful_tail_dependency_target(derived):
+    """Select a direct terminal edge only. C# must validate all prefix effects/ABI.
+
+    This does not label the body a pure thunk or grant normal-return evidence.
+    Complete source slices remain in the derived dependency closure.
+    """
+    lifted=derived['lift'];rows=lifted['instructions']
+    if len(rows)<2:return None
+    last=rows[-1];body=last['tree'].get('Body',[])
+    if len(body)!=1 or body[0].get('type')!='LiftIl.IlBranch' or body[0]['Kind']['name']!='Jmp':return None
+    return pure_forwarding_target(dict(derived,lift=dict(lifted,instructions=[last])))
+
+
 def lift_callees(request):
     # Every dependency is original-derived. Full module/inventory/lifter closure
     # are durable request inputs; exact slice and entry evidence are retained too.
     caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
     selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
-    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1')
+    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1')
     dependencies={};chains=[]
     for original_target,initial in selected:
         target=original_target;entry=initial;seen=set();chain=[]
@@ -127,6 +140,7 @@ def lift_callees(request):
                 require(derived['image_base']==caller['image_base'] and derived['image_end']==caller['image_end'],'callee_module_boundary_changed')
                 dependencies[target]=dict(target=target,rva=entry['rva'],entry=entry,binary_slice_sha256=derived['binary_slice_sha256'],lifter_manifest_sha256=derived['lifter_manifest_sha256'],lift=derived['lift'])
             next_target=pure_forwarding_target(dependencies[target]) if follow else None
+            if next_target is None and request.get('recipe',{}).get('compiler_profile')=='vc8-x86-flat32-call-adapters-v1':next_target=effectful_tail_dependency_target(dependencies[target])
             if next_target is None:break
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
