@@ -1836,3 +1836,39 @@ it adds no distinct recovered identity and extrapolates no credit to other input
 Partial receipts and restarts are exercised by open failure fixtures. Unknown group
 outcomes remain barriers; the existing single-job reconciliation is not silently
 reused for the new envelope protocol.
+
+
+The next bounded iteration separated private-byte state, outgoing arguments and
+caller cleanup. In the first unresolved wrapper, a low-byte store updates an
+initialized private word; six complete outgoing word copies remain visible, and
+28 bytes of cleanup comprise 24 outgoing bytes plus four private bytes. The
+minimum observed incoming extent is three words. Neither C3 nor cleanup alone
+establishes formal arity. The external target, unknown effects and external return
+value remain intact.
+
+The first generated VC8 candidate was a real nonmatch: 35 bytes against the
+original 43. It merged distinct repeated incoming reads. Qualifying the repeated
+parameter accesses as volatile preserves those observed reads while leaving their
+values and target unchanged; the resulting complete 43-byte object passes both
+unchanged comparison gates. A one-byte aggregate carries the initialized byte;
+its extra ABI word padding is unspecified in C++, never read as an uninitialized
+scalar or filled with an invented zero. Recovered IR retains the original upper
+bits, and only a complete selected-compiler artifact match grants native credit.
+This remains an artifact-domain result, not universal C++ semantics proof.
+
+The reviewed upstream IMUL repair was adopted into a separate dependency build
+at commit `0269ffd3d8fb19d50a946b005434917d6ec1bd64`. Generic 8/16/32-bit adapter
+checks preserve all four explicit undefined flag nodes. Consumed undefined values
+refuse in each symbolic recovery path; a structural uniform-RET observation does
+not turn the callee body into known semantics. The older source and adapter stay
+available for rollback.
+
+The next identity, `0x1180`, is a separate cyclic-memory capability boundary:
+count-controlled backward control, null-destination guards and alternating source
+word reads/destination stores with wrapping updates. It remains unsupported;
+there is no memcpy, nonalias or termination assumption and no skip to `0x11c0`.
+Representative validation covers nine identities, including the retained negative,
+with no routine full suite, whole-inventory sweep or CI. A larger input closure
+also exposed misuse of a small receipt reader for the dispatch decision. Separating
+the bounded decision-document budget from strict small receipts fixes that
+pre-dispatch failure without weakening compiler outcomes or comparisons.

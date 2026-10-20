@@ -10,15 +10,18 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe ConditionalCalls=>new(1,"x86-bits32-one-forward-conditional-v1","sharpretro-typed-v1",Vc8ConditionalCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","emit-vc8-composed-conditional-v1"]);
     public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     public static PipelineRecipe CallAdapters=>new(1,"x86-bits32-composed-call-adapters-v1","sharpretro-typed-v1",Vc8CallAdaptersProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-call-adapters-v1"]);
+    public static PipelineRecipe ByValueCalls=>new(1,"x86-bits32-composed-byvalue-calls-v1","sharpretro-typed-v1",Vc8ByValueCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","raise-initialized-private-subword-copies-v1","observe-outgoing-push-and-private-cleanup-regions-v1","emit-vc8-composed-byvalue-calls-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesCallAdapters=>CompilerProfile==Vc8CallAdaptersProfile.Version;
+    public bool UsesByValueCalls=>CompilerProfile==Vc8ByValueCallsProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version;
+    public bool UsesCallAdapters=>CompilerProfile is Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version;
+    public bool UsesEh=>CompilerProfile is Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version;
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -156,10 +159,12 @@ public sealed partial class Engine
                 try {var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}
                 catch(ArgumentException) when(recipe.UsesConditionalCalls) {
                     try {var conditional=recipe.UsesCallAdapters?Vc8CallAdaptersProfile.Raise(lifted.GetProperty("lift"),callees):Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
-                    catch(ArgumentException) when(recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift"))) {
+                    catch(ArgumentException) when((recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift")))||recipe.UsesByValueCalls) {
+                        if(recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift"))) {
                         var evidence=await ReplayableAdapter(request,"lift_eh",folder);if(evidence.TryGetProperty("error",out var ehError))throw new ArgumentException(ehError.GetString());File.WriteAllText(Path.Combine(folder,"eh-evidence.json"),evidence.GetRawText());
                         if(evidence.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("EH_caller_binding_changed");
                         var recovered=Vc8EhProfile.Raise(lifted.GetProperty("lift"),callees,evidence);ir=recovered;File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));source=Vc8EhProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);
+                        } else {var recovered=Vc8ByValueCallsProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8ByValueCallsProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
                     }
                 }
             }

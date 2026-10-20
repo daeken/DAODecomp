@@ -107,6 +107,7 @@ public static class X86ConditionalRecovery
     static RecoveredValue Eval(JsonElement n,State s,Dictionary<int,RecoveredValue> temp,ulong pc,int cleanup,bool flat)
     {
         switch(Tag(n)) {
+            case "IlUndefined":throw new ArgumentException("conditional_undefined_architectural_value:"+n.GetProperty("Reason").GetString());
             case "IlConst":int bits=Bits(n);Need(ulong.TryParse(n.GetProperty("Bits").GetProperty("decimal").GetString(),out var number)&&(bits==64||number<(1UL<<bits)),"conditional_constant_width");return new Constant(number,bits);
             case "IlTmp":Need(temp.ContainsKey(n.GetProperty("Id").GetInt32()),"missing_conditional_temporary");return temp[n.GetProperty("Id").GetInt32()];
             case "IlReadReg":int i=n.GetProperty("Idx").GetInt32();var kind=Name(n,"Kind");if(kind=="X86Seg")return new SegmentInput(i);if(kind=="Eflags"){Need(s.Flags.ContainsKey(i),"unsupported_flag_index");return s.Flags[i];}Need(kind=="X86"&&s.Regs.ContainsKey(i),"unsupported_conditional_register");return i==4?new AddValue(new RegisterInput(4),s.Sp):s.Regs[i];

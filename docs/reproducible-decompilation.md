@@ -897,3 +897,23 @@ provisional until cumulative machinery review and adoption: 832 provisional
 distinct observations versus 783 reviewed historical observations, zero accepted
 source exports and no game-execution claim. Earlier unchanged domains are retained
 with their original bindings; applicability is never substituted for comparison.
+
+
+Initialized private subword updates now retain untouched word bits in shared
+recovery. Outgoing push provenance distinguishes argument bytes from private
+cleanup, and minimum incoming reads remain independent of return cleanup and
+formal arity. The compiler profile may use aggregate ABI carriers and distinct
+volatile parameter accesses as candidate spellings of observed dataflow. It must
+retain unknown padding/results/effects and pass the complete original/object/EH
+checks; source generation alone earns no credit. The 43-byte `0x1150` development
+match followed a retained 35-byte nonmatch. The next 49-byte cyclic-memory identity
+remains unsupported, with no source or acceptance claim.
+
+A dependency update is separately built and attested, including source, adapter,
+runtime and explicit undefined-value behavior. It changes input bindings; prior
+matching artifacts are historical observations, never silently promoted into the
+new key. Stable validation uses a frozen representative sample in ordinary
+background processes, while implementation continues where independent work is
+available. The cumulative review includes dependency adoption, source rules and
+any concrete binding/transport fixes together; final installation receipts stay
+local and join the next combined public checkpoint.

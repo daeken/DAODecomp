@@ -40,3 +40,8 @@ TailAdapterIntegrationTests = load_shared('test_replayable_tail_adapters').TailA
 BatchPipelineTests = load_shared('test_replayable_batch_pipeline').BatchPipelineTests
 BatchDispatchTests = load_shared('test_replayable_batch_pipeline').BatchDispatchTests
 GuestBatchTests = load_shared('test_replayable_guest_batch').GuestBatchTests
+
+ByValueTests = load_shared('test_replayable_byvalue').ByValueTests
+UndefinedWireTests = load_shared('test_replayable_byvalue').UndefinedWireTests
+
+BatchDecisionDocumentTests = load_shared('test_replayable_byvalue').BatchDecisionDocumentTests

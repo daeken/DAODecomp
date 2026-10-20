@@ -83,6 +83,7 @@ public static class X86Recovery
             {
                 switch(Tag(n))
                 {
+                    case "IlUndefined":throw new ArgumentException("undefined_architectural_value:"+n.GetProperty("Reason").GetString());
                     case "IlConst":var cb=Bits(n);Need(cb is 8 or 16 or 32 or 64 && ulong.TryParse(n.GetProperty("Bits").GetProperty("decimal").GetString(),out _),"unsupported_constant");var cv=ulong.Parse(n.GetProperty("Bits").GetProperty("decimal").GetString()!);Need(cb==64||cv<(1UL<<cb),"constant_width_overflow");return new Constant(cv,cb);
                     case "IlReadReg":var registerKind=n.GetProperty("Kind").GetProperty("name").GetString();var idx=n.GetProperty("Idx").GetInt32();if(registerKind=="X86Seg")return new SegmentInput(idx);Need(registerKind=="X86","non_x86_register");return idx==4?new AddValue(new RegisterInput(4),sp):regs[idx];
                     case "IlTmp":return tmp[n.GetProperty("Id").GetInt32()];

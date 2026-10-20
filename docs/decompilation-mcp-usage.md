@@ -470,3 +470,52 @@ their original bindings; outputs outside the sample are unverified under the
 changed transport/runtime binding. CI is disabled by explicit user instruction;
 focused tests, a changed-component build and this representative sample support
 the cumulative independent machinery review and immutable release checkpoint.
+
+### Opt-in initialized private-byte and by-value call composition
+
+The additional recipe uses architecture
+`x86-bits32-composed-byvalue-calls-v1`, frontend `sharpretro-typed-v1` and
+compiler profile `vc8-x86-flat32-observed-byvalue-calls-v1`. Its ordered steps are:
+
+```json
+["raise-linear-effects-tail-v2", "derive-original-normal-return-stack-v1",
+ "resolve-pure-forwarding-normal-return-v1", "resolve-transparent-effectful-tail-ABI-v1",
+ "raise-one-forward-conditional-v1", "raise-bounded-two-exit-effects-v1",
+ "derive-original-VC8-EH-frame-v1", "raise-initialized-private-subword-copies-v1",
+ "observe-outgoing-push-and-private-cleanup-regions-v1", "emit-vc8-composed-byvalue-calls-v1"]
+```
+
+It first tries the previous supported domains. The new shared flow rule permits
+bounded byte/halfword updates only inside an already initialized allocated private
+word, retaining untouched bits. Observed outgoing push provenance separates the
+argument span from private words released by the same cleanup. Incoming reads,
+return cleanup and formal arity remain separate facts. The VC8 candidate profile
+currently emits one normal cdecl call with an external EAX result, word inputs,
+and low-byte aggregate carriers; it refuses unsupported values and memory effects.
+Aggregate ABI padding remains unspecified in C++ and explicit in recovered IR.
+No uninitialized scalar read or invented zero supplies the remaining word bits.
+Distinct repeated incoming reads use volatile parameter accesses to prevent the
+compiler from merging those observed reads; this is an emission constraint, not
+a claim that caller storage has a volatile-qualified type.
+
+The separately built SharpRetro dependency is pinned to
+`0269ffd3d8fb19d50a946b005434917d6ec1bd64`. Its typed one-operand IMUL includes
+explicit undefined flag values. Symbolic recovery refuses consumed `IlUndefined`
+values; normal-return CFG evidence keeps callee effects unknown. The prior
+`ce590d0a2f2a7e231e0529e30f2fd0d4252ca769` dependency and release remain available.
+
+The representative development sample covers nine identities. Six prior ordinary
+and EH controls match, the new `0x1150` candidate matches all 43 bytes and both
+comparison gates, `0x476650` remains a mismatch, and `0x1180` remains unsupported.
+The initial 35-byte candidate, a transport unknown with explicit nonaccepting
+abandonment, and all failed variants are retained. These are binding-specific
+observations, not a whole-inventory scan or game-execution proof. The previous
+reviewed historical total is 832; the additional identity remains provisional
+until machinery review and a fresh installed ordered check. Regression records
+never manually advance the ascending recovery selector.
+
+A larger pinned-source closure also exposed a pre-dispatch document limit:
+the ordered dispatch decision can contain up to 16 complete input closures. It
+now has a separate 16 MiB document budget with strict duplicate-key rejection.
+The compiler receipt budget, complete envelope requirements and comparison policy
+are unchanged. Oversized or invalid decisions fail before any VM dispatch.

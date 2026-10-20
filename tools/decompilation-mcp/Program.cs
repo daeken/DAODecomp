@@ -19,6 +19,9 @@ public static class Program
                 using var input=JsonDocument.Parse(await Console.In.ReadToEndAsync());var x=input.RootElement;
                 try {
                     var abi=x.TryGetProperty("abi",out var abiElement)?abiElement.Deserialize<RecoveryAbi>(Engine.Options)!:Vc8Profile.Abi;
+                    if(x.TryGetProperty("by_value_calls",out var byValueSelected)&&byValueSelected.GetBoolean()) {
+                        var deps=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();var recovered=Vc8ByValueCallsProfile.Raise(x.GetProperty("lift"),deps);var emittedByValue=Vc8ByValueCallsProfile.Emit(recovered,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open.exe");Console.WriteLine(Engine.Json(new{status="generated",ir=recovered,source=emittedByValue,proof=false}));return 0;
+                    }
                     if(x.TryGetProperty("eh_paths",out var ehSelected)&&ehSelected.GetBoolean()) {
                         var deps=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
                         var eh=Vc8EhProfile.Raise(x.GetProperty("lift"),deps,x.GetProperty("eh_evidence"));var emitted=x.TryGetProperty("emit",out var output)&&!output.GetBoolean()?"":Vc8EhProfile.Emit(eh,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var mod)?mod.GetString()!:"open.exe");

@@ -79,6 +79,7 @@ class TailAdapterDependencyTests(unittest.TestCase):
    def lift(r):return dict(lift=values[r['rva']],image_base=0x500000,image_end=0x510000,binary_slice_sha256='open-'+str(r['rva']),lifter_manifest_sha256='open')
    with patch.object(a,'lift',side_effect=lift):
     result=a.lift_callees(request);chain=next(c for c in result['forwarding_chains'] if c['original_target']==0x503100);self.assertEqual(chain['chain'],[0x503100,0x505000]);self.assertFalse(result['proof'])
+    request['recipe']['compiler_profile']='vc8-x86-flat32-observed-byvalue-calls-v1';composed=a.lift_callees(request);self.assertEqual(composed,result)
     request['recipe']['compiler_profile']='vc8-x86-flat32-conditional-calls-v1';old=a.lift_callees(request);self.assertNotIn(0x505000,[c['target'] for c in old['callees']])
     request['recipe']['compiler_profile']='vc8-x86-flat32-call-adapters-v1';path.write_text(json.dumps(dict(module_sha256='open',functions=[dict(rva=r) for r in values if r!=0x5000])))
     with self.assertRaisesRegex(ValueError,'forwarding_target_not_inventory_entry'):a.lift_callees(request)
