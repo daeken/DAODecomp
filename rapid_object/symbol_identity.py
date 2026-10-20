@@ -5,6 +5,7 @@ original address. Binding still requires the caller's explicit registry entry.
 """
 import re
 from .coff import Coff
+from .constructor_identity import constructor_identity
 
 _GENERATED = re.compile(r'^__(ehhandler|ehfuncinfo|unwindtable|unwindfunclet)\$(.+)$')
 _C = re.compile(r'^_?(fn|g)_([0-9a-fA-F]{8})(?:@\d+)?$')
@@ -33,7 +34,7 @@ def source_identity(name):
         return None
     found = _C.fullmatch(name) or _CPP.fullmatch(name)
     if not found:
-        return None
+        return constructor_identity(name)
     return found[1], int(found[2], 16)
 
 

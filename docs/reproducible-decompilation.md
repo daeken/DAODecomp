@@ -426,3 +426,40 @@ complete comparisons are the acceptance shortcut. This narrow source generator
 is not authorization for a broader rollout. Focused tests cover source binding,
 unknown effects, type/context refusal and composition. Compiling the four bodies
 together demonstrates same-unit composition, not a linked replacement game.
+
+### Recover one representative constructor at a time
+
+The [median-function experiment](learning-log.md#sequential-median-functions-native-constructors-and-copy-elision)
+worked three 109-byte functions sequentially; 109 bytes is the exact median of the
+27,555 pinned inventory identities. A complete retained source body and original
+instruction profile can support a more precise native C++ construction hypothesis.
+`rapid_object.conditional_construction` recognizes a guarded allocation and native
+constructor call; `rapid_object.byvalue_construction` recognizes base initialization
+and a directly constructed eight-byte by-value argument. Both bind source, original
+and complete range hashes, use a complete target-aware AST, derive cleanup edges
+from actual original bytes, and refuse unknown source effects. These are bounded
+DAO/Ghidra spellings and x86 layout hypotheses, not arbitrary constructor recovery.
+
+An external constructor declaration preserves the compiler's native constructor
+return convention. A wrapper that discards an ordinary call's return can force an
+extra preserved receiver. The narrow source identity extension recognizes only
+MSVC x86 `??0fn_<8hex>@@QAE@H@Z`; other special members, namespace/import/generated
+names and unsupported signatures refuse. An explicit copy-constructor declaration
+can enable VC8 to elide a temporary copy. No copy implementation is supplied; any
+remaining unknown copy dependency must block acceptance.
+
+The supported EH actions now include exactly eight bytes of
+`mov ecx,[ebp+signed displacement]; jmp rel32`, alongside the existing eight-byte
+address form and eleven-byte delete action. Complete terminal decoding, signed
+frame offsets, every relocation and the actual forwarding target remain checked.
+The legacy graph node name `delete_helper` denotes the compared five-byte forwarding
+node; its label does not establish deallocation semantics for a base destructor.
+The constructor identity implementation is included in the native EH input hashes.
+Unsupported actions and unknown dependencies remain inconclusive.
+
+The three generic regenerated sources matched all 585 supported main/EH graph bytes,
+including all 327 main bytes, after ten actual historical compiler variants. Preserve
+the failed variants and measure compiler latency separately from analysis time.
+Use the existing fresh snapshot exporter; instruction distance, source recognition
+or a matching main alone cannot publish a function. The POSIX Clang source-generation
+workflow and the portable complete native graph checker retain distinct host limits.

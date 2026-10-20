@@ -1034,3 +1034,79 @@ contains artifact/provenance hashes, versions and graph measurements; raw origin
 and library bytes remain local. The historical 94-function emulator registry,
 fixed 6,487 residual cohort and six new plus nine older transport unknowns are
 unchanged. No larger constructor batch is launched by this checkpoint.
+
+## Sequential median functions: native constructors and copy elision
+
+The pinned inventory's 27,555 identities have an exact median body size of 109 bytes.
+We worked three such functions sequentially: guarded allocation at RVA `0x7a90`,
+its sibling `0xa1d0` to test reuse, then base construction with a by-value temporary
+at `0x648f0`. No broad category sweep or paid provider call ran.
+
+| RVA | Retained main comparison before | Generic result | Actual compiler variants |
+| --- | --- | --- | ---: |
+| `0x7a90` | 112 candidate bytes: 10 equal, 99 different, 3 extra | 109/109 main; 196/196 complete graph bytes | 3 |
+| `0xa1d0` | 112 candidate bytes: 10 equal, 99 different, 3 extra | 109/109 main; 196/196 complete graph bytes | 2 |
+| `0x648f0` | 77 candidate bytes: 2 equal, 75 different, 32 missing | 109/109 main; 193/193 complete graph bytes | 5 |
+
+The before counts compare offsets across the full main ranges; the prior diagnostic
+instruction edit distances were 34/38, 34/38 and 29/38. Neither measure accepts a
+source. The final comparisons cover every supported main, handler, FuncInfo, unwind
+map, action and terminal forwarding byte: 327 main bytes and 585 graph bytes total,
+with zero different, absent or unresolved bytes. These are pinned compiler-artifact
+matches, not a whole-game proof or a linked replacement.
+
+The first hypothesis used a class constructor wrapper that called an unknown
+thiscall and discarded its return. VC8 preserved an extra receiver, producing a
+113-byte main. Declaring the native constructor externally on a class `fn_<RVA>`
+produced the observed 109-byte caller. The generic
+[`conditional_construction` rule](../rapid_object/conditional_construction.py)
+checks the complete retained body, AST, bound hashes and original 35-instruction
+profile; it derives the actual original cleanup/helper tail and emits class-specific
+new/delete forwarding. It supplies no unknown constructor implementation. The sibling
+passed through the same rule without RVA-specific source edits.
+
+The third original caller reserves eight stack bytes, constructs directly there,
+and calls a callee that cleans twelve argument bytes. The initial C++ type spelling
+caused a copied temporary and a second EH state. An explicit copy-constructor
+declaration permits VC8 copy elision; the
+[`byvalue_construction` rule](../rapid_object/byvalue_construction.py) checks the
+complete retained method and 38-instruction profile before emitting that hypothesis.
+The base destructor wrapper forwards to the observed original tail destination.
+No copy implementation is supplied, and emitted unknown dependencies cannot pass.
+The native constructor identity recognizer supports only the observed public x86
+thiscall signed-int decoration, retaining refusals for other special members and
+namespace, import and generated names.
+
+The native EH reader now selects complete eight- or eleven-byte supported action
+spans and checks their actual lengths for overlap. The new eight-byte load-receiver
+form retains its signed frame offset and complete terminal jump relocation. The
+legacy `delete_helper` graph-node name also covers a base-destructor forwarding
+node; that label is not evidence of deallocation semantics. The new constructor
+identity module participates in the native EH implementation hash set.
+
+Ten real VC8 14.00.50727.762 variants took 16.898 seconds in compiler receipts on
+Windows 11 ARM64 under x86 translation; the per-target counts include failed probes
+and final generic regenerations. This measures compiler latency, not model or total
+analysis time. No original function execution occurred. Native callee semantics,
+nominal C++ object layout/lifetime and a whole-game link remain outside these results.
+
+The independently reviewed change passed 130 focused cases and all 461 project
+tests on macOS ARM64, with 33 skips. Eighteen updated-receipt mutations across every
+node of the three real COFFs all refused; independent review added action/frame/
+relocation mutations, forged-summary checks, eight old object controls and four
+prior EH controls. The first CTest invocation selected a system Python without the
+project dependencies; the configured environment was then used for the required
+checks. Windows source-parser tests explicitly skip before importing the existing
+POSIX AST workflow; this readiness issue was caught during review. Portable native
+graph checks continue on Windows. The fresh exporter preserves every previous
+2,248 row, unit and source byte while adding these three sources, for 2,251 total.
+
+Reproduction on the configured private installation: regenerate each selected
+retained source with the two generic `propose` APIs and a complete Clang AST; compile
+with the selected VC8 flags under the shared VM lock; run `tools/check_eh_native.py`
+against the actual original, inventory, compiler and static library; extend the
+current snapshot through `tools/export_native_sources.py` and fresh trusted inputs.
+The ignored `local/median-function-001` checkpoint retains selection, all attempts,
+exact source/object/original bindings, independent review and publication receipts.
+The next sequential median candidates are `0x3cb70`, `0x44430` and `0x783b0`; their
+retained reports still require inspection before new attempts.

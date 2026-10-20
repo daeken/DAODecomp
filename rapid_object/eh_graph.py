@@ -69,6 +69,9 @@ def action_shape(data):
     if len(data) == 8 and data[:2] == b'\x8d\x4d' and data[3] == 0xe9:
         return {'kind': 'address_ecx_tail_jump', 'parent_ebp_offset': struct.unpack('b',data[2:3])[0],
                 'target_field': 4, 'target_kind': 0x14}
+    if len(data) == 8 and data[:2] == b'\x8b\x4d' and data[3] == 0xe9:
+        return {'kind': 'load_receiver_ecx_tail_jump', 'parent_ebp_offset': struct.unpack('b',data[2:3])[0],
+                'target_field': 4, 'target_kind': 0x14}
     raise Unsupported('unsupported_or_incomplete_unwind_action')
 
 
@@ -111,10 +114,12 @@ def original_graph(reader, main_va, data):
     if state != -1: raise Unsupported('unsupported_unwind_state_transition')
     # Both supported action forms have an explicit terminal transfer. They are
     # different forms, never flattened or normalized into each other.
-    ab = reader.read(av,11,True); ap = action_shape(ab)
+    prefix = reader.read(av,4,True)
+    action_size = 8 if prefix[:2] in (b'\x8d\x4d', b'\x8b\x4d') and prefix[3] == 0xe9 else 11
+    ab = reader.read(av,action_size,True); ap = action_shape(ab)
     target = av+ap['target_field']+4+unpack('<i',ab,ap['target_field'])[0]
     reader.read(target,1,True)
-    ranges=[(main_va,main_va+len(data)),(hva,hva+hsize),(descriptor,descriptor+36),(uv,uv+8),(av,av+11)]
+    ranges=[(main_va,main_va+len(data)),(hva,hva+hsize),(descriptor,descriptor+36),(uv,uv+8),(av,av+len(ab))]
     for j,(lo,hi) in enumerate(ranges):
         if any(lo < end and begin < hi for begin,end in ranges[:j]): raise Unsupported('overlapping_original_graph_nodes')
     return {'handler':hd,'FuncInfo':node(db,va=descriptor,fields=dp),'unwind_map':node(ub,va=uv,state_transition=[0,-1]),

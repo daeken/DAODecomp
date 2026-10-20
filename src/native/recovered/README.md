@@ -1,6 +1,6 @@
 # Recovered native C++
 
-**2,248 matching functions** in this published snapshot: 807 reccmp matches and 1,437 exact COFF object matches and 4 complete main/EH graph matches.
+**2,251 matching functions** in this published snapshot: 807 reccmp matches and 1,437 exact COFF object matches and 7 complete main/EH graph matches.
 
 Snapshot: 2026-10-19T21:54:26.193241+00:00. The running local queue may be further ahead.
 
@@ -54,7 +54,9 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000077a0` | Exact object | [000077a0-73ad14f6639caa79.cpp](units/000077a0-73ad14f6639caa79.cpp#L35) |
 | `0x00007800` | Exact object | [00007800-4f71c4a3a297b449.cpp](units/00007800-4f71c4a3a297b449.cpp#L35) |
 | `0x00007a50` | Exact object | [00007a50-ac77710bbdf7d27f.cpp](units/00007a50-ac77710bbdf7d27f.cpp#L111) |
+| `0x00007a90` | Exact main/EH graph | [00007a90-9705d77e37fdb758.cpp](units/00007a90-9705d77e37fdb758.cpp#L36) |
 | `0x00008620` | Exact object | [00008620-bc6e80b473cf01aa.cpp](units/00008620-bc6e80b473cf01aa.cpp#L25) |
+| `0x0000a1d0` | Exact main/EH graph | [0000a1d0-bce97f3fc8b4ea0a.cpp](units/0000a1d0-bce97f3fc8b4ea0a.cpp#L36) |
 | `0x00013660` | Exact object | [00013660-f83392de50d01d15.cpp](units/00013660-f83392de50d01d15.cpp#L25) |
 | `0x00013670` | Exact object | [000072e0-f2677407575cadad.cpp](units/000072e0-f2677407575cadad.cpp#L84) |
 | `0x000136d0` | Exact object | [000136d0-6fa6e1a3b7bc6438.cpp](units/000136d0-6fa6e1a3b7bc6438.cpp#L25) |
@@ -246,6 +248,7 @@ The exporter checks retained source and compiled artifact hashes. Free-report im
 | `0x000633a0` | Exact object | [000633a0-ff8d84c5ed512696.cpp](units/000633a0-ff8d84c5ed512696.cpp#L27) |
 | `0x00063790` | Exact object | [00063790-778c3afc9ed08209.cpp](units/00063790-778c3afc9ed08209.cpp#L27) |
 | `0x000637b0` | Exact object | [000637b0-d0d1ab7a478a5867.cpp](units/000637b0-d0d1ab7a478a5867.cpp#L27) |
+| `0x000648f0` | Exact main/EH graph | [000648f0-f59c3cb0d91eef26.cpp](units/000648f0-f59c3cb0d91eef26.cpp#L30) |
 | `0x00064a30` | Exact object | [00064a30-a216ad65265ab5f1.cpp](units/00064a30-a216ad65265ab5f1.cpp#L173) |
 | `0x00065a60` | Exact object | [00065a60-0f457dd6d7d3073f.cpp](units/00065a60-0f457dd6d7d3073f.cpp#L25) |
 | `0x00065ce0` | Exact object | [00065ce0-a853acf821e60966.cpp](units/00065ce0-a853acf821e60966.cpp#L27) |

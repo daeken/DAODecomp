@@ -18,7 +18,7 @@ else:
 
 
 def implementation_hashes():
-    paths=[Path(__file__),Path(__file__).with_name('static_crt_identity.py'),Path(g.__file__),Path(diagnostic.__file__),Path(g.__file__).with_name('coff.py'),Path(g.__file__).with_name('compare.py'),Path(g.__file__).with_name('symbol_identity.py')]
+    paths=[Path(__file__),Path(__file__).with_name('static_crt_identity.py'),Path(g.__file__),Path(diagnostic.__file__),Path(g.__file__).with_name('coff.py'),Path(g.__file__).with_name('compare.py'),Path(g.__file__).with_name('symbol_identity.py'),Path(g.__file__).with_name('constructor_identity.py')]
     return {p.name:g.sha(p.read_bytes()) for p in paths}
 
 
@@ -27,7 +27,7 @@ def terminal_profile(role,data,base):
     if role=='handler':
         profile=g.handler_shape(data);expected=['mov','jmp'] if not profile['cookie_checked'] else ['mov','lea','mov','xor','call','mov','jmp']
     elif role=='action':
-        profile=g.action_shape(data);expected=['mov','push','call','pop','ret'] if len(data)==11 else ['lea','jmp']
+        profile=g.action_shape(data);expected=['mov','push','call','pop','ret'] if len(data)==11 else ['mov','jmp'] if profile['kind']=='load_receiver_ecx_tail_jump' else ['lea','jmp']
     elif role=='delete_helper':
         require(len(data)==5 and data[0]==0xe9,'unsupported_complete_delete_helper');expected=['jmp'];profile={}
     else:raise g.Unsupported('unknown_terminal_profile')
