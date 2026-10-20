@@ -19,6 +19,17 @@ public static class Program
                 using var input=JsonDocument.Parse(await Console.In.ReadToEndAsync());var x=input.RootElement;
                 try {
                     var abi=x.TryGetProperty("abi",out var abiElement)?abiElement.Deserialize<RecoveryAbi>(Engine.Options)!:Vc8Profile.Abi;
+                    if(x.TryGetProperty("eh_paths",out var ehSelected)&&ehSelected.GetBoolean()) {
+                        var deps=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
+                        var eh=Vc8EhProfile.Raise(x.GetProperty("lift"),deps,x.GetProperty("eh_evidence"));var emitted=x.TryGetProperty("emit",out var output)&&!output.GetBoolean()?"":Vc8EhProfile.Emit(eh,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var mod)?mod.GetString()!:"open.exe");
+                        Console.WriteLine(Engine.Json(new{status=emitted.Length==0?"recovered":"generated",ir=eh,source=emitted,proof=false}));return 0;
+                    }
+                    if(x.TryGetProperty("flow_paths",out var flowSelected)&&flowSelected.GetBoolean()) {
+                        var deps=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
+                        var flow=X86FlowRecovery.Raise(x.GetProperty("lift"),new(abi,true,true),deps);
+                        Console.WriteLine(Engine.Json(new{status="recovered",ir=flow,proof=false,source_emission="not_selected"}));return 0;
+                    }
+
                     var conditional=x.TryGetProperty("conditional_calls",out var conditionalSelected)&&conditionalSelected.GetBoolean();var stack=conditional||(x.TryGetProperty("stack_arguments",out var selected)&&selected.GetBoolean());if(conditional&&!x.TryGetProperty("abi",out _))abi=Vc8ConditionalCallsProfile.Abi;object ir;string source;
                     try {var basic=X86Recovery.Raise(x.GetProperty("lift"),abi);ir=basic;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8Profile.Emit(basic,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");}
                     catch(ArgumentException) when(stack) {

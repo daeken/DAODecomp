@@ -28,3 +28,7 @@ StackDependencyTests = load_shared('test_replayable_stackargs').StackDependencyT
 ConditionalTests = load_shared('test_replayable_conditional').ConditionalTests
 ConditionalDependencyTests = load_shared('test_replayable_conditional').ConditionalDependencyTests
 ConditionalIntegrationTests = load_shared('test_replayable_conditional').ConditionalIntegrationTests
+
+FlowEhTests = load_shared('test_replayable_flow_eh').FlowEhTests
+EhScanTests = load_shared('test_replayable_flow_eh').EhScanTests
+EhDependencyTests = load_shared('test_replayable_flow_eh').EhDependencyTests

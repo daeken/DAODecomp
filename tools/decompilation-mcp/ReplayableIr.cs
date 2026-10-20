@@ -14,6 +14,8 @@ namespace Decompilation;
 [JsonDerivedType(typeof(IncomingStackAddress),"incoming_stack_address")]
 [JsonDerivedType(typeof(BitValue),"bit_operation")]
 [JsonDerivedType(typeof(IncomingStackRead),"incoming_stack_read")]
+[JsonDerivedType(typeof(MemoryReadValue),"memory_read")]
+[JsonDerivedType(typeof(ExternalRegisterValue),"external_register")]
 public abstract record RecoveredValue;
 public sealed record Constant(ulong Value, int Bits) : RecoveredValue;
 public sealed record RegisterInput(int Index) : RecoveredValue;
@@ -27,6 +29,8 @@ public sealed record RecoveredStackEffect(RecoveredValue Address,RecoveredValue 
 public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return");
 public sealed record IncomingStackInput(int Offset,int Bits) : RecoveredValue;
 public sealed record IncomingStackAddress(int Offset,int Bits) : RecoveredValue;
+public sealed record MemoryReadValue(RecoveredValue Address,int Bits,ulong Pc,int Epoch,int ReadOrdinal=0):RecoveredValue;
+public sealed record ExternalRegisterValue(ulong CallPc,int Register,int Bits):RecoveredValue;
 public sealed record BitValue(string Operation,RecoveredValue[] Operands,int Bits) : RecoveredValue;
 public sealed record IncomingStackRead(int Offset,int Bits,ulong Pc,int MemoryEpoch) : RecoveredValue;
 public sealed record CalleeStackLift(ulong Target,JsonElement Lift);

@@ -796,3 +796,43 @@ uncertainty barrier remains. All 27,555 scan rows have explicit accounting;
 analyses received no new conditional-match credit. Receipts are under ignored
 `local/replayable-conditional-calls-001`. Accepted source exports and game
 execution remain zero; these are compiled-artifact observations.
+
+The next bounded author pilot reconstructs a two-exit VC8 EH frame from typed
+original effects. Generic path recovery keeps the FS registration/restoration,
+cookie/state words, ordered memory reads and stores, original call targets,
+unknown external results, and each return arm. Return cleanup is recorded
+separately from the minimum observed incoming read extent; a plain `C3` does not
+establish zero arguments. The compiler profile derives its candidate class/new
+spelling from that IR, a complete normal receiver-return relation, and original
+PE/EH dependencies. These source ABI and layout choices are hypotheses, rather
+than claims about allocator, constructor, cleanup, or common-handler semantics.
+
+The first candidate used C linkage and `/GS-`: the generated 35-byte body did not
+satisfy the existing selected compiler/EH policy. C++ linkage with the registered
+`/GS` profile produced a 110-byte main plus all five required dependent EH nodes,
+197 bytes in total. The original checker then retained 193 equal bytes and four
+unresolved relocation bytes: its deliberately narrow source-name recognizer did
+not support the zero-argument constructor spelling. The separately authorized
+capability extension recognizes only the fully anchored x86 public `__thiscall`
+`??0fn_<eight hex digits>@@QAE@XZ`, alongside the existing signed-int form. It
+keeps dependency RVA lookup and full graph/range checks unchanged. Wrong targets,
+wrapped/generated names, other special members and conventions remain rejected.
+The changed shared checker creates a new pipeline binding; historical results
+retain their old bindings.
+
+A fresh author MCP pilot now reports complete checks for the four earlier
+controls and `0x10c0`, including all 197 EH graph bytes. Its failed variants and
+the prior unresolved report remain under ignored
+`local/replayable-eh-frontier-001`. This is pending cumulative independent review
+and installation; it grants no installed-release, source-export or game-execution
+credit. The prior 782 distinct bound object-match observations remain historical.
+
+The final added-rule scan accounted for all 27,555 original inventory identities:
+one generated EH hypothesis (`0x10c0`), 238 typed refusals, 54 unresolved dependency
+analyses and 27,262 rows outside the added necessary domain. It performed no VM
+compiles or comparisons and grants no credit. The single hypothesis is covered by
+the author pilot; installed checks remain pending review. Final local checks on
+macOS ARM64 passed 678 Python tests (33 skipped), 107 standalone MCP tests (two
+skipped), all seven CTest checks and the two synthetic demonstrations (59 positive
+cases; six expected negative mismatches). Twenty retained author build attempts
+used 28.381 measured compiler-host seconds; no attempt in this scope was uncertain.

@@ -1699,3 +1699,27 @@ uncertainty barrier remains. All 27,555 scan rows have explicit accounting;
 analyses received no new conditional-match credit. Receipts are under ignored
 `local/replayable-conditional-calls-001`. Accepted source exports and game
 execution remain zero; these are compiled-artifact observations.
+
+The `0x10c0` EH pilot exposed a useful cross-tool distinction. Actual typed effects
+supported a bounded two-terminal-arm recovery, with FS linkage, cookie, state,
+unknown external call results and ordered global stores retained explicitly.
+A VC8 class/new source spelling was a compiler-profile hypothesis checked against
+the complete native main/EH graph, not a recovered allocator/constructor contract.
+C linkage and `/GS-` failed the required compiler/EH domain; C++ linkage and `/GS`
+produced the full 197-byte graph. Four relocation bytes initially stayed unknown
+because an existing exact constructor-name recognizer supported only signed-int
+constructors. A separately authorized exact zero-argument spelling extension now
+passes generic positive, wrong-RVA/target and generated-name rejection tests. A
+fresh author pilot checks all 197 bytes and the earlier ordered controls. The
+unsupported-format report and failed candidate remain evidence; pending review,
+no installed match count or accepted source count changes.
+
+The final added-rule scan accounted for all 27,555 original inventory identities:
+one generated EH hypothesis (`0x10c0`), 238 typed refusals, 54 unresolved dependency
+analyses and 27,262 rows outside the added necessary domain. It performed no VM
+compiles or comparisons and grants no credit. The single hypothesis is covered by
+the author pilot; installed checks remain pending review. Final local checks on
+macOS ARM64 passed 678 Python tests (33 skipped), 107 standalone MCP tests (two
+skipped), all seven CTest checks and the two synthetic demonstrations (59 positive
+cases; six expected negative mismatches). Twenty retained author build attempts
+used 28.381 measured compiler-host seconds; no attempt in this scope was uncertain.

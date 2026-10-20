@@ -82,6 +82,34 @@ class PipelineBoundaryTests(unittest.TestCase):
         self.assertEqual(second['rva'], 0x1000)
         stdio.wait_job(self.client, second['job_id'])
 
+    def test_shared_checker_binding_change_creates_new_key_without_credit(self):
+        # Isolated source dependency inventory, never a production-module edit.
+        adapter_root = self.root / 'adapter-root'
+        for component in ('rapid_object', 'rapid_native', 'rapid', 'workers', 'tools/replayable'):
+            directory = adapter_root / component
+            directory.mkdir(parents=True)
+            (directory / 'binding.py').write_text('# open source dependency fixture\n')
+        checker = adapter_root / 'rapid_object/constructor_identity.py'
+        checker.write_text('# previous exact supported syntax fixture\n')
+        config = json.loads(self.config.read_text())
+        config['adapter_root'] = str(adapter_root)
+        self.config.write_text(json.dumps(config))
+        client = self.connect()
+        first = client.call('replayable_run_next', project_id='open', idempotency_key='checker-key', compile=False)
+        stdio.wait_job(client, first['job_id'])
+        request = json.loads((self.root / 'attempts' / first['job_id'] / 'request.json').read_text())
+        self.assertEqual(request['inputs'][str(checker)], sha(checker.read_bytes()))
+        checker.write_text('# newly supported exact syntax fixture\n')
+        with self.assertRaises(ValueError):
+            client.call('replayable_run_next', project_id='open', idempotency_key='checker-key', compile=False)
+        second = client.call('replayable_run_next', project_id='open', idempotency_key='checker-key-new', compile=False)
+        self.assertNotEqual(first['pipeline_key'], second['pipeline_key'])
+        self.assertEqual(second['rva'], 0x1000)
+        stdio.wait_job(client, second['job_id'])
+        state = client.call('replayable_status', project_id='open')
+        self.assertEqual(state['new_pipeline_full_matches'], 0)
+        self.assertEqual(state['first_unresolved_rva'], 0x1000)
+
     def test_seeded_receipt_source_object_and_report_integrity_invalidation(self):
         # Controlled persistence-only fixture: no comparison success is claimed.
         import sqlite3
@@ -89,7 +117,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         stdio.wait_job(self.client, first['job_id'])
         folder = self.root / 'attempts' / first['job_id']
         (folder / 'build').mkdir()
-        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
+        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json', 'eh_evidence_sha256': folder / 'eh-evidence.json'}
         for path in paths.values():
             path.write_bytes(b'controlled persistence fixture')
         receipt = dict(status='full_match', **{key: sha(path.read_bytes()) for key, path in paths.items()})
@@ -199,7 +227,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         stdio.wait_job(self.client, first['job_id'])
         folder = self.root / 'attempts' / first['job_id']
         (folder / 'build').mkdir()
-        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
+        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json', 'eh_evidence_sha256': folder / 'eh-evidence.json'}
         for path in paths.values():
             path.write_bytes(b'controlled regression receipt fixture')
         (folder / 'retained-comparison.json').write_bytes(b'controlled independent gate fixture')
@@ -249,7 +277,7 @@ class PipelineBoundaryTests(unittest.TestCase):
             stdio.wait_job(self.client, first['job_id'])
             folder = self.root / 'attempts' / first['job_id']
             (folder / 'build').mkdir()
-            paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
+            paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json', 'eh_evidence_sha256': folder / 'eh-evidence.json'}
             for path in paths.values():
                 path.write_bytes(b'controlled selector fixture')
             (folder / 'result.json').write_text(json.dumps(dict(status='full_match', **{key: sha(path.read_bytes()) for key, path in paths.items()})))

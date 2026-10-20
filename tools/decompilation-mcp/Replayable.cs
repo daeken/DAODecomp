@@ -8,11 +8,14 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe Default=>new(1,"x86-bits32-linear-tail-v2","sharpretro-typed-v1",Vc8Profile.Version,["raise-linear-effects-tail-v2","emit-thiscall-stores-tail-v2"]);
     public static PipelineRecipe StackArguments=>new(1,"x86-bits32-linear-tail-stack-v1","sharpretro-typed-v1",Vc8StackArgsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","emit-vc8-composed-stack-v1"]);
     public static PipelineRecipe ConditionalCalls=>new(1,"x86-bits32-one-forward-conditional-v1","sharpretro-typed-v1",Vc8ConditionalCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","emit-vc8-composed-conditional-v1"]);
+    public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version;
+    public bool UsesEh=>CompilerProfile==Vc8EhProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesConditionalCalls=>CompilerProfile==Vc8ConditionalCallsProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version;
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -20,7 +23,7 @@ public sealed partial class Engine
     {
         recipe.Validate();var cfg=p.Config.Replayable??throw new ArgumentException("replayable_not_registered");
         var result=new Dictionary<string,string>();
-        foreach(var path in new[]{p.Config.Inventory,p.Config.Original,p.Config.Compiler,cfg.LifterConfig,Assembly.GetExecutingAssembly().Location,Path.Combine(AppContext.BaseDirectory,"replayable_adapter.py"),Path.Combine(AppContext.BaseDirectory,"adapter.py")}.Concat(new[]{p.Config.EhPolicy}.Concat(p.Config.Libraries?.Values??Enumerable.Empty<string>()).Where(path=>path!=null)))
+        foreach(var path in new[]{p.Config.Inventory,p.Config.Original,p.Config.Compiler,cfg.LifterConfig,Assembly.GetExecutingAssembly().Location,Path.Combine(AppContext.BaseDirectory,"replayable_adapter.py"),Path.Combine(AppContext.BaseDirectory,"adapter.py"),Path.Combine(AppContext.BaseDirectory,"replayable_transport.py")}.Concat(new[]{cfg.TransportConfig}.OfType<string>()).Concat(new[]{p.Config.EhPolicy}.Concat(p.Config.Libraries?.Values??Enumerable.Empty<string>()).Where(path=>path!=null)))
         { if(path==null)throw new ArgumentException("missing_pipeline_input");result[path]=Hash(File.ReadAllBytes(path)); }
         var lifter=Read<JsonElement>(Safe(p.Config,cfg.LifterConfig));
         foreach(var name in new[]{"build_manifest","adapter_dll"})
@@ -30,7 +33,7 @@ public sealed partial class Engine
         foreach(var path in Directory.EnumerateFiles(Path.GetDirectoryName(dllPath)!).Where(f=>f.EndsWith(".dll")||f.EndsWith(".json")))result[path]=Hash(File.ReadAllBytes(Safe(p.Config,path)));
         var manifest=Read<JsonElement>(ResolveLifter(lifter.GetProperty("build_manifest").GetString()!));var checkout=ResolveLifter(lifter.GetProperty("sharp_retro_checkout").GetString()!);
         foreach(var property in manifest.GetProperty("upstream_tracked_source_sha256").EnumerateObject()){var path=Safe(p.Config,Path.Combine(checkout,property.Name));var hash=Hash(File.ReadAllBytes(path));if(hash!=property.Value.GetString())throw new ArgumentException("lifter_source_changed");result[path]=hash;}
-        foreach(var component in new[]{"rapid_object","rapid_native","rapid","workers"})foreach(var path in Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,component),"*.py",SearchOption.AllDirectories))result[path]=Hash(File.ReadAllBytes(path));
+        foreach(var component in new[]{"rapid_object","rapid_native","rapid","workers","tools/replayable"})foreach(var path in Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,component),"*.py",SearchOption.AllDirectories))result[path]=Hash(File.ReadAllBytes(path));
         if(result[p.Config.Original!]!=p.Config.ModuleSha256||result[p.Config.Inventory]!=p.InventorySha256||result[p.Config.Compiler!]!=p.Config.CompilerSha256)throw new ArgumentException("pipeline_input_pin_changed");
         return result;
     }
@@ -79,7 +82,7 @@ public sealed partial class Engine
     {
         try {
             var folder=Path.Combine(Safe(p.Config,p.Config.Replayable!.OutputRoot),job);var result=Read<JsonElement>(Path.Combine(folder,"result.json"));
-            return result.GetProperty("status").GetString()=="full_match" && Hash(File.ReadAllBytes(Path.Combine(folder,"candidate.cpp")))==result.GetProperty("source_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"build/candidate.obj")))==result.GetProperty("object_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"comparison.json")))==result.GetProperty("comparison_sha256").GetString() && (!result.TryGetProperty("retained_comparison_sha256",out var retained)||Hash(File.ReadAllBytes(Path.Combine(folder,"retained-comparison.json")))==retained.GetString()) && (!result.TryGetProperty("callee_lifts_sha256",out var dependencies)||Hash(File.ReadAllBytes(Path.Combine(folder,"callee-lifts.json")))==dependencies.GetString());
+            return result.GetProperty("status").GetString()=="full_match" && Hash(File.ReadAllBytes(Path.Combine(folder,"candidate.cpp")))==result.GetProperty("source_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"build/candidate.obj")))==result.GetProperty("object_sha256").GetString() && Hash(File.ReadAllBytes(Path.Combine(folder,"comparison.json")))==result.GetProperty("comparison_sha256").GetString() && (!result.TryGetProperty("retained_comparison_sha256",out var retained)||Hash(File.ReadAllBytes(Path.Combine(folder,"retained-comparison.json")))==retained.GetString()) && (!result.TryGetProperty("callee_lifts_sha256",out var dependencies)||Hash(File.ReadAllBytes(Path.Combine(folder,"callee-lifts.json")))==dependencies.GetString()) && (!result.TryGetProperty("eh_evidence_sha256",out var eh)||Hash(File.ReadAllBytes(Path.Combine(folder,"eh-evidence.json")))==eh.GetString());
         } catch(Exception e) when(e is IOException or JsonException or KeyNotFoundException) {return false;}
     }
     public object ReplayableInspect(string id,int limit)
@@ -138,7 +141,14 @@ public sealed partial class Engine
                 if(dependencies.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("callee_caller_binding_changed");
                 var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
                 try {var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}
-                catch(ArgumentException) when(recipe.UsesConditionalCalls) {var conditional=Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
+                catch(ArgumentException) when(recipe.UsesConditionalCalls) {
+                    try {var conditional=Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
+                    catch(ArgumentException) when(recipe.UsesEh) {
+                        var evidence=await ReplayableAdapter(request,"lift_eh",folder);if(evidence.TryGetProperty("error",out var ehError))throw new ArgumentException(ehError.GetString());File.WriteAllText(Path.Combine(folder,"eh-evidence.json"),evidence.GetRawText());
+                        if(evidence.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("EH_caller_binding_changed");
+                        var recovered=Vc8EhProfile.Raise(lifted.GetProperty("lift"),callees,evidence);ir=recovered;File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));source=Vc8EhProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);
+                    }
+                }
             }
             File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));File.WriteAllText(Path.Combine(folder,"candidate.cpp"),source);
             if(request.TryGetProperty("expected_source_sha256",out var expectedSource)&&expectedSource.ValueKind!=JsonValueKind.Null&&expectedSource.GetString()!=HashText(source))throw new ArgumentException("generated_source_hash_mismatch_no_compile");
@@ -148,6 +158,7 @@ public sealed partial class Engine
                 var boundResult=JsonSerializer.SerializeToElement(result,Options).Deserialize<Dictionary<string,JsonElement>>(Options)!;
                 boundResult["callee_lifts_sha256"]=JsonSerializer.SerializeToElement(Hash(File.ReadAllBytes(Path.Combine(folder,"callee-lifts.json"))));result=boundResult;
             }
+            if(File.Exists(Path.Combine(folder,"eh-evidence.json"))) {var bound=JsonSerializer.SerializeToElement(result,Options).Deserialize<Dictionary<string,JsonElement>>(Options)!;bound["eh_evidence_sha256"]=JsonSerializer.SerializeToElement(Hash(File.ReadAllBytes(Path.Combine(folder,"eh-evidence.json"))));result=bound;}
             File.WriteAllText(Path.Combine(folder,"result.json"),Json(result));
         }
         catch(Exception e) when(e is IOException or ArgumentException or KeyNotFoundException or JsonException or InvalidOperationException){if(e is IOException && request.GetProperty("compile").GetBoolean())status="external_outcome_unknown";result=new{status,blocker=e.Message,proof=false};}

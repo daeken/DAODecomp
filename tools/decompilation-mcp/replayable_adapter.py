@@ -116,7 +116,7 @@ def lift_callees(request):
     # are durable request inputs; exact slice and entry evidence are retained too.
     caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
     selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
-    follow=request.get('recipe',{}).get('compiler_profile')=='vc8-x86-flat32-conditional-calls-v1'
+    follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1')
     dependencies={};chains=[]
     for original_target,initial in selected:
         target=original_target;entry=initial;seen=set();chain=[]
@@ -132,6 +132,36 @@ def lift_callees(request):
         chains.append(dict(original_target=original_target,chain=chain))
     return dict(caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
                 scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown',proof=False)
+
+
+def lift_eh(request):
+    """Original-rooted supported EH dependencies, never source-authored placements."""
+    from rapid_object import eh_graph as graph
+    import struct
+    caller=lift(request);original=Path(request['project']['original']).read_bytes();reader=graph.Original(original)
+    rows=caller['lift']['instructions'];raw=bytes.fromhex(''.join(r['raw_hex'] for r in rows));main=rows[0]['pc']
+    evidence=graph.original_graph(reader,main,raw)
+    # LoadConfig fields are original PE metadata, not caller-provided symbols.
+    peoff=struct.unpack_from('<I',original,0x3c)[0];opt=peoff+24
+    load_rva,load_size=struct.unpack_from('<II',original,opt+96+10*8)
+    require(load_rva and load_size>=64,'EH_missing_PE_load_config')
+    declared=struct.unpack('<I',reader.read(reader.pe.image_base+load_rva,4))[0]
+    require(declared>=72,'EH_missing_complete_declared_load_config')
+    load=reader.read(reader.pe.image_base+load_rva,72)
+    cookie,table,count=struct.unpack_from('<III',load,60)
+    require(0<count<=65536,'EH_safe_handler_table_budget')
+    handlers=struct.unpack('<'+'I'*count,reader.read(table,count*4))
+    require(evidence['handler']['va']-reader.pe.image_base in handlers,'EH_handler_not_SAFESEH_registered')
+    target=evidence['action']['external_target_va'];helper=reader.read(target,5,True)
+    require(helper[0]==0xe9,'EH_cleanup_helper_not_pure_direct_forwarder')
+    terminal=(target+5+struct.unpack_from('<i',helper,1)[0])&0xffffffff
+    code=[]
+    for role,node in [(k,evidence[k]) for k in ('handler','action')]+[('cleanup_forwarder',dict(va=target,size=5,bytes_hex=helper.hex()))]:
+        rva=node['va']-reader.pe.image_base
+        entry=dict(rva=rva,body_bytes=node['size'],body_ranges=[dict(start_rva=rva,end_rva_inclusive=rva+node['size']-1)])
+        derived=lift(dict(request,rva=rva,entry=entry))
+        code.append(dict(role=role,va=node['va'],size=node['size'],slice_sha256=derived['binary_slice_sha256'],lift=derived['lift'],boundary_basis='original operand-rooted complete supported terminal profile; not an inventory mutation'))
+    return dict(caller_slice_sha256=caller['binary_slice_sha256'],image_base=caller['image_base'],image_end=caller['image_end'],graph=evidence,security_cookie_va=cookie,load_config_directory_size=load_size,load_config_declared_size=declared,safe_handler_table_sha256=sha(reader.read(table,count*4)),cleanup_forwarder_va=target,cleanup_terminal_va=terminal,code_dependencies=code,proof=False,scope='bounded original EH graph and actual typed dependencies; common handler, cookie check and cleanup effects remain unknown')
 
 
 def build(request, folder, source):
@@ -151,7 +181,11 @@ def build(request, folder, source):
     require(lock_path.is_file(), 'shared_vm_lock_missing')
     with lock_path.open('a+') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
-        receipt = compile_object(source_path, build_folder)
+        if project['compiler_flags']==['/c','/O2','/Ob1','/Oy','/Gy','/Z7','/Zl','/GS','/GR-','/EHsc']:
+            from tools.replayable.vc8_build import compile_object as compile_eh
+            receipt=compile_eh(source_path,build_folder,project['compiler_flags'],json.loads(Path(project['replayable']['transport_config']).read_text()))
+        else:
+            receipt = compile_object(source_path, build_folder)
     if not (build_folder / 'build-exit.txt').is_file():
         return dict(status='external_outcome_unknown', blocker='compiler_exit_marker_missing_no_automatic_retry', build=receipt, proof=False)
     compile_exit = int((build_folder / 'build-exit.txt').read_text(encoding='utf-8-sig').strip())
@@ -162,6 +196,21 @@ def build(request, folder, source):
     require(receipt['source_sha256'] == sha(source.encode()) == sha((build_folder / 'candidate.cpp').read_bytes()), 'compiled_source_mismatch')
     require(receipt['module_sha256'] == project['module_sha256'] and receipt['linked'] is False and receipt['original_executed'] is False, 'unsupported_build_receipt')
     require(json.loads((build_folder / 'compiler.json').read_text(encoding='utf-8-sig')) == receipt['compiler'], 'compiler_receipt_changed')
+    # EH is a separate existing complete-graph backend. A main-only comparison
+    # cannot grant credit when original FS registration or generated EH is present.
+    from rapid_object import eh_native
+    from rapid_object.symbol_identity import generated_identity
+    import capstone
+    md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);md.detail=True
+    obj=(build_folder/'candidate.obj').read_bytes()
+    original_rows=request['entry']['body_ranges'];original_body=PE(original).read(request['rva'],original_rows[0]['end_rva_inclusive']-request['rva']+1)
+    needs_eh=any(generated_identity(sym.name) is not None for sym in Coff(obj).symbols.values()) or any(op.type==capstone.x86.X86_OP_MEM and op.mem.segment==capstone.x86.X86_REG_FS and op.mem.disp==0 for ins in md.disasm(original_body,PE(original).image_base+request['rva']) for op in ins.operands)
+    if needs_eh:
+        require(project.get('eh_policy') and project.get('libraries'),'EH_requires_registered_policy_and_libraries')
+        report=eh_native.check(original,Path(project['inventory']).read_bytes(),Path(project['compiler']).read_bytes(),{n:Path(path).read_bytes() for n,path in project['libraries'].items()},source.encode(),obj,receipt,json.loads(Path(project['eh_policy']).read_text()))
+        (folder/'comparison.json').write_text(json.dumps(report,sort_keys=True));rows=report.get('functions',[])
+        status='full_match' if report['status']=='exact_eh_graph_match' and len(rows)==1 and rows[0]['rva']==request['rva'] else 'mismatch' if report['status']=='eh_graph_nonmatch' else 'inconclusive'
+        return dict(status=status,backend=report['backend'],functions=[dict(rva=r['rva'],status=r['status'],original_size=r.get('nodes',{}).get('main',{}).get('original_size'),object_size=r.get('nodes',{}).get('main',{}).get('candidate_size'),blockers=r.get('blockers',[])) for r in rows],blockers=report.get('blockers',[]),source_sha256=sha(source.encode()),object_sha256=sha(obj),comparison_sha256=sha((folder/'comparison.json').read_bytes()),build=receipt,proof=False,scope='complete bounded main/EH compiled artifact graph; external runtime semantics unknown')
     pe = PE(original)
     entry = request['entry']
     requested = {request['rva']: dict(ranges=entry['body_ranges'], original_va=pe.image_base + request['rva'])}
@@ -197,8 +246,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'build'), 'unsupported_pipeline_action')
-        result = lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build'), 'unsupported_pipeline_action')
+        result = lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

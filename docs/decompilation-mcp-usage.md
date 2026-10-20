@@ -402,3 +402,20 @@ checks reached `0x1070`; `0x10c0` remains unsupported. Its 577-candidate affecte
 check produced 576 full matches and one retained mismatch, with zero unrun
 candidates. This does not claim equivalence for all 27,555 assessed identities,
 accepted source exports, or game execution. Existing recipes remain available.
+
+An author-only opt-in EH composition is undergoing cumulative review:
+
+```json
+{"schema_version":1,"architecture":"x86-bits32-bounded-paths-EH-v1","frontend":"sharpretro-typed-v1","compiler_profile":"vc8-x86-flat32-EH-two-exit-v1","steps":["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]}
+```
+
+It uses the existing recipe-aware operations and durable project-wide uncertainty
+barrier. Earlier domains are tried first. The added domain is a bounded complete
+forward two-exit body, observed call-result guard, exact FS registration and
+restoration, PE-bound cookie/SAFESEH handler, one supported state/unwind action,
+and original-derived normal receiver-return ABI evidence. Calls retain unknown
+effects, exceptions and termination. A complete main/EH graph comparison is
+required; main bytes alone cannot pass. The selected `/GS` compiler profile uses
+the existing shared VM lock and synchronous copy/compile protocol. It requires a
+registered EH policy, libraries and matching transport-helper attestation.
+Existing installed recipes remain available while this candidate is reviewed.
