@@ -89,7 +89,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         stdio.wait_job(self.client, first['job_id'])
         folder = self.root / 'attempts' / first['job_id']
         (folder / 'build').mkdir()
-        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json'}
+        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
         for path in paths.values():
             path.write_bytes(b'controlled persistence fixture')
         receipt = dict(status='full_match', **{key: sha(path.read_bytes()) for key, path in paths.items()})
@@ -199,7 +199,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         stdio.wait_job(self.client, first['job_id'])
         folder = self.root / 'attempts' / first['job_id']
         (folder / 'build').mkdir()
-        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json'}
+        paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
         for path in paths.values():
             path.write_bytes(b'controlled regression receipt fixture')
         (folder / 'retained-comparison.json').write_bytes(b'controlled independent gate fixture')
@@ -249,7 +249,7 @@ class PipelineBoundaryTests(unittest.TestCase):
             stdio.wait_job(self.client, first['job_id'])
             folder = self.root / 'attempts' / first['job_id']
             (folder / 'build').mkdir()
-            paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json'}
+            paths = {'source_sha256': folder / 'candidate.cpp', 'object_sha256': folder / 'build/candidate.obj', 'comparison_sha256': folder / 'comparison.json', 'callee_lifts_sha256': folder / 'callee-lifts.json'}
             for path in paths.values():
                 path.write_bytes(b'controlled selector fixture')
             (folder / 'result.json').write_text(json.dumps(dict(status='full_match', **{key: sha(path.read_bytes()) for key, path in paths.items()})))
@@ -285,3 +285,20 @@ class PipelineBoundaryTests(unittest.TestCase):
             self.assertEqual(row, (first['job_id'],))
             tracking_key = db.execute('SELECT input_key FROM replayable_frontier WHERE job=?', (first['job_id'],)).fetchone()[0]
             self.assertEqual(tracking_key, 'regression:' + first['pipeline_key'])
+
+    def test_stack_recipe_explicit_key_frontier_and_uncertainty_barrier(self):
+        import sqlite3
+        recipe=dict(schema_version=1,architecture='x86-bits32-linear-tail-stack-v1',frontend='sharpretro-typed-v1',compiler_profile='vc8-x86-flat32-addressable-stack-v1',steps=['raise-linear-effects-tail-v2','derive-original-normal-return-stack-v1','emit-vc8-composed-stack-v1'])
+        baseline=self.client.call('replayable_status',project_id='open')
+        selected=self.client.call('replayable_status',project_id='open',recipe_json=json.dumps(recipe))
+        self.assertNotEqual(selected['pipeline_key'],baseline['pipeline_key']);self.assertEqual(selected['first_unresolved_rva'],0x1000)
+        first=self.submit('stack-selected',recipe_json=json.dumps(recipe));stdio.wait_job(self.client,first['job_id'])
+        self.assertEqual(first['rva'],0x1000)
+        self.assertEqual(self.submit('stack-selected',recipe_json=json.dumps(recipe))['job_id'],first['job_id'])
+        with self.assertRaises(ValueError):self.submit('stack-selected')
+        bad=dict(recipe,steps=list(reversed(recipe['steps'])))
+        with self.assertRaises(ValueError):self.submit('stack-bad-order',recipe_json=json.dumps(bad))
+        for state in ('running','external_outcome_unknown'):
+            with closing(sqlite3.connect(self.root/'state/jobs.sqlite3')) as db,db:db.execute('UPDATE replayable_frontier SET status=?',(state,))
+            with self.assertRaises(ValueError):self.submit('stack-cross-'+state)
+            with self.assertRaises(ValueError):self.regression('stack-regression-cross-'+state,recipe_json=json.dumps(recipe))

@@ -17,3 +17,10 @@ PipelineBoundaryTests = load_shared('test_replayable_pipeline').PipelineBoundary
 
 TransportGuardTests = load_shared('test_replayable_transport').TransportGuardTests
 TransportBoundaryTests = load_shared('test_replayable_transport').TransportBoundaryTests
+
+# The open stack fixtures import the shared IR builders by their test module name.
+import sys
+sys.path.insert(0,str(ROOT / 'tests'))
+StackArgumentTests = load_shared('test_replayable_stackargs').StackArgumentTests
+StackIntegrationTests = load_shared('test_replayable_stackargs').StackIntegrationTests
+StackDependencyTests = load_shared('test_replayable_stackargs').StackDependencyTests

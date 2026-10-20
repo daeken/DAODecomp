@@ -10,6 +10,8 @@ namespace Decompilation;
 [JsonDerivedType(typeof(UnknownValue),"unknown")]
 [JsonDerivedType(typeof(SegmentInput),"segment_input")]
 [JsonDerivedType(typeof(SegmentedAddress),"segmented_address")]
+[JsonDerivedType(typeof(IncomingStackInput),"incoming_stack_input")]
+[JsonDerivedType(typeof(IncomingStackAddress),"incoming_stack_address")]
 public abstract record RecoveredValue;
 public sealed record Constant(ulong Value, int Bits) : RecoveredValue;
 public sealed record RegisterInput(int Index) : RecoveredValue;
@@ -21,6 +23,13 @@ public sealed record RecoveredEffect(string Kind, RecoveredValue? Address, Recov
 public sealed record RecoveryAbi(string Id,int ReturnRegister,int[] ArgumentRegisters,int[] VolatileRegisters,int[] PreservedRegisters);
 public sealed record RecoveredStackEffect(RecoveredValue Address,RecoveredValue Value,int Bits,ulong Pc,bool WithinAllocatedFrame);
 public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return");
+public sealed record IncomingStackInput(int Offset,int Bits) : RecoveredValue;
+public sealed record IncomingStackAddress(int Offset,int Bits) : RecoveredValue;
+public sealed record CalleeStackLift(ulong Target,JsonElement Lift);
+public sealed record NormalReturnStackEvidence(ulong Target,int CleanupBytes,int ReturnSites,int CallSites,string Basis,bool Proof=false);
+public sealed record RecoveredStackCall(ulong Pc,NormalReturnStackEvidence Evidence,RecoveredValue[] Arguments);
+public sealed record StackArgumentFunction(RecoveredFunction Function,int ReturnCleanupBytes,IncomingStackInput[] IncomingSlots,RecoveredStackCall[] Calls);
+
 public static class X86Recovery
 {
     static string Tag(JsonElement n) => n.GetProperty("type").GetString()!.Split('+').Last().Split('.').Last();
@@ -34,12 +43,19 @@ public static class X86Recovery
         }
         return n.ValueKind==JsonValueKind.Array && n.EnumerateArray().Any(UsesStackSegment);
     }
-    public static RecoveredFunction Raise(JsonElement lift,RecoveryAbi abi)
+    public static RecoveredFunction Raise(JsonElement lift,RecoveryAbi abi) => RaiseCore(lift,abi,null);
+    internal static RecoveredFunction RaiseCore(JsonElement lift,RecoveryAbi abi,StackArgumentContext? stackArguments)
+    {
+        try { return RaiseCoreChecked(lift,abi,stackArguments); }
+        catch(OverflowException) { throw new ArgumentException("symbolic_offset_out_of_supported_range"); }
+    }
+    static RecoveredFunction RaiseCoreChecked(JsonElement lift,RecoveryAbi abi,StackArgumentContext? stackArguments)
     {
         Need(abi.Id is {Length: >0 and <=128} && abi.ReturnRegister is >=0 and <16 && abi.ReturnRegister!=4 && new[]{abi.ArgumentRegisters,abi.VolatileRegisters,abi.PreservedRegisters}.All(a=>a!=null&&a.Distinct().Count()==a.Length&&a.All(r=>r is >=0 and <16&&r!=4)),"unsupported_ABI_contract");
         Need(lift.GetProperty("mode").GetString()=="Bits32" && lift.GetProperty("decode_complete").GetBoolean() && lift.GetProperty("lift_errors").GetInt32()==0 && lift.GetProperty("opaque_instructions").GetInt32()==0,"incomplete_or_opaque_lift");
         var regs=Enumerable.Range(0,16).ToDictionary(i=>i,i=>(RecoveredValue)new RegisterInput(i));
         var stack=new Dictionary<long,RecoveredValue>{{0,new UnknownValue("entry_return_address")}};long sp=0;bool returned=false;bool tailExit=false;var effects=new List<RecoveredEffect>();var notes=new List<string>();var stackEffects=new List<RecoveredStackEffect>();
+        if(stackArguments!=null)foreach(var input in stackArguments.Inputs)stack[input.Offset]=input;
         bool segmentedStack=UsesStackSegment(lift);notes.Add(segmentedStack?"Stack slots retain symbolic SS base plus wrapped32 SP; SS is never replaced by zero.":"Stack accesses follow the lifter's unsegmented flat-stack representation.");
         long? StackOffset(RecoveredValue address) => address switch {
             SegmentedAddress {Segment: {Index:2},Offset:AddValue {Left:RegisterInput {Index:4}} a} when segmentedStack=>a.Offset,
@@ -87,7 +103,8 @@ public static class X86Recovery
                 sp-=4;var store=nodes[cursor+1];var ret=Eval(store.GetProperty("Val"));
                 Need(StackOffset(Eval(store.GetProperty("Addr")))==sp&&Bits(store.GetProperty("Val"))==32&&ret is Constant {Bits:32} rc&&rc.Value==pc+(ulong)ins.GetProperty("length").GetInt32(),"unsupported_call_return_address");
                 var branch=nodes.Last();Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_call");var target=Eval(branch.GetProperty("Target"));Need(target is Constant,"indirect_call");
-                effects.Add(new("call",null,target,32,pc,abi.ArgumentRegisters.Select(r=>regs[r]).ToArray()));sp=beforeSp;foreach(var r in abi.VolatileRegisters)regs[r]=new UnknownValue("external_call_clobber:"+abi.Id);
+                effects.Add(new("call",null,target,32,pc,abi.ArgumentRegisters.Select(r=>regs[r]).ToArray()));
+                sp=stackArguments==null?beforeSp:stackArguments.Call(pc,((Constant)target).Value,beforeSp,stack);foreach(var r in abi.VolatileRegisters)regs[r]=new UnknownValue("external_call_clobber:"+abi.Id);
                 notes.Add("Direct call retained as external boundary under explicit ABI profile "+abi.Id+"; callee effects remain external.");continue;
             }
             foreach(var n in nodes)
@@ -108,12 +125,12 @@ public static class X86Recovery
                             effects.Add(new("tail_call",null,target,32,pc,abi.ArgumentRegisters.Select(r=>regs[r]).ToArray()));
                             notes.Add("Terminal direct jump retains external target and ordered inputs under explicit ABI profile "+abi.Id+"; return and callee effects remain external.");tailExit=true;returned=true;break;
                         }
-                        Need(branchKind=="Ret","unsupported_control_flow");Need(sp==4&&Eval(n.GetProperty("Target"))==new UnknownValue("entry_return_address"),"unbalanced_return");returned=true;break;
+                        Need(branchKind=="Ret","unsupported_control_flow");Need(sp==4+(stackArguments?.ReturnCleanupBytes??0)&&Eval(n.GetProperty("Target"))==new UnknownValue("entry_return_address"),"unbalanced_return");returned=true;break;
                     default:throw new ArgumentException("unsupported_effect:"+Tag(n));
                 }
             }
         }
-        Need(returned,"missing_return");foreach(var r in abi.PreservedRegisters)Need(regs[r]==new RegisterInput(r),"profile_preserved_register_not_restored");
+        Need(returned,"missing_return");if(stackArguments!=null)notes.Add("Normal-return cleanup is a bounded original-CFG/RET-encoding ABI hypothesis; callee termination, clobbers and memory effects remain external/unknown. VC8 emission requires an explicit flat32 stack relation for address-taken parameters.");foreach(var r in abi.PreservedRegisters)Need(regs[r]==new RegisterInput(r),"profile_preserved_register_not_restored");
         return new(effects,tailExit?new UnknownValue("tail_callee_result:"+abi.Id):regs[abi.ReturnRegister],notes,stackEffects,tailExit?"tail_call":"return");
     }
 }
@@ -122,7 +139,8 @@ public static class Vc8Profile
 {
     public const string Version="vc8-x86-thiscall-stores-tail-v2";
     public static RecoveryAbi Abi=>new(Version,0,[1],[0,1,2],[3,5,6,7]);
-    public static string Emit(RecoveredFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
+    public static string Emit(RecoveredFunction ir,uint rva,uint imageBase,uint imageEnd,string module) => EmitCore(ir,rva,imageBase,imageEnd,module,null);
+    internal static string EmitCore(RecoveredFunction ir,uint rva,uint imageBase,uint imageEnd,string module,StackArgumentFunction? stackArguments)
     {
         if(module.Length is <1 or >128 || module.Any(c=>!(char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-')))throw new ArgumentException("unsupported_module_annotation");
         if(ir.StackEffects.Any(e=>!e.WithinAllocatedFrame))throw new ArgumentException("caller_or_unallocated_stack_write_not_emittable");
@@ -135,7 +153,13 @@ public static class Vc8Profile
             if(e.Kind is "call" or "tail_call")
             {
                 if(e.Inputs is not {Length:1} || e.Inputs[0]!=new RegisterInput(1)||e.Value is not Constant target||target.Value<imageBase||target.Value>=imageEnd)throw new ArgumentException("unsupported_call_ABI");
-                var name=$"fn_{target.Value-imageBase:x8}";decl.Add($"    void {name}();");statements.Add($"    {name}();");continue;
+                var name=$"fn_{target.Value-imageBase:x8}";string parameter="",argument="";
+                if(stackArguments!=null) {
+                    var calls=stackArguments.Calls.Where(c=>c.Pc==e.Pc).ToArray();
+                    if(calls.Length!=1||calls[0].Evidence.Target!=target.Value||calls[0].Evidence.CleanupBytes!=4||calls[0].Arguments.Length!=1||calls[0].Arguments[0]!=new IncomingStackAddress(4,32))throw new ArgumentException("unsupported_stack_call_ABI");
+                    parameter="unsigned int*";argument="&arg_0";
+                }
+                decl.Add($"    void {name}({parameter});");statements.Add($"    {name}({argument});");continue;
             }
             if(e.Kind!="store")throw new ArgumentException("unsupported_emitted_effect");
             long offset=e.Address switch {RegisterInput {Index:1}=>0,AddValue {Left:RegisterInput {Index:1}} a=>a.Offset,_=>throw new ArgumentException("unsupported_store_address")};
@@ -145,6 +169,144 @@ public static class Vc8Profile
         }
         var globals=decl.Where(d=>d.StartsWith("GLOBAL:")).Distinct().Select(d=>"extern unsigned char "+d[7..]+";");
         var returnType=tail?"void":"void*";
-        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}();\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}() {{\n"+string.Join("\n",statements)+(tail?"":"\n    return this;")+"\n}\n";
+        var parameters=stackArguments==null?"":"unsigned int arg_0";
+        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}({parameters});\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}({parameters}) {{\n"+string.Join("\n",statements)+(tail?"":"\n    return this;")+"\n}\n";
+    }
+}
+
+// Separate opt-in prototype: no current/default recipe acquires these assumptions.
+// Complete CFG/RET encoding is ABI evidence for *normal return*, not a claim
+// that calls terminate, preserve arbitrary state, or have no memory effects.
+internal sealed class StackArgumentContext
+{
+    public int ReturnCleanupBytes {get;}
+    public IncomingStackInput[] Inputs {get;}
+    readonly Dictionary<ulong,NormalReturnStackEvidence> Evidence;
+    public List<RecoveredStackCall> Calls {get;}=[];
+    public StackArgumentContext(int cleanup,IEnumerable<CalleeStackLift> callees)
+    {
+        ReturnCleanupBytes=cleanup;Inputs=Enumerable.Range(0,cleanup/4).Select(i=>new IncomingStackInput(4+i*4,32)).ToArray();
+        Evidence=[];foreach(var c in callees)if(!Evidence.TryAdd(c.Target,X86StackArgumentRecovery.InspectNormalReturn(c.Target,c.Lift)))throw new ArgumentException("duplicate_callee_cleanup_evidence");
+    }
+    public long Call(ulong pc,ulong target,long sp,Dictionary<long,RecoveredValue> stack)
+    {
+        if(!Evidence.TryGetValue(target,out var e))throw new ArgumentException("missing_callee_cleanup_evidence");
+        if(sp+e.CleanupBytes>0)throw new ArgumentException("callee_cleanup_exceeds_outgoing_frame");
+        var args=new List<RecoveredValue>();
+        for(int n=0;n<e.CleanupBytes;n+=4) {
+            if(!stack.TryGetValue(sp+n,out var value))throw new ArgumentException("missing_outgoing_stack_argument");
+            if(value is AddValue {Left:RegisterInput {Index:4}} a) {
+                if(a.Offset<4||a.Offset%4!=0||a.Offset>ReturnCleanupBytes)throw new ArgumentException("invalid_incoming_stack_address");
+                value=new IncomingStackAddress((int)a.Offset,32);
+            }
+            args.Add(value);
+        }
+        Calls.Add(new(pc,e,args.ToArray()));
+        foreach(var a in args.OfType<IncomingStackAddress>())stack[a.Offset]=new UnknownValue("external_call_addressable_input_clobber");
+        return checked(sp+e.CleanupBytes);
+    }
+}
+
+public static class X86StackArgumentRecovery
+{
+    static string Tag(JsonElement n)=>n.GetProperty("type").GetString()!.Split('+').Last().Split('.').Last();
+    static void Need(bool condition,string error){if(!condition)throw new ArgumentException(error);}
+    static IEnumerable<JsonElement> Branches(JsonElement n)
+    {
+        if(n.ValueKind==JsonValueKind.Object) {
+            if(n.TryGetProperty("type",out var t)&&t.GetString()=="LiftIl.IlBranch")yield return n;
+            foreach(var p in n.EnumerateObject())foreach(var b in Branches(p.Value))yield return b;
+        } else if(n.ValueKind==JsonValueKind.Array)foreach(var item in n.EnumerateArray())foreach(var b in Branches(item))yield return b;
+    }
+    static int RetCleanup(JsonElement instruction)
+    {
+        Need(instruction.TryGetProperty("raw_hex",out var raw),"missing_original_return_encoding");
+        byte[] bytes;try{bytes=Convert.FromHexString(raw.GetString()!);}catch{throw new ArgumentException("invalid_original_return_encoding");}
+        if(bytes.Length==1&&bytes[0]==0xc3)return 0;
+        Need(bytes.Length==3&&bytes[0]==0xc2,"unsupported_return_encoding");
+        int cleanup=bytes[1]|bytes[2]<<8;Need(cleanup%4==0&&cleanup<=64,"unsupported_return_cleanup");return cleanup;
+    }
+    static JsonElement Unwrap(JsonElement n) {
+        while(Tag(n)=="IlCast") {
+            Need(n.GetProperty("Kind").GetProperty("name").GetString() is "Trunc" or "Zext","unsupported_return_cast");
+            Need(n.GetProperty("Ty").GetProperty("Bits").GetInt32() is 32 or 64,"unsupported_return_width");n=n.GetProperty("X");
+        }
+        return n;
+    }
+    static long ReturnStackDelta(JsonElement value) {
+        value=Unwrap(value);
+        if(Tag(value)=="IlReadReg") {Need(value.GetProperty("Kind").GetProperty("name").GetString()=="X86"&&value.GetProperty("Idx").GetInt32()==4,"unsupported_return_stack_tree");return 0;}
+        Need(Tag(value)=="IlBin","unsupported_return_stack_tree");var right=value.GetProperty("R");
+        Need(Tag(right)=="IlConst"&&ulong.TryParse(right.GetProperty("Bits").GetProperty("decimal").GetString(),out _),"unsupported_return_stack_tree");
+        ulong delta=ulong.Parse(right.GetProperty("Bits").GetProperty("decimal").GetString()!);Need(delta<=68,"unsupported_return_stack_tree");
+        var op=value.GetProperty("Op").GetProperty("name").GetString();Need(op is "Add" or "Sub","unsupported_return_stack_tree");
+        return ReturnStackDelta(value.GetProperty("L"))+(op=="Add"?(long)delta:-(long)delta);
+    }
+    static void VerifyReturnTree(JsonElement row,int cleanup) {
+        var nodes=row.GetProperty("tree").GetProperty("Body").EnumerateArray().ToArray();Need(nodes.Length is >=3 and <=8,"unsupported_return_stack_tree");
+        Need(Tag(nodes[0])=="IlLet"&&Tag(nodes[^1])=="IlBranch","unsupported_return_stack_tree");var load=nodes[0].GetProperty("Val");
+        Need(Tag(load)=="IlLoad"&&load.GetProperty("Ty").GetProperty("Bits").GetInt32()==32,"unsupported_return_width");
+        var address=Unwrap(load.GetProperty("Addr"));
+        if(Tag(address)=="IlBin") {Need(address.GetProperty("Op").GetProperty("name").GetString()=="Add","unsupported_return_stack_address");var seg=address.GetProperty("L");Need(Tag(seg)=="IlReadReg"&&seg.GetProperty("Kind").GetProperty("name").GetString()=="X86Seg"&&seg.GetProperty("Idx").GetInt32()==2,"unsupported_return_stack_address");address=Unwrap(address.GetProperty("R"));}
+        Need(Tag(address)=="IlReadReg"&&address.GetProperty("Kind").GetProperty("name").GetString()=="X86"&&address.GetProperty("Idx").GetInt32()==4,"unsupported_return_stack_address");
+        var returnTemps=new HashSet<int>{nodes[0].GetProperty("Id").GetInt32()};
+        long delta=0;foreach(var n in nodes.Skip(1).SkipLast(1)) {
+            if(Tag(n)=="IlLet") {var v=n.GetProperty("Val");Need(Tag(v)=="IlTmp"&&v.GetProperty("Ty").GetProperty("Bits").GetInt32()==32&&returnTemps.Contains(v.GetProperty("Id").GetInt32())&&returnTemps.Add(n.GetProperty("Id").GetInt32()),"unsupported_return_target");continue;}
+            Need(Tag(n)=="IlWriteReg"&&n.GetProperty("Kind").GetProperty("name").GetString()=="X86"&&n.GetProperty("Idx").GetInt32()==4,"unsupported_return_stack_tree");delta+=ReturnStackDelta(n.GetProperty("Val"));
+        }
+        var target=nodes[^1].GetProperty("Target");Need(Tag(target)=="IlTmp"&&returnTemps.Contains(target.GetProperty("Id").GetInt32())&&target.GetProperty("Ty").GetProperty("Bits").GetInt32()==32,"unsupported_return_target");
+        Need(delta==4+cleanup,"conflicting_return_encoding_and_effects");
+    }
+    public static NormalReturnStackEvidence InspectNormalReturn(ulong target,JsonElement lift)
+    {
+        Need(lift.GetProperty("mode").GetString()=="Bits32"&&lift.GetProperty("decode_complete").GetBoolean()&&lift.GetProperty("lift_errors").GetInt32()==0&&lift.GetProperty("opaque_instructions").GetInt32()==0,"incomplete_callee_cleanup_evidence");
+        var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length>0&&rows[0].GetProperty("pc").GetUInt64()==target,"callee_entry_mismatch");
+        var indices=new Dictionary<ulong,int>();ulong expected=target;
+        foreach(var row in rows) {
+            var pc=row.GetProperty("pc").GetUInt64();int len=row.GetProperty("length").GetInt32();
+            Need(pc==expected&&len is >0 and <=15&&row.GetProperty("raw_hex").GetString()!.Length==2*len,"ambiguous_callee_range");
+            Need(indices.TryAdd(pc,indices.Count),"ambiguous_callee_range");expected=checked(pc+(ulong)len);
+        }
+        var pending=new Queue<int>();pending.Enqueue(0);var seen=new HashSet<int>();var cleanup=new HashSet<int>();int returns=0,calls=0;
+        while(pending.Count>0) {
+            int i=pending.Dequeue();if(!seen.Add(i))continue;var row=rows[i];
+            var branches=Branches(row.GetProperty("tree")).ToArray();Need(branches.Length<=1,"ambiguous_callee_control_flow");
+            bool fall=true;
+            if(branches.Length==1) {
+                var branch=branches[0];var kind=branch.GetProperty("Kind").GetProperty("name").GetString();
+                if(kind=="Ret") {Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_callee_return");var amount=RetCleanup(row);VerifyReturnTree(row,amount);cleanup.Add(amount);returns++;fall=false;}
+                else if(kind=="Call") {calls++;Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_callee_call");}
+                else {
+                    Need(kind is "Jmp" or "CondJmp","unsupported_callee_control_flow");var dest=branch.GetProperty("Target");
+                    Need(Tag(dest)=="IlConst"&&ulong.TryParse(dest.GetProperty("Bits").GetProperty("decimal").GetString(),out _),"ambiguous_callee_branch");
+                    ulong address=ulong.Parse(dest.GetProperty("Bits").GetProperty("decimal").GetString()!);Need(indices.TryGetValue(address,out _),"external_or_misaligned_callee_exit");pending.Enqueue(indices[address]);
+                    if(kind=="Jmp"){Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"ambiguous_callee_branch");fall=false;}
+                    else Need(branch.GetProperty("Cond").ValueKind!=JsonValueKind.Null,"ambiguous_callee_branch");
+                }
+            }
+            if(fall){Need(i+1<rows.Length,"callee_falls_out_of_range");pending.Enqueue(i+1);}
+        }
+        Need(seen.Count==rows.Length,"unreachable_callee_range_bytes");Need(returns>0,"missing_callee_return");Need(cleanup.Count==1,"conflicting_callee_cleanup");
+        return new(target,cleanup.Single(),returns,calls,"complete-reachable-CFG-uniform-RET-encoding; normal-return-ABI-hypothesis; nested-call-effects-unknown");
+    }
+    public static StackArgumentFunction Raise(JsonElement lift,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees)
+    {
+        var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length>0,"empty_instruction_range");
+        var last=rows[^1];var branch=Branches(last.GetProperty("tree")).ToArray();Need(branch.Length==1&&branch[0].GetProperty("Kind").GetProperty("name").GetString()=="Ret","stack_arguments_require_normal_return");
+        var outerCleanup=RetCleanup(last);VerifyReturnTree(last,outerCleanup);
+        var context=new StackArgumentContext(outerCleanup,callees);var function=X86Recovery.RaiseCore(lift,abi,context);
+        return new(function,context.ReturnCleanupBytes,context.Inputs,context.Calls.ToArray());
+    }
+}
+
+public static class Vc8StackArgsProfile
+{
+    public const string Version="vc8-x86-flat32-addressable-stack-v1";
+    public static StackArgumentFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees)=>X86StackArgumentRecovery.Raise(lift,Vc8Profile.Abi,callees);
+    public static string Emit(StackArgumentFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
+    {
+        if(ir.Function.ExitKind!="return"||ir.ReturnCleanupBytes!=4||ir.IncomingSlots.Length!=1||ir.IncomingSlots[0]!=new IncomingStackInput(4,32))throw new ArgumentException("unsupported_stack_parameter_ABI");
+        if(ir.Calls.Length!=ir.Function.Effects.Count(e=>e.Kind=="call")||ir.Calls.Select(c=>c.Pc).Distinct().Count()!=ir.Calls.Length)throw new ArgumentException("missing_stack_call_effect");
+        return Vc8Profile.EmitCore(ir.Function,rva,imageBase,imageEnd,module,ir);
     }
 }

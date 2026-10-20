@@ -64,6 +64,53 @@ def lift(request):
                 scope='typed linear lifter output; ABI is a candidate hypothesis, not proven semantics')
 
 
+def direct_call_targets(caller):
+    """Original encoding, not propagated register values, selects dependencies."""
+    import capstone
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    md.detail = True
+    targets = set()
+    for row in caller['lift']['instructions']:
+        decoded = list(md.disasm(bytes.fromhex(row['raw_hex']), row['pc']))
+        require(len(decoded) == 1 and decoded[0].size == row['length'], 'callee_decode_disagreement')
+        ins = decoded[0]
+        if ins.group(capstone.CS_GRP_CALL):
+            require(len(ins.operands) == 1 and ins.operands[0].type == capstone.x86.X86_OP_IMM, 'indirect_caller_call_unsupported')
+            targets.add(ins.operands[0].imm)
+    return sorted(targets)
+
+
+def select_callee_entries(request, caller, inventory):
+    require(inventory['module_sha256'] == request['project']['module_sha256'], 'callee_inventory_pin_changed')
+    entries = {}
+    for entry in inventory['functions']:
+        require(entry['rva'] not in entries, 'duplicate_inventory_rva')
+        entries[entry['rva']] = entry
+    selected = []
+    for target in direct_call_targets(caller):
+        rva = target - caller['image_base']
+        require(rva in entries, 'direct_callee_not_in_inventory')
+        selected.append((target, entries[rva]))
+    return selected
+
+
+def lift_callees(request):
+    # Every dependency is original-derived. Full module/inventory/lifter closure
+    # are durable request inputs; exact slice and entry evidence are retained too.
+    caller = lift(request)
+    inventory = json.loads(Path(request['project']['inventory']).read_text())
+    dependencies = []
+    for target, entry in select_callee_entries(request, caller, inventory):
+        dependency_request = dict(request, rva=entry['rva'], entry=entry)
+        derived = lift(dependency_request)
+        require(derived['image_base'] == caller['image_base'] and derived['image_end'] == caller['image_end'], 'callee_module_boundary_changed')
+        dependencies.append(dict(target=target, rva=entry['rva'], entry=entry,
+                                 binary_slice_sha256=derived['binary_slice_sha256'],
+                                 lifter_manifest_sha256=derived['lifter_manifest_sha256'], lift=derived['lift']))
+    return dict(caller_slice_sha256=caller['binary_slice_sha256'], callees=dependencies,
+                scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown', proof=False)
+
+
 def build(request, folder, source):
     from rapid_object.build import compile_object, symbol_bindings
     from rapid_object.compare import PE, compare_bytes
@@ -127,7 +174,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        result = lift(request) if data['action'] == 'lift' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'build'), 'unsupported_pipeline_action')
+        result = lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

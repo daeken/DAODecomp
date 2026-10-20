@@ -660,3 +660,36 @@ compiler seconds. The recovery frontier remains `0x1040`. The separate addressab
 stack-argument prototype has only offline generation evidence and was excluded
 from this reviewed transport release. Private receipts and complete rejected
 results remain under `local/replayable-transport-001/`.
+
+### Derive bounded callee cleanup without inventing call effects
+
+An opt-in composed recipe can retain an existing profile's supported domains and
+add a bounded stack-parameter rule. First run the established recovery/emission
+path. If it refuses, derive direct call targets from the actual original
+instruction operands, require exact inventory entries, and lift those original
+ranges through the same pinned frontend. Bind the full module, inventory, lifter
+source/runtime closure and generated evidence. A propagated register constant is
+not an original direct-call operand.
+
+For normal-return cleanup, require a complete reachable callee CFG, internal
+branch closure and uniform return encodings whose typed stack effects agree.
+Keep the result explicitly hypothetical: unknown nested calls can fail to return
+or alter state. The caller's incoming extent, outgoing argument slots, callee
+cleanup, outer return cleanup and preserved registers remain separate obligations.
+The initial profile supports one addressable four-byte input forwarded as one
+argument under the explicit flat32 VC8 ABI. It does not rewrite unknown calls as
+zero returns or no-effect summaries. Unsupported symbolic offsets refuse instead
+of overflowing the recovery process. Real source/object comparisons still decide
+whether a generated candidate matches its complete original range.
+
+The added-rule applicability scan accounted for all 27,555 inventory identities
+in 45.910 seconds on macOS ARM64. It generated two unchecked source hypotheses:
+one is the already compiled pilot and one still needs comparison. Necessary
+static preconditions excluded 27,012 identities; actual typed checking refused
+534 more, and seven dependency analyses could not use discontiguous original
+callee ranges. Those seven remain unresolved, not successful. The composed recipe
+retains prior domains, but this denominator measures the added rule only. It grants
+no new-runtime credit to the 204 retained earlier object matches. The final
+630-test suite (33 skips), standalone 65 tests (two skips), seven CTest checks and
+both 59-case synthetic demonstrations passed; the negative demo detected six
+mismatches. These generic tests do not establish game equivalence.

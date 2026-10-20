@@ -17,7 +17,17 @@ public static class Program
         {
             if(args.FirstOrDefault()=="recover-ir") {
                 using var input=JsonDocument.Parse(await Console.In.ReadToEndAsync());var x=input.RootElement;
-                try { var abi=x.TryGetProperty("abi",out var abiElement)?abiElement.Deserialize<RecoveryAbi>(Engine.Options)!:Vc8Profile.Abi;var ir=X86Recovery.Raise(x.GetProperty("lift"),abi);if(x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()){Console.WriteLine(Engine.Json(new{status="recovered",ir,proof=false}));return 0;}var source=Vc8Profile.Emit(ir,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");Console.WriteLine(Engine.Json(new{status="generated",ir,source,proof=false})); }
+                try {
+                    var abi=x.TryGetProperty("abi",out var abiElement)?abiElement.Deserialize<RecoveryAbi>(Engine.Options)!:Vc8Profile.Abi;
+                    var stack=x.TryGetProperty("stack_arguments",out var selected)&&selected.GetBoolean();object ir;string source;
+                    try {var basic=X86Recovery.Raise(x.GetProperty("lift"),abi);ir=basic;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8Profile.Emit(basic,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");}
+                    catch(ArgumentException) when(stack) {
+                        var callees=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
+                        var recovered=X86StackArgumentRecovery.Raise(x.GetProperty("lift"),abi,callees);ir=recovered;source=x.TryGetProperty("emit",out var emit)&&!emit.GetBoolean()?"":Vc8StackArgsProfile.Emit(recovered,x.GetProperty("rva").GetUInt32(),x.GetProperty("image_base").GetUInt32(),x.GetProperty("image_end").GetUInt32(),x.TryGetProperty("module",out var module)?module.GetString()!:"open_fixture");
+                    }
+                    if(source.Length==0)Console.WriteLine(Engine.Json(new{status="recovered",ir,proof=false}));
+                    else Console.WriteLine(Engine.Json(new{status="generated",ir,source,proof=false}));
+                }
                 catch(Exception e) when(e is ArgumentException or KeyNotFoundException or InvalidOperationException) {Console.WriteLine(Engine.Json(new{status="unsupported",blocker=e.Message,proof=false}));}
                 return 0;
             }
@@ -71,7 +81,7 @@ public sealed class DecompilationTools(Engine engine)
     public string ReplayableAbandonUnknown(string project_id,string unknown_job_id,string idempotency_key) => Engine.Json(engine.ReplayableAbandonUnknown(project_id,unknown_job_id,idempotency_key));
 
     [McpServerTool(Name = "replayable_status"), Description("Inspect the current exact pipeline key, ascending unresolved frontier, inventory denominator and current artifact-bound match count. Historical imported sources do not count.")]
-    public string ReplayableStatus(string project_id) => Engine.Json(engine.ReplayableStatus(project_id));
+    public string ReplayableStatus(string project_id,string? recipe_json=null) => Engine.Json(engine.ReplayableStatus(project_id,recipe_json));
 
     [McpServerTool(Name = "replayable_inspect"), Description("Read bounded generated source and typed recovered IR from a replayable job. Identity and acceptance remain separate from source spelling.")]
     public string ReplayableInspect(string job_id,int source_limit=4000) => Engine.Json(engine.ReplayableInspect(job_id,source_limit));

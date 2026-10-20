@@ -342,3 +342,29 @@ observation has `status: "abandoned_nonaccepting"`, `match: false` and
 request is required to try compilation again. Every unsupported observation
 returns inconclusive and retains the project-wide barrier. Reusing an idempotency
 key reads its historical observation, never replays the probe or compiler.
+
+The opt-in stack-argument recipe composes the earlier domains with one bounded
+addressable-parameter rule:
+
+```json
+{"schema_version":1,"architecture":"x86-bits32-linear-tail-stack-v1","frontend":"sharpretro-typed-v1","compiler_profile":"vc8-x86-flat32-addressable-stack-v1","steps":["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","emit-vc8-composed-stack-v1"]}
+```
+
+Pass this as `recipe_json` to `replayable_run_next`,
+`replayable_regression_check` or `replayable_status`. The previous default remains
+available. A new exact pipeline key starts at the first inventory identity and
+must obtain its own ordered checks; old evidence is never silently transferred.
+The new recipe tries the previous profile first, retaining its generated source.
+For the additional rule, it automatically decodes original direct call targets,
+looks up their exact inventory entries, lifts the complete original ranges and
+retains slice hashes plus typed normal-return evidence. No caller cleanup map or
+per-function contract is accepted by a durable job.
+
+The added profile currently supports one incoming four-byte slot whose address
+is forwarded as one four-byte outgoing argument, with separate caller and callee
+cleanup. Callee CFG/RET evidence is a normal-return ABI hypothesis; nested effects
+and termination remain unknown. Missing/ambiguous ranges, conflicting exits,
+indirect caller calls and unsupported source shapes refuse. Dependency evidence
+joins source/object/report integrity checks. `scan_stackargs.py` assesses every
+inventory identity against this added rule's preconditions and actual typed
+frontend; its generated hypotheses are not comparisons or acceptance.

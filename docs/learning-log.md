@@ -1556,3 +1556,35 @@ compiler seconds. The recovery frontier remains `0x1040`. The separate addressab
 stack-argument prototype has only offline generation evidence and was excluded
 from this reviewed transport release. Private receipts and complete rejected
 results remain under `local/replayable-transport-001/`.
+
+### Composing addressable stack parameters with original-derived ABI evidence
+
+The opt-in stack profile preserves the earlier store/call/tail domains and adds
+one address-taken incoming parameter forwarded to a direct callee. Its durable
+operation derives callee entries and typed lifts from the pinned original module
+and inventory. A complete reachable callee CFG with uniform typed RET encoding
+supports a bounded *normal-return cleanup hypothesis*. Unknown nested calls stay
+external: this does not establish their memory effects, termination or complete
+callee stack behavior.
+
+The original first stack-argument frontier generated C++ and passed a complete
+25/25-byte VC8 object comparison, with fresh 22/22 and 11/11 prior controls.
+Pilot results remain distinct from independent machinery approval and installation.
+An integration test caught an empty diagnostic source field; the prior response
+shape was restored. Whole-inventory analysis also exposed checked symbolic-offset
+overflow on two functions. Those offsets now refuse with a stable unsupported
+result rather than crashing; no wraparound value is guessed. Both earlier runtime
+variants, source outputs and results remain retained locally. Dependency evidence
+hashes participate in current-result integrity checks.
+
+The added-rule applicability scan accounted for all 27,555 inventory identities
+in 45.910 seconds on macOS ARM64. It generated two unchecked source hypotheses:
+one is the already compiled pilot and one still needs comparison. Necessary
+static preconditions excluded 27,012 identities; actual typed checking refused
+534 more, and seven dependency analyses could not use discontiguous original
+callee ranges. Those seven remain unresolved, not successful. The composed recipe
+retains prior domains, but this denominator measures the added rule only. It grants
+no new-runtime credit to the 204 retained earlier object matches. The final
+630-test suite (33 skips), standalone 65 tests (two skips), seven CTest checks and
+both 59-case synthetic demonstrations passed; the negative demo detected six
+mismatches. These generic tests do not establish game equivalence.
