@@ -4,6 +4,7 @@ No proprietary compiler, SharpRetro installation or VM is used in these tests.
 import hashlib
 import importlib.util
 import json
+from contextlib import closing
 from pathlib import Path
 import subprocess
 import tempfile
@@ -93,7 +94,7 @@ class PipelineBoundaryTests(unittest.TestCase):
             path.write_bytes(b'controlled persistence fixture')
         receipt = dict(status='full_match', **{key: sha(path.read_bytes()) for key, path in paths.items()})
         (folder / 'result.json').write_text(json.dumps(receipt))
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             db.execute("UPDATE replayable_frontier SET status='full_match'")
         self.assertEqual(self.client.call('replayable_status', project_id='open')['new_pipeline_full_matches'], 1)
         for path in paths.values():
@@ -110,7 +111,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         import sqlite3
         first = self.submit('unknown-control')
         stdio.wait_job(self.client, first['job_id'])
-        with sqlite3.connect(self.root / 'state/jobs.sqlite3') as db:
+        with closing(sqlite3.connect(self.root / 'state/jobs.sqlite3')) as db, db:
             db.execute("UPDATE replayable_frontier SET status='external_outcome_unknown'")
         with self.assertRaises(ValueError):
             self.submit('must-not-retry-unknown-external-call')
@@ -120,7 +121,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         first = self.submit('cross-key-' + state)
         stdio.wait_job(self.client, first['job_id'])
         database = self.root / 'state/jobs.sqlite3'
-        with sqlite3.connect(database) as db:
+        with closing(sqlite3.connect(database)) as db, db:
             db.execute("UPDATE replayable_frontier SET status=?", (state,))
         self.dll.write_bytes(b'changed frontend runtime must not clear external uncertainty')
         changed = self.client.call('replayable_status', project_id='open')
@@ -136,7 +137,7 @@ class PipelineBoundaryTests(unittest.TestCase):
         self.assertNotEqual(revised['pipeline_key'], changed['pipeline_key'])
         with self.assertRaises(ValueError):
             other.call('replayable_run_next', project_id='open', idempotency_key='revised-compiler-' + state, compile=True)
-        with sqlite3.connect(database) as db:
+        with closing(sqlite3.connect(database)) as db, db:
             self.assertEqual(db.execute('SELECT count(*) FROM jobs').fetchone()[0], 1)
             rows = db.execute('SELECT input_key,status,job FROM replayable_frontier').fetchall()
         self.assertEqual(rows, [(first['pipeline_key'], state, first['job_id'])])
