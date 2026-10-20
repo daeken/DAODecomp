@@ -892,3 +892,66 @@ Validation passed 35 focused tests, 296 standard tests (33 skips), 276 object-
 tool tests, the macOS ARM64 CMake build and seven CTest entries. Synthetic demos
 returned 59 positive passes and 53 passes plus six expected negative mismatches;
 these stay separate from complete native-function comparisons.
+
+### Generated exception identities and bounded graph diagnostics
+
+On 2026-10-19, retained VC8 x86 objects exposed an overly broad symbol-name rule:
+an embedded `fn_RVA` in a generated EH symbol inherited the parent address.
+A shared anchored binder now separates source names from generated handlers,
+FuncInfo descriptors, unwind maps and funclets. Both build and export consume
+the same helper. The existing comparator already refused the defined generated
+targets, so this was not evidence of a prior false acceptance.
+
+Two retained real objects were replayed, without compilation: eight accidental
+aliases disappeared, both comparisons remained inconclusive, and eight existing
+exact controls remained exact. The graph diagnostic follows actual original
+references and candidate relocations through supported complete handler,
+36-byte FuncInfo, 8-byte single-state map and cleanup-action spans. Those earlier
+objects still differ in main size, cookie handling and cleanup form; runtime
+identity, helper boundaries and parent-frame/state relationships remain explicit
+unknowns. No placement map or acceptance result is generated.
+
+One independent review found a real diagnostic bug: a global comparator refusal
+returned no function rows, causing an uncaught iterator error. The narrow fix
+retains the original refusal and marks the diagnostic incomplete; missing rows
+also fail explicitly. The two real invalid-input counterexamples and generic
+missing-row regression are retained. The corrected five-file proposal passed
+38 focused regressions, a 334-test integration overlay (33 skips), and independent
+retained-object/control replay. Review approved only the exact tooling change.
+
+No new exact functions, matched body bytes, VM compiler builds or production
+provider calls were claimed for this tooling round. Published source remains
+2,244 functions. Engineering/review time still costs Codex usage. Private source,
+object/compiler/original bindings, old failure, replacement freeze and review
+remain under `local/eh-graph-binding-001/`,
+`local/eh-graph-binding-reviewfix-002/` and `local/eh-graph-review-001/`.
+See the diagnostic API and regression command in
+[mismatch analysis](mismatch-analysis.md#inspect-compiler-generated-exception-dependencies).
+
+### Construction failure cleanup: native spelling removes guard overhead
+
+The next private experiment used compiler-visible construction and allocation
+failure cleanup instead of a conditional RAII guard. Four VC8 invocations
+produced three generic objects and one preserved transport-255 unknown; it was
+not retried. Eight new real variants across six identities all compiled. Each
+had the original complete main length (92 or 97 bytes), mnemonic/width sequence,
+27-byte checked handler and 11-byte unconditional failure action. Each main
+still had five raw differences carrying unresolved relocations. All eight
+unchanged complete comparisons remained **inconclusive**, not exact.
+
+Six variants introduced an extra delete-forwarding jump. Two further variants
+forwarded to the independently observed destination of the original cleanup
+jump, retaining unknown target semantics. They still need full graph identity
+and byte comparison. Placement construction instead added storage and cleanup
+arguments. Compiler `/GS` restored the checked handler; `/EHsc` behavior also
+depended on actual C/C++ linkage and nothrow declarations in generic probes.
+These findings are tied to VC8-SP1 14.00.50727.762, running as x86 under Windows
+11 ARM64 translation, not to native x86 execution of the game.
+
+The private generator passed 18 focused tests and 296 project tests (33 skips).
+It retains four-byte layout/type hypotheses and is not ready for rollout:
+separate objects reuse a wrapper name with different bodies, and global
+allocation/deallocation definitions need a consistent link-safe strategy.
+Complete EH graph/runtime bindings also remain unresolved. Preserve all eight
+sources and objects in `local/eh-construction-lowering-003/`; do not rerun its
+consumed build scripts. No candidate was published and no match count changed.

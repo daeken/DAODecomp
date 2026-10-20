@@ -124,32 +124,9 @@ def require(condition, reason):
 
 
 def retained_symbol_bindings(object_path, requested, registry):
-    """Decode retained COFF identities without importing the VM build backend.
-
-    Keep this pure export-local copy in parity with rapid_object.build's
-    symbol_bindings; the live recovery backend is independently provenance-pinned.
-    Only uniquely defined requested functions gain an explicit symbol identity.
-    """
-    from rapid_object.coff import Coff
-    obj = Coff(Path(object_path).read_bytes())
-    addresses, defined = {}, {}
-    for symbol in obj.symbols.values():
-        found = re.search(r'(?:^|[?_])(fn|g)_([0-9a-fA-F]{8})(?=@|$)', symbol.name)
-        if found is None:
-            continue
-        name = found[1] + '_' + found[2].lower()
-        record = registry.get(name)
-        if record is None:
-            continue
-        address = record['original_va'] if type(record) is dict else record
-        addresses[symbol.name] = address
-        rva = int(found[2], 16)
-        if found[1] == 'fn' and rva in requested and symbol.section > 0:
-            defined.setdefault(rva, []).append(symbol.name)
-    for rva, names in defined.items():
-        if len(names) == 1:
-            requested[rva]['symbol'] = names[0]
-    return addresses
+    """Bind only anchored source identities; generated EH nodes stay distinct."""
+    from rapid_object.symbol_identity import bind_symbols
+    return bind_symbols(Path(object_path).read_bytes(), requested, registry)
 
 
 def retained_free_match(row, original):

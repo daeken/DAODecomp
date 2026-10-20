@@ -327,3 +327,20 @@ primary-label churn or resetting to pre-repair sources. Generic tests run with
 `python -m unittest rapid_object.tests.test_allocator_receiver_fix -v` on the
 existing POSIX target-aware Clang workflow. Image base `0x400000` and the named
 DAO allocator/constructor family are explicit current limitations.
+
+### Keep generated exception symbols separate from source functions
+
+An embedded source RVA in a compiler-generated name is not its address. Bind
+source identities at the start of their actual C/C++ decoration, and keep the
+handler, descriptor, unwind table and cleanup actions as distinct graph nodes.
+The build and source exporter now share this rule. The complete comparator still
+refuses unexamined defined dependencies.
+
+The [exception-graph diagnostic](mismatch-analysis.md#inspect-compiler-generated-exception-dependencies)
+consumes original bytes, retained COFF objects and existing comparison inputs;
+it requires no authored per-function artifacts. Its current support is bounded
+to observed MSVC x86 profiles, including one-state FuncInfo data. Complete node
+bytes, relocations and explicit unknowns are retained. This is a way to locate
+remaining differences, not an acceptance extension or proof of EH runtime
+behavior. Preserve comparator-level refusals as diagnostic errors too: an empty
+per-function result after a global refusal must not crash the diagnostic reader.

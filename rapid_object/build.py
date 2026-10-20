@@ -41,21 +41,10 @@ exit $buildExit
     finally:shutil.rmtree(transfer)
 
 
-def symbol_bindings(object_path,requested,registry):
-    from .coff import Coff
-    obj=Coff(Path(object_path).read_bytes());addresses={};defined={}
-    for symbol in obj.symbols.values():
-        found=re.search(r'(?:^|[?_])(fn|g)_([0-9a-fA-F]{8})(?=@|$)',symbol.name)
-        if found is None:continue
-        name=found[1]+'_'+found[2].lower();record=registry.get(name)
-        if record is None:continue
-        address=record['original_va'] if type(record) is dict else record
-        addresses[symbol.name]=address
-        rva=int(found[2],16)
-        if found[1]=='fn' and rva in requested and symbol.section>0:defined.setdefault(rva,[]).append(symbol.name)
-    for rva,names in defined.items():
-        if len(names)==1:requested[rva]['symbol']=names[0]
-    return addresses
+def symbol_bindings(object_path, requested, registry):
+    """Bind only anchored source identities; generated EH nodes stay distinct."""
+    from rapid_object.symbol_identity import bind_symbols
+    return bind_symbols(Path(object_path).read_bytes(), requested, registry)
 
 
 def build_and_compare(source,output,requested,registry,vcvars=VCVARS):

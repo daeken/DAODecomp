@@ -18,6 +18,28 @@ ranges and incomplete decoding remain separate outcomes. A stack-adjustment or
 branch label in a substantially different function is not a proven root cause.
 Raw decoded original instructions belong in ignored local reports.
 
+## Inspect compiler-generated exception dependencies
+
+`rapid_object.eh_graph.diagnose(original_bytes, object_bytes, requested,
+symbol_addresses, module_sha256=original_sha256)` examines the supported x86
+MSVC exception graph in retained objects. Use the same original hash, complete
+requested ranges and symbol inputs as the object comparator. Run its synthetic
+regressions with `python -m unittest discover -s tests -p test_eh_graph.py -v`.
+
+The diagnostic follows actual references through the handler, complete 36-byte
+FuncInfo, one-state 8-byte unwind map and cleanup action. It retains bytes, sizes,
+relocations, frame offsets, differences and unresolved dependencies. Unsupported
+profiles and comparator refusals remain explicit incomplete outcomes. The API
+always reports `acceptance_supported: false` and supplies no placements to the
+comparator. Similar handler profiles do not establish a complete match.
+
+Generated names containing a parent `fn_RVA` identify relationships, not original
+addresses. The shared `symbol_identity` binder used by building and exporting
+recognizes only an anchored source identifier; generated handlers, unwind data,
+import pointers and embedded nested identifiers cannot inherit the parent's
+address. Original runtime identity, helper boundaries and parent-frame/state
+correspondence need separate evidence before accepting a complete graph.
+
 ## First frozen census
 
 On 2026-10-19, 29 retained reports supplied 14,174 distinct compiled identities.
