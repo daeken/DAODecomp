@@ -1,4 +1,7 @@
 import copy,hashlib,json,sys,unittest
+import os
+if os.name == "nt":
+ raise unittest.SkipTest("Constructor source generation uses the existing POSIX Clang AST workflow")
 from pathlib import Path
 R=next(p for p in Path(__file__).resolve().parents if (p/'rapid_object/coff.py').is_file());sys.path.insert(0,str(R));from rapid_object.eh_construction import propose,compose,Unsupported
 from rapid_object.ast_match import parse
