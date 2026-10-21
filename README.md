@@ -29,7 +29,8 @@ one further independent unit with exact artifact evidence. Its separate index
 preserves the prior ten-unit snapshot; the table below counts that prior snapshot.
 The [second expansion snapshot](src/native/replayable/expansion-026/README.md)
 adds three exact units. The [first size-priority snapshot](src/native/replayable/expansion-027/README.md)
-adds ten exact units, for twenty-four published units across four collections.
+adds ten exact units. The [second size-priority snapshot](src/native/replayable/expansion-028/README.md)
+adds nine exact units, for thirty-three published units across five collections.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful

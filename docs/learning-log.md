@@ -2747,3 +2747,28 @@ build took 2.00 seconds and ten VC8 object invocations ran in Windows 11 ARM64
 translation. No LINK, CI, whole-inventory compilation or game execution ran.
 The prior fourteen public units remain intact in their three collections; the
 new ten are in expansion-027. Next sorted candidate is one byte at `0x6d8bf0`.
+
+
+### 2026-10-21: constants and cleanup returns in the second size window
+
+Five bare-return candidates reused the prior rule. The four three-byte cases
+exposed a shared missing source domain: zeroing EAX with flags, assigning only AL,
+and discarding either 4 or 20 bytes on return. Existing FlowIR already retained
+these effects. A bounded one/two-instruction leaf source proposal preserves that
+record and emits an unsigned fullword/byte return or an empty void member with
+proposed word parameters. No new flag, alias or calling-convention theorem is
+claimed; the complete historical-compiler checks remain the acceptance boundary.
+
+Nine of ten selected functions matched in full: five 1/1-byte and four 3/3-byte
+objects. The remaining original short jump is 2 bytes while its external-symbol
+object jump is 5; exact, encoding and behavioral routes do not accept it. The old
+mismatch and new counterexample are retained for a future placement capability,
+without another speculative source or flag sweep. The prior seventeen holes
+remain unresolved and this mismatch is tracked separately.
+
+Seventy-three focused tests passed on macOS ARM64, including eight new generic
+leaf guards. Fifteen fresh complete cases retained eleven exact, one encoding,
+one behavioral and two mismatches. One C# build took 1.75 seconds; ten VC8 object
+invocations ran in Windows 11 ARM64 translation. No LINK, CI, whole-inventory
+compilation or game execution ran. Nine fresh exports in expansion-028 preserve
+the prior twenty-four public units. Next candidate is three bytes at `0x621c0`.

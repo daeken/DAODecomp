@@ -1839,3 +1839,26 @@ Seven focused generic tests exercise the actual recognizer and refusal guards:
 `python -m unittest discover -s tests -p test_replayable_bare_return.py -v`.
 No original bytes or inline assembly are emitted. The first ten size-priority
 candidates required ten actual VC8 objects, all complete 1/1-byte exact matches.
+
+
+### Retain machine effects in small leaf source proposals
+
+A bounded leaf profile consumes the existing FlowIR, requiring one unconditional
+normal path, no incoming reads, calls, memory stores, frame escape or unsupported
+fault path, and a completely verified final return tree. It accepts either one
+cleanup-only return with unchanged EAX and a positive word-aligned cleanup up to
+32 bytes, or one result-producing instruction followed by a return. The latter
+requires exactly one EAX write, no other register write, and only constant flag
+writes alongside a fullword constant. A low-byte constant requires the explicit
+upper-EAX-preserving mask/or expression and no flag writes. All effects, flags,
+return targets, stack adjustments and instruction origins remain in the record.
+
+Unsigned int, unsigned char and void member declarations, and parameters chosen
+from the cleanup span, are compiler proposals. They do not establish original
+arity, receiver validity, source return type or unobservability of flags/upper
+register bits. Actual compiler output must pass the unchanged complete artifact
+checks. No flags are erased to claim semantic equivalence. Generic positive and
+negative checks reach the same recovery path used by routine generation:
+`python -m unittest discover -s tests -p test_replayable_leaf_returns.py -v`.
+The profile intentionally leaves longer functions and other register/memory forms
+to their existing domains; it is not a general leaf-function theorem.

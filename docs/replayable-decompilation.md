@@ -357,3 +357,19 @@ The fifteen-identity sample has 12 exact, 1 encoding, 1 behavioral and the known
 `0x12a0` mismatch. The separate expansion-027 collection preserves all fourteen
 prior exported units. Next sorted candidate is `(1 byte, 0x6d8bf0)`; this does not
 resolve any earlier hole or establish original source signatures.
+
+
+The second size-priority window checked the five remaining one-byte candidates,
+a two-byte tail jump and four three-byte functions. Nine actual objects passed
+complete exact checks: five bare returns, a fullword constant result, a low-byte
+constant result and two cleanup-only returns. A bounded leaf proposal retains the
+complete FlowIR, including flags and the original upper-EAX expression, while
+proposing ordinary C++ return types and word parameters. These declarations do
+not establish original source signatures or formal arity.
+
+The two-byte tail jump at `0x4e0da6` remains a mismatch against a five-byte object
+jump; both optional comparison lanes also refuse it. Its earlier mismatch is
+preserved. All ten were visited, and the separate expansion-028 exports nine
+accepted units while preserving the prior twenty-four. The fifteen-identity
+sample retains eleven exact, one encoding, one behavioral and two mismatches
+(the short jump and `0x12a0`). Next sorted candidate is `(3 bytes, 0x621c0)`.

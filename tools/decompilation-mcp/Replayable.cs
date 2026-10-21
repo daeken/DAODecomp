@@ -233,7 +233,7 @@ public sealed partial class Engine
                 File.WriteAllText(Path.Combine(folder,"callee-lifts.json"),dependencies.GetRawText());
                 if(dependencies.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("callee_caller_binding_changed");
                 var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
-                try {var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}
+                try {if(Vc8LeafReturnProfile.TryRaise(lifted.GetProperty("lift"),out var leaf)){ir=leaf!;source=Vc8LeafReturnProfile.Emit(leaf!,rva,imageBase,project.Module);}else{var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}}
                 catch(ArgumentException) when(recipe.UsesConditionalCalls) {
                     try {var conditional=recipe.UsesCallAdapters?Vc8CallAdaptersProfile.Raise(lifted.GetProperty("lift"),callees):Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
                     catch(ArgumentException) when((recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift")))||recipe.UsesByValueCalls) {
