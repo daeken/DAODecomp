@@ -26,6 +26,9 @@ public static class Vc8MutableMemoryEmitter
         Need(ir.TerminalAware,"mutable_requires_explicit_profile");var rows=lift.GetProperty("instructions").EnumerateArray().ToDictionary(r=>r.GetProperty("pc").GetUInt64());var f=ir.Flow;Need((f.FaultPaths??[]).Length==0,"mutable_architectural_fault_lowering_unsupported");
         var allEffects=f.NormalPaths.SelectMany(p=>p.Effects).Concat((f.TerminalPaths??[]).SelectMany(p=>p.Effects)).ToArray();
         var inputs=allEffects.Where(e=>e.Kind=="incoming_read").Select(e=>(IncomingStackRead)e.Value!).GroupBy(i=>i.Offset).ToDictionary(g=>g.Key,g=>g.Select(i=>i.Bits).Distinct().Single());int argumentCount=f.ReturnCleanupBytes.Single()/4;
+        // A post-call architectural reload is not an ordinary C++ parameter.
+        // A stored captured MemoryReadValue has an earlier origin and remains valid.
+        Need(!allEffects.Any(e=>e.Kind=="incoming_slot_read"&&e.Value is MemoryReadValue m&&m.Pc==e.Pc),"mutable_unknown_incoming_memory_version");
         var slotCarriers=incomingValueIdentities?IncomingSlotValueIdentityRecovery.Plan(f):new Dictionary<long,string>();
         // A byte parameter is not storage for a later full incoming-word write.
         // Refuse mixed-width mutation until separate fullword slot storage exists.

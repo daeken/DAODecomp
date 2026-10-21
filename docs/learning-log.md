@@ -2609,3 +2609,23 @@ actual VC8 compiles and two C# builds were used; twenty open traces are compiler
 runtime diagnostics, never original trace proof. Public10/historical836/frontier12a0
 remain unchanged; original dependency throwing behavior and residual-state/source
 correspondence are the next semantic blockers.
+
+
+### 2026-10-21 — Normal ABI return does not preserve caller memory
+
+The frame-value investigation found the assignment and count capture already in
+recovered source. The distinct architectural issue was a conditional normal-frame
+retention assumption: opaque calls changed the general memory epoch but retained
+cached incoming words. New FlowIR separates the selected ABI continuation from
+memory content, invalidates caller-word freshness at calls and preserves stable
+register captures. Original401383 now has a new memory identity on the40 normal
+paths with intervening suffix calls;8 paths without those calls retain the fresh
+store. This corrects representation without claiming a native source improvement.
+
+Tracing consumers matters. The mutable emitter now explicitly refuses unknown
+incoming reloads; the existing EH exact-restoration check conservatively blocks
+fresh0x10c0 generation. EBP locals remain labeled physical-storage hypotheses.
+Legacy conditional records and their original receipts stay intact. Nine other
+published controls reproduce their complete retained-object outcomes;0x12a0 stays
+488/506 nonmatching with unchanged source. No comparison/acceptance policy was
+changed, and no new VC8 compile, game execution or callback contract was needed.

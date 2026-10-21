@@ -1640,3 +1640,48 @@ builds ran for this checkpoint. Guest execution used Windows11 ARM64 x86
 translation; focused tests used macOS ARM64. Reproduce from local batch018 scope,
 evidence.json, frozen versions and retained comparison inputs. No original-game
 execution, full suite, whole-inventory scan or CI was performed.
+
+
+### Separate normal ABI continuation from caller-memory contents
+
+`FlowCallContract.NormalReturnAbiSelected` selects normal return, stack cleanup
+and register ABI facts only. Newly recovered `FlowFunction` records carry
+`opaque-call-caller-memory-havoc-v2`. Each opaque call advances the memory epoch
+and invalidates cached caller words, even when no address escape was observed.
+A preserved register capture keeps its value; a later incoming/private/return-word
+load observes a new memory version. POP restoration therefore does not establish
+that the restored register equals its entry value. Call-entry snapshots describe
+pre-call state; later call, exit and fault snapshots mask stale cache entries.
+
+Only explicit aligned full-word stores refresh that word. Partial private writes
+require a currently fresh complete word; overlapping/partial incoming writes
+refuse. Another call invalidates refreshed words again. Branch paths retain their
+own freshness. No valid-frame, no-alias or nonthrowing dependency contract follows
+from this model. Exceptional catch/continuation contexts remain separate evidence.
+Legacy serialized records without a memory-model field retain the conditional
+`legacy-caller-frame-retained-v1` label; an old contract JSON selector does not
+silently opt into the new contract. Recipes already bind source/runtime hashes,
+so changed machinery receives new input identities without altering comparison
+or acceptance rules.
+
+Consumers either retain the unknown or refuse. The mutable emitter rejects an
+unknown incoming-word reload instead of substituting its C++ argument/local.
+Its optional incoming-value carrier pass retains definite-definition/escape
+guards. The EH source profile's existing exact saved-FS-restoration guard now
+refuses where caller-memory havoc makes that equality unknown. By-value argument
+captures remain pre-call facts. EBP source carries the actual frame-model label
+and explicit conditional storage provenance; its locals do not prove physical
+caller-word preservation, catch/runtime aliases or numeric return-PC context.
+
+Batch022's eleven original identities yielded seven exact, one encoding and one
+behavioral retained-object comparison through both complete routes, one generation
+refusal at0x10c0 (unknown saved FS), and the unchanged full488/506 mismatch at0x12a0.
+The0x10c0 historical exact artifact remains under its old bindings; it is not a
+fresh generation success. At0x12a0,40 of48 normal paths reach401383 after suffix
+calls and now reload current memory; the other8 keep an explicitly refreshed word
+with no intervening call. The401347 count capture remains stable in EBX. Generated
+C++ is byte-identical to the prior conservative v4 source, so retained VC8 objects
+were reused, with no new C++ compiler/VM execution. Open tests distinguish memory
+mutation from a register capture; they do not prove game behavior. Historical836,
+public10 and frontier0x12a0 stay unchanged. Original frame/alias/fault/lifetime and
+trap obligations remain unresolved; no native physical-context gate was added.

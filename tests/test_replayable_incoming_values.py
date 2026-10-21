@@ -22,7 +22,32 @@ class IncomingValueIdentityTests(unittest.TestCase):
    else:store['Addr']=binary('Add',reg(4),const(9,64))
    self.assertEqual(self.recover(p)['status'],'unsupported',mode)
  def test_unknown_alias_between_word_store_and_read_refuses(self):
-  p=self.payload();p['lift']['instructions'][10]['tree']['Body'].append(node('IlStore',Addr=binary('Add',reg(6),const(16,64)),Val=const(9)));x=self.recover(p);self.assertEqual(x['status'],'unsupported',x);self.assertIn('unknown_incoming_slot_read',x['blocker'])
+  p=self.payload();p['lift']['instructions'][10]['tree']['Body'].append(node('IlStore',Addr=binary('Add',reg(6),const(16,64)),Val=const(9)));x=self.recover(p);self.assertEqual(x['status'],'unsupported',x);self.assertEqual(x['blocker'],'mutable_unknown_incoming_memory_version')
+ def test_call_between_incoming_store_and_reload_reaches_consumer_refusal(self):
+  import struct
+  from test_replayable_byvalue import push
+  from test_replayable_conditional import call
+  from test_replayable_stackargs import row
+  from test_replayable_ir import write
+  p=self.payload();rows=p['lift']['instructions'];target=p['callee_lifts'][0]['target']
+  # Separate PUSH/CALL/cleanup rows preserve the actual outgoing-word rule.
+  rows[11:11]=[row(0xdead0000,push(const(0)),'6a00'),row(0xdead0010,call(0xdead0010,target),'e800000000'),row(0xdead0020,[write(4,binary('Add',reg(4),const(4,64)))],'83c404'),row(0xdead0030,[write(0,const(17))],'b811000000')]
+  mapping={};pc=0x508000
+  for rr in rows:mapping[rr['pc']]=pc;pc+=rr['length']
+  for rr in rows:
+   rr['pc']=mapping[rr['pc']]
+   for n in rr['tree']['Body']:
+    if n['type']=='LiftIl.IlBranch':
+     if n['Kind']['name']=='CondJmp':n['Target']=const(mapping[int(n['Target']['Bits']['decimal'])],32)
+     elif n['Kind']['name']=='Call':
+      rr['raw_hex']=(b'\xe8'+struct.pack('<i',target-rr['pc']-5)).hex()
+      for st in rr['tree']['Body']:
+       if st['type']=='LiftIl.IlStore':st['Val']=const(rr['pc']+5,32)
+  for selected in (False,True):
+   p['incoming_value_identities']=selected;x=self.recover(p);self.assertEqual(x['status'],'unsupported',x);self.assertEqual(x['blocker'],'mutable_unknown_incoming_memory_version')
+  p['recover_only']=True;x=self.recover(p);self.assertEqual(x['status'],'recovered',x)
+  for path in x['ir']['normal_paths']:
+   reload=next(e for e in path['effects']if e['kind']=='incoming_slot_read');self.assertEqual(reload['value']['kind'],'memory_read');self.assertEqual(reload['value']['pc'],reload['pc'])
  def test_escaped_stack_value_is_not_a_private_slot_assumption(self):
   p=self.payload();p['lift']['instructions'][10]['tree']['Body'][0]['Val']=reg32(4);x=self.recover(p);self.assertEqual(x['status'],'unsupported',x)
  def test_byte_declared_argument_cannot_hold_fullword_carrier(self):

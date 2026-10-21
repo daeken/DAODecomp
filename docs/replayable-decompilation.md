@@ -284,3 +284,14 @@ A separate known-contract synthetic compiler probe shows omitted resets for a
 nonthrowing C tail, without establishing any original call's throwing contract.
 Historical836, public10 and frontier0x12a0 remain unchanged. The prior enclosing-
 catch v3 and its lifetime counterexample remain retained rejected evidence.
+
+
+FlowIR now separates selected normal ABI continuation from caller-memory retention.
+Opaque calls invalidate cached incoming/private words; preserved register captures
+remain distinct from later memory reloads. New records name the havoc-v2 model,
+while old records retain their conditional legacy identity. Consumers refuse an
+unknown incoming reload or expose source-storage hypotheses. The focused eleven-
+identity checkpoint conservatively blocks fresh0x10c0 EH generation at unknown
+saved-FS restoration, retains nine other comparison outcomes, and leaves0x12a0's
+full488/506 mismatch unchanged. Prior public10 evidence is not relabeled as fresh
+new-model credit. See the methodology's caller-memory section for limits.

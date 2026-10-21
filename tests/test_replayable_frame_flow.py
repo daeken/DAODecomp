@@ -8,7 +8,7 @@ from tools.replayable.range_lift import combine
 
 
 def contract(**options):
- return dict(abi=dict(id='open-frame-v1',return_register=0,argument_registers=[1],volatile_registers=[0,1,2],preserved_registers=[3,5,6,7]),flat_data_and_stack_segments=True,caller_frame_retained_on_normal_return=True,**options)
+ return dict(abi=dict(id='open-frame-v1',return_register=0,argument_registers=[1],volatile_registers=[0,1,2],preserved_registers=[3,5,6,7]),flat_data_and_stack_segments=True,normal_return_abi_selected=True,**options)
 def payload(bodies,**options):
  p=simple(bodies);p.update(flow_paths=True,callee_lifts=[],flow_contract=contract(**options));return p
 

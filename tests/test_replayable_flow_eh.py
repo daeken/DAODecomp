@@ -78,9 +78,8 @@ class FlowEhTests(unittest.TestCase):
   for off in (1,2,3,4,8):
    p=simple([push(reg(6)),[store(binary('Add',reg(4),const(off,64)),const(123))],[write(4,binary('Add',reg(4),const(4,64)))],ret(0)])
    self.assertEqual(self.recover(p)['blocker'],'flow_stack_store_outside_allocated_word')
- def test_complete_two_exit_EH_roles_preserve_unknown_call_results(self):
-  r=self.recover(eh_fixture());self.assertEqual(r['status'],'generated',r);f=r['ir']['function'];self.assertEqual(len(f['normal_paths']),2);self.assertTrue(f['exceptional_semantics_unknown']);self.assertFalse(f['incoming']['exact_arity_known'])
-  calls=[e['call'] for e in f['normal_paths'][0]['effects'] if e['kind']=='external_call'];self.assertEqual([c['target'] for c in calls],[0x503000,0x504000]);self.assertTrue(all(c['memory_effects_unknown'] and c['throw_behavior_unknown'] and c['termination_unknown'] and not c['formal_arity_known'] for c in calls));self.assertEqual(f['normal_paths'][0]['exit']['return']['kind'],'external_register');self.assertIn('return g_00009100 = new fn_00004000',r['source']);self.assertNotIn('__asm',r['source'])
+ def test_complete_two_exit_EH_refuses_unproved_postcall_FS_restoration(self):
+  r=self.recover(eh_fixture());self.assertEqual(r['status'],'unsupported',r);self.assertEqual(r['blocker'],'EH_registration_and_exact_restoration_required')
  def test_EH_evidence_wrong_cookie_handler_state_and_dependency_reject(self):
   edits=[lambda p:p['evidence'].update(security_cookie_va=0x509004),lambda p:p['evidence']['graph']['handler'].update(va=0x506001),lambda p:p['evidence']['graph']['FuncInfo']['fields'].update(states=2),lambda p:p['evidence']['code_dependencies'].pop(),lambda p:p['evidence']['code_dependencies'][0].update(slice_sha256='0'*64),lambda p:p['evidence']['code_dependencies'][0]['lift'].update(opaque_instructions=1),lambda p:p['evidence']['code_dependencies'][0].update(va=0x506001)]
   for edit in edits:
@@ -90,7 +89,7 @@ class FlowEhTests(unittest.TestCase):
  def test_actual_direct_call_required_before_propagation(self):
   p=eh_fixture();r=next(r for r in p['lift']['instructions'] if r['tree']['Body'][-1].get('Kind',{}).get('name')=='Call');r['tree']['Body'][0]['Val']=reg(0);self.assertEqual(self.recover(p)['blocker'],'flow_direct_call_required')
  def test_no_implicit_normal_frame_contract(self):
-  p=simple([ret(0)]);p['frame']=False;self.assertEqual(self.recover(p)['blocker'],'flow_requires_explicit_normal_frame_contract')
+  p=simple([ret(0)]);p['frame']=False;self.assertEqual(self.recover(p)['blocker'],'flow_requires_explicit_normal_ABI_contract')
  def test_unregistered_frame_escape_prevents_unknown_call(self):
   p=eh_fixture();p['eh']=False;self.assertEqual(self.recover(p)['blocker'],'flow_unknown_store_frame_alias')
  def test_misaligned_backward_partial_and_unreached_control_refuse(self):
@@ -98,8 +97,8 @@ class FlowEhTests(unittest.TestCase):
    p=eh_fixture();edit(p);self.assertEqual(self.recover(p)['status'],'unsupported')
  def test_extra_memory_effect_cannot_be_emission_noise(self):
   p=eh_fixture();p['lift']['instructions'][0]['tree']['Body'].insert(0,store(addr(3,0x509200),const(1)));self.assertEqual(self.recover(p)['status'],'unsupported')
- def test_source_binding_and_entity_names_are_derived(self):
-  p=eh_fixture();a=self.recover(p);p['rva']=0x2100;b=self.recover(p);self.assertEqual(b['status'],'generated',b);self.assertIn('fn_00002100()',b['source']);self.assertNotEqual(a['source'],b['source']);self.assertEqual(a['ir'],b['ir'])
+ def test_source_identity_cannot_bypass_unknown_saved_FS(self):
+  p=eh_fixture();p['rva']=0x2100;r=self.recover(p);self.assertEqual(r['blocker'],'EH_registration_and_exact_restoration_required')
  def test_wrong_call_RA_width_and_outgoing_frame_alias_refuse(self):
   edits=[lambda r:r['tree']['Body'][1].update(Val=const(1)),lambda r:r['tree']['Body'][2]['Val'].update(R=const(8,64)),lambda r:r['tree']['Body'][0].update(Val=reg(1))]
   for edit in edits:
