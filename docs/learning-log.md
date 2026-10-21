@@ -2824,3 +2824,30 @@ unaccepted candidate emerged; 26,655 identities had no local cache to inspect.
 The report identifies the missing persistent typed-IR index/bulk cached route
 instead of treating a small sample as a whole-binary result. No new lifts or
 acceptance checks ran for this reach audit.
+
+
+### 2026-10-21: reuse four-byte receiver rules and retain typed analysis
+
+Nine of ten selected functions matched completely with the existing word/byte
+receiver-load and receiver-address proposals. No source rule changed. The
+remaining `OR EAX, -1` result and flag expressions are retained in FlowIR but not
+accepted by the guarded leaf proposal; it stopped before compilation. The next
+size/RVA candidate is `(4, 0xfe920)`, with twenty-two explicit deferred identities.
+
+The new machinery addresses the saved-analysis gap: ordinary selected generation
+indexes bound typed lifts in the existing job database, and an explicit bounded
+MCP replay returns source-only leaf applicability. Ten selected records populated
+in 12.95 seconds and replayed in 2.31 seconds, occupying 897,006 logical payload
+bytes. Replay dispatched no lifting/compiler/acceptance check; its nine proposals
+match ordinary source hashes, and one case refuses. No broad cache enumeration or
+whole-inventory fill ran. Older lifter/schema/input versions and incomplete or
+unknown outcomes remain nonaccepting; broader profiles/population remain future
+work rather than assumed whole-binary reach.
+
+Ninety-five focused tests passed on macOS ARM64, including eight cache integration
+and negative tests. An initial test asserted an irrelevant text fragment in the
+report; it was corrected to inspect the retained entry-EAX return expression.
+Fourteen complete objects retain ten exact, one encoding, one behavioral and two
+known mismatches through both routes. One C# build took 1.82 seconds; nine VC8
+object invocations ran under Windows 11 ARM64 translation. No LINK, CI, full suite
+or game ran. Nine fresh expansion-031 exports preserve fifty earlier units.

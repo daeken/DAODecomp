@@ -1914,3 +1914,46 @@ for later complete checks; source-only output grants no acceptance or export.
 The current repository lacks a persistent whole-inventory typed-IR index and a
 bulk cached applicability endpoint. Its older whole-inventory scan scripts lift
 functions anew, so they are not a cheap cache reevaluation mechanism.
+
+
+### Save typed analysis and replay bounded rule applicability
+
+Selected ordinary `replayable_regression_check` work now saves exact typed lift
+payloads in `replayable_typed_lifts` within the existing job database. Each record
+is content addressed and binds module SHA, RVA, owned ranges and raw slice hashes,
+inventory, image bounds, lifter schema/manifest, assemblies/runtime files, upstream
+sources and extraction bridge/range/cache code. Older records are retained.
+Changing recovery/emission C# does not invalidate the typed lift itself; each fresh
+replay report binds the current runtime, recipe and complete input snapshot.
+
+To populate a bounded selection, submit the existing `replayable_regression_check`
+with `project_id`, one registered `function_id`, a fresh `idempotency_key`, the
+chosen `recipe_json`, and `compile: false`, then wait for `job_get`. Repeat only
+for the selected identities. Inspect each job's `typed-analysis-index.json`;
+`not_indexed` retains a precise cache failure and grants no cache coverage.
+To replay saved leaf applicability, call `replayable_analysis_replay` with the
+same `project_id`, a unique list of 1–16 `function_ids` and `recipe_json`. The
+response identifies a hash-bound report under the registered replayable output
+root's `analysis-replay/<report_id>/report.json`. Source proposals are private
+analysis, never accepted matches or public exports.
+
+Replay validates record/payload hashes, identity, current ownership and producer
+bindings before recovering source. Missing records, legacy lifters, stale inputs
+or ranges, unsupported schemas, incomplete/failed/unknown outcomes and invalid
+payloads produce no proposal. Multiple current payloads or more than sixteen
+retained versions refuse rather than selecting silently. The implemented profile
+is the existing one/two-instruction leaf/bare-return domain; dependencies and
+longer profiles remain unsupported. Ordinary generation and acceptance still
+perform their fresh lifting and complete comparisons; this index is no shortcut
+through acceptance. The shared input-snapshot route still requires readable
+registered compiler artifacts even though source-only replay never executes them.
+
+`python -m unittest discover -s tests -p test_replayable_typed_cache.py -v` covers
+index/restart reuse, zero compiler/lifter replay dispatch, missing identities,
+explicit budgets, wrong identity/range/schema/hash, stale/legacy inputs,
+incomplete/failed/unknown results, effect refusal and ambiguous current versions.
+The ten-original demonstration is bounded evidence: 12.95 seconds population,
+2.31 seconds replay and 897,006 logical UTF-8 record bytes, excluding SQLite
+page/WAL overhead and reports. It is not a whole-inventory time/storage estimate.
+A separately scoped population pass and additional replay profiles are still
+needed for broad binary coverage; no whole-inventory generation ran here.

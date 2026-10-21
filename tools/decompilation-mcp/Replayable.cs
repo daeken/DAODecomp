@@ -203,7 +203,7 @@ public sealed partial class Engine
     {
         foreach(var pair in request.GetProperty("inputs").EnumerateObject())if(Hash(File.ReadAllBytes(pair.Name))!=pair.Value.GetString())throw new ArgumentException("submitted_pipeline_input_changed");
         var project=request.GetProperty("project").Deserialize<ProjectConfig>(Options)!;
-            var lifted=await ReplayableAdapter(request,"lift",folder);if(lifted.TryGetProperty("error",out var error))throw new ArgumentException(error.GetString());
+            var lifted=await ReplayableAdapter(request,"lift",folder);await SaveTypedAnalysis(request,lifted,folder);if(lifted.TryGetProperty("error",out var error))throw new ArgumentException(error.GetString());
             File.WriteAllText(Path.Combine(folder,"lift.json"),lifted.GetRawText());
             if(lifted.GetProperty("lift").TryGetProperty("schema",out var rangeSchema)&&rangeSchema.GetString()=="sharpretro_owned_ranges_v1") {
                 var owned=OwnedRangeRecovery.Inspect(lifted.GetProperty("lift"));File.WriteAllText(Path.Combine(folder,"owned-range-ir.json"),Json(owned));

@@ -32,7 +32,8 @@ adds three exact units. The [first size-priority snapshot](src/native/replayable
 adds ten exact units. The [second size-priority snapshot](src/native/replayable/expansion-028/README.md)
 adds nine exact units. The [third size-priority snapshot](src/native/replayable/expansion-029/README.md)
 adds eight exact units. The [fourth size-priority snapshot](src/native/replayable/expansion-030/README.md)
-adds nine exact units, for fifty published units across seven collections.
+adds nine exact units. The [fifth size-priority snapshot](src/native/replayable/expansion-031/README.md)
+adds nine exact units, for fifty-nine published units across eight collections.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful

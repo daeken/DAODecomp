@@ -412,3 +412,21 @@ inventory identities lack retained local typed IR in this enumeration and remain
 uninspected for applicability. This is not a whole-binary reevaluation: efficient
 coverage needs a persistent typed-IR inventory and cached bulk applicability
 route. No acceptance is inferred from size, prior acceptance or source generation.
+
+
+The fifth size-priority window reused the reviewed receiver rules for nine more
+complete 4/4-byte matches. The `OR EAX, -1` expression and derived flags at
+`0xe13d0` remain outside the guarded leaf proposal; no compiler ran for that case.
+Expansion-031 adds nine units while preserving fifty earlier units. The next
+candidate is `(4 bytes, 0xfe920)`; twenty-two identities remain deferred.
+
+Ordinary generation now indexes its bound typed lift in the existing job database.
+The bounded `replayable_analysis_replay` operation reads those records for explicit
+identities and proposes leaf source using the current recovery runtime. It never
+lifts, compiles, checks acceptance, exports source or changes the traversal state.
+Legacy/stale/invalid/incomplete/failed/unknown records remain distinguishable and
+nonaccepting. Ten selected records occupied 897,006 logical payload bytes; their
+population took 12.95 seconds and replay took 2.31 seconds. Nine replay proposals
+equal ordinary generated sources; one refuses. Broader population and replay of
+non-leaf profiles remain separately scoped; this does not fill the earlier
+26,655-identity cache gap or establish whole-binary applicability.

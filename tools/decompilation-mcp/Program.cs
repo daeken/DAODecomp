@@ -113,6 +113,9 @@ public sealed class DecompilationTools(Engine engine)
     [McpServerTool(Name = "replayable_status"), Description("Inspect the current exact pipeline key, ascending unresolved frontier, inventory denominator and current artifact-bound match count. Historical imported sources do not count.")]
     public string ReplayableStatus(string project_id,string? recipe_json=null) => Engine.Json(engine.ReplayableStatus(project_id,recipe_json));
 
+    [McpServerTool(Name = "replayable_analysis_replay"), Description("Replay the bounded leaf source-proposal profile for 1..16 explicit inventory identities using indexed bound typed lifts only. Ordinary selected generation populates the existing job database. Reports missing, stale, legacy, failed, incomplete or unsupported records. No lifting, compiler, acceptance, export or frontier update; produces a bound local report.")]
+    public async Task<string> ReplayableAnalysisReplay(string project_id,string[] function_ids,string? recipe_json=null) => Engine.Json(await engine.ReplayableAnalysisReplay(project_id,function_ids,recipe_json));
+
     [McpServerTool(Name = "replayable_inspect"), Description("Read bounded generated source and typed recovered IR from a replayable job. Identity and acceptance remain separate from source spelling.")]
     public string ReplayableInspect(string job_id,int source_limit=4000) => Engine.Json(engine.ReplayableInspect(job_id,source_limit));
 
