@@ -1268,3 +1268,52 @@ match or export credit. Complete EBP frame/state/try/catch source lowering and t
 independent candidate multi-try exception-graph comparison remain required before
 this domain can compile and pass. Outside-sample identities are unverified; CI,
 whole-inventory scans and routine broad suites remain disabled.
+
+### Recover EBP frame flow without discarding exception fragments
+
+The bounded flow recovery can now opt into explicit owned ranges, signed frame
+address displacements, and deferred undefined flags. An EBP value assigned from
+ESP remains the same frame-relative expression. Range traversal follows the
+executed branch, not the previous instruction in a flattened list. A fallthrough
+into an excluded interval still refuses. Undefined multiply flags remain unknown
+and cannot be read unless a later defined write replaces them.
+
+An aliasable store invalidates saved stack words. The optional fresh-word mode
+recognizes a subsequent fullword push/store as a new value for that exact slot;
+it does not restore the validity of other saved words or assume the receiver and
+stack are disjoint. Unknown outgoing arguments, partial updates of invalidated
+words, and opaque callee effects still refuse. These are architecture recovery
+options, not a recovered exception contract or a source acceptance policy.
+
+`tools.replayable.ebp_eh_candidate.inspect(object_bytes, main_symbol)` derives the
+bounded multi-try candidate graph from the actual COFF registration relocation.
+It follows FuncInfo, unwind/try maps, catch tables, catch bodies and relocated
+literal continuation references. Every byte in the parent's code COMDAT and its
+handler/metadata sections must have an owner. Extra bytes, overlapping nodes,
+missing references, jumps into instruction interiors and unsupported unwind
+forms refuse. `tools.replayable.ebp_eh_compare.compare(original_bytes,
+owned_va_ranges, object_bytes, main_symbol)` independently derives the original
+graph and reports each byte as equal, different or an unresolved reference.
+Both operations are **diagnostic only**. External symbol names do not prove
+runtime identities; parent-frame and catch-continuation semantics remain open.
+The existing source acceptance backend is unchanged. When an experimental
+multi-range EH candidate reaches the build checker, its diagnostic is retained
+separately as `range-eh-comparison.json`; it cannot override the existing verdict.
+
+A two-invocation VC8 SP1 experiment on Windows 11 ARM64 under x86 translation
+used an open nested-catch example. With C-linkage external declarations under
+`/EHsc`, the output had no catch graph. Correcting those declarations to potentially
+throwing C++ calls produced 143 code bytes and 167 handler/metadata bytes,
+including a literal catch continuation and a rethrow followed by INT3. This is
+compiler-profile evidence, not a recovered game function. Retained CRT archive
+instructions also expose parent-EBP setup and an indirect continuation jump;
+complete original/runtime identity and exceptional semantics have not been
+established by that observation.
+
+At the actual `0x12a0` frontier, the normal-call dependency check now identifies
+an additional prerequisite: the helper at `0x475240` contains unsigned DIV at
+`0x47525f`, opaque in the pinned lifter. The ordinary forwarding/normal-return
+resolver correctly refuses it. The complete original callee lift and slice hash
+are retained by `inspect_range_callees`, without granting an ABI contract. The
+exceptional INT3 remains unresolved too. No generated source, accepted match,
+source export or frontier advancement is claimed for this function.

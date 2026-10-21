@@ -73,7 +73,8 @@ def direct_call_targets(caller):
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     md.detail = True
     targets = set()
-    for row in caller['lift']['instructions']:
+    parts = [r['lift'] for r in caller['lift']['ranges']] if caller['lift'].get('schema') == 'sharpretro_owned_ranges_v1' else [caller['lift']]
+    for row in (row for part in parts for row in part['instructions']):
         decoded = list(md.disasm(bytes.fromhex(row['raw_hex']), row['pc']))
         require(len(decoded) == 1 and decoded[0].size == row['length'], 'callee_decode_disagreement')
         ins = decoded[0]
@@ -127,13 +128,13 @@ def effectful_tail_dependency_target(derived):
     return pure_forwarding_target(dict(derived,lift=dict(lifted,instructions=[last])))
 
 
-def lift_callees(request):
+def lift_callees(request, *, inspection=False):
     # Every dependency is original-derived. Full module/inventory/lifter closure
     # are durable request inputs; exact slice and entry evidence are retained too.
     caller=lift(request);inventory=json.loads(Path(request['project']['inventory']).read_text())
     selected=select_callee_entries(request,caller,inventory);entries={e['rva']:e for e in inventory['functions']}
     follow=request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-conditional-calls-v1','vc8-x86-flat32-EH-two-exit-v1','vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1','vc8-x86-flat32-terminal-aware-memory-control-v1')
-    dependencies={};chains=[]
+    dependencies={};chains=[];blockers=[]
     for original_target,initial in selected:
         target=original_target;entry=initial;seen=set();chain=[]
         for depth in range(9):
@@ -142,16 +143,19 @@ def lift_callees(request):
                 derived=lift(dict(request,rva=entry['rva'],entry=entry))
                 require(derived['image_base']==caller['image_base'] and derived['image_end']==caller['image_end'],'callee_module_boundary_changed')
                 dependencies[target]=dict(target=target,rva=entry['rva'],entry=entry,binary_slice_sha256=derived['binary_slice_sha256'],lifter_manifest_sha256=derived['lifter_manifest_sha256'],lift=derived['lift'])
-            next_target=pure_forwarding_target(dependencies[target]) if follow else None
+            try: next_target=pure_forwarding_target(dependencies[target]) if follow else None
+            except ValueError as exc:
+                if not inspection: raise
+                blockers.append(dict(target=target,blocker=str(exc),binary_slice_sha256=dependencies[target]['binary_slice_sha256']));break
             if next_target is None and request.get('recipe',{}).get('compiler_profile') in ('vc8-x86-flat32-call-adapters-v1','vc8-x86-flat32-observed-byvalue-calls-v1','vc8-x86-flat32-ordered-counted-loops-v1','vc8-x86-flat32-ordered-memory-control-v1','vc8-x86-flat32-terminal-aware-memory-control-v1'):next_target=effectful_tail_dependency_target(dependencies[target])
             if next_target is None:break
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
     terminal={}
-    if request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1','x86-bits32-scalar-behavioral-events-v1','x86-bits32-incoming-slot-value-identities-v1'):
+    if not inspection and request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1','x86-bits32-scalar-behavioral-events-v1','x86-bits32-incoming-slot-value-identities-v1'):
         from tools.replayable.terminal_calls import derive
         project=request['project'];terminal['runtime_terminal_evidence']=derive(Path(project['original']).read_bytes(),Path(project['inventory']).read_bytes(),{name:Path(path).read_bytes() for name,path in project['libraries'].items()})
-    return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,
+    return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,inspection_only=inspection,blockers=blockers,
                 scope='original-derived normal-return ABI evidence; nested callee effects and termination remain unknown',proof=False)
 
 
@@ -248,6 +252,13 @@ def compare_built(request, folder, source, receipt=None):
     if needs_eh:
         require(project.get('eh_policy') and project.get('libraries'),'EH_requires_registered_policy_and_libraries')
         report=eh_native.check(original,Path(project['inventory']).read_bytes(),Path(project['compiler']).read_bytes(),{n:Path(path).read_bytes() for n,path in project['libraries'].items()},source.encode(),obj,receipt,json.loads(Path(project['eh_policy']).read_text()))
+        if len(original_rows)>1:
+            from tools.replayable.ebp_eh_compare import compare as compare_ebp_diagnostic
+            mains=[s.name for s in Coff(obj).symbols.values() if s.section>0 and source_identity(s.name)==('fn',request['rva'])]
+            if len(mains)==1:
+                image=PE(original).image_base
+                diagnostic=compare_ebp_diagnostic(original,[(image+r['start_rva'],image+r['end_rva_inclusive']+1)for r in original_rows],obj,mains[0])
+                (folder/'range-eh-comparison.json').write_text(json.dumps(diagnostic,sort_keys=True))
         (folder/'comparison.json').write_text(json.dumps(report,sort_keys=True));rows=report.get('functions',[])
         status='full_match' if report['status']=='exact_eh_graph_match' and len(rows)==1 and rows[0]['rva']==request['rva'] else 'mismatch' if report['status']=='eh_graph_nonmatch' else 'inconclusive'
         return dict(status=status,backend=report['backend'],functions=[dict(rva=r['rva'],status=r['status'],original_size=r.get('nodes',{}).get('main',{}).get('original_size'),object_size=r.get('nodes',{}).get('main',{}).get('candidate_size'),blockers=r.get('blockers',[])) for r in rows],blockers=report.get('blockers',[]),source_sha256=sha(source.encode()),object_sha256=sha(obj),comparison_sha256=sha((folder/'comparison.json').read_bytes()),build=receipt,proof=False,scope='complete bounded main/EH compiled artifact graph; external runtime semantics unknown')
@@ -407,8 +418,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'inspect_range_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
-        result = __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else inspect_range_eh(request) if data['action']=='inspect_range_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'inspect_range_callees', 'lift_eh', 'inspect_range_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
+        result = __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request,inspection=True) if data['action']=='inspect_range_callees' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else inspect_range_eh(request) if data['action']=='inspect_range_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

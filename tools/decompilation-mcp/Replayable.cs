@@ -160,7 +160,7 @@ public sealed partial class Engine
         var p=request.GetProperty("project").Deserialize<ProjectConfig>(Options)!;var folder=Path.Combine(Safe(p,p.Replayable!.OutputRoot),id);var path=Path.Combine(folder,"candidate.cpp");var source=File.Exists(path)?File.ReadAllText(path):null;
         var irPath=Path.Combine(folder,"recovered-ir.json");var ir=File.Exists(irPath)?File.ReadAllText(irPath):null;
         string? Artifact(string name){var artifact=Path.Combine(folder,name);if(!File.Exists(artifact))return null;var text=File.ReadAllText(artifact);return text[..Math.Min(limit,text.Length)];}
-        return new{owned_range_ir=Artifact("owned-range-ir.json"),range_eh_inspection=Artifact("range-eh-inspection.json"),diagnostic_artifacts_may_be_truncated=true,job_id=id,rva=request.GetProperty("rva").GetUInt32(),state=reader.GetString(1),source=source?[..Math.Min(limit,source.Length)],source_sha256=source==null?null:HashText(source),source_truncated=source?.Length>limit,recovered_ir=ir==null?null:ir[..Math.Min(limit,ir.Length)],ir_truncated=ir?.Length>limit,publication="draft_only",proof=false};
+        return new{owned_range_ir=Artifact("owned-range-ir.json"),range_eh_inspection=Artifact("range-eh-inspection.json"),range_callee_inspection=Artifact("range-callee-inspection.json"),range_frame_ir=Artifact("range-frame-ir.json"),range_eh_comparison=Artifact("range-eh-comparison.json"),diagnostic_artifacts_may_be_truncated=true,job_id=id,rva=request.GetProperty("rva").GetUInt32(),state=reader.GetString(1),source=source?[..Math.Min(limit,source.Length)],source_sha256=source==null?null:HashText(source),source_truncated=source?.Length>limit,recovered_ir=ir==null?null:ir[..Math.Min(limit,ir.Length)],ir_truncated=ir?.Length>limit,publication="draft_only",proof=false};
     }
     async Task<JsonElement> ReplayableAdapter(JsonElement request,string action,string folder,string? source=null,object? members=null)
     {
@@ -209,6 +209,16 @@ public sealed partial class Engine
                 var owned=OwnedRangeRecovery.Inspect(lifted.GetProperty("lift"));File.WriteAllText(Path.Combine(folder,"owned-range-ir.json"),Json(owned));
                 var rooted=await ReplayableAdapter(request,"inspect_range_eh",folder);File.WriteAllText(Path.Combine(folder,"range-eh-inspection.json"),rooted.GetRawText());
                 if(rooted.TryGetProperty("error",out var rangeError))throw new ArgumentException("owned_ranges_EH_inspection: "+rangeError.GetString());
+                var dependencies=await ReplayableAdapter(request,"inspect_range_callees",folder);File.WriteAllText(Path.Combine(folder,"range-callee-inspection.json"),dependencies.GetRawText());
+                if(dependencies.TryGetProperty("error",out var depError))throw new ArgumentException("owned_range_callee_inspection: "+depError.GetString());
+                if(dependencies.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("callee_caller_binding_changed");
+                var blockers=dependencies.GetProperty("blockers").EnumerateArray().ToArray();
+                if(blockers.Length>0)throw new ArgumentException("owned_range_callee_unsupported: "+string.Join("; ",blockers.Select(b=>$"0x{b.GetProperty("target").GetUInt64():x}:{b.GetProperty("blocker").GetString()}")));
+                var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
+                // Architecture recovery retains unknown saved-frame values after
+                // aliasable stores. This is not an EH/source/acceptance profile.
+                var frame=X86FlowRecovery.Raise(lifted.GetProperty("lift"),new(Vc8EhProfile.Abi,true,true,[new SegmentedAddress(new SegmentInput(4),new Constant(0,64))],PrivateSubwordStack:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true,MaximumPaths:32,IncomingWordStores:true,ExplicitOwnedRanges:true,SignedFrameDisplacements:true,DeferredUndefinedFlags:true,TrackFreshStackWords:true),callees);
+                File.WriteAllText(Path.Combine(folder,"range-frame-ir.json"),Json(frame));
                 throw new ArgumentException("owned_ranges_EBP_try_catch_source_recovery_unsupported");
             }
             var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();

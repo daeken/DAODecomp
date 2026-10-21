@@ -195,8 +195,10 @@ current handoff and compact-status paths for owners, evidence, frontiers and nex
 action. Bootstrap records are historical once the pointer advances. Preserve
 them without restarting old sweeps/controllers.
 
-Use at most two implementation lanes with disjoint files. Sol6.1 medium is the
-toolkit implementation/review default; DeepSeek production remains paused.
+Use at most two implementation lanes with disjoint files. The primary toolkit
+author uses GPT-6 Astra with high reasoning, as requested by the user on
+2026-10-20. Independent reviewers remain Sol6.1 medium. DeepSeek production
+remains paused.
 Account model assignments in the existing global ledger and preserve paid budgets.
 Reuse the actual shared VM build lock across worktrees. Compiler execution in
 Windows 11 ARM64 under x86 translation is not native x86 hardware evidence.

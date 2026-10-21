@@ -34,7 +34,8 @@ public static class Program
                     }
                     if(x.TryGetProperty("flow_paths",out var flowSelected)&&flowSelected.GetBoolean()) {
                         var deps=x.GetProperty("callee_lifts").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
-                        var flow=X86FlowRecovery.Raise(x.GetProperty("lift"),new(abi,true,true),deps);
+                        var contract=x.TryGetProperty("flow_contract",out var flowContract)?flowContract.Deserialize<FlowCallContract>(Engine.Options)!:new(abi,true,true);
+                        var flow=X86FlowRecovery.Raise(x.GetProperty("lift"),contract,deps);
                         Console.WriteLine(Engine.Json(new{status="recovered",ir=flow,proof=false,source_emission="not_selected"}));return 0;
                     }
 

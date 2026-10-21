@@ -2366,3 +2366,35 @@ the durable MCP path. It does not close source reconstruction: EBP parent-frame
 state, catch/continuation lowering and complete candidate multi-try EH comparison
 remain unsupported. Generation refuses before creating C++ or compiling. No
 original bytes or proprietary metadata are published with this tooling change.
+
+### 2026-10-20 — EBP flow and complete candidate catch diagnostics
+
+The next bounded iteration retained the ten prior controls and worked at
+`0x12a0`. Reusable frame-flow options now preserve signed EBP-relative addresses,
+actual cross-range successors, undefined flag liveness and the freshness of
+individual stack words after aliasable stores. Earlier provisional code inferred
+a cross-range transition from the physically preceding row; a branch that skips
+that row exposed the error. The corrected check tracks the actual successor.
+
+A new independent diagnostic accounts for the complete COFF parent COMDAT,
+handler, four-state/two-try metadata, both catch bodies and literal continuation
+fragments. It keeps external relocation identity unknown and does not participate
+in acceptance. Synthetic negatives cover omitted fragments, changed continuation
+bytes, an altered trap, extra nodes/bytes, bad parent references, overlaps and
+missing relocations. A complete synthetic byte relation still reports unresolved
+runtime references rather than a pass.
+
+Two VC8 SP1 invocations used one open nested-catch source family on the Windows
+11 ARM64 VM, under the existing shared lock. The first produced only a normal
+body: C-linkage call declarations with `/EHsc` had removed the EH structure.
+Using C++ call declarations produced the expected nested catch/continuation
+layout, including an actual INT3 after rethrow. Neither output is game source or
+acceptance evidence. No original game execution occurred.
+
+The actual normal-flow attempt reached a new concrete dependency blocker: the
+allocation helper's unsigned DIV remains opaque in the pinned SharpRetro build.
+Its complete retained 25-instruction lift is not replaced by a guessed cleanup
+contract. The SharpRetro pin is unchanged. Reconstructing exception source,
+binding the runtime continuation convention and enabling complete multi-try
+acceptance remain unfinished; actual source compilation cannot yet be reached
+through this dependency. Prior source exports and accepted counts are unchanged.
