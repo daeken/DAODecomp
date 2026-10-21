@@ -217,8 +217,9 @@ public sealed partial class Engine
                 var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
                 // Architecture recovery retains unknown saved-frame values after
                 // aliasable stores. This is not an EH/source/acceptance profile.
-                var frame=X86FlowRecovery.Raise(lifted.GetProperty("lift"),new(Vc8EhProfile.Abi,true,true,[new SegmentedAddress(new SegmentInput(4),new Constant(0,64))],PrivateSubwordStack:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true,MaximumPaths:32,IncomingWordStores:true,ExplicitOwnedRanges:true,SignedFrameDisplacements:true,DeferredUndefinedFlags:true,TrackFreshStackWords:true),callees);
+                var frame=X86FlowRecovery.Raise(lifted.GetProperty("lift"),new(Vc8EhProfile.Abi,true,true,[new SegmentedAddress(new SegmentInput(4),new Constant(0,64))],PrivateSubwordStack:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true,MaximumPaths:128,IncomingWordStores:true,ExplicitOwnedRanges:true,SignedFrameDisplacements:true,DeferredUndefinedFlags:true,TrackFreshStackWords:true,NormalReturnTerminalRuntime:dependencies.TryGetProperty("runtime_terminal_evidence",out var terminalRuntime)?terminalRuntime.Deserialize<RuntimeTerminalEvidence>(Options):null,ConstantConditionEffects:true),callees);
                 File.WriteAllText(Path.Combine(folder,"range-frame-ir.json"),Json(frame));
+                if(rooted.GetProperty("typed_lift_errors").GetInt32()!=0||rooted.GetProperty("typed_opaque_instructions").GetInt32()!=0)throw new ArgumentException("owned_EH_required_effect_unsupported");
                 throw new ArgumentException("owned_ranges_EBP_try_catch_source_recovery_unsupported");
             }
             var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();

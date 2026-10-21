@@ -152,7 +152,7 @@ def lift_callees(request, *, inspection=False):
             require(depth<8,'forwarding_depth_exhausted');rva=next_target-caller['image_base'];require(rva in entries,'forwarding_target_not_inventory_entry');target=next_target;entry=entries[rva]
         chains.append(dict(original_target=original_target,chain=chain))
     terminal={}
-    if not inspection and request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1','x86-bits32-scalar-behavioral-events-v1','x86-bits32-incoming-slot-value-identities-v1'):
+    if request.get('recipe',{}).get('architecture') in ('x86-bits32-terminal-aware-memory-encoding-v1','x86-bits32-terminal-aware-abi-effects-v1','x86-bits32-terminal-aware-typed-receiver-v1','x86-bits32-terminal-aware-scalar-source-v1','x86-bits32-scalar-behavioral-events-v1','x86-bits32-incoming-slot-value-identities-v1'):
         from tools.replayable.terminal_calls import derive
         project=request['project'];terminal['runtime_terminal_evidence']=derive(Path(project['original']).read_bytes(),Path(project['inventory']).read_bytes(),{name:Path(path).read_bytes() for name,path in project['libraries'].items()})
     return dict(**terminal,caller_slice_sha256=caller['binary_slice_sha256'],callees=list(dependencies.values()),forwarding_chains=chains,inspection_only=inspection,blockers=blockers,

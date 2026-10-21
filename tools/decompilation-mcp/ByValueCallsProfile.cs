@@ -38,6 +38,7 @@ public static class Vc8ByValueCallsProfile
     public static string Emit(ByValueCallFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
     {
         Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");
+        Need((ir.Function.FaultPaths??[]).Length==0,"byvalue_architectural_fault_lowering_unsupported");
         var call=ir.Call;Need(call.Target>=imageBase&&call.Target<imageEnd,"byvalue_external_target_outside_module");
         string Value(RecoveredValue value)=>U(value) switch {
             IncomingStackRead{Bits:32,MemoryEpoch:0} incoming when incoming.Offset>=4&&incoming.Offset%4==0&&incoming.Offset-4<ir.Function.Incoming.RequiredReadBytes=>$"arg_{(incoming.Offset-4)/4}",

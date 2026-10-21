@@ -1317,3 +1317,55 @@ resolver correctly refuses it. The complete original callee lift and slice hash
 are retained by `inspect_range_callees`, without granting an ABI contract. The
 exceptional INT3 remains unresolved too. No generated source, accepted match,
 source export or frontier advancement is claimed for this function.
+
+
+### Preserve explicit architectural faults during dependency integration
+
+The reviewed unsigned-DIV dependency is SharpRetro
+`144ef270c088f01df7d570aaf0dba6e8bb592b73`, based on `d805b248`.
+The upstream review covers the exact lifter patch; it does not authorize a DAO
+consumer to discard the new ordered `IlIf`/`IlFault("x86", 0)` exits. Keep the
+old dependency and adapter immutable, prepare a new clean checkout and adapter
+manifest, and review consumer integration separately before installation.
+
+The normal-return cleanup walker now retains each supported conditional fault's
+instruction origin, effect ordinal, predicate and complete preceding effects.
+That prefix includes earlier fault guards and source captures. The resulting
+cleanup fact remains conditional on normal return; it neither promises a return
+nor supplies handler/unwind semantics. A complete, independently bound terminal
+runtime can distinguish a callee's throw exits from its normal RET sites.
+Unknown calls, missing terminal identity and a fallthrough outside the supplied
+range still refuse. Terminal-only summaries cannot silently omit a divide fault
+on the way to the certified runtime call.
+
+The explicit flow option records separate ordered fault paths with pre-fault
+registers, flags, stack and effects, plus the complementary normal predicates.
+Unsupported architectures/vectors, malformed guards and widths over 64 bits
+refuse. Existing source emitters and the bounded effect comparator do not lower
+these fault paths; their refusal is required, not a successful stub. Scalar
+inlining treats conditional effects and architectural faults as ordering barriers.
+Owned-range graphs retain fault edges and their guard evidence independently of
+ordinary fallthrough edges.
+
+Constant instruction-local conditions can select actual effect arms, including
+nested shift-flag updates. A symbolic condition outside the supported fault-guard
+form refuses. The existing explicit path budget can now be set up to 128;
+exhaustion remains inconclusive. No default recovery path budget or acceptance
+policy changes. The EBP diagnostic uses this bound to recover all 48 normal paths
+at the current frontier, preserving 230 owned bytes and the excluded gap.
+
+Reproduce the bounded integration with a changed-component Release build and
+`test_replayable_fault_paths`, the frame/range tests, and the existing relevant
+EH, ordered-memory, terminal, incoming-value and tail-adapter tests. The retained
+11-identity pilot freshly checked ten source-equal cached compiler artifacts:
+eight exact, one SIB encoding-equivalent and one bounded behavioral result.
+It performed no new compiler dispatch. The frontier reaches its saved frame IR
+and refuses `owned_EH_required_effect_unsupported`: a required catch still
+contains typed-opaque actual INT3. Parent-frame catch/continuation source lowering
+and accepting multi-try comparison remain unfinished. The dependency change,
+frame recovery and tests establish neither new accepted source nor game behavior.
+
+Fault snapshots export stack-memory uncertainty and the exact fresh-word set.
+After a potentially aliasing store, cached nonfresh words become unknown; a later
+full-word stack write restores only its own word. Ordered earlier effects remain
+in the snapshot, so sanitization does not erase the write that caused uncertainty.

@@ -6,7 +6,7 @@ from tools.replayable.range_eh import metadata,reachable
 from test_replayable_ir import DLL,DOTNET,node,const
 
 def part(pc,raw,body):
- return dict(mode='Bits32',pc=pc,byte_length=len(raw),decoded_bytes=len(raw),decode_complete=True,lift_errors=0,opaque_instructions=0,instructions=[dict(pc=pc,length=len(raw),raw_hex=raw.hex(),tree=dict(Body=body))])
+ return dict(mode='Bits32',pc=pc,byte_length=len(raw),decoded_bytes=len(raw),decode_complete=True,lift_errors=0,opaque_instructions=0,instructions=[dict(pc=pc,length=len(raw),raw_hex=raw.hex(),tree=node('IlBlock',Body=body))])
 def envelope():
  return combine([part(0x1000,b'\xeb\x0e',[node('IlBranch',Kind=dict(name='Jmp'),Cond=None,Target=const(0x1010))]),part(0x1010,b'\xc3',[node('IlBranch',Kind=dict(name='Ret'),Cond=None,Target=const(0))])],[(0x1000,0x1001),(0x1010,0x1010)],0)
 class OwnedRangeTests(unittest.TestCase):

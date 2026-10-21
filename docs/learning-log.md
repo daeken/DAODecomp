@@ -2398,3 +2398,41 @@ contract. The SharpRetro pin is unchanged. Reconstructing exception source,
 binding the runtime continuation convention and enabling complete multi-try
 acceptance remain unfinished; actual source compilation cannot yet be reached
 through this dependency. Prior source exports and accepted counts are unchanged.
+
+
+### Unsigned DIV integration: preserve exceptional paths before normal ABI facts
+
+The isolated DIV review approved upstream `144ef270`, including 65 focused tests
+and independent arithmetic/JIT checks. New typed effects exposed a consumer gap:
+the existing normal-return and terminal CFG walkers inspected branches but did
+not account for architectural fault exits. Simply removing the opaque-DIV marker
+would therefore have allowed those walkers to omit a required outcome.
+
+The integration retains ordered conditional faults in normal-only cleanup
+evidence, provides explicit fault paths in opt-in flow recovery, and refuses
+fault-bearing terminal-only summaries or unsupported source/effect consumers.
+The original allocation callee also has a final throw call beyond its normal
+RET path. Binding that call to the already recognized complete noncontinuable
+runtime permits separate normal cleanup and exceptional-exit evidence; a call
+name or missing RET cannot supply this fact.
+
+After constant shift guards and a bounded 128-path option, the actual main frame
+recovers 48 normal paths across both owned ranges. Earlier trials are retained:
+missing forwarding dependency, unbound terminal fallthrough and the old path
+budget all refused. The final 11-identity pilot kept all ten previous generated
+sources identical and rechecked eight exact, one SIB and one behavioral control
+in 19.086 seconds on macOS ARM64, with zero compiler/VM calls. These are retained
+compiled-artifact checks, not execution of the original game or new acceptance.
+
+Required catch INT3 remains opaque; its trap/resumption semantics must be
+preserved before source lowering can proceed. Compiler-runtime parent-frame and
+continuation lowering remains an additional obligation. No 0x12a0 C++ candidate,
+new public source, frontier advance or whole-game claim results from this work.
+The old d805 dependency and f768 runtime remain rollback inputs.
+
+Independent consumer review found that the first fault snapshot copied a stale
+saved word after a potentially aliasing store. The retained witness saves 11,
+permits an aliasing write of 99, then faults. The correction exports the stale
+word as unknown with explicit uncertainty/fresh-word metadata, while retaining
+ordered writes. Separate tests cover invalidated and selectively fresh words;
+43 focused tests passed after the correction. No acceptance policy changed.

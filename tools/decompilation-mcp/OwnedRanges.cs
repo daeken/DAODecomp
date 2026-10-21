@@ -3,7 +3,7 @@ namespace Decompilation;
 
 public sealed record OwnedInstructionRange(ulong StartVa,ulong EndVaExclusive,string SliceSha256,JsonElement Lift);
 public sealed record OwnedControlEdge(ulong Pc,string Kind,ulong? Target,string Ownership);
-public sealed record OwnedRangeProgram(ulong EntryVa,int OwnedBytes,OwnedInstructionRange[] Ranges,OwnedControlEdge[] Edges,string ExceptionalDependencies,string SourceRecovery,bool Proof=false);
+public sealed record OwnedRangeProgram(ulong EntryVa,int OwnedBytes,OwnedInstructionRange[] Ranges,OwnedControlEdge[] Edges,string ExceptionalDependencies,string SourceRecovery,bool Proof=false,ArchitecturalFaultSite[]? ArchitecturalFaults=null);
 
 // Architectural range ownership, not EH/source interpretation. No synthesized
 // stream can give a nonexistent fallthrough across an excluded byte interval.
@@ -26,9 +26,9 @@ public static class OwnedRangeRecovery
         }
         Need(ranges.Count is >1 and <=64&&envelope.GetProperty("entry_va").GetUInt64()==ranges[0].StartVa&&bytes==envelope.GetProperty("owned_bytes").GetInt32(),"owned_range_entry_or_accounting");
         string Ownership(ulong target) {if(rows.ContainsKey(target))return "owned_instruction";if(ranges.Any(r=>r.StartVa<=target&&target<r.EndVaExclusive))throw new ArgumentException("owned_branch_into_instruction");return "outside_owned_ranges";}
-        var edges=new List<OwnedControlEdge>();
+        var edges=new List<OwnedControlEdge>();var faults=new List<ArchitecturalFaultSite>();
         foreach(var (pc,row) in rows) {
-            bool fall=true;int branches=0;
+            bool fall=true;int branches=0;foreach(var fault in Decompilation.ArchitecturalFaults.Inspect(row)){faults.Add(fault);edges.Add(new(pc,"architectural_fault",null,"handler_destination_unknown"));}
             foreach(var node in row.GetProperty("tree").GetProperty("Body").EnumerateArray()) {
                 if(node.GetProperty("type").GetString()!="LiftIl.IlBranch")continue;
                 Need(++branches==1,"owned_multiple_control_transfers");string kind=node.GetProperty("Kind").GetProperty("name").GetString()!;
@@ -43,6 +43,6 @@ public static class OwnedRangeRecovery
             }
             if(fall){ulong next=pc+(ulong)row.GetProperty("length").GetInt32();edges.Add(new(pc,"fallthrough",next,Ownership(next)));}
         }
-        return new(ranges[0].StartVa,bytes,ranges.ToArray(),edges.ToArray(),"separate original-rooted EH evidence required; external edges never become owned bytes","unsupported: range graph is not a recovered source or accepted function");
+        return new(ranges[0].StartVa,bytes,ranges.ToArray(),edges.ToArray(),"separate original-rooted EH evidence required; external edges never become owned bytes","unsupported: range graph is not a recovered source or accepted function",ArchitecturalFaults:faults.ToArray());
     }
 }

@@ -72,6 +72,7 @@ public static class Vc8EhProfile
     }
     public static string Emit(Vc8EhFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
     {
+        Need((ir.Function.FaultPaths??[]).Length==0,"EH_architectural_fault_lowering_unsupported");
         uint R(ulong va){Need(va>=imageBase&&va<imageEnd,"EH_entity_outside_image");return (uint)(va-imageBase);}var p=ir.Plan;string cls=$"fn_{R(p.ReceiverCallTarget):x8}",own=$"fn_{rva:x8}",alloc=$"fn_{R(p.AllocationTarget):x8}",cleanup=$"fn_{R(p.CleanupTerminal):x8}",global=$"g_{R(p.GlobalTarget):x8}";Need(module.Length>0&&!module.Any(char.IsWhiteSpace)&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"EH_module_name");
         var tail=p.AllocationBytes>4?$"  unsigned char opaque_tail[{p.AllocationBytes-4}];":"";
         return $$"""

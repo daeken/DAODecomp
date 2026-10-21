@@ -43,7 +43,7 @@ public static class Vc8StructuredMemoryProfile
     public static string Emit(StructuredMemoryFunction ir,uint rva,uint imageBase,uint imageEnd,string module,JsonElement? originalLift=null,bool typedReceiver=false,bool compactScalars=false,bool incomingValueIdentities=false)
     {
         if(ir.TerminalAware){Need(originalLift!=null,"terminal_memory_original_lift_required");return Vc8MutableMemoryEmitter.Emit(ir,originalLift!.Value,rva,imageBase,imageEnd,module,typedReceiver,compactScalars,incomingValueIdentities);}
-        Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");var f=ir.Flow;int arguments=f.ReturnCleanupBytes[0]/4;var allEffects=f.NormalPaths.SelectMany(Observable).ToArray();var reads=allEffects.Where(e=>e.Kind=="memory_read").DistinctBy(e=>((MemoryReadValue)e.Value!).Pc).ToArray();var calls=allEffects.Where(e=>e.Kind=="external_call").GroupBy(e=>e.Call!.Target).ToArray();
+        Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");var f=ir.Flow;Need((f.FaultPaths??[]).Length==0,"structured_architectural_fault_lowering_unsupported");int arguments=f.ReturnCleanupBytes[0]/4;var allEffects=f.NormalPaths.SelectMany(Observable).ToArray();var reads=allEffects.Where(e=>e.Kind=="memory_read").DistinctBy(e=>((MemoryReadValue)e.Value!).Pc).ToArray();var calls=allEffects.Where(e=>e.Kind=="external_call").GroupBy(e=>e.Call!.Target).ToArray();
         string Value(RecoveredValue raw) {
             var v=Low(Normalize(raw));return v switch{
                 Constant c when c.Value<=uint.MaxValue&&c.Bits is 8 or 16 or 32 or 64=>$"{c.Value}u",

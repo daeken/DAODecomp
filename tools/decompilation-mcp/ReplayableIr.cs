@@ -40,9 +40,44 @@ public sealed record ExternalRegisterValue(ulong CallPc,int Register,int Bits):R
 public sealed record BitValue(string Operation,RecoveredValue[] Operands,int Bits) : RecoveredValue;
 public sealed record IncomingStackRead(int Offset,int Bits,ulong Pc,int MemoryEpoch) : RecoveredValue;
 public sealed record CalleeStackLift(ulong Target,JsonElement Lift);
-public sealed record NormalReturnStackEvidence(ulong Target,int CleanupBytes,int ReturnSites,int CallSites,string Basis,bool Proof=false);
+public sealed record NormalReturnStackEvidence(ulong Target,int CleanupBytes,int ReturnSites,int CallSites,string Basis,bool Proof=false,ArchitecturalFaultSite[]? ArchitecturalFaults=null,ulong[]? ExceptionalCallSites=null,RuntimeTerminalEvidence? TerminalRuntime=null);
 public sealed record RecoveredStackCall(ulong Pc,NormalReturnStackEvidence Evidence,RecoveredValue[] Arguments);
 public sealed record StackArgumentFunction(RecoveredFunction Function,int ReturnCleanupBytes,IncomingStackInput[] IncomingSlots,RecoveredStackCall[] Calls);
+
+// Retain ordered conditional architectural exits when deriving normal-only ABI
+// facts. This is not fault delivery/unwind support, and never proves a return.
+public sealed record ArchitecturalFaultSite(ulong Pc,int EffectOrdinal,string Architecture,int Vector,JsonElement Condition,JsonElement[] PrecedingEffects,bool HandlerSemanticsUnknown=true);
+public static class ArchitecturalFaults
+{
+    static string Tag(JsonElement n)=>n.GetProperty("type").GetString()!.Split('+').Last().Split('.').Last();
+    static void Need(bool ok,string why){if(!ok)throw new ArgumentException(why);}
+    public static bool Contains(JsonElement n,string kind)=>n.ValueKind==JsonValueKind.Object?(n.TryGetProperty("type",out var t)&&t.ValueKind==JsonValueKind.String&&Tag(n)==kind)||n.EnumerateObject().Any(p=>Contains(p.Value,kind)):n.ValueKind==JsonValueKind.Array&&n.EnumerateArray().Any(x=>Contains(x,kind));
+    public static JsonElement Guard(JsonElement n)
+    {
+        Need(Tag(n)=="IlIf"&&n.GetProperty("Else").GetArrayLength()==0,"architectural_fault_guard_shape");var yes=n.GetProperty("Then").EnumerateArray().ToArray();
+        Need(yes.Length==1&&Tag(yes[0])=="IlFault","architectural_fault_guard_shape");var fault=yes[0];Need(fault.GetProperty("Architecture").GetString()=="x86"&&fault.GetProperty("Vector").GetInt32()==0,"unsupported_architectural_fault");
+        var c=n.GetProperty("Cond");Need(Tag(c.GetProperty("Ty"))=="I"&&c.GetProperty("Ty").GetProperty("Bits").GetInt32()==1&&!c.GetProperty("Ty").GetProperty("Signed").GetBoolean()&&!Contains(c,"IlFault")&&!Contains(c,"IlIf")&&!Contains(c,"IlBranch")&&!Contains(c,"IlStore")&&!Contains(c,"IlWriteReg"),"architectural_fault_condition");return c;
+    }
+    static void NonControlEffects(JsonElement n,int depth=0)
+    {
+        Need(depth<=8,"architectural_effect_nesting_budget");string tag=Tag(n);Need(!Contains(n,"IlFault")&&!Contains(n,"IlBranch"),"nested_architectural_control_effect");
+        if(tag=="IlIf") {foreach(var arm in new[]{"Then","Else"})foreach(var child in n.GetProperty(arm).EnumerateArray())NonControlEffects(child,depth+1);return;}
+        Need(tag is "IlLet" or "IlWriteReg" or "IlStore","unsupported_architectural_control_effect:"+tag);Need(!Contains(n,"IlIf"),"nested_architectural_control_effect");
+    }
+    public static ArchitecturalFaultSite[] Inspect(JsonElement row)
+    {
+        var body=row.GetProperty("tree");Need(Tag(body)=="IlBlock","architectural_control_block_required");var nodes=body.GetProperty("Body").EnumerateArray().ToArray();var sites=new List<ArchitecturalFaultSite>();
+        for(int i=0;i<nodes.Length;i++) {
+            var n=nodes[i];string tag=Tag(n);
+            if(tag=="IlIf"&&!Contains(n,"IlFault")) {NonControlEffects(n);continue;}
+            if(tag=="IlIf") {var condition=Guard(n);sites.Add(new(row.GetProperty("pc").GetUInt64(),i,"x86",0,condition.Clone(),nodes.Take(i).Select(x=>x.Clone()).ToArray()));continue;}
+            Need(tag is "IlLet" or "IlWriteReg" or "IlStore" or "IlBranch","unsupported_architectural_control_effect:"+tag);
+            Need(!Contains(n,"IlFault")&&!Contains(n,"IlIf"),"nested_architectural_control_effect");
+            if(tag=="IlBranch")Need(i==nodes.Length-1,"nonterminal_architectural_branch");else NonControlEffects(n);
+        }
+        return sites.ToArray();
+    }
+}
 
 public static class X86Recovery
 {
@@ -272,25 +307,25 @@ public static class X86StackArgumentRecovery
         var target=nodes[^1].GetProperty("Target");Need(Tag(target)=="IlTmp"&&returnTemps.Contains(target.GetProperty("Id").GetInt32())&&target.GetProperty("Ty").GetProperty("Bits").GetInt32()==32,"unsupported_return_target");
         Need(delta==4+cleanup,"conflicting_return_encoding_and_effects");
     }
-    public static NormalReturnStackEvidence InspectNormalReturn(ulong target,JsonElement lift)
+    public static NormalReturnStackEvidence InspectNormalReturn(ulong target,JsonElement lift,RuntimeTerminalEvidence? terminalRuntime=null)
     {
         Need(lift.GetProperty("mode").GetString()=="Bits32"&&lift.GetProperty("decode_complete").GetBoolean()&&lift.GetProperty("lift_errors").GetInt32()==0&&lift.GetProperty("opaque_instructions").GetInt32()==0,"incomplete_callee_cleanup_evidence");
-        var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length>0&&rows[0].GetProperty("pc").GetUInt64()==target,"callee_entry_mismatch");
+        if(terminalRuntime!=null)X86TerminalCallRecovery.ValidateRuntime(terminalRuntime);var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length>0&&rows[0].GetProperty("pc").GetUInt64()==target,"callee_entry_mismatch");
         var indices=new Dictionary<ulong,int>();ulong expected=target;
         foreach(var row in rows) {
             var pc=row.GetProperty("pc").GetUInt64();int len=row.GetProperty("length").GetInt32();
             Need(pc==expected&&len is >0 and <=15&&row.GetProperty("raw_hex").GetString()!.Length==2*len,"ambiguous_callee_range");
             Need(indices.TryAdd(pc,indices.Count),"ambiguous_callee_range");expected=checked(pc+(ulong)len);
         }
-        var pending=new Queue<int>();pending.Enqueue(0);var seen=new HashSet<int>();var cleanup=new HashSet<int>();int returns=0,calls=0;
+        var pending=new Queue<int>();pending.Enqueue(0);var seen=new HashSet<int>();var cleanup=new HashSet<int>();int returns=0,calls=0;var faults=new List<ArchitecturalFaultSite>();var exceptionalCalls=new List<ulong>();
         while(pending.Count>0) {
             int i=pending.Dequeue();if(!seen.Add(i))continue;var row=rows[i];
-            var branches=Branches(row.GetProperty("tree")).ToArray();Need(branches.Length<=1,"ambiguous_callee_control_flow");
+            faults.AddRange(ArchitecturalFaults.Inspect(row));var branches=Branches(row.GetProperty("tree")).ToArray();Need(branches.Length<=1,"ambiguous_callee_control_flow");
             bool fall=true;
             if(branches.Length==1) {
                 var branch=branches[0];var kind=branch.GetProperty("Kind").GetProperty("name").GetString();
                 if(kind=="Ret") {Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_callee_return");var amount=RetCleanup(row);VerifyReturnTree(row,amount);cleanup.Add(amount);returns++;fall=false;}
-                else if(kind=="Call") {calls++;Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_callee_call");}
+                else if(kind=="Call") {calls++;Need(branch.GetProperty("Cond").ValueKind==JsonValueKind.Null,"conditional_callee_call");if(terminalRuntime!=null&&row.GetProperty("raw_hex").GetString() is {Length:10} rawCall&&rawCall.StartsWith("e8",StringComparison.OrdinalIgnoreCase)&&X86TerminalCallRecovery.DirectCallTarget(row,branch)==terminalRuntime.Target){fall=false;exceptionalCalls.Add(row.GetProperty("pc").GetUInt64());}}
                 else {
                     Need(kind is "Jmp" or "CondJmp","unsupported_callee_control_flow");var dest=branch.GetProperty("Target");
                     Need(Tag(dest)=="IlConst"&&ulong.TryParse(dest.GetProperty("Bits").GetProperty("decimal").GetString(),out _),"ambiguous_callee_branch");
@@ -302,7 +337,7 @@ public static class X86StackArgumentRecovery
             if(fall){Need(i+1<rows.Length,"callee_falls_out_of_range");pending.Enqueue(i+1);}
         }
         Need(seen.Count==rows.Length,"unreachable_callee_range_bytes");Need(returns>0,"missing_callee_return");Need(cleanup.Count==1,"conflicting_callee_cleanup");
-        return new(target,cleanup.Single(),returns,calls,"complete-reachable-CFG-uniform-RET-encoding; normal-return-ABI-hypothesis; nested-call-effects-unknown");
+        return new(target,cleanup.Single(),returns,calls,"complete-reachable-CFG-uniform-RET-encoding; normal-return-ABI-hypothesis; nested-call-effects-unknown; explicit conditional faults retained with unknown handler semantics",ArchitecturalFaults:faults.ToArray(),ExceptionalCallSites:exceptionalCalls.ToArray(),TerminalRuntime:exceptionalCalls.Count>0?terminalRuntime:null);
     }
     public static StackArgumentFunction Raise(JsonElement lift,RecoveryAbi abi,IEnumerable<CalleeStackLift> callees)
     {

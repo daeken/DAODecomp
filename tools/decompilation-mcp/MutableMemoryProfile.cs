@@ -23,7 +23,7 @@ public static class Vc8MutableMemoryEmitter
     static long? Slot(RecoveredValue v)=>v switch{AddValue{Left:RegisterInput{Index:4}} a=>a.Offset,SegmentedAddress{Segment:{Index:2},Offset:var x}=>Slot(x),_=>null};
     public static string Emit(StructuredMemoryFunction ir,JsonElement lift,uint rva,uint imageBase,uint imageEnd,string module,bool typedReceiver=false,bool compactScalars=false,bool incomingValueIdentities=false)
     {
-        Need(ir.TerminalAware,"mutable_requires_explicit_profile");var rows=lift.GetProperty("instructions").EnumerateArray().ToDictionary(r=>r.GetProperty("pc").GetUInt64());var f=ir.Flow;
+        Need(ir.TerminalAware,"mutable_requires_explicit_profile");var rows=lift.GetProperty("instructions").EnumerateArray().ToDictionary(r=>r.GetProperty("pc").GetUInt64());var f=ir.Flow;Need((f.FaultPaths??[]).Length==0,"mutable_architectural_fault_lowering_unsupported");
         var allEffects=f.NormalPaths.SelectMany(p=>p.Effects).Concat((f.TerminalPaths??[]).SelectMany(p=>p.Effects)).ToArray();
         var inputs=allEffects.Where(e=>e.Kind=="incoming_read").Select(e=>(IncomingStackRead)e.Value!).GroupBy(i=>i.Offset).ToDictionary(g=>g.Key,g=>g.Select(i=>i.Bits).Distinct().Single());int argumentCount=f.ReturnCleanupBytes.Single()/4;
         var slotCarriers=incomingValueIdentities?IncomingSlotValueIdentityRecovery.Plan(f):new Dictionary<long,string>();

@@ -64,7 +64,7 @@ public static class NormalReturnResolver
         }
         return new(destination!.Value,recovered,abi,0,exit.Inputs!);
     }
-    public static ForwardedReturnEvidence Resolve(ulong original,IEnumerable<CalleeStackLift> supplied,int maximumDepth=8,RecoveryAbi? adapterAbi=null)
+    public static ForwardedReturnEvidence Resolve(ulong original,IEnumerable<CalleeStackLift> supplied,int maximumDepth=8,RecoveryAbi? adapterAbi=null,RuntimeTerminalEvidence? terminalRuntime=null)
     {
         Need(maximumDepth is >0 and <=16,"invalid_forwarding_budget");var map=new Dictionary<ulong,JsonElement>();foreach(var c in supplied)Need(map.TryAdd(c.Target,c.Lift),"duplicate_callee_evidence");var visited=new HashSet<ulong>();var chain=new List<ReturnEvidenceNode>();ulong target=original;
         for(int depth=0;depth<=maximumDepth;depth++) {
@@ -72,7 +72,7 @@ public static class NormalReturnResolver
             var bytes=rows.SelectMany(r=>Convert.FromHexString(r.GetProperty("raw_hex").GetString()!)).ToArray();
             var next=PureForwardTarget(target,lift);var adapter=next==null&&adapterAbi!=null?TailAdapter(target,lift,adapterAbi):null;next??=adapter?.Target;
             chain.Add(new(target,Convert.ToHexStringLower(SHA256.HashData(bytes)),bytes.Length,adapter));
-            if(next==null)return new(original,X86StackArgumentRecovery.InspectNormalReturn(target,lift),chain.ToArray());Need(depth<maximumDepth,"forwarding_depth_exhausted");target=next.Value;
+            if(next==null)return new(original,X86StackArgumentRecovery.InspectNormalReturn(target,lift,terminalRuntime),chain.ToArray());Need(depth<maximumDepth,"forwarding_depth_exhausted");target=next.Value;
         }
         throw new ArgumentException("forwarding_depth_exhausted");
     }
