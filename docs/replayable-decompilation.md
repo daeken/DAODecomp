@@ -14,14 +14,15 @@ already been resolved, or that matching functions establish a runnable game.
 
 ## The development loop
 
-1. Select the earliest unresolved inventory identity by ascending RVA.
+1. Select the next unvisited inventory identity by ascending RVA in the bounded window.
 2. Inspect original instructions and actual typed SharpRetro effects.
 3. Find the missing or incorrect general reconstruction/compiler behavior.
 4. Implement a reusable pass with explicit applicability and failure conditions.
 5. Run focused boundary/negative tests, a complete real-compiler comparison at
-   the frontier, and a small relevant set of previously matching controls.
-6. On a complete match, continue to the next consecutive identity within the
-   current bounded implementation batch. Keep development results provisional.
+   the current candidates, and a small relevant set of previously matching controls.
+6. Record each complete match, mismatch or unsupported outcome and continue to
+   the next identity. Defer blockers explicitly with the evidence needed to revisit
+   them; generation and deferral grant no recovery credit.
 7. Check a representative sample, initially at most 16 identities, rather than
    scanning or recompiling the whole inventory. Include the frontier, relevant
    previously matching domains, changed-rule boundaries and known failures.
@@ -32,8 +33,11 @@ The user requested this tighter cadence on 2026-10-20. A small rule or successfu
 function does not require a new author assignment, a full test suite, independent
 review, a release or an installation. An author can own several consecutive
 frontiers in one bounded batch. Regressions in previously matching controls
-require investigation; an unsupported next identity remains the development
-frontier and must not be skipped.
+require investigation. On 2026-10-21 the user redirected work toward expansion:
+unsupported identities now remain on an explicit deferred list while traversal
+continues. Track next unvisited and visited-through separately from earliest
+unresolved and contiguous accepted coverage; later individually accepted matches
+can be exported without claiming that earlier holes are resolved.
 
 The user's later instruction on the same date also pauses CI and routine full
 sweeps. Choose the sample deterministically from existing evidence, covering
@@ -96,7 +100,7 @@ credit transfer or ambiguous execution replay is implied.
 
 The first five inventory entries are `0x1000`, `0x1030`, `0x1040`, `0x1070`,
 and `0x10c0`. Their signatures and boundaries are discovery hypotheses.
-Do not substitute more convenient examples for the first unresolved identity.
+Do not substitute more convenient examples for an identity in the selected window.
 Calls may require inspecting other functions; generic tests and corpus checks
 may produce matches ahead of the frontier. Record those separately.
 
@@ -312,3 +316,12 @@ The normal0x12a0 and private002 objects fail consistent section placement, so th
 frontier and historical/public counts remain unchanged. A real independently
 linked open nested-try fixture exercises the positive route; arbitrary source or
 runtime-context equivalence is not inferred from that test.
+
+
+The first expansion window visits all ten identities from `0x13f0` through
+`0x19d0`, with `0x12a0` explicitly deferred. The existing ordered-memory source
+profile now permits zero stack cleanup when no incoming argument reads are
+observed. This yields a fresh complete 38-byte VC8 match at `0x13f0`; it does not
+infer a zero-argument dependency signature or preserve caller memory across calls.
+Nine other identities remain deferred with their original evidence and distinct
+blockers. Next traversal is `0x1a40`; earliest unresolved remains `0x12a0`.

@@ -2671,3 +2671,30 @@ escaped the first section-only check. The repaired domain validates all symbol
 definitions and section auxiliaries, rejecting COMMON, weak aliases, unknown
 absolute definitions and unplaced definitions before acceptance. The original
 review rejection is preserved; it was never installed or used for game credit.
+
+
+### Expand the traversal while preserving recovery holes
+
+The first ten-entry expansion window (`0x13f0`–`0x19d0`) produced one fresh
+complete VC8 artifact match and nine explicit generation refusals. The successful
+38-byte function needed only a source-profile boundary correction: zero stack
+cleanup is valid for the existing forward ordered-memory proposal when no
+incoming argument reads are observed. No new instruction lowering, dependency
+contract, memory-retention promise or comparison rule was added. Generated C++
+uses the existing unsigned/raw-memory and call emission.
+
+Two new generic tests reach the profile: an empty-argument memory-controlled
+diamond generates, while zero cleanup with observed incoming reads refuses. A
+prior test expected an obsolete caller-memory refusal label; the installed prior
+runtime reproduces its current refusal, and the assertion now names that guard.
+An initial new fixture used an unsupported byte memory read; it was corrected to
+a supported word read without changing production guards. Initial failures remain
+in local records. Focused runs passed 8 ordered-memory,12 memory-version and19
+source-export tests on macOS ARM64. One C# build and one VC8 object compilation
+ran; VC8 took1.361seconds in Windows11 ARM64 under x86 translation. No game ran.
+
+Three refused callers expose the split-range normal-continuation evidence gap;
+others expose post-call parameter memory, subword writes, arithmetic shifts,
+non-EH split loops, indirect calls and cleanup graphs. These are separate unknowns,
+not nine compiler mismatches. The traversal cursor is now `0x1a40`; earliest
+unresolved remains `0x12a0`. No earlier-hole or whole-game credit is implied.

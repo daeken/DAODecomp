@@ -6,9 +6,10 @@
   `docs/replayable-decompilation.md` and current local handoff first.
   `codex/ghidra-mainline` preserves the previous committed workflow.
 - Progress through the pinned inventory in ascending RVA order, beginning at
-  `0x1000`. The earliest unresolved function is the frontier. No ease/size
-  filtering or silent skip; dependency analysis and whole-inventory regression
-  checks do not themselves advance the frontier.
+  `0x1000`. Visit each identity in a bounded window without ease/size filtering.
+  Record unsupported identities explicitly as deferred and continue; keep the
+  traversal cursor separate from earliest unresolved and contiguous acceptance.
+  Only complete accepted checks grant individual recovery/export credit.
 - Recover reusable architecture/compiler rules with explicit preconditions.
   Do not encode target RVAs, expected output bytes or copied recovered bodies
   as transformation logic. Fix incorrect lifter semantics at the correct layer;
@@ -18,8 +19,8 @@
   JSON recipes/trials must preserve prior candidates and report regressions,
   unknowns and pending work. Introduce these operations through the C# MCP/core.
 - Use a tight development loop: focused generic tests, a complete real-compiler
-  comparison at the current frontier, and relevant previously matching controls.
-  Continue through consecutive functions within a bounded implementation batch;
+  comparison for the current candidates, and relevant previously matching controls.
+  Continue through the ascending window within a bounded implementation batch;
   do not require a director handoff, full suite, review, CI or installation after
   every small rule. Development matches and the development frontier are
   provisional until the batch passes release checks.

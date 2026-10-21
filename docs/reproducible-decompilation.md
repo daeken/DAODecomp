@@ -1769,3 +1769,31 @@ outside placed runtime bytes. COMDAT selection/association and section sizes and
 relocation counts are checked. Independent review found the original section-only
 walk missed COMMON storage; its false-acceptance witness and rejection remain
 retained, and both raw and integrated paths now test that boundary.
+
+
+### Traverse beyond explicit recovery holes
+
+Use the existing explicit-identity `replayable_regression_check` route for each
+identity in an ascending bounded inventory window. Retain each original identity,
+job, recipe, generated source and complete result. After a bounded diagnosis,
+record unsupported cases as deferred with a concrete revisit condition and
+continue. Keep visited-through and next-unvisited independent of earliest
+unresolved and contiguous acceptance. A later complete match can be published
+individually; it does not repair earlier holes.
+
+The ordered-memory source profile admits zero return cleanup only when its
+existing incoming-extent guard observes no incoming parameter reads. The same
+fullword/byte effects, unknown calls, fresh caller-memory semantics and independent
+full artifact comparison remain required. Zero cleanup does not establish a
+callee's formal arity. Reproduce focused boundaries with
+`python -m unittest discover -s tests -p test_replayable_ordered_memory.py -v`
+after building the changed C# component. The new real38-byte acceptance is a
+pinned VC8 artifact result, not a proof of source signatures or a linked game.
+
+The existing source exporter replaces a selected snapshot rather than appending
+units. To preserve the prior ten-unit index without refreshing extra identities
+outside this window's sample cap, the new unit is exported into the separate
+`src/native/replayable/expansion-025` collection through the same fresh guarded
+route. Counts remain ten in the prior snapshot plus one in this expansion, with
+no inherited comparison credit. A future combined index needs its own fresh
+checks or a reviewed append design.

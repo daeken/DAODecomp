@@ -38,7 +38,7 @@ class OrderedMemoryTests(unittest.TestCase):
   calls=[e['call'] for p in f['normal_paths'] for e in p['effects'] if e['kind']=='external_call'];self.assertEqual(len(calls),1);self.assertTrue(calls[0]['memory_effects_unknown']);self.assertTrue(calls[0]['termination_unknown']);self.assertFalse(calls[0]['formal_arity_known']);self.assertEqual(r['source'].count('write_word('),2);self.assertIn('unsigned char arg_0',r['source'])
  def test_pointer_escape_and_call_after_alias_store_refuse(self):
   p=fixture();p['lift']['instructions'][6]['tree']['Body'][0]['Val']=reg32(4);self.assertEqual(self.recover(p)['status'],'unsupported')
-  p=fixture();p['lift']['instructions'][1]['tree']['Body']=[node('IlStore',Addr=binary('Add',reg(6),const(20)),Val=const(1))];r=self.recover(p);self.assertEqual(r['status'],'unsupported');self.assertEqual(r['blocker'],'flow_call_after_aliasable_store_requires_fresh_argument_state')
+  p=fixture();p['lift']['instructions'][1]['tree']['Body']=[node('IlStore',Addr=binary('Add',reg(6),const(20)),Val=const(1))];r=self.recover(p);self.assertEqual(r['status'],'unsupported');self.assertEqual(r['blocker'],'structured_memory_precall_incoming_extent')
  def test_unknown_callee_and_indirect_target_refuse(self):
   p=fixture();p['callee_lifts']=[];self.assertEqual(self.recover(p)['status'],'unsupported')
   p=fixture();p['lift']['instructions'][3]['tree']['Body'][0]['Val']=reg(0);self.assertEqual(self.recover(p)['status'],'unsupported')
@@ -57,3 +57,22 @@ class OrderedMemoryTests(unittest.TestCase):
  def test_supported_byte_and_word_input_boundaries_still_generate(self):
   for bits in (8,32):
    p=fixture();p['lift']['instructions'][0]['tree']['Body'][4]['Val']['Ty']['Bits']=bits;r=self.recover(p);self.assertEqual(r['status'],'generated',r);self.assertIn(('unsigned char' if bits==8 else 'unsigned int')+' arg_0',r['source'])
+
+ def test_zero_cleanup_without_incoming_reads_generates_empty_parameters(self):
+  p=fixture();rows=p['lift']['instructions']
+  # A distinct memory-controlled diamond, with no observed incoming arguments.
+  rows[0]['tree']['Body'][4]['Val']=load(binary('Add',reg(6),const(24,64)),32)
+  rows[2]['tree']['Body']=push(reg32(6))
+  rows[-1]=row(rows[-1]['pc'],ret(0),'c3')
+  r=self.recover(p);self.assertEqual(r['status'],'generated',r)
+  self.assertIn('fn_00002000()',r['source']);self.assertNotIn('arg_0',r['source'])
+  self.assertEqual(r['ir']['flow']['incoming']['required_read_bytes'],0)
+  for path in r['ir']['flow']['normal_paths']:
+   self.assertEqual(path['exit']['return_target']['kind'],'memory_read')
+  calls=[e['call'] for path in r['ir']['flow']['normal_paths'] for e in path['effects'] if e['kind']=='external_call']
+  self.assertTrue(all(c['memory_effects_unknown'] and c['throw_behavior_unknown'] and not c['formal_arity_known'] for c in calls))
+
+ def test_zero_cleanup_does_not_hide_observed_incoming_reads(self):
+  p=fixture();rows=p['lift']['instructions'];rows[-1]=row(rows[-1]['pc'],ret(0),'c3')
+  r=self.recover(p);self.assertEqual(r['status'],'unsupported',r)
+  self.assertEqual(r['blocker'],'structured_memory_precall_incoming_extent')

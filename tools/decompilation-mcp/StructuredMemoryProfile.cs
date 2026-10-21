@@ -31,7 +31,7 @@ public static class Vc8StructuredMemoryProfile
     public static StructuredMemoryFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees,RuntimeTerminalEvidence? terminalRuntime=null)
     {
         var f=RecoverFlow(lift,callees,terminalRuntime);
-        Need(f.ReturnCleanupBytes.Length==1&&f.ReturnCleanupBytes[0] is >0 and <=32&&f.ReturnCleanupBytes[0]%4==0&&f.NormalPaths.Length>=2&&f.NormalPaths.Length<=(terminalRuntime==null?7:31)&&!f.Incoming.AddressEscapeObserved,"structured_memory_thiscall_normal_paths_domain");
+        Need(f.ReturnCleanupBytes.Length==1&&f.ReturnCleanupBytes[0] is >=0 and <=32&&f.ReturnCleanupBytes[0]%4==0&&f.NormalPaths.Length>=2&&f.NormalPaths.Length<=(terminalRuntime==null?7:31)&&!f.Incoming.AddressEscapeObserved,"structured_memory_thiscall_normal_paths_domain");
         Need(f.Incoming.RequiredReadBytes<=f.ReturnCleanupBytes[0]&&f.NormalPaths.All(p=>p.Effects.Where(e=>e.Kind=="incoming_read").All(e=>e.Value is IncomingStackRead{MemoryEpoch:0})) ,"structured_memory_precall_incoming_extent");
         Need(f.NormalPaths.SelectMany(p=>p.Effects).Where(e=>e.Kind=="incoming_read").Select(e=>(IncomingStackRead)e.Value!).All(v=>v.Bits is 8 or 32&&v.Offset>=4&&v.Offset%4==0),"structured_memory_incoming_byte_or_word_slots_only");
         Need(f.NormalPaths.Any(p=>p.Effects.Any(e=>e.Kind=="memory_store"))&&f.NormalPaths.Any(p=>p.Effects.Any(e=>e.Kind=="external_call")),"structured_memory_calls_and_stores_required");

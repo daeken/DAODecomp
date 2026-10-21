@@ -23,6 +23,9 @@ here for reference and independent checks.
 The separate [replayable generated C++ snapshot](src/native/replayable/README.md)
 publishes freshly checked independent units from the new pipeline. It does not
 replace or merge the historical source collection and is not a linked game.
+The [first expansion snapshot](src/native/replayable/expansion-025/README.md) adds
+one further independent unit with exact artifact evidence. Its separate index
+preserves the prior ten-unit snapshot; the table below counts that prior snapshot.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful
