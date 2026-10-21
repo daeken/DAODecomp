@@ -40,9 +40,9 @@ public static class Vc8StructuredMemoryProfile
         return new(f,["flat32 thiscall void and observed cdecl outgoing-word signatures are compiler hypotheses; zero callee cleanup never proves arity","external target, unknown result/effects/throw/termination retained; no allocator or container interpretation","ordered potentially aliased observations retained, stack POP/RET become fresh unknown memory reads after stores; no untouched-frame proof","structured forward paths share only identical ordered effects; complete original/native comparison required"],terminalRuntime!=null,terminalRuntime==null?null:ReceiverLayoutRecovery.Observe(f));
     }
     sealed record Path(FlowPredicate[] Predicates,FlowEffect[] Effects);
-    public static string Emit(StructuredMemoryFunction ir,uint rva,uint imageBase,uint imageEnd,string module,JsonElement? originalLift=null,bool typedReceiver=false,bool compactScalars=false)
+    public static string Emit(StructuredMemoryFunction ir,uint rva,uint imageBase,uint imageEnd,string module,JsonElement? originalLift=null,bool typedReceiver=false,bool compactScalars=false,bool incomingValueIdentities=false)
     {
-        if(ir.TerminalAware){Need(originalLift!=null,"terminal_memory_original_lift_required");return Vc8MutableMemoryEmitter.Emit(ir,originalLift!.Value,rva,imageBase,imageEnd,module,typedReceiver,compactScalars);}
+        if(ir.TerminalAware){Need(originalLift!=null,"terminal_memory_original_lift_required");return Vc8MutableMemoryEmitter.Emit(ir,originalLift!.Value,rva,imageBase,imageEnd,module,typedReceiver,compactScalars,incomingValueIdentities);}
         Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");var f=ir.Flow;int arguments=f.ReturnCleanupBytes[0]/4;var allEffects=f.NormalPaths.SelectMany(Observable).ToArray();var reads=allEffects.Where(e=>e.Kind=="memory_read").DistinctBy(e=>((MemoryReadValue)e.Value!).Pc).ToArray();var calls=allEffects.Where(e=>e.Kind=="external_call").GroupBy(e=>e.Call!.Target).ToArray();
         string Value(RecoveredValue raw) {
             var v=Low(Normalize(raw));return v switch{

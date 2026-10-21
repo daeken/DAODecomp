@@ -2234,3 +2234,110 @@ all produced the same relocated130-byte body. Natural signed forms were explicit
 diagnostic-only because signed overflow is not the unsigned machine contract.
 These negative experiments justify no new compiler profile or source rule. The
 ordinary return-slot alias counterexample and conservative refusal remain.
+
+## Isolate authentic template context before changing the compiler profile
+
+An escaping member pointer instantiated the actual VC8
+`std::string::erase(size_type, size_type)` from unmodified, locally acquired
+headers. With the existing flags, both RTM and SP1 emitted a complete 131-byte
+body matching all 123 original nonrelocation bytes at `0x1210`. The two vendor
+call relocations remain unbound: this is source-family evidence, not a complete
+accepted match. Four retail observations (two compilers, default and secure-SCL
+disabled) agreed. Debug configurations instead changed seven field-offset bytes
+and object size from 28 to 32. Eight successful compiles took 1.897 compiler
+seconds and 6.202 seconds of VM dispatch, with no unknown outcomes.
+
+A separate ten-compile ablation held the retail layout and flags fixed. Bypassing
+traits tag dispatch, calling the traits move helper directly, calling the secure
+memmove macro directly, and literally expanding both buffer-pointer selections
+each retained the identical 131-byte body. Introducing only a destination-pointer
+local produced 129 bytes; only a source-pointer local produced 132; both locals
+produced the same 129-byte body. Restoring the authentic expressions restored 131
+bytes, and RTM corroborated the SP1 result with both locals. All ten exits were
+successful, with zero warnings/unknowns, 2.099 compiler seconds and 5.381 seconds
+of VM dispatch. Execution used Windows 11 ARM64's x86 translation.
+
+This isolates a sensitivity to value materialization, selection ordering and
+register/stack reuse. It does not isolate the precise 131/130-byte difference:
+none of these variants emitted the retained recovered 130-byte body. In
+particular, neither helper indirection nor the buffer-selector call boundary is
+the sole cause in the authentic template context. The compiler's internal reason
+and original source history remain unknown. No flags or production rules changed.
+
+The portable lesson is to retain conditional pointer values and their definitions
+through recovery rather than assume either temporaries or inlined expressions
+will always reproduce a compiler decision. Original helper boundaries need not
+be uniquely recoverable. A deterministic, bounded choice among justified source
+forms is possible; a universal inverse rule is not established here. Typed pointer
+operations and explicit locals can change validity premises or evaluation order,
+so these diagnostic variants do not prove the raw wrapped-input semantics or
+exclude the retained ordinary return-slot alias counterexample. Vendor headers,
+overlay diffs, objects and complete comparison records remain private in the
+template-context and template-ablation scopes. Accepted totals and the frontier
+are unchanged.
+
+## Separate recovered value identity from reused incoming storage
+
+A further bounded reduction found a reversible switch in the recovered witness.
+The incoming offset is first captured in a register, after which its stack home
+holds a selected buffer base. Replacing the generated assignments to the incoming
+parameter with assignments to a fresh unsigned local, and reading that local in
+the same sum, changed `LEA+ADD` to `MOV memory+ADD+ADD`. It also restored the
+capacity subtraction after the source-argument push. Exact reversal restored the
+130-byte body; renaming the fresh local retained the new 131-byte body. The two
+ADD operands remain reversed relative to the original, so this is not an exact
+match. No assembly, bytes or scheduling barriers were inserted.
+
+Changing the external declaration (return type, argument types, genuine CRT name
+and annotations) or changing only the inner sum between pointer and unsigned
+arithmetic did not switch the respective witnesses. An authentic source variant
+imitating incoming-parameter reuse still emitted 131 bytes. An unrelated 87-byte
+synthetic pair changed initial load placement but did not reproduce the specific
+LEA-versus-ADD trigger; a 73-byte no-join case also retained ADDs. The full witness
+therefore establishes source-value-identity sensitivity, not a universal compiler
+rule or a verified explanation of VC8's internal passes.
+
+All 16 compiler invocations succeeded without warnings or unknown exits:
+1.974 compiler seconds, 6.375 VM dispatch seconds and 391.8 seconds from first
+dispatch through reporting. Existing exact baselines were reused; reversal was
+the justified repeat. Windows 11 ARM64 x86 translation and the same fixed SP1
+flags were used. Complete bodies, relocations and minimal deltas remain in the
+private codegen-reduction scope; no acceptance, export or frontier credit changed.
+
+For recovery, a stack slot's new contents need a distinct value identity even
+when the physical address previously held an argument. Physical reuse does not
+prove an assignment to the original source parameter. A fresh-local emission
+choice may be investigated as a compiler-profile hypothesis, but architectural
+stack stores, reads and aliases must remain represented and independently checked.
+The next useful test is whether a reusable transformation produces the same
+candidate through the normal pipeline and satisfies the existing complete gates,
+including the previously rejected ordinary return-slot observation.
+
+
+## Recover values independently of reused parameter homes
+
+The first reusable candidate from the controlled VC8 reductions separates the
+selected value in a reused incoming word from the source-level parameter name.
+It does not infer that this was an original local or erase the architectural
+stack effects. New recipe/version bindings distinguish this candidate from all
+earlier source and cache records. Existing recipes and acceptance policies remain.
+
+Normal generation emits a fresh unsigned slot carrier and compiles `0x1210`
+to131 bytes. Its exact result is still mismatch, while both existing complete
+comparison gates report separately labeled bounded behavioral equivalence. Both
+CALL return PCs now equal the original, so the concrete original/actual-CRT
+return-slot alias input produces `0x401272` in both ordinary buffers, with the
+same normal return/stack/length. This uses actual CRT instructions with no stubs;
+Unicorn is not native Windows or game execution.
+
+The ordered ten-identity development pilot took62.21seconds wall and8.557seconds
+summed compiler receipt time, producing8exact/1SIB/1behavioral results. An earlier
+22byte control compiled successfully but cache validation refused the newly
+registered recipe until its Python allowlists and runtime copy were updated.
+That first attempt is preserved; total11known compiler exits remain below16.
+Focused generic tests cover old argument capture, joined/fullword definitions,
+partial/overlap/mixed widths, unknown aliases/frame escape, terminal paths, live
+flag captures and recipe/cache invalidation. No original function fixture is
+committed. The private export pilot rechecks ten source-equal artifacts without
+compilation. Released counts/public source are not promoted before independent
+review; the next actual identity12a0 remains blocked at the explicit range guard.

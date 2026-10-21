@@ -57,9 +57,10 @@ Unsupported obligations remain unresolved; this is not whole-game proof.
 | Implementations with current emulator corpus evidence | 0 |
 | Input cases across those functions (excluding repeat runs) | 0 |
 | Implementations with current native Windows corpus evidence | 0 |
-| Exported replayable C++ units (separate snapshot) | 9 |
+| Exported replayable C++ units (separate snapshot) | 10 |
 | Replayable exports with exact artifact evidence | 8 |
 | Replayable exports with bounded encoding evidence | 1 |
+| Replayable exports with bounded behavioral evidence | 1 |
 
 Corpus evidence is not a universal equivalence proof. The inventory is provisional;
 these counts are not a percentage of whole-game completion. Evidence counts require

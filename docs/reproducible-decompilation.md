@@ -1142,3 +1142,98 @@ The prior0269 dependency and installed runtime/configuration are rollback inputs
 This adoption changes no reconstruction, comparison or observation-policy rule.
 The ten-identity measured sample is eight exact, one SIB-equivalent and one
 retained mismatch, with no new source export or frontier advancement.
+
+### Diagnose source-context sensitivity with controlled ablations
+
+When an authentic library template is a concrete source-family hypothesis,
+instantiate it with its actual headers and force emission of the target method.
+Inspect the entire method's object section, not a calling wrapper. Preserve
+header, compiler, flag, layout, source and relocation identities. Equal instruction
+bytes outside relocations do not establish external-call bindings or acceptance.
+
+Once a baseline reproduces the observed instruction shape, remove one layer at
+a time in private copies: helper dispatch, selector calls, then value
+materialization. Hold compiler flags and layout fixed, retain full-body outcomes,
+and reverse a discriminating edit to check that the original result returns.
+Use another compiler version only for a specific corroborating case. Do not
+exhaust a matrix after it stops distinguishing hypotheses. Keep modified vendor
+headers private and separate from the immutable baseline.
+
+The VC8 erase pilot reproduced all 123 nonrelocation bytes of a 131-byte original
+body. Ten subsequent ablation compiles ruled out helper-layer removal and literal
+selector expansion as sole causes in that context, while pointer locals changed
+code size and allocation. They did not reproduce the recovered 130-byte body or
+explain that exact difference. These are compiler experiments, not a new recovery
+or acceptance pass.
+
+For recovery without source, preserve value flow, receiver lineage, conditional
+selections, machine widths and ordered effects before choosing source forms.
+Separate facts recoverable from the binary from original names, helper boundaries
+and declarations that may be underdetermined. A proposed compiler-profile search
+must use bounded, reproducible choices with explicit preconditions and existing
+complete validation. Pointer types, valid-object bounds and nonaliasing must not
+be inferred merely because a source form compiles more closely. Unknown call,
+fault, wrap or exception obligations remain unknown. No automatic search of these
+source forms is implemented by this diagnostic.
+
+Compiler-pattern research is a reusable project output, including when the
+current function already has a plausible source-family identification. Reduce
+paired code-generation witnesses while preserving the precise distinguishing
+instruction/value-flow pattern; code size alone is not the discriminator. A
+candidate compiler-profile rule should retain the minimal source delta, fixed
+compiler context, a reversal, unrelated synthetic positive cases and relevant
+boundary/negative cases. State the binary/IR evidence required to apply it and
+whether it predicts source sensitivity or an established code-generation trigger.
+Do not present an unobserved compiler-internal mechanism as a measured fact.
+Preserve unresolved pairs for later work rather than converting proximity into
+an explanatory rule.
+
+Keep storage identity distinct from value identity when an incoming argument
+slot is reused after its original value has been captured elsewhere. The observed
+write/read remains an architectural memory effect; assigning the later value the
+original parameter's source name is a separate emission choice. A measured VC8
+example switches reassociation and scheduling when that later value uses a fresh
+local, even though the compiler can reuse the same physical slot. Reversal and
+renaming controls reproduce the result, but smaller examples did not establish a
+universal trigger. Any reusable emission pass still needs explicit applicability,
+negative cases and complete compiled-artifact checking; this observation alone
+does not license eliminating a stack effect or assuming it cannot alias.
+
+
+### Separate an incoming slot's storage from its later value identity
+
+The opt-in recipe `x86-bits32-incoming-slot-value-identities-v1` adds
+`emit-vc8-incoming-word-value-identities-v1` before the existing behavioral
+comparison step. It keeps the captured original argument, incoming-memory writes,
+subsequent memory versions, aliases and instruction origins in the same recovered
+IR. Only the VC8 C++ carrier changes: a selected fullword value may use
+`slot_value_0004` rather than an assignment to source parameter `arg_0`. This is
+a compiler-profile emission hypothesis, not a theorem that a stack write is private
+or unobservable. Generated source alone remains unaccepted.
+
+Eligibility requires complete aligned observed word slots, no observed frame
+escape, and a known reaching word definition on every emitted normal/terminal
+path. Partial/overlapping stores, mixed byte/fullword parameters, unknown aliases
+or calls invalidating a later reaching slot read refuse. Multiple definitions
+remain ordered; conditional paths keep their values. An ordinary memory read can
+observe an earlier slot store, so its effect remains in IR and the compiled
+artifact must preserve it. No implicit stack nonaliasing or object bounds are added.
+
+The measured candidate at `0x1210` is now131 bytes with both original numeric
+call-return PCs. The existing strict checker still reports a mismatch because the
+two additions use a different operand order. The unchanged opt-in behavioral
+relation checks the complete range/relocations, one changed block, five ordered
+memory events, all call-boundary registers/arithmetic flags and inherited-unwind
+obligations. Its saved-fault-context observation exclusions stay explicit. The
+previous actual CRT alias input now copies the same return word on both sides;
+that single Unicorn recheck is a regression test, not a universal proof.
+
+The representative development sample is eight exact, one SIB-equivalent and
+one behaviorally-equivalent compiled artifact. The source is generated through
+normal durable MCP operations, not edited from the private experiment. A private
+fresh source-export pilot contains the same ten source hashes. These outcomes
+remain provisional until cumulative machinery review and adoption. No whole
+inventory inference follows. Next `0x12a0` refuses the existing discontiguous-range
+guard; its separated230owned bytes,42byte excluded gap and four-state/two-try EH
+need explicit range/exception recovery. The typed MUL prerequisite is available;
+that does not make those remaining obligations supported.

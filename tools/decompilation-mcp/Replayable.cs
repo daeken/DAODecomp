@@ -11,9 +11,12 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public static PipelineRecipe EhTwoExit=>new(1,"x86-bits32-bounded-paths-EH-v1","sharpretro-typed-v1",Vc8EhProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-EH-v1"]);
     public static PipelineRecipe CallAdapters=>new(1,"x86-bits32-composed-call-adapters-v1","sharpretro-typed-v1",Vc8CallAdaptersProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","emit-vc8-composed-call-adapters-v1"]);
     public static PipelineRecipe ByValueCalls=>new(1,"x86-bits32-composed-byvalue-calls-v1","sharpretro-typed-v1",Vc8ByValueCallsProfile.Version,["raise-linear-effects-tail-v2","derive-original-normal-return-stack-v1","resolve-pure-forwarding-normal-return-v1","resolve-transparent-effectful-tail-ABI-v1","raise-one-forward-conditional-v1","raise-bounded-two-exit-effects-v1","derive-original-VC8-EH-frame-v1","raise-initialized-private-subword-copies-v1","observe-outgoing-push-and-private-cleanup-regions-v1","emit-vc8-composed-byvalue-calls-v1"]);
+    public static PipelineRecipe IncomingSlotValues=>new(1,"x86-bits32-incoming-slot-value-identities-v1","sharpretro-typed-v1",Vc8TerminalCallProfile.Version,[..ScalarSource.Steps,IncomingSlotValueIdentityRecovery.Version,"compare-windows-x86-inherited-unwind-ordered-events-v1"]);
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesIncomingSlotValues=>Architecture==IncomingSlotValues.Architecture;
     public static PipelineRecipe BehavioralEvents=>new(1,"x86-bits32-scalar-behavioral-events-v1","sharpretro-typed-v1",Vc8TerminalCallProfile.Version,[..ScalarSource.Steps,"compare-windows-x86-inherited-unwind-ordered-events-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool UsesBehavioralEvents=>Architecture==BehavioralEvents.Architecture;
+    public bool UsesBehavioralEvents=>Architecture==BehavioralEvents.Architecture||UsesIncomingSlotValues;
     public static PipelineRecipe ScalarSource=>new(1,"x86-bits32-terminal-aware-scalar-source-v1","sharpretro-typed-v1",Vc8TerminalCallProfile.Version,[..TypedReceiver.Steps,"compact-captured-instruction-local-unsigned-scalars-v1"]);
     [System.Text.Json.Serialization.JsonIgnore]
     public bool UsesScalarSource=>Architecture==ScalarSource.Architecture||UsesBehavioralEvents;
@@ -45,7 +48,7 @@ public sealed record PipelineRecipe(int SchemaVersion,string Architecture,string
     public bool UsesStackArguments=>CompilerProfile is Vc8StackArgsProfile.Version or Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
     [System.Text.Json.Serialization.JsonIgnore]
     public bool UsesConditionalCalls=>CompilerProfile is Vc8ConditionalCallsProfile.Version or Vc8EhProfile.Version or Vc8CallAdaptersProfile.Version or Vc8ByValueCallsProfile.Version or Vc8LoopsProfile.Version or Vc8StructuredMemoryProfile.Version or Vc8TerminalCallProfile.Version;
-    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory,EncodingEquivalence,TerminalMemory,AbiEffects,TypedReceiver,ScalarSource,BehavioralEvents}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
+    public void Validate() { if(SchemaVersion!=1||Frontend!="sharpretro-typed-v1"||!(new[]{Default,StackArguments,ConditionalCalls,EhTwoExit,CallAdapters,ByValueCalls,CountedLoops,OrderedMemory,EncodingEquivalence,TerminalMemory,AbiEffects,TypedReceiver,ScalarSource,BehavioralEvents,IncomingSlotValues}.Any(r=>Architecture==r.Architecture&&CompilerProfile==r.CompilerProfile&&Steps.SequenceEqual(r.Steps))))throw new ArgumentException("unsupported_recipe_or_step_order"); }
 }
 public sealed partial class Engine
 {
@@ -225,7 +228,7 @@ public sealed partial class Engine
                                     StructuredMemoryFunction recovered;
                                     try {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees);}
                                     catch(ArgumentException) when(recipe.UsesTerminalMemory) {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees,dependencies.GetProperty("runtime_terminal_evidence").Deserialize<RuntimeTerminalEvidence>(Options));}
-                                    ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module,lifted.GetProperty("lift"),recipe.UsesTypedReceiver,recipe.UsesScalarSource);
+                                    ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module,lifted.GetProperty("lift"),recipe.UsesTypedReceiver,recipe.UsesScalarSource,recipe.UsesIncomingSlotValues);
                                 }
                             }
                         }

@@ -77,3 +77,5 @@ BehavioralPipelineTests = load_shared('test_replayable_behavioral').BehavioralPi
 BehavioralBoundaryTests = load_shared('test_replayable_behavioral').BehavioralBoundaryTests
 ReturnSlotAliasTests = load_shared('test_replayable_behavioral').ReturnSlotAliasTests
 MulConsumerTests = load_shared('test_replayable_mul').MulConsumerTests
+IncomingValueIdentityTests = load_shared('test_replayable_incoming_values').IncomingValueIdentityTests
+IncomingValuePipelineTests = load_shared('test_replayable_incoming_values').IncomingValuePipelineTests
