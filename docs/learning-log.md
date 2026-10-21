@@ -2772,3 +2772,28 @@ one behavioral and two mismatches. One C# build took 1.75 seconds; ten VC8 objec
 invocations ran in Windows 11 ARM64 translation. No LINK, CI, whole-inventory
 compilation or game execution ran. Nine fresh exports in expansion-028 preserve
 the prior twenty-four public units. Next candidate is three bytes at `0x621c0`.
+
+
+### 2026-10-21: receiver words and addresses at three/four bytes
+
+The next ten functions yielded eight complete exact compiler matches: six 3/3-byte
+and two 4/4-byte units. Existing rules covered four; the shared extension handles
+two receiver-word loads, receiver-address arithmetic, and a low-byte zero return
+with retained flags. The source uses observed word width and unsigned native
+address arithmetic, without fabricated fields, arrays, valid-object or nonalias
+contracts. Complete FlowIR retains original read origins/snapshots, upper-EAX
+expressions, flags, return-target read and stack effects.
+
+The indirect CALL EAX case and entry-EAX doubling case remain generation refusals,
+not compiled mismatches. They need reusable target/ABI recovery and preservation
+of unknown effects and nonconstant flags; guessing targets or parameters would
+not resolve those boundaries. The prior eighteen holes remain and these two are
+added explicitly. Next sorted candidate is four bytes at `0x1f060`.
+
+Eighty-one focused tests passed on macOS ARM64. Thirteen complete objects retain
+nine exact, one encoding, one behavioral and two known mismatches; together with
+the two generation refusals these cover fifteen original identities. One C# build
+took 1.76 seconds; eight actual VC8 object invocations ran in Windows 11 ARM64
+translation. Two compile-request jobs stopped before compiler dispatch because
+generation was unsupported. No LINK, CI, full scan or game ran. Eight fresh
+exports in expansion-029 preserve the thirty-three earlier public units.

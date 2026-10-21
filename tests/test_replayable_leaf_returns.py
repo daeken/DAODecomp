@@ -30,9 +30,9 @@ class LeafReturnTests(unittest.TestCase):
   extras=[write(1,const(7)),node('IlStore',Addr=reg(1),Val=const(7)),node('IlWriteReg',Kind=dict(name='Eflags'),Idx=6,Val=node('IlReadReg',Kind=dict(name='Eflags'),Idx=0,Ty=ty(1))),write(0,node('IlLoad',Addr=reg(1),Ty=ty(32)))]
   for extra in extras:
    p=fixture();p['lift']['instructions'][0]['tree']['Body'].insert(0,extra);self.assertEqual(self.recover(p)['status'],'unsupported',extra)
- def test_partial_register_mask_and_extra_flags_refuse(self):
+ def test_partial_register_mask_and_unknown_flags_refuse(self):
   p=fixture(1,low=True);p['lift']['instructions'][0]['tree']['Body'][0]['Val']['L']['R']=const(0xffffffffffff0000,64);self.assertEqual(self.recover(p)['status'],'unsupported')
-  p=fixture(1,low=True);p['lift']['instructions'][0]['tree']['Body'].append(node('IlWriteReg',Kind=dict(name='Eflags'),Idx=6,Val=const(1,1)));self.assertEqual(self.recover(p)['status'],'unsupported')
+  p=fixture(1,low=True);p['lift']['instructions'][0]['tree']['Body'].append(node('IlWriteReg',Kind=dict(name='Eflags'),Idx=6,Val=node('IlReadReg',Kind=dict(name='Eflags'),Idx=0,Ty=ty(1))));self.assertEqual(self.recover(p)['status'],'unsupported')
  def test_return_target_fault_prefix_and_extra_instructions_refuse(self):
   for mode in ('target','fault','prefix','extra','opaque'):
    p=fixture();rows=p['lift']['instructions']

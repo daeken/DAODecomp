@@ -1849,8 +1849,9 @@ fault path, and a completely verified final return tree. It accepts either one
 cleanup-only return with unchanged EAX and a positive word-aligned cleanup up to
 32 bytes, or one result-producing instruction followed by a return. The latter
 requires exactly one EAX write, no other register write, and only constant flag
-writes alongside a fullword constant. A low-byte constant requires the explicit
-upper-EAX-preserving mask/or expression and no flag writes. All effects, flags,
+writes alongside a fullword constant. The initial low-byte form required the explicit
+upper-EAX-preserving mask/or expression and no flag writes; the subsequent
+extension below retains constant flag writes as additional artifact obligations. All effects, flags,
 return targets, stack adjustments and instruction origins remain in the record.
 
 Unsigned int, unsigned char and void member declarations, and parameters chosen
@@ -1862,3 +1863,29 @@ negative checks reach the same recovery path used by routine generation:
 `python -m unittest discover -s tests -p test_replayable_leaf_returns.py -v`.
 The profile intentionally leaves longer functions and other register/memory forms
 to their existing domains; it is not a general leaf-function theorem.
+
+
+### Propose receiver reads without inventing object types
+
+The bounded leaf profile admits one 32-bit memory read at an address derived
+only from entry ECX plus a constant displacement from zero to 4096. It requires
+that exact epoch-zero read snapshot to feed the sole EAX result write, with no
+other pre-return effect. A separate form admits only the sole EAX write of the
+receiver-relative address. Stripping 32/64-bit truncation/extension wrappers is
+limited to a low 32-bit source proposal; the full original expression stays in FlowIR.
+Unsigned address arithmetic preserves wrap in the proposed source. A raw word
+dereference describes the observed read width, not a recovered field or array.
+
+Neither declaration proves object validity, alignment, extent, alias freedom or
+a source type. Complete actual artifact checking still covers the read/return
+fault ordering, register/flag state and native context; the C++ proposal alone
+is insufficient. Extra reads, writes, flags, calls, changed receiver, partial
+widths, different snapshot/result identity or unsupported displacement refuse.
+No memory-effect or caller-memory-retention rule changes.
+
+Low-byte constants may now retain constant single-bit flag writes, just as the
+fullword constant form already did. The upper-EAX mask and all flags remain in
+the record; no flag is declared unobservable. Actual compiler comparison accepted
+the observed low-byte zero idiom. Entry-EAX-dependent arithmetic/nonconstant flags
+and indirect call contracts remain unsupported. Reproduce the new generic guards
+with `python -m unittest discover -s tests -p test_replayable_leaf_receivers.py -v`.

@@ -373,3 +373,19 @@ preserved. All ten were visited, and the separate expansion-028 exports nine
 accepted units while preserving the prior twenty-four. The fifteen-identity
 sample retains eleven exact, one encoding, one behavioral and two mismatches
 (the short jump and `0x12a0`). Next sorted candidate is `(3 bytes, 0x621c0)`.
+
+
+The third size-priority window visited eight three-byte and two four-byte
+identities. Eight actual objects matched completely. The leaf profile now also
+proposes a single entry-ECX-relative fullword read or unsigned receiver-address
+calculation, with the actual load width, address lineage and memory snapshot
+retained. It does not infer fields, arrays, object extent or valid pointers. A
+low-byte constant may retain constant flag writes, checked in the actual output.
+
+`0x5032fc` remains unsupported because its indirect call target and contract are
+unknown. `0x50ee90` remains unsupported because entry-EAX arithmetic and its flags
+have no supported incoming source ABI. Neither reached the compiler. Thirteen
+complete sampled objects retain nine exact, one encoding, one behavioral and
+two known mismatches; the two generation refusals complete the fifteen-identity
+sample. Expansion-029 adds eight units while preserving the prior thirty-three.
+Next sorted candidate is `(4 bytes, 0x1f060)`; twenty recorded holes remain.
