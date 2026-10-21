@@ -54,11 +54,17 @@ def bypass(p,index,target,*,initial=None):
  prefix.append(row(start+len(prefix)*2,[branch],'7400'));rows[index:index]=prefix;p['frame']['instruction_origins']=[r['pc']for part in p['lift']['ranges']for r in part['lift']['instructions']]
  return p
 
+def comparison_fixture(other_zero_bound=7):
+ p=fixture();rows=p['lift']['ranges'][0]['lift']['instructions'];a=tmp(101,32);diff=tmp(102,32)
+ rows[16]['tree']['Body'] += [node('IlLet',Id=101,Val=node('IlCast',Kind=dict(name='Trunc'),X=reg(1),Ty=ty(32))),node('IlLet',Id=102,Val=node('IlBin',Op=dict(name='Sub'),L=a,R=const(other_zero_bound,32),Ty=ty(32))),node('IlWriteReg',Kind=dict(name='Eflags'),Idx=0,Val=node('IlBin',Op=dict(name='Ult'),L=a,R=const(7,32),Ty=ty(1))),node('IlWriteReg',Kind=dict(name='Eflags'),Idx=6,Val=node('IlBin',Op=dict(name='Eq'),L=diff,R=const(0,32),Ty=ty(1)))]
+ cf=node('IlReadReg',Kind=dict(name='Eflags'),Idx=0,Ty=ty(1));zf=node('IlReadReg',Kind=dict(name='Eflags'),Idx=6,Ty=ty(1));condition=node('IlBin',Op=dict(name='Or'),L=cf,R=zf,Ty=ty(1));rows[17]['tree']['Body'] += [write(1,const(999)),node('IlBranch',Kind=dict(name='CondJmp'),Target=const(rows[18]['pc'],32),Cond=condition)]
+ return p
+
 @unittest.skipUnless(DLL.exists(),'build changed component first')
 class EbpSourceTests(unittest.TestCase):
  def run_source(self,p):return json.loads(subprocess.check_output([DOTNET,str(DLL),'recover-ir'],input=json.dumps(p).encode()))
  def test_shared_suffix_keeps_normal_and_catch_exception_regions(self):
-  r=self.run_source(fixture());self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('r_0 = fn_00002100('),2);self.assertLess(s.index('r_0 = fn_00002100('),s.index('} catch (...)'));self.assertIn('throw;',s);self.assertIn('__debugbreak();',s);self.assertFalse(r['proof']);self.assertEqual(len(r['ir']['traps']),1);self.assertTrue(r['ir']['traps'][0]['delivery_and_resumption_unknown'])
+  r=self.run_source(fixture());self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),2);self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('throw;',s);self.assertIn('__debugbreak();',s);self.assertFalse(r['proof']);self.assertEqual(len(r['ir']['traps']),1);self.assertTrue(r['ir']['traps'][0]['delivery_and_resumption_unknown'])
  def test_wrong_trap_vector_origin_or_continuation_refuses(self):
   for key,value in [('Vector',0),('Architecture','other'),('InstructionPc',const(7,64)),('ContinuationPc',const(7,64))]:
    p=fixture();p['eh']['dependencies'][0]['typed_instructions'][0]['lift']['instructions'][-1]['tree']['Body'][0][key]=value;self.assertEqual(self.run_source(p)['status'],'unsupported',key)
@@ -114,3 +120,26 @@ class EbpSourceTests(unittest.TestCase):
  def test_try_marker_and_literal_continuation_cannot_be_bypassed(self):
   p=bypass(fixture(),21,22);self.assertEqual(self.run_source(p)['blocker'],'EBP_try_outer_try_body')
   p=fixture();rows=p['eh']['dependencies'][1]['typed_instructions'][0]['lift']['instructions'];rows[9]['raw_hex']='7500000000';rows[9]['tree']['Body']=[node('IlBranch',Kind=dict(name='CondJmp'),Target=const(rows[10]['pc'],32),Cond=const(1,1))];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_catch_continuation_not_definite')
+
+ def test_source_contexts_share_only_explicit_parent_words(self):
+  r=self.run_source(fixture());self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertIn('r_main_0 = fn_00002100',s);self.assertIn('r_continuation_0 = fn_00002100',s);self.assertIn('r_allocation_catch_0 = fn_00002000',s);self.assertIn('r_cleanup_catch_6 =',s);self.assertIn('parent_m20 =',s);self.assertIn('parent_m24 =',s);self.assertNotIn('unsigned int r_0;',s);self.assertIn('push_main_',s);self.assertIn('push_continuation_',s)
+
+ def test_zero_extended_capture_uses_word_storage_but_wide_product_stays_wide(self):
+  p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];narrow=node('IlCast',Kind=dict(name='Zext'),X=node('IlCast',Kind=dict(name='Trunc'),X=reg(1),Ty=ty(32)),Ty=ty(64));r['tree']['Body'].insert(0,node('IlLet',Id=101,Val=narrow));r['tree']['Body'].append(write(0,tmp(101,64)));wide=node('IlBin',Op=dict(name='Mul'),L=narrow,R=narrow,Ty=ty(64));r['tree']['Body'].append(node('IlLet',Id=102,Val=wide));r['tree']['Body'].append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(102,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);source=result['source'];self.assertIn(f"unsigned int t_main_{r['pc']:x}_101;",source);self.assertIn(f"unsigned __int64 t_main_{r['pc']:x}_102;",source)
+
+ def test_unsigned_condition_uses_same_captured_operands_after_register_write(self):
+  result=self.run_source(comparison_fixture());self.assertEqual(result['status'],'generated',result);source=result['source'];condition=next(line for line in source.splitlines()if 'goto L_main_'in line);self.assertIn(' <= ',condition);self.assertIn('t_main_',condition);self.assertNotIn('r_main_1',condition)
+ def test_different_subtraction_bound_does_not_fuse_flags(self):
+  result=self.run_source(comparison_fixture(8));self.assertEqual(result['status'],'generated',result);condition=next(line for line in result['source'].splitlines()if 'goto L_main_'in line);self.assertNotIn(' <= ',condition);self.assertIn(' | ',condition)
+
+ def test_wide_product_of_captured_words_keeps_value_without_wide_local(self):
+  p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];body=r['tree']['Body'];body.insert(0,node('IlLet',Id=101,Val=node('IlCast',Kind=dict(name='Trunc'),X=reg(1),Ty=ty(32))));operand=node('IlCast',Kind=dict(name='Zext'),X=tmp(101,32),Ty=ty(64));body.append(node('IlLet',Id=102,Val=node('IlBin',Op=dict(name='Mul'),L=operand,R=operand,Ty=ty(64))));body.append(write(1,const(9)));body.append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(102,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);source=result['source'];self.assertNotIn(f"t_main_{r['pc']:x}_102",source);self.assertIn(f"t_main_{r['pc']:x}_101",source);self.assertIn(' * ',source)
+
+ def test_flag_operand_load_is_captured_once_across_aliasable_store(self):
+  p=comparison_fixture();rows=p['lift']['ranges'][0]['lift']['instructions'];next(n for n in rows[16]['tree']['Body']if n.get('Id')==101)['Val']=node('IlLoad',Addr=reg(1),Ty=ty(32));rows[17]['tree']['Body'].insert(0,node('IlStore',Addr=reg(1),Val=const(99,32)));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);source=result['source'];self.assertEqual(source.count('read_word('),2);condition=next(line for line in source.splitlines()if 'goto L_main_'in line);self.assertIn('t_main_',condition);self.assertNotIn('read_word',condition)
+ def test_flag_facts_do_not_cross_a_join_with_different_initial_values(self):
+  p=comparison_fixture();initial=[write(7,reg(1))]+[node('IlWriteReg',Kind=dict(name='Eflags'),Idx=i,Val=const(0,1))for i in (0,6)];p=bypass(p,16,17,initial=initial);result=self.run_source(p);self.assertEqual(result['status'],'generated',result);condition=[line for line in result['source'].splitlines()if 'goto L_main_'in line][1];self.assertIn('flag_main_0',condition);self.assertIn('flag_main_6',condition);self.assertNotIn(' <= ',condition)
+ def test_mistyped_capture_does_not_acquire_unsigned_comparison_fact(self):
+  p=comparison_fixture();rows=p['lift']['ranges'][0]['lift']['instructions'];next(n for n in rows[16]['tree']['Body']if n.get('Id')==101)['Val']=reg(1);result=self.run_source(p);self.assertEqual(result['status'],'generated',result);condition=next(line for line in result['source'].splitlines()if 'goto L_main_'in line);self.assertNotIn(' <= ',condition)
+ def test_capture_word_narrowing_preserves_arbitrary_high_bits(self):
+  p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];r['tree']['Body'].insert(0,node('IlLet',Id=200,Val=node('IlBin',Op=dict(name='Add'),L=reg(1),R=const(0x100000000,64),Ty=ty(64))));r['tree']['Body'].append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(200,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);self.assertIn(f"unsigned __int64 t_main_{r['pc']:x}_200;",result['source'])

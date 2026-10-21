@@ -2470,3 +2470,28 @@ initialization and compatible outgoing stacks at CFG joins, conservatively
 bounds catch-entry locals, and checks definite try/continuation facts. It refuses
 the witness without inventing an initial register value. The actual frontier
 source remains byte-for-byte unchanged, so its completed compile is reused.
+
+### Captured values reduced a compiled EBP mismatch
+
+The next bounded batch used four real VC8 compiles for the same frontier.
+Separating source value identities across EH contexts alone left the complete
+744-byte candidate unchanged. Proven zero-extension capture narrowing reduced it
+to 668 bytes. Recovering unsigned conditions from the same captured carry/zero
+operands reduced it to 611 bytes. Keeping a captured word-by-word wide product
+as a pure expression removed another artificial spill, producing 608 bytes.
+The original complete graph has 488 bytes; all graphs and failures were retained.
+These sizes do not measure behavioral equivalence.
+
+The final main body is 234 bytes against 230 original; the first catch is 135
+against 36, the cleanup catch is 49 against 49, and the return continuation is
+23 against 6. Matching sizes are not matches. The exception tables still compare
+exactly with original-bound references; code and parent-frame differences remain.
+The large first-catch expansion contains the separately protected suffix. A
+nonthrowing-call shortcut is not justified: its deallocation dependency reaches
+an indirect virtual call with unknown exceptional behavior.
+
+Focused tests cover captured reads across aliasable stores and register writes,
+flag-fact invalidation at joins, mismatched unsigned operands/widths, genuine wide
+values and all retained initialization refusals. Compiler runs used Windows 11
+ARM64 x86 translation; host tests ran on macOS ARM64. No game execution, linked
+replacement, new acceptance or source export followed from these improvements.

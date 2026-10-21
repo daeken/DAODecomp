@@ -1422,3 +1422,37 @@ only parent words initialized before its try region. A skipped assignment or
 incompatible argument stack refuses generation; unknown values are never filled
 with zero. Independent review exposed this boundary and its rejected fixture is
 retained with the corrected refusal.
+
+### Recover values before materializing compiler temporaries
+
+The bounded EBP source profile now gives normal, catch and resumed contexts
+separate register, flag, temporary and outgoing-capture identities. Explicit
+parent words and incoming arguments remain the shared values. This does not
+merge exception regions or authorize a different continuation convention.
+
+A zero extension of an observed unsigned word can use word-sized capture storage;
+its later expressions still retain the required wide arithmetic view. Arbitrary
+64-bit values, signed expressions and genuine wide products are not narrowed.
+A 64-bit product of two already captured unsigned words can remain a pure
+expression instead of creating a wide addressable temporary. Its operands must
+be immutable captures or constants; loads are never copied or delayed across an
+aliasable store, register write, call or fault by this rule.
+
+Carry and zero conditions can recover one unsigned comparison when both derive
+from the same instruction's captured word operands. For example, unsigned borrow
+or zero from the same subtraction becomes `left <= right`. Reversed tests use
+the corresponding inverse relation. Different operands, widths or instruction
+origins do not combine. At CFG joins, predicate facts survive only when every
+incoming path supplies the same fact; otherwise emission uses the explicit flag
+values. The reviewed definite-initialization and compatible outgoing-stack
+requirements remain in force.
+
+Reproduce through the focused EBP source tests, then the usual MCP generation,
+fixed VC8 compilation and both full comparison routes. Four paired frontier
+compiles retained the baseline and each changed rule. The complete candidate
+normal/EH graph decreased from 744 to 608 bytes; this is a diagnostic size result,
+not a semantic percentage or acceptance. Main, catch and continuation differences
+remain. In particular, an observed deallocation dependency reaches an indirect
+virtual call, so a nonthrowing declaration cannot be inferred to move the shared
+suffix outside its exception context. The nonaccepting multi-try route is
+unchanged, and parent-frame/continuation correspondence is still required.
