@@ -2698,3 +2698,32 @@ others expose post-call parameter memory, subword writes, arithmetic shifts,
 non-EH split loops, indirect calls and cleanup graphs. These are separate unknowns,
 not nine compiler mismatches. The traversal cursor is now `0x1a40`; earliest
 unresolved remains `0x12a0`. No earlier-hole or whole-game credit is implied.
+
+
+### Small void-source proposals across the next window
+
+The second expansion window visited all ten identities from `0x1a40` to `0x1d50`.
+Three functions already had usable linear effects but no matching source domain.
+The new store-only proposal requires unchanged entry EAX, no stack effects and
+only existing supported constant receiver stores. The constant-call proposal
+requires one original member-call target/receiver, no incoming parameters, one
+to four fullword constants, a matching complete normal-return cleanup observation,
+and exactly the reversed outgoing push span. It retains the unknown call result,
+external effects and existing ABI hypotheses. It neither fabricates a successful
+return nor asserts that void is the original source signature.
+
+Actual VC8 compiled artifacts matched all bytes:7/7 at `0x1cd0`,10/10 at `0x1d40`
+and10/10 at `0x1d50`. The existing exporter freshly checked all three into a separate
+collection. Seven generation refusals cover incoming/member forwarding, sentinel
+loops, two EH cleanup shapes, an explicit callee divide-fault boundary, opaque
+REP stores, and cleanup-lookahead/linear arithmetic support. They are not seven
+compiler mismatches. Earlier holes remain explicit; next unvisited is `0x1d60`.
+
+Focused macOS ARM64 checks passed58 tests:7 new proposal tests,12 linear IR,8
+ordered-memory,12 caller-memory and19 source-export tests. The eight-identity
+complete sample retained five exact, one encoding, one behavioral and the known
+`0x12a0` mismatch. One C# build took1.80seconds; three VC8 object receipts recorded
+1.350,0.959 and0.837seconds in Windows11 ARM64 translation. No LINK or game ran.
+A first local sample script used the wrong retained cache directory and failed
+before dispatch; its log is preserved. The corrected script reused the exact
+original source/profile/object caches without another compiler invocation.

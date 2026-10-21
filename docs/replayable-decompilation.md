@@ -325,3 +325,13 @@ observed. This yields a fresh complete 38-byte VC8 match at `0x13f0`; it does no
 infer a zero-argument dependency signature or preserve caller memory across calls.
 Nine other identities remain deferred with their original evidence and distinct
 blockers. Next traversal is `0x1a40`; earliest unresolved remains `0x12a0`.
+
+
+The next ten-entry window (`0x1a40`–`0x1d50`) adds three exact compiled units:
+`0x1cd0` (7 bytes), `0x1d40` and `0x1d50` (10 bytes each). Two narrow source
+proposals cover store-only code with unchanged entry EAX and one opaque member
+call with one to four observed constant outgoing words. Neither proposal proves
+a void signature; complete artifact comparison decides acceptance. Seven other
+identities remain deferred. Traversal continues at `0x1d60`, while earliest
+unresolved remains `0x12a0`. The separate expansion-026 collection preserves both
+prior source indexes and adds no transferred historical credit.

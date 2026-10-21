@@ -1797,3 +1797,24 @@ outside this window's sample cap, the new unit is exported into the separate
 route. Counts remain ten in the prior snapshot plus one in this expansion, with
 no inherited comparison credit. A future combined index needs its own fresh
 checks or a reviewed append design.
+
+
+### Treat void declarations as checked compiler proposals
+
+A store-only function that leaves entry EAX unchanged may be proposed as a void
+member only when the recovered function has no stack effects and every effect is
+an already supported constant receiver store. A separate forwarding proposal
+admits one opaque member call, no incoming words, one to four constant fullwords,
+a complete uniform callee RET-cleanup observation matching that word span, and
+exact reversed push values/addresses before the call. Additional effects, changed
+receiver, nonconstant/narrow words, unsupported cleanup or missing evidence refuse.
+The older source domains and comparison gates remain unchanged.
+
+These source forms are hypotheses. Unchanged entry EAX and an arbitrary callee
+result remain visible in IR; neither becomes proof of void return semantics,
+formal arity, no-throw behavior, nonaliasing or preserved caller memory. Exact
+compiled artifact comparison can accept a proposal even when its source type is
+not established. No portability or linked-runtime theorem follows. Reproduce
+the focused guard checks with `python -m unittest discover -s tests -p
+test_replayable_void_proposals.py -v` after building the C# component; these open
+typed fixtures are separate from the actual historical-compiler evidence.

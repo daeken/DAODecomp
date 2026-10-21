@@ -195,8 +195,11 @@ public static class Vc8Profile
         if(module.Length is <1 or >128 || module.Any(c=>!(char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-')))throw new ArgumentException("unsupported_module_annotation");
         if(ir.StackEffects.Any(e=>!e.WithinAllocatedFrame))throw new ArgumentException("caller_or_unallocated_stack_write_not_emittable");
         bool tail=ir.ExitKind=="tail_call";
+        // A void declaration is a compiler proposal, not proof that the entry
+        // return register is unobservable. Complete artifact checking remains required.
+        bool voidStores=stackArguments==null&&ir.ExitKind=="return"&&ir.Return==new RegisterInput(0)&&ir.StackEffects.Count==0&&ir.Effects.Count>0&&ir.Effects.All(e=>e.Kind=="store");
         if(tail) {if(ir.Effects.Count==0||ir.Effects[^1].Kind!="tail_call"||ir.Effects.Count(e=>e.Kind=="tail_call")!=1)throw new ArgumentException("unsupported_tail_exit");}
-        else if(ir.ExitKind!="return"||ir.Return!=new RegisterInput(1))throw new ArgumentException("unsupported_return_ABI");
+        else if(!voidStores&&(ir.ExitKind!="return"||ir.Return!=new RegisterInput(1)))throw new ArgumentException("unsupported_return_ABI");
         var decl=new List<string>();var statements=new List<string>();
         foreach(var e in ir.Effects)
         {
@@ -218,9 +221,9 @@ public static class Vc8Profile
             else {var type=e.Bits switch {8=>"unsigned char",16=>"unsigned short",32=>"unsigned int",_=>throw new ArgumentException("unsupported_store_width")};statements.Add($"    *reinterpret_cast<{type}*>(reinterpret_cast<char*>(this) + {offset}) = {c.Value}u;");}
         }
         var globals=decl.Where(d=>d.StartsWith("GLOBAL:")).Distinct().Select(d=>"extern unsigned char "+d[7..]+";");
-        var returnType=tail?"void":"void*";
+        var returnType=tail||voidStores?"void":"void*";
         var parameters=stackArguments==null?"":"unsigned int arg_0";
-        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}({parameters});\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}({parameters}) {{\n"+string.Join("\n",statements)+(tail?"":"\n    return this;")+"\n}\n";
+        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}({parameters});\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}({parameters}) {{\n"+string.Join("\n",statements)+(tail||voidStores?"":"\n    return this;")+"\n}\n";
     }
 }
 
@@ -351,10 +354,32 @@ public static class X86StackArgumentRecovery
 
 public static class Vc8StackArgsProfile
 {
+    // Only one opaque member call, with an exactly observed constant outgoing
+    // word span and no incoming parameters or additional effects. No arity,
+    // return-value, no-throw or memory-retention theorem follows from this source.
+    static string EmitConstantMemberCall(StackArgumentFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
+    {
+        void Need(bool ok,string why){if(!ok)throw new ArgumentException(why);}
+        Need(module.Length is >0 and <=128&&module.All(c=>char.IsAsciiLetterOrDigit(c)||c is '.' or '_' or '-'),"unsupported_module_annotation");
+        var f=ir.Function;
+        Need(f.ExitKind=="return"&&ir.IncomingSlots.Length==0&&ir.Calls.Length==1&&f.Effects.Count==1&&f.Return==new UnknownValue("external_call_clobber:"+Vc8Profile.Abi.Id),"constant_member_call_shape");
+        var call=ir.Calls[0];var e=f.Effects[0];
+        Need(e.Kind=="call"&&e.Pc==call.Pc&&e.Inputs is {Length:1}&&e.Inputs[0]==new RegisterInput(1)&&e.Value is Constant target&&target.Value==call.Evidence.Target&&target.Value>=imageBase&&target.Value<imageEnd,"constant_member_call_target_receiver");
+        Need(call.Arguments.Length is >=1 and <=4&&call.Evidence.CleanupBytes==4*call.Arguments.Length&&call.Arguments.All(a=>a is Constant{Bits:32,Value:<=uint.MaxValue}),"constant_member_call_words");
+        Need(f.StackEffects.Count==call.Arguments.Length,"constant_member_call_extra_stack_effect");
+        for(int i=0;i<f.StackEffects.Count;i++) {
+            var push=f.StackEffects[i];long expected=-4L*(i+1);
+            bool address=push.Address==new AddValue(new RegisterInput(4),expected)||push.Address==new SegmentedAddress(new SegmentInput(2),new AddValue(new RegisterInput(4),expected));
+            Need(address&&push.WithinAllocatedFrame&&push.Bits==32&&push.Value==call.Arguments[^(i+1)]&&push.Pc<call.Pc,"constant_member_call_push_span");
+        }
+        var name=$"fn_{call.Evidence.Target-imageBase:x8}";var parameters=string.Join(", ",Enumerable.Repeat("unsigned int",call.Arguments.Length));var arguments=string.Join(", ",call.Arguments.Cast<Constant>().Select(c=>$"{c.Value}u"));
+        return $"struct Recovered {{\n    void {name}({parameters});\n    void fn_{rva:x8}();\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\nvoid Recovered::fn_{rva:x8}() {{\n    {name}({arguments});\n}}\n";
+    }
     public const string Version="vc8-x86-flat32-addressable-stack-v1";
     public static StackArgumentFunction Raise(JsonElement lift,IEnumerable<CalleeStackLift> callees)=>X86StackArgumentRecovery.Raise(lift,Vc8Profile.Abi,callees);
     public static string Emit(StackArgumentFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
     {
+        if(ir.ReturnCleanupBytes==0)return EmitConstantMemberCall(ir,rva,imageBase,imageEnd,module);
         if(ir.Function.ExitKind!="return"||ir.ReturnCleanupBytes!=4||ir.IncomingSlots.Length!=1||ir.IncomingSlots[0]!=new IncomingStackInput(4,32))throw new ArgumentException("unsupported_stack_parameter_ABI");
         if(ir.Calls.Length!=ir.Function.Effects.Count(e=>e.Kind=="call")||ir.Calls.Select(c=>c.Pc).Distinct().Count()!=ir.Calls.Length)throw new ArgumentException("missing_stack_call_effect");
         return Vc8Profile.EmitCore(ir.Function,rva,imageBase,imageEnd,module,ir);

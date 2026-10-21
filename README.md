@@ -26,6 +26,8 @@ replace or merge the historical source collection and is not a linked game.
 The [first expansion snapshot](src/native/replayable/expansion-025/README.md) adds
 one further independent unit with exact artifact evidence. Its separate index
 preserves the prior ten-unit snapshot; the table below counts that prior snapshot.
+The [second expansion snapshot](src/native/replayable/expansion-026/README.md)
+adds three exact units, for fourteen published units across the three collections.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful
