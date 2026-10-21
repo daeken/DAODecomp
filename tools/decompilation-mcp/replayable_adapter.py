@@ -41,26 +41,29 @@ def lift(request):
     require(sha(original) == project['module_sha256'], 'original_pin_changed')
     pe = PE(original)
     entry = request['entry']
-    ranges = entry['body_ranges']
-    require(len(ranges) == 1 and ranges[0]['start_rva'] == request['rva'], 'discontiguous_or_nonentry_range_unsupported')
-    raw = pe.read(request['rva'], ranges[0]['end_rva_inclusive'] - request['rva'] + 1)
-    require(len(raw) == entry['body_bytes'], 'inventory_range_length_mismatch')
-    payload = dict(hex=raw.hex(), pc=pe.image_base + request['rva'], id=project['module_sha256'] + ':' + str(request['rva']))
-    run = subprocess.run([config.get('dotnet', 'dotnet'), str(dll)], input=json.dumps(payload) + '\n', capture_output=True, text=True, timeout=60)
-    require(run.returncode == 0, 'lifter_process_failure')
-    lifted = json.loads(run.stdout)
-    require('adapter_error' not in lifted, 'lifter_adapter_error')
-    # Independent decoder checks every instruction boundary; no guessed/dropped bytes.
-    import capstone
-    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
-    decoded = list(md.disasm(raw, pe.image_base + request['rva']))
-    require([(i.address, i.size, i.bytes.hex()) for i in decoded] == [(i['pc'], i['length'], i['raw_hex']) for i in lifted['instructions']] and sum(i.size for i in decoded) == len(raw), 'independent_decode_disagreement')
+    from tools.replayable.range_lift import spans, combine
+    ownership = spans(entry, request['rva'])
+    parts=[];slices=[]
+    for lo,hi in ownership:
+        raw=pe.read(lo,hi-lo+1);require(len(raw)==hi-lo+1,'original_owned_range_short_read');slices.append(raw)
+        payload=dict(hex=raw.hex(),pc=pe.image_base+lo,id=project['module_sha256']+':'+str(lo))
+        run=subprocess.run([config.get('dotnet','dotnet'),str(dll)],input=json.dumps(payload)+'\n',capture_output=True,text=True,timeout=60)
+        require(run.returncode==0,'lifter_process_failure');part=json.loads(run.stdout)
+        require('adapter_error' not in part,'lifter_adapter_error')
+        import capstone
+        md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);decoded=list(md.disasm(raw,pe.image_base+lo))
+        require([(i.address,i.size,i.bytes.hex())for i in decoded]==[(i['pc'],i['length'],i['raw_hex'])for i in part['instructions']]and sum(i.size for i in decoded)==len(raw),'independent_decode_disagreement')
+        parts.append(part)
+    lifted=parts[0] if len(parts)==1 else combine(parts,ownership,pe.image_base)
+    # Single-range slice identity stays byte-for-byte compatible. Multi-range
+    # identity binds address/length/hash records, not a fabricated byte stream.
+    slice_hash=sha(slices[0]) if len(parts)==1 else sha(json.dumps([dict(start_rva=lo,end_rva_inclusive=hi,sha256=sha(raw))for(lo,hi),raw in zip(ownership,slices)],sort_keys=True,separators=(',',':')).encode())
     # PE SizeOfImage, never a hardcoded game address bound.
     import struct
     peoff = struct.unpack_from('<I', original, 0x3c)[0]
     image_size = struct.unpack_from('<I', original, peoff + 24 + 56)[0]
     return dict(lift=lifted, image_base=pe.image_base, image_end=pe.image_base + image_size,
-                binary_slice_sha256=sha(raw), lifter_manifest_sha256=sha(manifest_path.read_bytes()),
+                binary_slice_sha256=slice_hash, lifter_manifest_sha256=sha(manifest_path.read_bytes()),
                 scope='typed linear lifter output; ABI is a candidate hypothesis, not proven semantics')
 
 
@@ -180,6 +183,11 @@ def lift_eh(request):
         derived=lift(dict(request,rva=rva,entry=entry))
         code.append(dict(role=role,va=node['va'],size=node['size'],slice_sha256=derived['binary_slice_sha256'],lift=derived['lift'],boundary_basis='original operand-rooted complete supported terminal profile; not an inventory mutation'))
     return dict(caller_slice_sha256=caller['binary_slice_sha256'],image_base=caller['image_base'],image_end=caller['image_end'],graph=evidence,security_cookie_va=cookie,load_config_directory_size=load_size,load_config_declared_size=declared,safe_handler_table_sha256=sha(reader.read(table,count*4)),cleanup_forwarder_va=target,cleanup_terminal_va=terminal,code_dependencies=code,proof=False,scope='bounded original EH graph and actual typed dependencies; common handler, cookie check and cleanup effects remain unknown')
+
+
+def inspect_range_eh(request):
+    from tools.replayable.range_eh import inspect
+    return inspect(request,lift(request),lift)
 
 
 def build(request, folder, source):
@@ -399,8 +407,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
-        result = __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('lift', 'lift_callees', 'lift_eh', 'inspect_range_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
+        result = __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else inspect_range_eh(request) if data['action']=='inspect_range_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

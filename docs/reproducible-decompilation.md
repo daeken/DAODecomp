@@ -1237,3 +1237,34 @@ inventory inference follows. Next `0x12a0` refuses the existing discontiguous-ra
 guard; its separated230owned bytes,42byte excluded gap and four-state/two-try EH
 need explicit range/exception recovery. The typed MUL prerequisite is available;
 that does not make those remaining obligations supported.
+
+### Inspect split ownership and rooted EBP exception dependencies
+
+The lifter bridge accepts validated ordered, nonoverlapping inventory ranges and
+independently decodes/lifts each at its original VA. Single-range outputs preserve
+their existing form. Multiple ranges use `sharpretro_owned_ranges_v1`: nested typed
+lifts, exact range extents and hashes, excluded intervals and a composite identity
+binding addresses as well as slice hashes. They never masquerade as a linear
+instruction stream. `OwnedRangeRecovery` validates coverage and accounting and
+records normal control edges; a target inside an instruction refuses, while
+external/indirect/return edges retain their uncertainty.
+
+Durable generation saves `owned-range-ir.json` and a separate
+`range-eh-inspection.json`, exposed in bounded `replayable_inspect` output. The
+`recover-ir` command also accepts `owned_ranges:true` for generic range inspection;
+its result is `inspected`, never generated or accepted source. The EBP inspection
+supports a rooted cookie-handler form, bounded four-byte-aligned FuncInfo tables,
+acyclic zero-action unwind transitions and catch-all metadata. It rejects invalid
+or overlapping metadata, nonzero unwind actions and unsupported catch types. Catch
+code is discovered by bounded reachable instruction decoding, with call targets,
+returns and traps explicit. Literal EAX return addresses introduce separately
+labeled continuation candidates; they do not enlarge parent ownership. Actual
+typed dependency lifts, including opaque effects, remain available for subsequent
+recovery.
+
+The representative check covers the split-range frontier and ten previously
+accepted source-equal controls, reusing their retained objects. It grants no new
+match or export credit. Complete EBP frame/state/try/catch source lowering and the
+independent candidate multi-try exception-graph comparison remain required before
+this domain can compile and pass. Outside-sample identities are unverified; CI,
+whole-inventory scans and routine broad suites remain disabled.

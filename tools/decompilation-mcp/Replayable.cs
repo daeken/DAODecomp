@@ -159,7 +159,8 @@ public sealed partial class Engine
         var request=JsonDocument.Parse(reader.GetString(0)).RootElement;if(!request.TryGetProperty("operation",out var op)||op.GetString()!="replayable")throw new ArgumentException("not_replayable_job");
         var p=request.GetProperty("project").Deserialize<ProjectConfig>(Options)!;var folder=Path.Combine(Safe(p,p.Replayable!.OutputRoot),id);var path=Path.Combine(folder,"candidate.cpp");var source=File.Exists(path)?File.ReadAllText(path):null;
         var irPath=Path.Combine(folder,"recovered-ir.json");var ir=File.Exists(irPath)?File.ReadAllText(irPath):null;
-        return new{job_id=id,rva=request.GetProperty("rva").GetUInt32(),state=reader.GetString(1),source=source?[..Math.Min(limit,source.Length)],source_sha256=source==null?null:HashText(source),source_truncated=source?.Length>limit,recovered_ir=ir==null?null:ir[..Math.Min(limit,ir.Length)],ir_truncated=ir?.Length>limit,publication="draft_only",proof=false};
+        string? Artifact(string name){var artifact=Path.Combine(folder,name);if(!File.Exists(artifact))return null;var text=File.ReadAllText(artifact);return text[..Math.Min(limit,text.Length)];}
+        return new{owned_range_ir=Artifact("owned-range-ir.json"),range_eh_inspection=Artifact("range-eh-inspection.json"),diagnostic_artifacts_may_be_truncated=true,job_id=id,rva=request.GetProperty("rva").GetUInt32(),state=reader.GetString(1),source=source?[..Math.Min(limit,source.Length)],source_sha256=source==null?null:HashText(source),source_truncated=source?.Length>limit,recovered_ir=ir==null?null:ir[..Math.Min(limit,ir.Length)],ir_truncated=ir?.Length>limit,publication="draft_only",proof=false};
     }
     async Task<JsonElement> ReplayableAdapter(JsonElement request,string action,string folder,string? source=null,object? members=null)
     {
@@ -204,6 +205,12 @@ public sealed partial class Engine
         var project=request.GetProperty("project").Deserialize<ProjectConfig>(Options)!;
             var lifted=await ReplayableAdapter(request,"lift",folder);if(lifted.TryGetProperty("error",out var error))throw new ArgumentException(error.GetString());
             File.WriteAllText(Path.Combine(folder,"lift.json"),lifted.GetRawText());
+            if(lifted.GetProperty("lift").TryGetProperty("schema",out var rangeSchema)&&rangeSchema.GetString()=="sharpretro_owned_ranges_v1") {
+                var owned=OwnedRangeRecovery.Inspect(lifted.GetProperty("lift"));File.WriteAllText(Path.Combine(folder,"owned-range-ir.json"),Json(owned));
+                var rooted=await ReplayableAdapter(request,"inspect_range_eh",folder);File.WriteAllText(Path.Combine(folder,"range-eh-inspection.json"),rooted.GetRawText());
+                if(rooted.TryGetProperty("error",out var rangeError))throw new ArgumentException("owned_ranges_EH_inspection: "+rangeError.GetString());
+                throw new ArgumentException("owned_ranges_EBP_try_catch_source_recovery_unsupported");
+            }
             var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();
             var rva=request.GetProperty("rva").GetUInt32();var imageBase=lifted.GetProperty("image_base").GetUInt32();var imageEnd=lifted.GetProperty("image_end").GetUInt32();object ir;string source;
             try {var basic=X86Recovery.Raise(lifted.GetProperty("lift"),Vc8Profile.Abi);source=Vc8Profile.Emit(basic,rva,imageBase,imageEnd,project.Module);ir=basic;}

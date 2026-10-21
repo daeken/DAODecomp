@@ -2341,3 +2341,28 @@ flag captures and recipe/cache invalidation. No original function fixture is
 committed. The private export pilot rechecks ten source-equal artifacts without
 compilation. Released counts/public source are not promoted before independent
 review; the next actual identity12a0 remains blocked at the explicit range guard.
+
+### Preserve explicit owned ranges before reconstructing split EH
+
+At the next original identity, the inventory owns 230 bytes in two ranges,
+separated by 42 excluded bytes. Lifting those ranges independently preserves real
+instruction addresses; concatenating their bytes would invent a fallthrough and
+misidentify exception continuations as ordinary parent instructions. The shared
+range representation now records each range's slice hash, typed trees and normal
+control edges, including a direct jump into the second owned range. An edge into
+an excluded interval remains outside ownership.
+
+A separate, nonaccepting VC8 inspection follows the actual EBP/FS registration
+prefix to its cookie-checking SAFESEH handler and metadata. The measured graph has
+four states, two catch-all entries and zero unwind actions. Reachable decoding
+retains the two catch graphs separately, plus a literal-return continuation
+candidate that reaches the second parent range. Calls remain unknown effects and
+may return; a following INT3 is retained as an architectural trap, with its opaque
+lifter effect explicitly unresolved. The continuation convention is a hypothesis,
+not a normal entry, source contract or exception-semantics proof.
+
+This closes the earlier inability to inspect a complete owned-range lift through
+the durable MCP path. It does not close source reconstruction: EBP parent-frame
+state, catch/continuation lowering and complete candidate multi-try EH comparison
+remain unsupported. Generation refuses before creating C++ or compiling. No
+original bytes or proprietary metadata are published with this tooling change.

@@ -79,3 +79,6 @@ ReturnSlotAliasTests = load_shared('test_replayable_behavioral').ReturnSlotAlias
 MulConsumerTests = load_shared('test_replayable_mul').MulConsumerTests
 IncomingValueIdentityTests = load_shared('test_replayable_incoming_values').IncomingValueIdentityTests
 IncomingValuePipelineTests = load_shared('test_replayable_incoming_values').IncomingValuePipelineTests
+
+OwnedRangeTests = load_shared('test_replayable_owned_ranges').OwnedRangeTests
+RangeEhInspectionTests = load_shared('test_replayable_owned_ranges').RangeEhInspectionTests
