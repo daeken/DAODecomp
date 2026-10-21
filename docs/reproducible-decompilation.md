@@ -2034,3 +2034,29 @@ a claimed nine-function speedup. No compiler ran for the selected originals.
 Missing control metadata declines the dependency shortcut conservatively; ordinary
 generation keeps its existing bound evidence path. Saved records still require all
 metadata before replay. Older open export fixtures exercise this fallback.
+
+### Recover fixed-width signed bit arithmetic
+
+Flow and graph recovery retain integer values as bit patterns. Sign extension,
+bit-preserving casts and arithmetic shifts now have explicit width checks; signed
+multiply uses the same modular product bits as unsigned arithmetic. Signed binary
+operands must have compatible typed widths. Arithmetic-shift counts must already
+be known within the operand width; an explicit masked count may constant-fold,
+but an unproven dynamic count remains unsupported. Exact truncate/zero-extend
+cancellation prevents repeated register captures from creating redundant deep IR.
+Undefined flags still refuse when observed, and signed comparisons keep the lifted
+flag relations rather than replacing them with guessed source comparisons.
+
+A narrow closed-control, read-only scalar profile emits ordered reads, explicit
+forward predicates and word returns. It supports no opaque calls, external jumps,
+unknown return values, arbitrary stores or guessed object layouts. Extension,
+products and shift sign filling use unsigned C++ bit arithmetic; no signed-overflow
+assumption is added. Original register, flag and stack effects remain in FlowIR.
+Their physical/fault-context obligations still require independent complete native
+comparison; source generation alone never establishes those obligations.
+
+Run the focused `test_replayable_signed` module for open high-bit, extreme-value,
+sign-extension, full/truncated-product, signed-flag comparison and shift-boundary
+cases. These are machinery tests, not execution proof of the original binary.
+Replay an authorized bound identity list with the same recipe and `populate:false`
+for applicability; inspect complete compiler checks separately.

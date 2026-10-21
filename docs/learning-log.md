@@ -2897,3 +2897,34 @@ Zero VC8,VM,LINK,CI,full-suite or game runs occurred; no source or acceptance wa
 invented. Five retained objects preserve exact/encoding/behavioral/two mismatch
 outcomes through both complete routes. Fifty-nine public units and the recovery
 queue `(4 bytes,0xfe920)` remain unchanged.
+
+### 2026-10-21: signed arithmetic enables proposals, not automatic matches
+
+Two closed-control bodies of31 and59 bytes now pass fixed-width signed recovery and
+produce ordered scalar source. Across the retained128-identity pilot, source
+proposals increased from11 to13, affecting exactly90 owned bytes. All other status
+and source-hash results remained unchanged. Baseline/post replay took3.77/3.60
+seconds with zero new diagnostic population. Unavailable, dependency and external
+control cases remain uninspected; this is not whole-binary yield evidence.
+
+Actual VC8 objects exposed different downstream limits: the31-byte original became
+90 bytes with an unresolved `__allmul` helper; the59-byte original became196 bytes
+and mismatched. No source was exported or accepted. The bit-exact unsigned source
+spelling avoids signed overflow, but does not promise the compiler's original
+instruction selection. Natural signed comparison/product lowering remains future
+work requiring its own evidence, not a reason to weaken comparison.
+
+Two single-object launches returned no exit marker. Their unknown outcomes remain
+consumed and immutable; the existing reviewed quiescence/abandonment route released
+the barriers without acceptance. A separate existing serial batch envelope then
+compiled the same two source hashes successfully. No transport or compiler flag
+change, VM restart, target execution or policy relaxation was used.
+
+Independent review found a generic C++ promotion bug: casting only the result
+can multiply narrow operands before widening or shift a32-bit operand by32.
+The repair widens arithmetic and shift value operands before the operation;
+comparison operands retain their value widths rather than the boolean result
+width. Distinguishing open witnesses were retained and added to focused tests.
+The two selected originals were rebuilt after repair and retained the same
+90/196-byte inconclusive/mismatch outcomes. The full128 replay measurement
+predates this spelling repair and was not repeated beyond its bounded budget.

@@ -448,3 +448,12 @@ The nine selected diagnostic functions produce five detailed, ordinary-matching
 refusal traces and four uninspected control boundaries; no source, compiler run or
 acceptance results. A generic longer store fixture confirms exact source/IR reuse.
 The queue remains `(4 bytes,0xfe920)` and all59 public units are preserved.
+
+Fixed-width signed recovery now supports explicit sign extension, same-width bit
+casts, modular products and bounded arithmetic shifts in shared Flow/graph IR.
+The closed read-only scalar source profile retains ordered reads and branch/return
+values; opaque calls, stores and unsupported control flow remain refused. The
+first two31/59-byte proposals both failed complete native acceptance (helper-domain
+inconclusive and full mismatch). Applicability increased by two of128 cached pilot
+identities, not by two recovered functions. See the signed-arithmetic reproduction
+and learning notes; all59 previously published units remain unchanged.

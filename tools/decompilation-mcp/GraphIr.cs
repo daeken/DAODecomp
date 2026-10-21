@@ -16,16 +16,17 @@ public static class X86GraphRecovery
     static string Tag(JsonElement n)=>n.GetProperty("type").GetString()!.Split('+').Last().Split('.').Last();
     static string Name(JsonElement n,string p)=>n.GetProperty(p).GetProperty("name").GetString()!;
     static void Need(bool p,string s){if(!p)throw new ArgumentException(s);}
-    static int Bits(JsonElement n){var t=n.GetProperty("Ty");Need(Tag(t)=="I"&&!t.GetProperty("Signed").GetBoolean(),"graph_unsigned_type");int b=t.GetProperty("Bits").GetInt32();Need(b is 1 or 8 or 16 or 32 or 64,"graph_width");return b;}
+    static int Bits(JsonElement n)=>FixedWidthInteger.Width(n);
     public static bool Same(RecoveredValue a,RecoveredValue b)=>JsonSerializer.Serialize<RecoveredValue>(a)==JsonSerializer.Serialize<RecoveredValue>(b);
     public static RecoveredValue Op(string op,RecoveredValue a,RecoveredValue b,int bits)
     {
-        Need(op is "Add" or "Sub" or "And" or "Or" or "Xor" or "Shr" or "Shl" or "Eq" or "Ne" or "Ult","graph_binary");
+        if(op=="Sar")return FixedWidthInteger.ArithmeticShift(a,b,bits);
+        Need(op is "Add" or "Sub" or "And" or "Or" or "Xor" or "Shr" or "Shl" or "Eq" or "Ne" or "Ult" or "Mul","graph_binary");
         if(op=="Add"&&a is SegmentInput seg)return new SegmentedAddress(seg,b);
         if(Same(a,b)){if(op is "And" or "Or")return a;if(op is "Xor" or "Sub" or "Ne" or "Ult")return new Constant(0,bits);if(op=="Eq")return new Constant(1,1);}
         if(b is Constant{Value:0}) {if(op is "Add" or "Sub" or "Or" or "Xor")return a;if(op=="And")return new Constant(0,bits);if(a is BitValue{Operation:"Eq",Operands.Length:2} e&&op=="Eq")return new BitValue("Ne",e.Operands,1);}
         if(a is Constant{Value:0}&&op=="Or")return b;
-        if(a is Constant l&&b is Constant r){ulong x=l.Value,y=r.Value;ulong z=op switch{"Add"=>unchecked(x+y),"Sub"=>unchecked(x-y),"And"=>x&y,"Or"=>x|y,"Xor"=>x^y,"Shr" when y<64=>x>>(int)y,"Shl" when y<64=>x<<(int)y,"Eq"=>x==y?1UL:0UL,"Ne"=>x!=y?1UL:0UL,"Ult"=>x<y?1UL:0UL,_=>throw new ArgumentException("graph_shift")};return new Constant(bits==64?z:z&((1UL<<bits)-1),bits);}
+        if(a is Constant l&&b is Constant r){ulong x=l.Value,y=r.Value;ulong z=op switch{"Add"=>unchecked(x+y),"Sub"=>unchecked(x-y),"Mul"=>unchecked(x*y),"And"=>x&y,"Or"=>x|y,"Xor"=>x^y,"Shr" when y<64=>x>>(int)y,"Shl" when y<64=>x<<(int)y,"Eq"=>x==y?1UL:0UL,"Ne"=>x!=y?1UL:0UL,"Ult"=>x<y?1UL:0UL,_=>throw new ArgumentException("graph_shift")};return new Constant(bits==64?z:z&((1UL<<bits)-1),bits);}
         return new BitValue(op,[a,b],bits);
     }
     static int Width(RecoveredValue x)=>x switch{Constant c=>c.Bits,BitValue b=>b.Bits,MemoryReadValue m=>m.Bits,WrappedStackAddress s=>s.Bits,_=>64};
@@ -62,8 +63,8 @@ public static class X86GraphRecovery
                     case "IlUndefined":throw new ArgumentException("graph_undefined_architectural_value:"+n.GetProperty("Reason").GetString());
                     case "IlReadReg":int i=n.GetProperty("Idx").GetInt32();string kind=Name(n,"Kind");if(kind=="X86Seg"){Need(i is >=0 and <6,"graph_segment");return new SegmentInput(i);}if(kind=="Eflags"){Need(flags.ContainsKey(i),"graph_flag");return flags[i];}Need(kind=="X86"&&i is >=0 and <16,"graph_register");return i==4?new WrappedStackAddress(sp):regs[i];
                     case "IlTmp":Need(temp.TryGetValue(n.GetProperty("Id").GetInt32(),out var t),"graph_temp_before_definition");return t!;
-                    case "IlCast":var x=Eval(n.GetProperty("X"));int w=Bits(n);string cast=Name(n,"Kind");Need(cast is "Trunc" or "Zext","graph_cast");return Cast(cast,x,w);
-                    case "IlBin":var left=Eval(n.GetProperty("L"));var right=Eval(n.GetProperty("R"));string op=Name(n,"Op");if(op is "Add" or "Sub"&&right is Constant delta&&StackOffset(left) is long offset){Need(delta.Value<=4096,"graph_stack_adjustment_budget");return new WrappedStackAddress(checked(offset+(op=="Sub"?-(long)delta.Value:(long)delta.Value)));}return Op(op,left,right,Bits(n));
+                    case "IlCast":var x=Eval(n.GetProperty("X"));int w=Bits(n);string cast=Name(n,"Kind");if(cast is "Sext" or "Bitcast")return FixedWidthInteger.Cast(cast,x,Bits(n.GetProperty("X")),w);Need(cast is "Trunc" or "Zext","graph_cast");return Cast(cast,x,w);
+                    case "IlBin":FixedWidthInteger.ValidateSignedBinary(n);var left=Eval(n.GetProperty("L"));var right=Eval(n.GetProperty("R"));string op=Name(n,"Op");if(op is "Add" or "Sub"&&right is Constant delta&&StackOffset(left) is long offset){Need(delta.Value<=4096,"graph_stack_adjustment_budget");return new WrappedStackAddress(checked(offset+(op=="Sub"?-(long)delta.Value:(long)delta.Value)));}return Op(op,left,right,Bits(n));
                     case "IlLoad":var addr=Eval(n.GetProperty("Addr"));int b=Bits(n);Need(b is 8 or 16 or 32,"graph_memory_width");var memory=new MemoryReadValue(addr,b,origin,0,++ordinal);effects.Add(new("memory_read",origin,addr,memory,b));return memory;
                     default:throw new ArgumentException("graph_expression:"+Tag(n));
                     }

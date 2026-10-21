@@ -77,6 +77,14 @@ public sealed partial class Engine
             }
         attempts.Add(new(active,"generated",null));observeAttempts?.Invoke(attempts.ToArray());
         return new(ir,source,attempts.ToArray());
-        } catch(ArgumentException e){Refused(e);throw new SourceRecoveryRefusal(e.Message,attempts.ToArray());}
+        } catch(ArgumentException e){
+            Refused(e);
+            if(request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!.UsesOrderedMemory&&IsCompleteCallFree(lifted.GetProperty("lift"))) {
+                active="readonly_scalar_paths";
+                try {var ir=Vc8ScalarPathsProfile.Raise(lifted.GetProperty("lift"));var source=Vc8ScalarPathsProfile.Emit(ir,request.GetProperty("rva").GetUInt32(),lifted.GetProperty("image_base").GetUInt32(),module);attempts.Add(new(active,"generated",null));observeAttempts?.Invoke(attempts.ToArray());return new(ir,source,attempts.ToArray());}
+                catch(ArgumentException scalar){Refused(scalar);throw new SourceRecoveryRefusal(scalar.Message,attempts.ToArray());}
+            }
+            throw new SourceRecoveryRefusal(e.Message,attempts.ToArray());
+        }
     }
 }
