@@ -19,7 +19,23 @@ def need(ok, reason):
         raise ValueError(reason)
 
 
-def context(request):
+class Context:
+    """One operation-local immutable byte snapshot; callers recheck inputs at exit."""
+    def __init__(self, request):
+        self.project = request["project"]
+        self.inputs = request["inputs"]
+        self.binding, self.pe, self.entries = context(request, include_entries=True)
+
+    def for_request(self, request):
+        need(request["project"] == self.project and request["inputs"] == self.inputs, "typed_cache_context_changed")
+        entries = self.entries.get(request["rva"], [])
+        need(len(entries) == 1 and entries[0] == request["entry"], "typed_cache_inventory_identity")
+        ownership = spans(request["entry"], request["rva"])
+        binding = dict(self.binding, rva=request["rva"], ownership=[dict(start_rva=lo, end_rva_inclusive=hi, sha256=hashlib.sha256(self.pe.read(lo, hi-lo+1)).hexdigest()) for lo, hi in ownership])
+        return binding, self.pe
+
+
+def context(request, include_entries=False):
     p = request['project']; inputs = request['inputs']
     def bound(path):
         path = str(path); value = hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -58,6 +74,10 @@ def context(request):
                    ownership=[dict(start_rva=lo, end_rva_inclusive=hi, sha256=hashlib.sha256(pe.read(lo, hi-lo+1)).hexdigest()) for lo, hi in ownership],
                    inventory_sha256=inventory_hash, image_base=pe.image_base, image_end=image_end,
                    lifter_manifest_sha256=producer['manifest'], producer=producer)
+    if include_entries:
+        indexed = {}
+        for entry in inventory["functions"]: indexed.setdefault(entry["rva"], []).append(entry)
+        return binding, pe, indexed
     return binding, pe
 
 
@@ -97,19 +117,19 @@ def inspect_payload(binding, pe, payload):
     return 'complete' if complete else 'incomplete'
 
 
-def pack(request, payload):
-    binding, pe = context(request)
+def pack(request, payload, shared=None):
+    binding, pe = shared.for_request(request) if shared else context(request)
     status = inspect_payload(binding, pe, payload)
     record = dict(schema=SCHEMA, binding=binding, payload=payload, payload_sha256=digest(payload), status=status, proof=False)
     record['record_id'] = digest(record)
     return record
 
 
-def verify(request, record):
+def verify(request, record, shared=None):
     need(record.get('schema') == SCHEMA, 'typed_cache_record_schema')
     need(record.get('record_id') == digest({k:v for k,v in record.items() if k != 'record_id'}), 'typed_cache_record_hash')
     need(record.get('payload_sha256') == digest(record['payload']), 'typed_cache_payload_hash')
-    current, pe = context(request); old = record['binding']
+    current, pe = shared.for_request(request) if shared else context(request); old = record['binding']
     need(all(old[k] == current[k] for k in ('module', 'module_sha256', 'rva')), 'typed_cache_wrong_identity')
     if old['lifter_manifest_sha256'] != current['lifter_manifest_sha256']:
         return dict(status='legacy_lifter', current=False, proof=False)
@@ -118,3 +138,60 @@ def verify(request, record):
     status = inspect_payload(current, pe, record['payload'])
     need(status == record['status'], 'typed_cache_status_changed')
     return dict(status=status, current=True, payload=record['payload'] if status == 'complete' else None, proof=False)
+
+
+def batch(request, members, folder, lift, prepare):
+    """Analysis only: no dependency traversal, source synthesis or compiler."""
+    import time
+    started = time.monotonic(); items = members['items']; populate = members['populate']
+    seconds = members['seconds']; byte_limit = members['bytes']
+    need(isinstance(populate, bool) and 1 <= len(items) <= 128 and len({x['rva'] for x in items}) == len(items), 'typed_analysis_identity_budget')
+    need(0 < seconds <= 300 and 0 < byte_limit <= 512 * 1024**2, 'typed_analysis_operation_budget')
+    folder.mkdir(parents=True, exist_ok=True)
+    shared = Context(dict(request, rva=items[0]['rva'], entry=items[0]['entry']))
+    extraction = prepare(request) if populate else None
+    context_seconds = time.monotonic() - started; rows = []; used = 0; attempts = 0
+    for item in items:
+        row = dict(rva=item['rva'], status='unrun', versions=[], fresh_attempts=0)
+        q = dict(request, rva=item['rva'], entry=item['entry'])
+        try:
+            shared.for_request(q)
+        except (ValueError, KeyError, TypeError) as exc:
+            row.update(status='invalid', blocker=str(exc)); rows.append(row); continue
+        if time.monotonic() - started >= seconds or used >= byte_limit:
+            row['blocker'] = 'operation_budget'; rows.append(row); continue
+        t = time.monotonic(); records = item['records']
+        if populate:
+            attempts += 1; row['fresh_attempts'] = 1
+            try:
+                payload = lift(q, shared=extraction, timeout=min(60, max(.001, seconds-(time.monotonic()-started))), deadline=started+seconds)
+            except Exception as exc:
+                payload = dict(error=type(exc).__name__ + ':' + str(exc), status='inconclusive', proof=False)
+            row['extraction_seconds'] = time.monotonic()-t; t = time.monotonic()
+            records = [pack(q, payload, shared)]
+        row['versions'] = []
+        if len(records) > 16:
+            row['status'] = 'version_budget_exceeded'
+        else:
+            for record in records:
+                try:
+                    outcome = verify(q, record, shared)
+                except (ValueError, KeyError, TypeError) as exc:
+                    outcome = dict(status='invalid', error=str(exc), proof=False)
+                row['versions'].append(dict(record_id=record.get('record_id'), **outcome))
+            row['status'] = 'validated' if records else 'missing'
+        row['validation_seconds'] = time.monotonic()-t
+        if populate: row['record'] = records[0]
+        # Actual serialized bytes are bounded before persistence. Oversized output
+        # remains explicitly unindexed; no truncated record can be replayed.
+        t = time.monotonic(); data = json.dumps(row, separators=(',', ':')).encode()
+        row['serialization_seconds'] = time.monotonic()-t
+        if used + len(data) > byte_limit:
+            row = dict(rva=item['rva'], status='unrun', blocker='storage_budget', fresh_attempts=row['fresh_attempts'])
+        rows.append(row); used += len(data)
+    result = dict(schema='typed-analysis-batch-v1', rows=rows, context_seconds=context_seconds,
+                  backend_seconds=time.monotonic()-started, serialized_row_bytes=used, fresh_attempts=attempts,
+                  compiler_invocations=0, acceptance_credit=False, proof=False)
+    # No result is consumable until the outer bridge has also checked all inputs.
+    path = folder/'batch-data.json'; path.write_text(json.dumps(result, separators=(',', ':')))
+    return dict(status='analysis_batch', data_sha256=hashlib.sha256(path.read_bytes()).hexdigest(), proof=False)

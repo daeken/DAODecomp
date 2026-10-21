@@ -23,7 +23,7 @@ def resolved(config, name):
     return p if p.is_absolute() else config.parent / p
 
 
-def lift(request):
+def lift_context(request):
     project = request['project']
     config_path = Path(project['replayable']['lifter_config'])
     config = json.loads(config_path.read_text())
@@ -40,14 +40,24 @@ def lift(request):
     original = Path(project['original']).read_bytes()
     require(sha(original) == project['module_sha256'], 'original_pin_changed')
     pe = PE(original)
+    return config, manifest_path, dll, original, pe
+
+
+def lift(request, shared=None, timeout=60, deadline=None):
+    project = request['project']
+    config, manifest_path, dll, original, pe = shared or lift_context(request)
     entry = request['entry']
     from tools.replayable.range_lift import spans, combine
     ownership = spans(entry, request['rva'])
     parts=[];slices=[]
     for lo,hi in ownership:
+        if deadline is not None:
+            import time
+            require(time.monotonic() < deadline, 'analysis_wall_budget')
+            timeout = min(timeout, max(.001, deadline-time.monotonic()))
         raw=pe.read(lo,hi-lo+1);require(len(raw)==hi-lo+1,'original_owned_range_short_read');slices.append(raw)
         payload=dict(hex=raw.hex(),pc=pe.image_base+lo,id=project['module_sha256']+':'+str(lo))
-        run=subprocess.run([config.get('dotnet','dotnet'),str(dll)],input=json.dumps(payload)+'\n',capture_output=True,text=True,timeout=60)
+        run=subprocess.run([config.get('dotnet','dotnet'),str(dll)],input=json.dumps(payload)+'\n',capture_output=True,text=True,timeout=timeout)
         require(run.returncode==0,'lifter_process_failure');part=json.loads(run.stdout)
         require('adapter_error' not in part,'lifter_adapter_error')
         import capstone
@@ -418,8 +428,8 @@ def main():
     try:
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed')
-        require(data['action'] in ('typed_cache_pack', 'typed_cache_validate', 'lift', 'lift_callees', 'inspect_range_callees', 'lift_eh', 'inspect_range_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
-        result = __import__('tools.replayable.typed_cache',fromlist=['pack']).pack(request,data['members']) if data['action']=='typed_cache_pack' else __import__('tools.replayable.typed_cache',fromlist=['verify']).verify(request,data['members']) if data['action']=='typed_cache_validate' else __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request,inspection=True) if data['action']=='inspect_range_callees' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else inspect_range_eh(request) if data['action']=='inspect_range_eh' else build(request, Path(data['folder']), data['source'])
+        require(data['action'] in ('typed_analysis_batch', 'typed_cache_pack', 'typed_cache_validate', 'lift', 'lift_callees', 'inspect_range_callees', 'lift_eh', 'inspect_range_eh', 'build', 'build_batch', 'check_build', 'verify_encoding_cache', 'source_export_check'), 'unsupported_pipeline_action')
+        result = __import__('tools.replayable.typed_cache',fromlist=['batch']).batch(request, data['members'], Path(data['folder']), lift, lift_context) if data['action']=='typed_analysis_batch' else __import__('tools.replayable.typed_cache',fromlist=['pack']).pack(request,data['members']) if data['action']=='typed_cache_pack' else __import__('tools.replayable.typed_cache',fromlist=['verify']).verify(request,data['members']) if data['action']=='typed_cache_validate' else __import__('tools.replayable.source_export',fromlist=['check']).check(request,Path(data['folder']),data['source'],data['members']) if data['action']=='source_export_check' else batch_build(request,Path(data['folder']),data['members']) if data['action']=='build_batch' else verify_encoding_cache(request,Path(data['folder'])) if data['action']=='verify_encoding_cache' else compare_built(request,Path(data['folder']),data['source']) if data['action']=='check_build' else lift(request) if data['action'] == 'lift' else lift_callees(request,inspection=True) if data['action']=='inspect_range_callees' else lift_callees(request) if data['action'] == 'lift_callees' else lift_eh(request) if data['action']=='lift_eh' else inspect_range_eh(request) if data['action']=='inspect_range_eh' else build(request, Path(data['folder']), data['source'])
         for name, expected in request['inputs'].items():
             require(sha(Path(name).read_bytes()) == expected, 'pipeline_input_changed_during_operation')
     except Exception as exc:

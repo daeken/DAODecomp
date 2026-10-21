@@ -430,3 +430,12 @@ population took 12.95 seconds and replay took 2.31 seconds. Nine replay proposal
 equal ordinary generated sources; one refuses. Broader population and replay of
 non-leaf profiles remain separately scoped; this does not fill the earlier
 26,655-identity cache gap or establish whole-binary applicability.
+
+
+The subsequent throughput milestone leaves recovery at `(4 bytes,0xfe920)`.
+A bounded shared-context analysis batch now populates/replays explicit selections
+without compiler or dependency traversal. Its128-identity diagnostic pilot retains
+all outcomes and identical payloads;92 complete bodies expose missing broader
+replay profiles rather than proven semantic blockers. Timings, overlapping effect/
+call incidence and storage limits are documented in the methodology and learning
+log. Fifty-nine public units and all acceptance policies remain unchanged.

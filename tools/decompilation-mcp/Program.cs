@@ -116,6 +116,9 @@ public sealed class DecompilationTools(Engine engine)
     [McpServerTool(Name = "replayable_analysis_replay"), Description("Replay the bounded leaf source-proposal profile for 1..16 explicit inventory identities using indexed bound typed lifts only. Ordinary selected generation populates the existing job database. Reports missing, stale, legacy, failed, incomplete or unsupported records. No lifting, compiler, acceptance, export or frontier update; produces a bound local report.")]
     public async Task<string> ReplayableAnalysisReplay(string project_id,string[] function_ids,string? recipe_json=null) => Engine.Json(await engine.ReplayableAnalysisReplay(project_id,function_ids,recipe_json));
 
+    [McpServerTool(Name = "replayable_analysis_batch"), Description("Bounded analysis-only population or cached leaf applicability replay for 1..128 explicit inventory identities. Shares input context, preserves every owned range, never traverses dependencies or invokes a compiler. Missing/incomplete/unknown and unavailable profiles remain explicit. No acceptance, export or queue credit. Operation limits: 1..300 seconds and 1..536870912 serialized bytes.")]
+    public async Task<string> ReplayableAnalysisBatch(string project_id,string[] function_ids,bool populate=false,string? recipe_json=null,int seconds=300,long byte_limit=536870912) => Engine.Json(await engine.ReplayableAnalysisBatch(project_id,function_ids,populate,recipe_json,seconds,byte_limit));
+
     [McpServerTool(Name = "replayable_inspect"), Description("Read bounded generated source and typed recovered IR from a replayable job. Identity and acceptance remain separate from source spelling.")]
     public string ReplayableInspect(string job_id,int source_limit=4000) => Engine.Json(engine.ReplayableInspect(job_id,source_limit));
 

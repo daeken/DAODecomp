@@ -2851,3 +2851,25 @@ Fourteen complete objects retain ten exact, one encoding, one behavioral and two
 known mismatches through both routes. One C# build took 1.82 seconds; nine VC8
 object invocations ran under Windows 11 ARM64 translation. No LINK, CI, full suite
 or game ran. Nine fresh expansion-031 exports preserve fifty earlier units.
+
+
+### 2026-10-21: measure shared analysis before expanding recovery
+
+A frozen 128-function,70,600-byte diagnostic pilot measured 66.17 seconds for
+per-identity extraction/packing versus19.98 seconds for shared-context batch
+population, then3.02 seconds cached replay. No semantic rule or acceptance gate
+changed. All127 produced payloads agree exactly; one invalid ownership is explicit.
+One hundred focused tests pass. Two C# invocations include one corrected local-name
+build error; no VC8,VM,LINK,CI,full suite or game ran. Fourteen retained objects
+preserve ten exact,one encoding,one behavioral and two mismatches through both
+comparison routes; the OR-result refusal remains separate. No acceptance/export
+was added, and the recovery queue remains `(4 bytes,0xfe920)`.
+
+The clearest applicability gap is92 complete lifts outside the leaf replay profile,
+including nine call-free cases.97 selected bodies contain calls whose dependencies
+were not inspected;16 show x87 instructions, within17 opaque-effect cases. Fourteen
+opaque cases also contain calls. These overlaps prevent exclusive-blocker or yield
+claims. Historical4745 opaque identities use an older lifter and are incidence
+evidence only. Next candidates are shared replay of existing broader profiles,
+proper typed x87 effects, and exact bound dependency reuse. No semantic capability
+was implemented merely because it appears in this ranking.

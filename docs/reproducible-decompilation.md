@@ -1957,3 +1957,43 @@ The ten-original demonstration is bounded evidence: 12.95 seconds population,
 page/WAL overhead and reports. It is not a whole-inventory time/storage estimate.
 A separately scoped population pass and additional replay profiles are still
 needed for broad binary coverage; no whole-inventory generation ran here.
+
+
+### Bounded shared analysis population and blocker mapping
+
+`replayable_analysis_batch` accepts 1–128 explicit inventory identities, a recipe,
+`populate` (default false), `seconds` (1–300) and `byte_limit` (1–536870912).
+Population lifts only those identities and preserves their complete owned ranges;
+it never follows dependencies or invokes a compiler. Cached replay validates the
+existing content-addressed records. One operation shares the immutable module,
+inventory and producer context, checks inputs before and after backend work and
+before committing records, and returns a hash-bound report. Budget, invalid,
+missing, incomplete, failed and unknown outcomes grant no source or match credit.
+The byte limit bounds serialized backend rows, not total database/report disk
+growth; callers must separately budget cumulative storage and wall time.
+
+The batch route uses the existing guarded leaf recovery. Longer or split-range
+complete bodies report `profile_not_implemented`, separately from unsupported
+effects and uninspected dependencies. A malformed shared context (including an
+invalid first selected ownership) rejects the operation before population. Other
+per-identity ownership failures remain explicit rows. Ordinary generation and all
+independent acceptance gates remain unchanged. The older sixteen-ID replay tool
+remains available. A source proposal never grants acceptance or export credit.
+
+On the frozen 128-identity diagnostic sample (70,600 owned bytes), baseline
+per-identity extraction/packing took 66.17 seconds; shared batch population took
+19.98 seconds and cached replay 3.02 seconds. All 127 produced payloads were
+identical; one invalid ownership stopped before extraction. Of 109 complete lifts,
+11 produced leaf proposals, six refused and 92 lacked an implemented replay
+profile. Seventeen lifts were incomplete and one extraction failed. The largest
+selected function owns 48,856 bytes, so these strata are not a statistical
+whole-binary estimate. The old replay completed 112 selected identities and failed
+on its final sixteen-ID group; its exact backend error was not retained.
+
+The population consumed 320.65 MB of additional file lengths, rising to409.79 MB
+with cached replay; repeated report/payload representations dominate this bounded
+demonstration. Logical index size and detailed stage times are retained locally.
+Process startup, backend validation and extraction are partly combined timings;
+no isolated startup speedup or whole-inventory storage prediction is claimed.
+Use `populate: true` once for an authorized exact ID list, then `populate: false`
+for the same IDs; inspect every report status and separately budget total disk.

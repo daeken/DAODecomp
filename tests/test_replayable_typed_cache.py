@@ -72,3 +72,26 @@ class TypedAnalysisTests(unittest.TestCase):
   self.seed();x=copy.deepcopy(self.record);x['payload']['scope']='second retained payload';x['payload_sha256']=cache.digest(x['payload']);x['record_id']=cache.digest({k:v for k,v in x.items()if k!='record_id'})
   with closing(sqlite3.connect(self.root/'state/jobs.sqlite3')) as db,db:db.execute("INSERT INTO replayable_typed_lifts SELECT project,module_sha256,rva,?, ?,first_origin,created FROM replayable_typed_lifts",(x['record_id'],json.dumps(x)))
   self.assertEqual(self.replay()['records'][0]['status'],'ambiguous_current_records')
+ def test_batch_population_shared_replay_and_no_acceptance(self):
+  self.seed();out=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid],populate=True);self.assertEqual(out['fresh_attempts'],1);self.assertEqual(out['records'][0]['status'],'source_proposal');before=(self.root/'lift-calls.txt').read_bytes();cached=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid]);self.assertEqual(cached['fresh_attempts'],0);self.assertEqual(cached['records'][0]['source_sha256'],out['records'][0]['source_sha256']);self.assertEqual((self.root/'lift-calls.txt').read_bytes(),before);self.assertFalse(cached['acceptance_credit']);self.assertFalse(list(self.root.rglob('candidate.obj')))
+ def test_batch_limits_and_storage_stop_are_explicit(self):
+  self.seed()
+  for kw in (dict(function_ids=[]),dict(function_ids=[self.fid]*129),dict(seconds=0),dict(seconds=301),dict(byte_limit=0),dict(byte_limit=536870913)):
+   args=dict(project_id='open',function_ids=[self.fid]);args.update(kw)
+   with self.assertRaises(ValueError):self.client.call('replayable_analysis_batch',**args)
+  out=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid],populate=True,byte_limit=1);self.assertEqual(out['records'][0]['status'],'unrun');self.assertEqual(out['fresh_attempts'],1)
+ def test_batch_rechecks_changed_inputs_and_refuses_substituted_identity(self):
+  self.seed();shared=cache.Context(self.request);changed=copy.deepcopy(self.request);changed['entry']['rva']+=1
+  with self.assertRaisesRegex(ValueError,'inventory_identity'):shared.for_request(changed)
+  changed=copy.deepcopy(self.request);changed['project']['module']='other'
+  with self.assertRaisesRegex(ValueError,'context_changed'):shared.for_request(changed)
+  # The fake lifter mutates a bound input during the actual batch operation.
+  script=self.dll.read_text();script=script.replace('print(json.dumps(out))','Path('+repr(str(self.root/'inventory.json'))+').write_text("changed")\n print(json.dumps(out))');self.dll.write_text(script);m=json.loads((self.root/'manifest.json').read_text());m['assemblies_sha256'][self.dll.name]=sha(self.dll.read_bytes());(self.root/'manifest.json').write_text(json.dumps(m))
+  with self.assertRaises(ValueError):self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid],populate=True)
+ def test_batch_invalid_and_incomplete_never_become_proposals(self):
+  self.seed();x=copy.deepcopy(self.record);x['payload']['lift']['opaque_instructions']=1;x['status']='incomplete';x['payload_sha256']=cache.digest(x['payload']);self.replace(x)
+  out=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid]);self.assertEqual(out['records'][0]['status'],'unavailable')
+  x['record_id']='invalid';self.replace(x,rehash=False);out=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid]);self.assertEqual(out['records'][0]['status'],'unavailable')
+ def test_batch_wall_stop_preserves_failed_and_unrun(self):
+  self.seed();script=self.dll.read_text().replace('req=json.loads(line);','__import__("time").sleep(2);req=json.loads(line);');self.dll.write_text(script);m=json.loads((self.root/'manifest.json').read_text());m['assemblies_sha256'][self.dll.name]=sha(self.dll.read_bytes());(self.root/'manifest.json').write_text(json.dumps(m));second=sha((self.record['binding']['module_sha256']+':4144').encode())
+  out=self.client.call('replayable_analysis_batch',project_id='open',function_ids=[self.fid,second],populate=True,seconds=1);self.assertEqual(out['fresh_attempts'],1);self.assertEqual([x['status']for x in out['records']],['unavailable','unrun'])
