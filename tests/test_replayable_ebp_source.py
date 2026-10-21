@@ -145,8 +145,8 @@ class EbpSourceTests(unittest.TestCase):
   p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];r['tree']['Body'].insert(0,node('IlLet',Id=200,Val=node('IlBin',Op=dict(name='Add'),L=reg(1),R=const(0x100000000,64),Ty=ty(64))));r['tree']['Body'].append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(200,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);self.assertIn(f"unsigned __int64 t_main_{r['pc']:x}_200;",result['source'])
 
 
- def test_forward_protected_suffix_has_both_exception_regions(self):
-  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),2);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (!cleanup_active) throw;',s);self.assertNotIn('for (;;)',s);self.assertNotIn('resumed',s);self.assertNotIn('goto ',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'forward_protected_continuation_v3');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
+ def test_lexical_shared_suffix_retains_machine_regions_as_unproved_obligations(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertEqual(s.count('= fn_00002000('),2);self.assertNotIn('cleanup_active',s);self.assertIn('if (retry_completed)',s);self.assertNotIn('for (;;)',s);self.assertNotIn('resumed',s);self.assertNotIn('goto ',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'lexical_catch_shared_continuation_v4');self.assertGreater(s.index('= fn_00002100('),s.rindex('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof']);self.assertTrue(any('NOT established' in h for h in r['ir']['hypotheses']))
  def test_shared_tail_requires_both_register_inputs(self):
   p=fixture();p['shared_tail']=True;p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'][0]['tree']['Body']=[];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_7')
  def test_shared_tail_retains_parent_and_stack_dominance_guards(self):
@@ -158,17 +158,17 @@ class EbpSourceTests(unittest.TestCase):
  def test_shared_tail_private_parent_must_exist_on_both_paths(self):
   p=fixture();p['shared_tail']=True;p['lift']['ranges'][1]['lift']['instructions'][0]['tree']['Body']=push(load(-24));self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_parent_word')
  def test_shared_tail_retains_aliasable_memory_and_call_order(self):
-  p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),2);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)
+  p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)
 
- def test_resumed_parent_reads_follow_catch_completion_inside_cleanup_protection(self):
-  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];catch=s.index('} catch (...)');completion=s.index('\n      }',catch);cleanup=s.rindex('} catch (...)')
+ def test_resumed_parent_reads_follow_outer_catch_completion(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];completion=s.index('\n    }',s.index('retry_completed = true;'));resume=s.index('if (retry_completed)',completion)
   for register,parent in [(7,20),(6,24)]:
    assignment='r_continuation_'+str(register)+' = static_cast<unsigned int>(parent_m'+str(parent)+');'
-   self.assertEqual(s.count(assignment),1);self.assertLess(completion,s.index(assignment));self.assertLess(s.index(assignment),cleanup)
-  self.assertLess(s.index('cleanup_active = true;',catch),completion)
+   self.assertEqual(s.count(assignment),1);self.assertLess(resume,s.index(assignment));self.assertGreater(s.index(assignment),completion)
+  self.assertLess(s.rindex('} catch (...)'),completion)
  def test_continuation_memory_effect_occurs_outside_allocation_catch(self):
   p=fixture();p['shared_tail']=True;rows=p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'];rows[1]['tree']['Body'].append(node('IlStore',Addr=reg(7),Val=const(99,32)))
-  r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];a=s.index('write_word(static_cast');self.assertLess(s.index('\n      }',s.index('} catch (...)')),a);self.assertLess(a,s.rindex('} catch (...)'));self.assertEqual(s.count('write_word(static_cast'),1)
+  r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];a=s.index('write_word(static_cast');self.assertLess(s.index('if (retry_completed)'),a);self.assertGreater(a,s.rindex('} catch (...)'));self.assertEqual(s.count('write_word(static_cast'),1)
 
  def dispatch(self,plan,state,category='eligible_cpp',unchanged=True):
   return self.run_source(dict(ebp_region_dispatch=plan,state=state,category=category,runtime_state_unchanged=unchanged))

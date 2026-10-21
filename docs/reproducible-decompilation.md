@@ -1488,9 +1488,10 @@ That macOS C++ evidence is separate from the later pinned-runtime address-role
 correction and VC8 counterexamples below. Both native comparison routes rejected
 the historical proposal, and it earned no source export or frontier advance.
 
-The direct source API currently selects `forward_protected_continuation_v3` with
-`shared_tail=true`. The name of that Boolean is retained for API compatibility;
-it no longer selects the loop or a single emitted suffix. `shared_tail=false`
+The direct source API currently selects `lexical_catch_shared_continuation_v4`
+with `shared_tail=true`: one shared suffix after catch completion, without an
+artificial loop. This is a nonaccepting lexical-source proposal; its residual-state
+exception routes are not established. `shared_tail=false`
 retains the older duplicate-inside-catch spelling only as a rejected lifetime
 comparison probe. Neither option grants runtime equivalence or acceptance.
 
@@ -1558,7 +1559,7 @@ outside both local try intervals. Unknown state mutations and unestablished
 exception categories return unknown. FuncInfo magic/flags remain checked; ordinary
 access faults are never silently converted into C++ throws.
 
-The current nonaccepting proposal, `forward_protected_continuation_v3`, uses nested
+The retained nonaccepting proposal, `forward_protected_continuation_v3`, used nested
 try/catch and two forward suffix copies. A cleanup guard activates at the observed
 state-2 marker. Catch completion precedes continuation reloads. Forward conditional
 regions become if/else only when every branch is forward and each arm has a single
@@ -1584,3 +1585,58 @@ fresh source/comparison checks. Historical accepted count 836, public source cou
 10 and frontier 0x12a0 remain unchanged. Outside-sample work, full suites, CI and
 original-game execution are unrun. Old state-1/resumed-rethrow reports remain
 immutable rejected evidence and must not be used as current semantic claims.
+
+
+### Recover lexical ownership independently of residual state
+
+`EbpLexicalTopology` uses try-low/high/catch-high intervals and zero-action unwind
+exits to distinguish a try nested inside a catch from one inside a surrounding
+try. It rejects crossing/ambiguous intervals, duplicate entries, unsupported unwind
+actions and exits that disagree with the inferred parent. This bounded inference
+is not a universal source-language AST reconstruction. Original triples [0,0,3]
+and [2,2,3] with unwind [-1,-1,1,1] place the retry region inside the first catch;
+the previous enclosing handler instead produced [1,1,2]/[0,2,3], [-1,0,0,-1].
+
+Three additional targeted CRT sections were bound against original bytes:
+FrameUnwindToState, GetRangeOfTrysToCheck and UnwindNestedFrames. CatchGuardHandler
+passes its guard and catch depth through handler search; CatchIt selects that
+nonzero guard as the nested unwind target. Conditional on RtlUnwind retaining its
+target guard, retry failure enters cleanup while ownership of the first caught
+exception remains live: cleanup precedes its destruction. The original OS unwind,
+filters, indirect callbacks and exceptional runtime branches remain unproved.
+This conditional instruction-derived expectation is separate from synthetic traces.
+Normal completion still restores saved ESP rather than state, and guarded caught-
+object destruction precedes the literal continuation. Residual state2 therefore
+persists absent mutation even after the lexical catch has completed.
+
+A controlled pinned VC8 probe holds the nested source scope fixed and varies only
+a synthetic tail's declared throwing contract. Both objects have the original
+try/unwind topology. A potentially throwing C++ tail causes resets to -1 on the
+normal path and1 in the catch; a genuinely nonthrowing synthetic C tail omits both.
+Ten tagged-object traces observe cleanup before first-exception destruction on
+retry failure, and nonrecursive cleanup when cleanup itself throws. No C-tail run
+throws through that declaration. This establishes a compiler mechanism, not the
+throwing contract of any original dependency or the original source text.
+
+The generic v4 proposal keeps unknown calls potentially throwing, nests cleanup
+inside the retry catch, completes that catch before continuation effects, and
+joins definitely available values into one forward structured suffix. A second
+VC8 probe uses the actual old/new generated bodies with an aliasable receiver
+word and tagged exception identities. Ten traces expose both the improved retry
+lifetime and the unresolved suffix route: v4 propagates suffix exceptions where
+the original conditional residual state can select retry/cleanup. Neither that
+route nor catch-completion protection may be dropped from the final contract.
+No production C-linkage/nonthrowing promise was added to make metadata fit.
+
+One real frontier compile has the original try/unwind topology but still differs
+on the complete graph: original488/candidate506, main230/238, zero unresolved
+targets. Source and IR explicitly call out the residual-state limitation. Both
+comparison gates remain nonaccepting, including their categorical multi-try block.
+The 230 owned main bytes,42 exceptional-gap bytes,49 cleanup bytes through INT3
+and saved next PC remain accounted; faults, aliases, frame/register values,
+current-exception ownership and numeric CALL-return correspondence remain unknown.
+Three pinned VC8 compilations (two open probes and this candidate) plus two C#
+builds ran for this checkpoint. Guest execution used Windows11 ARM64 x86
+translation; focused tests used macOS ARM64. Reproduce from local batch018 scope,
+evidence.json, frozen versions and retained comparison inputs. No original-game
+execution, full suite, whole-inventory scan or CI was performed.

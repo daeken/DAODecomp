@@ -267,17 +267,20 @@ Fixed intervals and indexed expressions retain guards/origins; overlapping slots
 and unknown index bounds remain ambiguous. Generated checked raw-byte views may
 name fixed offsets without declaring the object's extent or indexing beyond a
 proven view. Cross-method class merging needs separate receiver/type evidence.
-The current development frontier remains `0x1210`: generated source is useful
+The retained single-try comparison at `0x1210` remains a mismatch: generated source is useful
 recovery evidence, but its retained native comparison is a mismatch.
 
 
-The current multi-try source experiment is `forward_protected_continuation_v3`:
-forward nested try/catch regions replace the invented resumed loop. Original
-normal catch completion restores saved ESP, not EH state; the resumed suffix
-retains state2 absent mutation and its eligible C++ exceptions select cleanup.
-The previous state1/bare-rethrow interpretation was incorrect. Continuation
-reloads remain after caught-object destruction. Full comparison is still a
-637/488-byte mismatch, and an open VC8 probe exposes changed retry-failure
-destruction ordering in the new enclosing-catch proposal. Ten public sources,
-836 historical accepted identities and frontier0x12a0 remain unchanged. See the
-methodology and learning log for the retained counterexample and limitations.
+The current multi-try source proposal is `lexical_catch_shared_continuation_v4`.
+Generic EH interval/unwind analysis places the retry try inside the first catch;
+the generated code completes that catch before continuation loads and one shared
+suffix. Actual VC8 metadata now matches the original try/unwind topology, and an
+open tagged-object probe observes retry cleanup before first-exception destruction.
+The complete comparison remains a 506/488-byte mismatch. Unknown calls retain
+potentially throwing C++ declarations, and VC8 inserts state resets; this proposal
+does **not** preserve the original conditional residual-state0/state2 suffix routes.
+Those obligations remain explicit in the region model and block acceptance.
+A separate known-contract synthetic compiler probe shows omitted resets for a
+nonthrowing C tail, without establishing any original call's throwing contract.
+Historical836, public10 and frontier0x12a0 remain unchanged. The prior enclosing-
+catch v3 and its lifetime counterexample remain retained rejected evidence.

@@ -8,7 +8,7 @@ public sealed record EbpProtectedRegion(string Role,int State,ulong? Handler,ulo
 public sealed record EbpExceptionRoute(string Status,ulong? Handler,string Reason);
 public sealed record EbpExceptionRegions(int RegistrationParentOffset,int SavedEspParentOffset,int StateParentOffset,
     int InitialState,int CatchPreparationState,int RetryState,int CleanupState,
-    EbpProtectedRegion[] Regions,string RuntimeConvention,string[] Obligations,bool Proof=false)
+    EbpProtectedRegion[] Regions,string RuntimeConvention,string[] Obligations,bool Proof=false,EbpLexicalTopology? LexicalTopology=null)
 {
     public EbpExceptionRoute Dispatch(int? state,string category,bool runtimeStateUnchanged)
     {
@@ -46,6 +46,6 @@ public sealed record EbpExceptionRegions(int RegistrationParentOffset,int SavedE
              "Guarded caught-object destruction precedes literal continuation loads and remains in the retry-state interval if a C++ exception reaches the parent",
              "State1 preparation and state3 cleanup failures do not reenter cleanup; source guard/rethrow adds unproved runtime effects",
              "Ordinary access faults are not converted into host C++ exceptions; FuncInfo magic/flags and runtime category dispatch remain bound obligations",
-             "Native frame/alias, unwind, exception ownership, saved registers, return-PC and trap/resumption correspondence require independent complete checking"]);
+             "Native frame/alias, unwind, exception ownership, saved registers, return-PC and trap/resumption correspondence require independent complete checking"],LexicalTopology:EbpLexicalTopology.Recover(graph));
     }
 }

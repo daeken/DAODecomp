@@ -2582,3 +2582,30 @@ permission to ignore ordinary exception lifetime. No additional source variants
 were compiled. Both compiler results used Windows11 ARM64 x86 translation; the
 original function was not executed. Existing ten controls are freshly checked
 with unchanged objects; public10/historical836/frontier12a0 remain unchanged.
+
+
+### 2026-10-21 — Lexical catch lifetime and residual state are different facts
+
+Original EH intervals and zero-action unwind exits put retry cleanup inside the
+first catch, while the preceding enclosing-handler proposal destroyed that caught
+object before cleanup. Generic lexical recovery now distinguishes those shapes
+and refuses conflicting intervals/exits. Targeted original CRT guard/search/unwind
+paths support cleanup-before-first-destruction conditional on the external target
+unwind contract; the original function and OS unwind were not executed or proved.
+
+A controlled VC8 compile demonstrates the missing compiler distinction: identical
+nested source produces the original try/unwind topology with either tail contract,
+but a potentially throwing tail inserts state resets and a genuinely nonthrowing
+synthetic C tail omits them. Residual state therefore does not uniquely identify
+source scope. This is not evidence that original allocator, copy or release calls
+are nonthrowing; production declarations remain conservative.
+
+The generated v4 source has one shared suffix after catch completion and reproduces
+the original topology. A second tagged-object open probe confirms its retry-lifetime
+improvement while exposing its unmatched suffix exception routes. The complete
+frontier compile remains488/506 nonmatching (main230/238,0unresolved). The source
+proposal records this limitation rather than claiming behavioral recovery. Three
+actual VC8 compiles and two C# builds were used; twenty open traces are compiler/
+runtime diagnostics, never original trace proof. Public10/historical836/frontier12a0
+remain unchanged; original dependency throwing behavior and residual-state/source
+correspondence are the next semantic blockers.
