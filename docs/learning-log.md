@@ -2203,3 +2203,34 @@ refutes the proposed unrestricted relation: no justified object-validity or
 nonaliasing precondition currently excludes it. The exact mismatch therefore
 remains unresolved even after the approved fault-context exclusion. The failed
 freeze, open review counterexample and actual-code diagnostic remain preserved.
+
+
+## Adopt typed unsigned multiplication without advancing the frontier
+
+The separately reviewed SharpRetro unsigned-MUL patch was published as
+`d805b248d4f29cecd483c515006e5f146d9e2634`, based on `0269ffd3`.
+The three published source blobs exactly match the reviewed patch. A separate
+clean checkout, adapter output and build manifest preserve the earlier dependency.
+The actual instruction at `0x12e9` now has typed product/register/CF/OF effects
+and four explicit undefined flags rather than an opaque `mul-wide` intrinsic.
+Both owned ranges (230 bytes, with the intervening gap excluded) lift without
+opaque effects. This removes a lifter prerequisite; split-range and multi-state
+EH recovery are still unsupported, and `0x1210` remains the frontier.
+
+On macOS ARM64/.NET10 the new adapter and unchanged MCP core build passed.
+Twenty focused downstream tests checked unsigned wire forms, undefined-value
+refusals, unsupported wide scalar values, existing signed controls and the
+return-slot guard. Ten source-equal retained artifacts were checked again with
+the new pin through both existing gates: eight exact, one SIB encoding-equivalent
+and the same `0x1210` mismatch. No compiler dispatch was needed, no new acceptance
+was inserted, and identities outside the sample remain unverified for this pin.
+Upstream evidence remains separate: author52 focused/381 XFusion tests and
+reviewer1280 independent typed-IL/Unicorn cases, not a game proof.
+
+Additional user-requested source diagnostics held the latest `0x1210` logic and
+baseline flags fixed on RTM/SP1. Fourteen inline-argument/signedness compiles,
+26 arithmetic-order/grouping compiles and18 inline-helper/typed-pointer compiles
+all produced the same relocated130-byte body. Natural signed forms were explicitly
+diagnostic-only because signed overflow is not the unsigned machine contract.
+These negative experiments justify no new compiler profile or source rule. The
+ordinary return-slot alias counterexample and conservative refusal remain.

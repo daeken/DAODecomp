@@ -1119,3 +1119,26 @@ arbitrary handler/callee implementations, portable C++ semantics or the game.
 Registered EH frames and more general metadata still require their own complete
 EH graph path. The new policy and implementation participate in recipe/input
 keys, fresh retained checks and source-export provenance.
+
+
+### Adopt a reviewed lifter dependency as a new input closure
+
+The unsigned-MUL prerequisite uses SharpRetro
+`d805b248d4f29cecd483c515006e5f146d9e2634` with a fresh clean checkout,
+separate adapter build and manifest containing tracked-source, assembly, runtime
+and adapter-source hashes. The reviewed patch captures source/accumulator before
+writes, computes the unsigned2W product, writes the architectural low/high halves
+and CF/OF, and leaves PF/AF/ZF/SF explicitly undefined. Symbolic consumers must
+keep those values unknown or refuse; scalar128-bit limitations remain refusal.
+The public adapter is still Bits32 and does not claim a 64-bit recovery domain.
+
+Reproduce with the normal adapter build against that checkout, record its fresh
+manifest/configuration, then select it through the registered `lifter_config`.
+Run the open `test_replayable_mul` checks with
+`DECOMPILATION_REPLAYABLE_TEST_LIFTER_CONFIG` pointing at that configuration.
+The existing durable generation and retained-object checks bind the new closure;
+source equality permits object reuse but never transfers accepted queue credit.
+The prior0269 dependency and installed runtime/configuration are rollback inputs.
+This adoption changes no reconstruction, comparison or observation-policy rule.
+The ten-identity measured sample is eight exact, one SIB-equivalent and one
+retained mismatch, with no new source export or frontier advancement.

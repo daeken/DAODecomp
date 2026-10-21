@@ -76,3 +76,4 @@ UnregisteredUnwindTests = load_shared('test_replayable_behavioral').Unregistered
 BehavioralPipelineTests = load_shared('test_replayable_behavioral').BehavioralPipelineTests
 BehavioralBoundaryTests = load_shared('test_replayable_behavioral').BehavioralBoundaryTests
 ReturnSlotAliasTests = load_shared('test_replayable_behavioral').ReturnSlotAliasTests
+MulConsumerTests = load_shared('test_replayable_mul').MulConsumerTests

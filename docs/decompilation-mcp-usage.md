@@ -501,10 +501,15 @@ compiler from merging those observed reads; this is an emission constraint, not
 a claim that caller storage has a volatile-qualified type.
 
 The separately built SharpRetro dependency is pinned to
-`0269ffd3d8fb19d50a946b005434917d6ec1bd64`. Its typed one-operand IMUL includes
+`d805b248d4f29cecd483c515006e5f146d9e2634`. Its typed one-operand MUL/IMUL includes
 explicit undefined flag values. Symbolic recovery refuses consumed `IlUndefined`
 values; normal-return CFG evidence keeps callee effects unknown. The prior
-`ce590d0a2f2a7e231e0529e30f2fd0d4252ca769` dependency and release remain available.
+`0269ffd3d8fb19d50a946b005434917d6ec1bd64` and
+`ce590d0a2f2a7e231e0529e30f2fd0d4252ca769` dependencies and releases remain available.
+Unsigned MUL captures both operands before writes, preserves the full 2W product
+and sets CF/OF from the high half. The Bits32 adapter supports byte, word and
+32-bit forms; unsupported 128-bit scalar consumers still refuse. Pin changes
+create fresh input keys; they do not transfer earlier match or export credit.
 
 The representative development sample covers nine identities. Six prior ordinary
 and EH controls match, the new `0x1150` candidate matches all 43 bytes and both
