@@ -870,7 +870,7 @@ seconds, not compiler CPU time. The 476-case sweep took
 705.270 seconds, including 0.0261
 seconds waiting for the existing VM lock. The final pilot invocation took
 31.388 seconds after the first two smoke cases were retained.
-VC8 x86 14.00.50727.762 under Windows11 ARM64 translation and Apple Clang21.0.0
+VC8 x86 14.00.50727.762 under Windows 11 ARM64 translation and Apple Clang21.0.0
 with i686/MS compatibility14 parsing were unchanged. Zero production inference
 calls still consumed prepaid engineering, one separately accounted independent
 review, builds and publication/CI time. These are static compiler observations, not game execution
@@ -2579,7 +2579,7 @@ proposal and its absence in the old one. They also expose different retry-failur
 destruction order: the enclosing handler unwinds a caught object before cleanup.
 This is a retained counterexample and a concrete next limitation, not a match or
 permission to ignore ordinary exception lifetime. No additional source variants
-were compiled. Both compiler results used Windows11 ARM64 x86 translation; the
+were compiled. Both compiler results used Windows 11 ARM64 x86 translation; the
 original function was not executed. Existing ten controls are freshly checked
 with unchanged objects; public10/historical836/frontier12a0 remain unchanged.
 
@@ -2689,9 +2689,9 @@ prior test expected an obsolete caller-memory refusal label; the installed prior
 runtime reproduces its current refusal, and the assertion now names that guard.
 An initial new fixture used an unsupported byte memory read; it was corrected to
 a supported word read without changing production guards. Initial failures remain
-in local records. Focused runs passed 8 ordered-memory,12 memory-version and19
+in local records. Focused runs passed 8 ordered-memory,12 memory-version and 19
 source-export tests on macOS ARM64. One C# build and one VC8 object compilation
-ran; VC8 took1.361seconds in Windows11 ARM64 under x86 translation. No game ran.
+ran; VC8 took1.361seconds in Windows 11 ARM64 under x86 translation. No game ran.
 
 Three refused callers expose the split-range normal-continuation evidence gap;
 others expose post-call parameter memory, subword writes, arithmetic shifts,
@@ -2719,11 +2719,31 @@ loops, two EH cleanup shapes, an explicit callee divide-fault boundary, opaque
 REP stores, and cleanup-lookahead/linear arithmetic support. They are not seven
 compiler mismatches. Earlier holes remain explicit; next unvisited is `0x1d60`.
 
-Focused macOS ARM64 checks passed58 tests:7 new proposal tests,12 linear IR,8
-ordered-memory,12 caller-memory and19 source-export tests. The eight-identity
+Focused macOS ARM64 checks passed58 tests:7 new proposal tests, 12 linear IR,8
+ordered-memory, 12 caller-memory and 19 source-export tests. The eight-identity
 complete sample retained five exact, one encoding, one behavioral and the known
 `0x12a0` mismatch. One C# build took1.80seconds; three VC8 object receipts recorded
-1.350,0.959 and0.837seconds in Windows11 ARM64 translation. No LINK or game ran.
+1.350,0.959 and0.837seconds in Windows 11 ARM64 translation. No LINK or game ran.
 A first local sample script used the wrong retained cache directory and failed
 before dispatch; its log is preserved. The corrected script reused the exact
 original source/profile/object caches without another compiler invocation.
+
+
+### 2026-10-21: first smallest-first window
+
+The completed metadata audit enabled selection by owned size and RVA. All ten
+selected one-byte identities were actual near returns; the missing capability was
+a guarded empty-body source proposal, not a rule that small functions are empty.
+Recognizing a complete return tree preserves unchanged EAX and avoids accidentally
+admitting volatile-register changes hidden by an empty effect list. Source void
+and member declarations remain hypotheses checked against actual compiled code.
+
+All ten generated objects and fresh exports passed exact complete 1/1-byte checks.
+Sixty-five focused macOS ARM64 tests passed: 7 new return guards, 7 prior void
+proposals, 12 linear IR, 8 ordered-memory, 12 caller-memory and 19 source-export.
+Fresh checks of fifteen identities retained 12 exact, 1 encoding, 1 behavioral and
+the known `0x12a0` mismatch; no old historical credit was transferred. One C#
+build took 2.00 seconds and ten VC8 object invocations ran in Windows 11 ARM64
+translation. No LINK, CI, whole-inventory compilation or game execution ran.
+The prior fourteen public units remain intact in their three collections; the
+new ten are in expansion-027. Next sorted candidate is one byte at `0x6d8bf0`.

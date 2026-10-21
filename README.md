@@ -8,7 +8,8 @@ iteration or other checking. Observable function behavior is the overall goal.
 
 **Active development: [replayable SharpRetro decompilation](docs/replayable-decompilation.md)**
 on `codex/replayable-decompilation`. We are building a binary-to-IL-to-C++ pipeline
-with reusable architecture/compiler passes and a queue in ascending RVA order.
+with reusable architecture/compiler passes and a queue ordered by owned byte size,
+then ascending RVA for ties.
 The previous committed workflow is preserved on `codex/ghidra-mainline`.
 Its existing source and measurements below remain historical evidence; the new
 pipeline does not inherit matching credit. Current bootstrap results are tracked
@@ -27,7 +28,8 @@ The [first expansion snapshot](src/native/replayable/expansion-025/README.md) ad
 one further independent unit with exact artifact evidence. Its separate index
 preserves the prior ten-unit snapshot; the table below counts that prior snapshot.
 The [second expansion snapshot](src/native/replayable/expansion-026/README.md)
-adds three exact units, for fourteen published units across the three collections.
+adds three exact units. The [first size-priority snapshot](src/native/replayable/expansion-027/README.md)
+adds ten exact units, for twenty-four published units across four collections.
 
 **[Reusable decompilation methodology](docs/reproducible-decompilation.md)** and
 **[learning log](docs/learning-log.md)** document the successful and unsuccessful

@@ -5,8 +5,9 @@
   historical compiler -> independent complete comparison. Read
   `docs/replayable-decompilation.md` and current local handoff first.
   `codex/ghidra-mainline` preserves the previous committed workflow.
-- Progress through the pinned inventory in ascending RVA order, beginning at
-  `0x1000`. Visit each identity in a bounded window without ease/size filtering.
+- Progress through the pinned inventory by summed owned byte size, then ascending
+  RVA for ties. Select identities without accepted evidence from the audited queue;
+  visit every selected identity in its bounded window.
   Record unsupported identities explicitly as deferred and continue; keep the
   traversal cursor separate from earliest unresolved and contiguous acceptance.
   Only complete accepted checks grant individual recovery/export credit.
@@ -20,7 +21,7 @@
   unknowns and pending work. Introduce these operations through the C# MCP/core.
 - Use a tight development loop: focused generic tests, a complete real-compiler
   comparison for the current candidates, and relevant previously matching controls.
-  Continue through the ascending window within a bounded implementation batch;
+  Continue through the size-priority window within a bounded implementation batch;
   do not require a director handoff, full suite, review, CI or installation after
   every small rule. Development matches and the development frontier are
   provisional until the batch passes release checks.

@@ -1636,7 +1636,7 @@ The 230 owned main bytes,42 exceptional-gap bytes,49 cleanup bytes through INT3
 and saved next PC remain accounted; faults, aliases, frame/register values,
 current-exception ownership and numeric CALL-return correspondence remain unknown.
 Three pinned VC8 compilations (two open probes and this candidate) plus two C#
-builds ran for this checkpoint. Guest execution used Windows11 ARM64 x86
+builds ran for this checkpoint. Guest execution used Windows 11 ARM64 x86
 translation; focused tests used macOS ARM64. Reproduce from local batch018 scope,
 evidence.json, frozen versions and retained comparison inputs. No original-game
 execution, full suite, whole-inventory scan or CI was performed.
@@ -1818,3 +1818,24 @@ not established. No portability or linked-runtime theorem follows. Reproduce
 the focused guard checks with `python -m unittest discover -s tests -p
 test_replayable_void_proposals.py -v` after building the C# component; these open
 typed fixtures are separate from the actual historical-compiler evidence.
+
+
+### Propose an empty body only for a complete typed near return
+
+An empty effects list is insufficient: the linear recovery may omit volatile
+register results from that list. The new fact requires exactly one unprefixed
+one-byte near return, after normal typed recovery, plus explicit verification of
+the return tree: a 32-bit target load from ESP or SS:ESP, permitted temporary
+aliases, an ESP advance of four, and return to that captured target. Extra register
+writes, flags, faults, prefixes, cleanup words, partial lifts, other encodings or
+additional instructions refuse. The source profile additionally requires normal
+return, unchanged entry EAX and no recovered memory or stack effects.
+
+An empty void member is only a compiler proposal. It does not prove original void
+return, zero arity, a valid frame or a nonnull receiver. The returned machine
+artifact must independently retain complete original bytes, return-target load,
+stack change, flags, faults and context under the unchanged acceptance route.
+Seven focused generic tests exercise the actual recognizer and refusal guards:
+`python -m unittest discover -s tests -p test_replayable_bare_return.py -v`.
+No original bytes or inline assembly are emitted. The first ten size-priority
+candidates required ten actual VC8 objects, all complete 1/1-byte exact matches.

@@ -32,7 +32,7 @@ public sealed record SegmentedAddress(SegmentInput Segment, RecoveredValue Offse
 public sealed record RecoveredEffect(string Kind, RecoveredValue? Address, RecoveredValue? Value, int Bits, ulong Pc, RecoveredValue[]? Inputs=null);
 public sealed record RecoveryAbi(string Id,int ReturnRegister,int[] ArgumentRegisters,int[] VolatileRegisters,int[] PreservedRegisters);
 public sealed record RecoveredStackEffect(RecoveredValue Address,RecoveredValue Value,int Bits,ulong Pc,bool WithinAllocatedFrame);
-public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return");
+public sealed record RecoveredFunction(List<RecoveredEffect> Effects, RecoveredValue Return, List<string> Hypotheses,List<RecoveredStackEffect> StackEffects,string ExitKind="return",bool BareNearReturn=false);
 public sealed record IncomingStackInput(int Offset,int Bits) : RecoveredValue;
 public sealed record IncomingStackAddress(int Offset,int Bits) : RecoveredValue;
 public sealed record MemoryReadValue(RecoveredValue Address,int Bits,ulong Pc,int Epoch,int ReadOrdinal=0):RecoveredValue;
@@ -181,7 +181,14 @@ public static class X86Recovery
             }
         }
         Need(returned,"missing_return");if(stackArguments!=null)notes.Add("Normal-return cleanup is a bounded original-CFG/RET-encoding ABI hypothesis; callee termination, clobbers and memory effects remain external/unknown. VC8 emission requires an explicit flat32 stack relation for address-taken parameters.");foreach(var r in abi.PreservedRegisters)Need(regs[r]==new RegisterInput(r),"profile_preserved_register_not_restored");
-        return new(effects,tailExit?new UnknownValue("tail_callee_result:"+abi.Id):regs[abi.ReturnRegister],notes,stackEffects,tailExit?"tail_call":"return");
+        // This fact is about one complete typed near-return instruction, not
+        // empty high-level effects: omitted volatile/flag effects cannot qualify.
+        bool bareNearReturn=false;
+        if(instructions.Length==1&&instructions[0].GetProperty("length").GetInt32()==1&&instructions[0].TryGetProperty("raw_hex",out var rawReturn)&&rawReturn.GetString()?.Equals("c3",StringComparison.OrdinalIgnoreCase)==true) {
+            X86StackArgumentRecovery.VerifyReturnTree(instructions[0],0);
+            bareNearReturn=true;
+        }
+        return new(effects,tailExit?new UnknownValue("tail_callee_result:"+abi.Id):regs[abi.ReturnRegister],notes,stackEffects,tailExit?"tail_call":"return",bareNearReturn);
     }
 }
 
@@ -198,8 +205,9 @@ public static class Vc8Profile
         // A void declaration is a compiler proposal, not proof that the entry
         // return register is unobservable. Complete artifact checking remains required.
         bool voidStores=stackArguments==null&&ir.ExitKind=="return"&&ir.Return==new RegisterInput(0)&&ir.StackEffects.Count==0&&ir.Effects.Count>0&&ir.Effects.All(e=>e.Kind=="store");
+        bool voidReturn=stackArguments==null&&ir.BareNearReturn&&ir.ExitKind=="return"&&ir.Return==new RegisterInput(0)&&ir.StackEffects.Count==0&&ir.Effects.Count==0;
         if(tail) {if(ir.Effects.Count==0||ir.Effects[^1].Kind!="tail_call"||ir.Effects.Count(e=>e.Kind=="tail_call")!=1)throw new ArgumentException("unsupported_tail_exit");}
-        else if(!voidStores&&(ir.ExitKind!="return"||ir.Return!=new RegisterInput(1)))throw new ArgumentException("unsupported_return_ABI");
+        else if(!voidStores&&!voidReturn&&(ir.ExitKind!="return"||ir.Return!=new RegisterInput(1)))throw new ArgumentException("unsupported_return_ABI");
         var decl=new List<string>();var statements=new List<string>();
         foreach(var e in ir.Effects)
         {
@@ -221,9 +229,9 @@ public static class Vc8Profile
             else {var type=e.Bits switch {8=>"unsigned char",16=>"unsigned short",32=>"unsigned int",_=>throw new ArgumentException("unsupported_store_width")};statements.Add($"    *reinterpret_cast<{type}*>(reinterpret_cast<char*>(this) + {offset}) = {c.Value}u;");}
         }
         var globals=decl.Where(d=>d.StartsWith("GLOBAL:")).Distinct().Select(d=>"extern unsigned char "+d[7..]+";");
-        var returnType=tail||voidStores?"void":"void*";
+        var returnType=tail||voidStores||voidReturn?"void":"void*";
         var parameters=stackArguments==null?"":"unsigned int arg_0";
-        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}({parameters});\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}({parameters}) {{\n"+string.Join("\n",statements)+(tail||voidStores?"":"\n    return this;")+"\n}\n";
+        return string.Join("\n",globals)+$"\nstruct Recovered {{\n"+string.Join("\n",decl.Where(d=>!d.StartsWith("GLOBAL:")).Distinct())+$"\n    {returnType} fn_{rva:x8}({parameters});\n}};\n// FUNCTION: {module} 0x{imageBase+rva:x8}\n{returnType} Recovered::fn_{rva:x8}({parameters}) {{\n"+string.Join("\n",statements)+(tail||voidStores||voidReturn?"":"\n    return this;")+"\n}\n";
     }
 }
 

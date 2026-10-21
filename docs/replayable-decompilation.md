@@ -14,7 +14,8 @@ already been resolved, or that matching functions establish a runnable game.
 
 ## The development loop
 
-1. Select the next unvisited inventory identity by ascending RVA in the bounded window.
+1. Select the smallest owned-byte identity without accepted evidence, using ascending
+   RVA to break ties, from the audited bounded window.
 2. Inspect original instructions and actual typed SharpRetro effects.
 3. Find the missing or incorrect general reconstruction/compiler behavior.
 4. Implement a reusable pass with explicit applicability and failure conditions.
@@ -129,7 +130,7 @@ provenance. They must not become hidden target-specific transformation code.
 
 All routine stages belong behind the same C# core/MCP API: generate, inspect,
 submit corrections, trial a JSON pass recipe, compile, compare, report regressions,
-publish and resume the linear queue. A minimal implemented subset must advertise
+publish and resume the size-priority queue. A minimal implemented subset must advertise
 its limits. The [full design](decompilation-mcp.md) remains a roadmap wherever
 there is no tested implementation.
 
@@ -231,8 +232,8 @@ ordered-memory composition and uses architecture
 `x86-bits32-composed-memory-encoding-equivalence-v1`. It changes checking policy,
 not generated source. `full_match` remains exact; `encoding_equivalent` is a
 separate outcome with its strict nonmatch retained. Queue/status totals expose
-both counts and their accepted union. The project-wide uncertainty barrier and
-ascending selector still apply. Cache reads for this opt-in policy freshly
+both counts and their accepted union. The project-wide uncertainty barrier still
+applies; current scheduling uses owned-byte size followed by RVA. Cache reads for this opt-in policy freshly
 recheck the bound artifacts and accepted mode; a saved diagnostic certificate
 or edited result label is insufficient.
 
@@ -335,3 +336,24 @@ a void signature; complete artifact comparison decides acceptance. Seven other
 identities remain deferred. Traversal continues at `0x1d60`, while earliest
 unresolved remains `0x12a0`. The separate expansion-026 collection preserves both
 prior source indexes and adds no transferred historical credit.
+
+
+## Smallest-first expansion
+
+The later 2026-10-21 user instruction supersedes linear traversal: audit retained
+identity/match/size metadata, then select by summed owned bytes and ascending RVA
+for ties. The audit found 840 distinct retained accepted identities among 27,555,
+but only 7 had the current 026 smoke evidence. Those historical/current categories
+remain separate. Scheduling does not refresh or grant acceptance automatically.
+The prior linear cursor `0x1d60` is historical; the seventeen earlier holes,
+including earliest unresolved `0x12a0`, remain deferred.
+
+The first ten size-priority identities each own one byte. Inspection established
+actual near returns; size alone did not imply that result. A new guarded source
+proposal recognizes a single complete typed near return with a fullword return
+target load from ESP/SS and an ESP advance of four, retaining unchanged entry EAX.
+All ten actual VC8 objects passed complete exact comparison and fresh export.
+The fifteen-identity sample has 12 exact, 1 encoding, 1 behavioral and the known
+`0x12a0` mismatch. The separate expansion-027 collection preserves all fourteen
+prior exported units. Next sorted candidate is `(1 byte, 0x6d8bf0)`; this does not
+resolve any earlier hole or establish original source signatures.
