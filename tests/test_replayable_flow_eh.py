@@ -78,8 +78,8 @@ class FlowEhTests(unittest.TestCase):
   for off in (1,2,3,4,8):
    p=simple([push(reg(6)),[store(binary('Add',reg(4),const(off,64)),const(123))],[write(4,binary('Add',reg(4),const(4,64)))],ret(0)])
    self.assertEqual(self.recover(p)['blocker'],'flow_stack_store_outside_allocated_word')
- def test_complete_two_exit_EH_refuses_unproved_postcall_FS_restoration(self):
-  r=self.recover(eh_fixture());self.assertEqual(r['status'],'unsupported',r);self.assertEqual(r['blocker'],'EH_registration_and_exact_restoration_required')
+ def test_complete_two_exit_EH_tracks_unknown_saved_location_reload(self):
+  r=self.recover(eh_fixture());self.assertEqual(r['status'],'generated',r);self.assertEqual(len(r['ir']['saved_frame_reloads']),2);self.assertTrue(all(not p['restored_entry_value_proven']and p['current_value']['kind']=='memory_read'for p in r['ir']['saved_frame_reloads']))
  def test_EH_evidence_wrong_cookie_handler_state_and_dependency_reject(self):
   edits=[lambda p:p['evidence'].update(security_cookie_va=0x509004),lambda p:p['evidence']['graph']['handler'].update(va=0x506001),lambda p:p['evidence']['graph']['FuncInfo']['fields'].update(states=2),lambda p:p['evidence']['code_dependencies'].pop(),lambda p:p['evidence']['code_dependencies'][0].update(slice_sha256='0'*64),lambda p:p['evidence']['code_dependencies'][0]['lift'].update(opaque_instructions=1),lambda p:p['evidence']['code_dependencies'][0].update(va=0x506001)]
   for edit in edits:
@@ -97,8 +97,8 @@ class FlowEhTests(unittest.TestCase):
    p=eh_fixture();edit(p);self.assertEqual(self.recover(p)['status'],'unsupported')
  def test_extra_memory_effect_cannot_be_emission_noise(self):
   p=eh_fixture();p['lift']['instructions'][0]['tree']['Body'].insert(0,store(addr(3,0x509200),const(1)));self.assertEqual(self.recover(p)['status'],'unsupported')
- def test_source_identity_cannot_bypass_unknown_saved_FS(self):
-  p=eh_fixture();p['rva']=0x2100;r=self.recover(p);self.assertEqual(r['blocker'],'EH_registration_and_exact_restoration_required')
+ def test_source_identity_keeps_unknown_saved_location_plan(self):
+  p=eh_fixture();a=self.recover(p);p['rva']=0x2100;b=self.recover(p);self.assertEqual(b['status'],'generated',b);self.assertNotEqual(a['source'],b['source']);self.assertEqual(a['ir'],b['ir'])
  def test_wrong_call_RA_width_and_outgoing_frame_alias_refuse(self):
   edits=[lambda r:r['tree']['Body'][1].update(Val=const(1)),lambda r:r['tree']['Body'][2]['Val'].update(R=const(8,64)),lambda r:r['tree']['Body'][0].update(Val=reg(1))]
   for edit in edits:

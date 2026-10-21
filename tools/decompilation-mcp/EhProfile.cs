@@ -3,7 +3,8 @@ namespace Decompilation;
 
 public sealed record ReceiverReturnRelation(ulong Target,string Basis,bool EffectsUnknown=true,bool ThrowBehaviorUnknown=true,bool TerminationUnknown=true);
 public sealed record EhSourcePlan(ulong AllocationTarget,ulong ReceiverCallTarget,ulong CleanupForwarder,ulong CleanupTerminal,ulong GlobalTarget,int AllocationBytes,ulong HandlerTarget,ulong CookieTarget);
-public sealed record Vc8EhFunction(FlowFunction Function,JsonElement OriginalEhEvidence,ReceiverReturnRelation ReceiverReturn,EhSourcePlan Plan,string[] Hypotheses);
+public sealed record EhSavedFrameReload(ulong SavePc,ulong RegistrationPc,ulong ReloadPc,ulong RestorationPc,long EntryStackOffset,int WidthBits,RecoveredValue SavedEntryValue,RecoveredValue CurrentValue,ulong[] InterveningCalls,ulong[] InterveningMemoryWrites,bool RestoredEntryValueProven=false,bool FrameDisjointnessProven=false);
+public sealed record Vc8EhFunction(FlowFunction Function,JsonElement OriginalEhEvidence,ReceiverReturnRelation ReceiverReturn,EhSourcePlan Plan,string[] Hypotheses,EhSavedFrameReload[]? SavedFrameReloads=null);
 
 // Compiler-specific interpretation; architecture recovery above retains FS,
 // cookie/state words, call results, every ordered store and both normal exits.
@@ -27,6 +28,7 @@ public static class Vc8EhProfile
     static void Need(bool b,string why){if(!b)throw new ArgumentException(why);}
     static bool Same(RecoveredValue a,RecoveredValue b)=>JsonSerializer.Serialize<RecoveredValue>(a)==JsonSerializer.Serialize<RecoveredValue>(b);
     static RecoveredValue U(RecoveredValue v){while(v is BitValue{Operands.Length:1} b&&b.Operation is "Trunc" or "Zext")v=b.Operands[0];return v;}
+    static RecoveredValue CompleteWord(RecoveredValue v){while(v is BitValue{Operands.Length:1} b&&b.Operation is "Trunc" or "Zext"){Need(b.Bits is 32 or 64,"EH_saved_FS_word_width_required");v=b.Operands[0];}return v;}
     static long? Slot(RecoveredValue? v)=>v switch{SegmentedAddress{Segment:{Index:2},Offset:AddValue{Left:RegisterInput{Index:4}} a}=>a.Offset,AddValue{Left:RegisterInput{Index:4}} a=>a.Offset,_=>null};
     static bool Address(RecoveredValue? v,int segment,ulong offset)=>v is SegmentedAddress a&&a.Segment.Index==segment&&U(a.Offset)==new Constant(offset,64);
     static ulong Global(RecoveredValue? v){Need(v is SegmentedAddress{Segment:{Index:3},Offset:Constant},"EH_global_address_required");return ((Constant)((SegmentedAddress)v!).Offset).Value;}
@@ -50,11 +52,25 @@ public static class Vc8EhProfile
         var callee=callees.Single(c=>c.Target==construct.Item2.Target);var rr=X86Recovery.Raise(callee.Lift,Abi);Need(rr.ExitKind=="return"&&rr.Return==new RegisterInput(1),"EH_missing_original_receiver_return_relation");
         var graph=evidence.GetProperty("graph");var h=graph.GetProperty("handler");ulong handler=h.GetProperty("va").GetUInt64(),cookie=evidence.GetProperty("security_cookie_va").GetUInt64();
         Need(h.GetProperty("profile").GetProperty("cookie_checked").GetBoolean()&&graph.GetProperty("FuncInfo").GetProperty("fields").GetProperty("states").GetInt32()==1&&graph.GetProperty("action").GetProperty("profile").GetProperty("kind").GetString()=="load_word_push_call_pop_ret"&&graph.GetProperty("action").GetProperty("profile").GetProperty("parent_ebp_offset").GetInt32()==-16,"EH_supported_complete_runtime_frame_required");
-        var initialFs=body.Effects.Where(e=>e.Kind=="stack_store"&&Slot(e.Address)==-12).Select(e=>U(e.Value!)).Single();Need(initialFs is MemoryReadValue fs&&Address(fs.Address,4,0)&&fs.Bits==32,"EH_saved_FS_registration_required");
+        var initialSaves=body.Effects.Where(e=>e.Kind=="stack_store"&&Slot(e.Address)==-12).ToArray();Need(initialSaves.Length==1&&initialSaves[0].Bits==32,"EH_unique_saved_FS_word_required");
+        var initialFs=CompleteWord(initialSaves[0].Value!);Need(initialFs is MemoryReadValue fs&&Address(fs.Address,4,0)&&fs.Bits==32,"EH_saved_FS_registration_required");
+        var reloads=new List<EhSavedFrameReload>();
         foreach(var path in f.NormalPaths) {
             var reads=path.Effects.Where(e=>e.Kind=="memory_read").ToArray();Need(reads.Length==2&&reads.All(e=>e.Bits==32)&&Address(reads[0].Address,4,0)&&Address(reads[1].Address,3,cookie),"EH_unmodeled_external_read");
             var memory=path.Effects.Where(e=>e.Kind=="memory_store").ToArray();Need(memory.Length==3&&memory.All(e=>e.Bits==32),"EH_extra_or_partial_memory_effect");
-            Need(Address(memory[0].Address,4,0)&&memory[0].Value==new AddValue(new RegisterInput(4),-12)&&Address(memory[2].Address,4,0)&&Same(U(memory[2].Value!),initialFs),"EH_registration_and_exact_restoration_required");
+            // A compiler-frame role is location provenance, not an equality proof
+            // after opaque calls. Keep the fresh unknown load in architectural IR.
+            Need(Address(memory[0].Address,4,0)&&memory[0].Value==new AddValue(new RegisterInput(4),-12)&&Address(memory[2].Address,4,0),"EH_registration_and_restoration_locations_required");
+            var saves=path.Effects.Where(e=>e.Kind=="stack_store"&&Slot(e.Address)==-12).ToArray();
+            var savedReads=path.Effects.Where(e=>e.Kind=="stack_read"&&Slot(e.Address)==-12).ToArray();
+            Need(saves.Length==1&&saves[0].Bits==32&&Same(CompleteWord(saves[0].Value!),initialFs),"EH_unique_saved_FS_word_required");
+            Need(savedReads.Length==1&&savedReads[0].Bits==32&&CompleteWord(savedReads[0].Value!) is MemoryReadValue{Bits:32},"EH_saved_FS_reload_required");
+            var reload=savedReads[0];var current=(MemoryReadValue)CompleteWord(reload.Value!);
+            Need(current.Pc==reload.Pc&&Slot(current.Address)==-12&&Same(current.Address,reload.Address!)&&Same(CompleteWord(memory[2].Value!),current)&&current.Epoch>((MemoryReadValue)initialFs).Epoch,"EH_saved_FS_current_reload_required");
+            int Position(FlowEffect effect)=>Array.IndexOf(path.Effects,effect);
+            var callEffects=path.Effects.Where(e=>e.Kind=="external_call").ToArray();
+            Need(Position(reads[0])<Position(saves[0])&&Position(saves[0])<Position(memory[0])&&callEffects.All(e=>Position(memory[0])<Position(e)&&Position(e)<Position(memory[1]))&&Position(memory[1])<Position(reload)&&Position(reload)<Position(memory[2]),"EH_saved_FS_effect_order_required");
+            reloads.Add(new(saves[0].Pc,memory[0].Pc,reload.Pc,memory[2].Pc,-12,32,initialFs,current,callEffects.Select(e=>e.Pc).ToArray(),[memory[1].Pc]));
             Need(Global(memory[1].Address)==Global(body.Effects.Single(e=>e.Kind=="memory_store"&&!Address(e.Address,4,0)).Address)&&Same(U(memory[1].Value!),U(path.Exit.Return)),"EH_ordered_global_result_store_required");
             var stores=path.Effects.Where(e=>e.Kind=="stack_store").ToArray();var expected=new long[]{-4,-8,-12,-16,-20,-24,-28,-16,-4}.Concat(path==body?new long[]{-24}:Array.Empty<long>()).ToArray();Need(stores.Select(e=>Slot(e.Address)).SequenceEqual(expected.Select(x=>(long?)x)),"EH_unmodeled_frame_word_effect");
             Need(U(stores[0].Value!)==new Constant(uint.MaxValue,32)&&U(stores[1].Value!)==new Constant(handler,32)&&Same(U(stores[2].Value!),initialFs)&&U(stores[3].Value!)==new RegisterInput(1),"EH_entry_frame_roles");
@@ -68,7 +84,7 @@ public static class Vc8EhProfile
         }
         ulong global=Global(body.Effects.Single(e=>e.Kind=="memory_store"&&!Address(e.Address,4,0)).Address);
         var plan=new EhSourcePlan(alloc.Item2.Target,construct.Item2.Target,evidence.GetProperty("cleanup_forwarder_va").GetUInt64(),evidence.GetProperty("cleanup_terminal_va").GetUInt64(),global,bytes,handler,cookie);
-        return new(f,evidence.Clone(),new(construct.Item2.Target,"complete original typed callee normal-return dataflow under selected preserved-register ABI; not constructor semantics proof"),plan,["cdecl pointer-result source ABI is a candidate spelling; C3 does not establish arity; only required directly observed incoming extent is zero","class-specific new/cleanup and nominal layout are compiler-lowering hypotheses from the original request, state/unwind graph and normal-return receiver relation; external semantics are not invented","normal ABI candidate assumes module data and thread FS linkage are disjoint from the caller stack; unclassified store addresses refuse","FS registration/restoration, cookie, state, helper/table bytes and relocation dependencies remain explicit and require complete native main/EH graph comparison","both path-specific call results/global stores/returns remain in architectural IR; unknown calls may throw or not return"]);
+        return new(f,evidence.Clone(),new(construct.Item2.Target,"complete original typed callee normal-return dataflow under selected preserved-register ABI; not constructor semantics proof"),plan,["cdecl pointer-result source ABI is a candidate spelling; C3 does not establish arity; only required directly observed incoming extent is zero","class-specific new/cleanup and nominal layout are compiler-lowering hypotheses from the original request, state/unwind graph and normal-return receiver relation; external semantics are not invented","module-data and FS stores retain the existing profile address classification; it proves no caller-frame disjointness, and opaque calls invalidate caller-memory contents","FS registration/restoration, cookie, state, helper/table bytes and relocation dependencies remain explicit and require complete native main/EH graph comparison","both path-specific call results/global stores/returns remain in architectural IR; unknown calls may throw or not return","saved-FS source role binds one complete saved word and its ordered post-call reload on every normal path; current contents stay unknown, entry-value equality and arbitrary frame disjointness are not proved"],reloads.ToArray());
     }
     public static string Emit(Vc8EhFunction ir,uint rva,uint imageBase,uint imageEnd,string module)
     {

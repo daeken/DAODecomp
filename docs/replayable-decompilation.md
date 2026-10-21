@@ -295,3 +295,11 @@ identity checkpoint conservatively blocks fresh0x10c0 EH generation at unknown
 saved-FS restoration, retains nine other comparison outcomes, and leaves0x12a0's
 full488/506 mismatch unchanged. Prior public10 evidence is not relabeled as fresh
 new-model credit. See the methodology's caller-memory section for limits.
+
+
+The subsequent saved-frame provenance correction restores0x10c0 generation without
+restoring the old memory-retention assumption. Both normal exits must reload the
+exact saved location and write that current unknown value to FS; entry-value
+identity is not claimed. Identical source and retained object freshly pass both
+complete197-byte main/EH checks. The representative sample returns to8exact+
+1encoding+1behavioral with0x12a0 still unmatched; no new unique credit or export.

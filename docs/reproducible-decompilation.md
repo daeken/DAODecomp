@@ -1685,3 +1685,37 @@ were reused, with no new C++ compiler/VM execution. Open tests distinguish memor
 mutation from a register capture; they do not prove game behavior. Historical836,
 public10 and frontier0x12a0 stay unchanged. Original frame/alias/fault/lifetime and
 trap obligations remain unresolved; no native physical-context gate was added.
+
+
+### Recover a saved frame location without claiming retained contents
+
+A compiler source profile may recognize an exception-frame role from a save and
+reload of the same location even when opaque calls invalidate its value. Batch023
+replaces the two-exit EH profile's stale entry-FS equality requirement with explicit
+`EhSavedFrameReload` provenance. Each normal path must save one complete32-bit FS
+word at the supported frame location, register that location, execute its observed
+calls before the result write, reload that exact word, and write the current reload
+to FS. The plan records save/registration/reload/restoration origins, width, entry
+value, current memory version, intervening calls and memory writes. Narrowing casts,
+wrong locations, duplicate/missing reloads, multiple saves and reordered effects
+refuse; existing frame/cookie/handler/state/dependency checks still apply.
+
+The location relation does not prove the restored contents equal the saved entry
+value. Both `RestoredEntryValueProven` and `FrameDisjointnessProven` remain false.
+FlowIR's havoc-v2 default, unknown saved-register/return-target reads and fault
+snapshots are unchanged. Module/FS address classification remains the existing
+profile boundary, not a new disjointness proof. Complete native comparison still
+checks the compiler proposal independently; no comparator/binder, observation or
+multi-try acceptance gate changed.
+
+At0x10c0 the original saves FS at4010cd into entryESP-12 and registers that word
+at4010db. The two exits reload it at401107/40111e and write FS at40110b/401122;
+current epochs4/3 differ from the entry read's epoch0. The plan preserves those
+unknown current values. Fresh source remains1cd9f45b… and the exact retained VC8
+objectf9694bda… passes both complete main/EH routes:197/197bytes, including110/110
+main bytes and every required dependency. This restores a previously supported
+representative after022's retained refusal; it is not a new historical identity,
+export or frontier gain. The ten-control sample again reports8exact+1encoding+
+1behavioral;0x12a0 stays488/506 nonmatching with unchanged memory/source obligations.
+No new VC8 compile or VM/game execution was needed. Focused open tests demonstrate
+location/content distinctions and refusal boundaries, never original game behavior.

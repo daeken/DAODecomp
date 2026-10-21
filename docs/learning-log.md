@@ -2629,3 +2629,21 @@ Legacy conditional records and their original receipts stay intact. Nine other
 published controls reproduce their complete retained-object outcomes;0x12a0 stays
 488/506 nonmatching with unchanged source. No comparison/acceptance policy was
 changed, and no new VC8 compile, game execution or callback contract was needed.
+
+
+### 2026-10-21 — Saved location and saved value support different claims
+
+Batch022 correctly invalidated caller-memory contents but exposed a too-strong
+source-profile requirement: restoring FS had to equal the entry value. The original
+instead reloads its saved frame word, whose contents are unknown after opaque calls.
+Generic path-local provenance now requires the exact save/register/reload/write
+relation, complete word width and observed effect order while leaving the reloaded
+value unknown. It supplies a compiler-frame source role, not a retention guarantee.
+
+The same0x10c0 source and retained object now freshly pass both complete197-byte
+main/EH checks under current bindings. Wrong slot, partial/overlap, missing/duplicate
+reload, multiple save, narrowed value and reordered effects are tested refusals.
+The corrected caller-memory model and independent gates are unchanged. This
+restores the prior representative capability; public10/historical836/frontier12a0
+do not increase. The frontier's escaped-frame storage and exception/context gaps
+remain separate from this ordinary two-exit compiler-frame role.
