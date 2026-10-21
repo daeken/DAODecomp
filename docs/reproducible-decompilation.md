@@ -1719,3 +1719,53 @@ export or frontier gain. The ten-control sample again reports8exact+1encoding+
 1behavioral;0x12a0 stays488/506 nonmatching with unchanged memory/source obligations.
 No new VC8 compile or VM/game execution was needed. Focused open tests demonstrate
 location/content distinctions and refusal boundaries, never original game behavior.
+
+### Exact split-EH physical identity
+
+The split-range route now separately checks `fixed-original-image-physical-EH-identity-v1`.
+A COFF runtime section receives one base derived from the main entry and rooted EH
+operands. Conflicting anchors, different relative fragment offsets, incomplete
+coverage, extra runtime sections, nonzero relocation addends, unsupported relocation
+kinds, unbound symbols, overlap, alignment or permission differences refuse the
+route. Complete relocated section bytes must equal the original at those numeric
+addresses. The original inventory, complete catch/continuation graph, cookie and
+SAFESEH records remain required. No instruction-by-instruction remapping is used.
+
+The sufficiency claim is narrowly a fixed-image substitution: an identical byte
+replacement in an otherwise unchanged original image and identical complete
+architectural context cannot change native execution. Numeric CALL return words,
+frame effects, exceptions, arbitrary opaque writes/reentry and trap resumption
+therefore remain identical in that context. Surrounding bytes, including a trap's
+possible resumption outside the function, are retained as original image context;
+they are not silently treated as unreachable. This is a pinned artifact result
+at a derived placement, not evidence that a replacement has actually been linked
+or deployed, nor a theorem about C++ or different contexts. `linked_placement_proven`
+remains false. The old node diagnostic stays nonaccepting and is retained alongside
+the new certificate. Narrow encoding/behavioral policies are unchanged.
+
+An independently compiled and linked open nested-try fixture supplies a positive
+318-byte section/EH check and generic negative mutations. Its linker map supplies
+test bindings independently; production placements remain derived from pinned
+original operands and existing runtime/source identity, with no authored placement
+packet. No executable was run. The actual normal frontier still has a complete
+488/506-byte mismatch and conflicting section bases; private linkage002 remains
+negative-only evidence. There are no new accepted game identities or exports.
+
+Both ordinary retained-check adapters use the new exact route. Its implementation
+and dependencies are bound in the job inputs and fresh comparison key. Existing
+replayable export requires fresh complete checks; historical results do not inherit
+credit. The older six-node `rapid_object.eh_source_export` remains conservative and
+refuses the new section-shaped graph; its narrow exporter was not widened here.
+To run the new fixture tests, set `DAO_PHYSICAL_EH_FIXTURE` to a folder containing
+its independent `candidate.obj`, `candidate.exe` and linker `candidate.map`, then
+run `python -m unittest discover -s tests -p test_replayable_physical_eh.py -v`.
+Missing private compiler fixtures are reported as skipped, never as positive evidence.
+
+The object-domain guard also checks symbols outside sections. COMMON allocations,
+weak aliases, unknown absolute definitions and unsupported auxiliary records are
+refused even when unreferenced. Only ordinary zero-valued undefined externals,
+constrained compiler metadata and validated section definitions are permitted
+outside placed runtime bytes. COMDAT selection/association and section sizes and
+relocation counts are checked. Independent review found the original section-only
+walk missed COMMON storage; its false-acceptance witness and rejection remain
+retained, and both raw and integrated paths now test that boundary.

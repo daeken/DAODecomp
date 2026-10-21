@@ -303,3 +303,12 @@ exact saved location and write that current unknown value to FS; entry-value
 identity is not claimed. Identical source and retained object freshly pass both
 complete197-byte main/EH checks. The representative sample returns to8exact+
 1encoding+1behavioral with0x12a0 still unmatched; no new unique credit or export.
+
+A separate strict split-EH check now derives one physical base per COFF runtime
+section and compares every relocated byte at its original numeric address. It
+retains the original surrounding image and complete architectural context; it does
+not claim a linked replacement. The old per-node diagnostic remains nonaccepting.
+The normal0x12a0 and private002 objects fail consistent section placement, so the
+frontier and historical/public counts remain unchanged. A real independently
+linked open nested-try fixture exercises the positive route; arbitrary source or
+runtime-context equivalence is not inferred from that test.

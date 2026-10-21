@@ -18,7 +18,7 @@ else:
 
 
 def implementation_hashes():
-    paths=[Path(__file__),Path(__file__).with_name('static_crt_identity.py'),Path(g.__file__),Path(diagnostic.__file__),Path(g.__file__).with_name('coff.py'),Path(g.__file__).with_name('compare.py'),Path(g.__file__).with_name('symbol_identity.py'),Path(g.__file__).with_name('constructor_identity.py'),Path(__file__).parents[1]/'tools/replayable/ebp_eh_native.py',Path(__file__).parents[1]/'tools/replayable/ebp_eh_compare.py',Path(__file__).parents[1]/'tools/replayable/ebp_eh_candidate.py',Path(__file__).parents[1]/'tools/replayable/range_eh.py',Path(__file__).parents[1]/'tools/replayable/terminal_calls.py']
+    paths=[Path(__file__),Path(__file__).with_name('static_crt_identity.py'),Path(g.__file__),Path(diagnostic.__file__),Path(g.__file__).with_name('coff.py'),Path(g.__file__).with_name('compare.py'),Path(g.__file__).with_name('symbol_identity.py'),Path(g.__file__).with_name('constructor_identity.py'),Path(__file__).parents[1]/'tools/replayable/ebp_eh_native.py',Path(__file__).parents[1]/'tools/replayable/physical_eh_identity.py',Path(__file__).parents[1]/'tools/replayable/ebp_eh_compare.py',Path(__file__).parents[1]/'tools/replayable/ebp_eh_candidate.py',Path(__file__).parents[1]/'tools/replayable/range_eh.py',Path(__file__).parents[1]/'tools/replayable/terminal_calls.py']
     return {p.name:g.sha(p.read_bytes()) for p in paths}
 
 
@@ -88,8 +88,8 @@ def check(original,inventory,compiler,libraries,source,object_bytes,build,pins,*
         runtime=recognize(original,inventory,libraries);report['runtime_identity']=runtime
         reader=g.Original(original);obj=Coff(object_bytes);entries=inventory_entries(inventory,g.sha(original),reader);requested,symbols=inferred_requests(source,obj,entries,reader,allow_split=True)
         if any(len(spec['ranges'])>1 for spec in requested.values()):
-            from tools.replayable.ebp_eh_native import compare_nonmatch
-            report.update(compare_nonmatch(original,inventory,libraries,object_bytes,requested,symbols,runtime))
+            from tools.replayable.ebp_eh_native import compare_complete
+            report.update(compare_complete(original,inventory,libraries,object_bytes,requested,symbols,runtime))
             return report
         observed=g.diagnose(original,object_bytes,requested,symbols,module_sha256=g.sha(original));graph=diagnostic.compare_graphs(original,object_bytes,requested,symbols,module_sha256=g.sha(original))
         require(not observed.get('error') and not graph.get('error'),'upstream_diagnostic_error:'+str(observed.get('error') or graph.get('error')))

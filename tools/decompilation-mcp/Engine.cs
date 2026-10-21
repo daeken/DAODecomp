@@ -178,7 +178,7 @@ public sealed partial class Engine
             }
         }
         // Bind adapter/comparator implementations too; an update cannot silently reuse old work.
-        foreach(var file in Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,"rapid_object"),"*.py").Append(Path.Combine(AppContext.BaseDirectory,"adapter.py")).Append(Assembly.GetExecutingAssembly().Location)) inputs[file]=Hash(File.ReadAllBytes(file));
+        foreach(var file in Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,"rapid_object"),"*.py").Concat(Directory.EnumerateFiles(Path.Combine(registry.AdapterRoot,"tools","replayable"),"*.py")).Append(Path.Combine(AppContext.BaseDirectory,"adapter.py")).Append(Assembly.GetExecutingAssembly().Location)) inputs[file]=Hash(File.ReadAllBytes(file));
         if(build.Config.Profile=="abi_effects")foreach(var input in PipelineInputs(p,PipelineRecipe.AbiEffects))inputs[input.Key]=input.Value;
         job=Guid.NewGuid().ToString("N"); var request=new CheckRequest(p.Config,build,inputs,p.Revision);
         using var insert=db.CreateCommand();insert.Transaction=tx;insert.CommandText="INSERT INTO jobs(id,project,token,request,state,created) VALUES($i,$p,$t,$r,'queued',$c)";

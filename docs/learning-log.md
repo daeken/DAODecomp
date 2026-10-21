@@ -2647,3 +2647,27 @@ The corrected caller-memory model and independent gates are unchanged. This
 restores the prior representative capability; public10/historical836/frontier12a0
 do not increase. The frontier's escaped-frame storage and exception/context gaps
 remain separate from this ordinary two-exit compiler-frame role.
+
+### Whole-section placement exposes a difference hidden by node correspondence
+
+The strict physical-context checkpoint keeps the legacy node diagnostic intact and
+adds a separate complete-section identity check. On the normal multi-try frontier,
+entry and catch anchors demand three different bases for the same COFF code section.
+The private linkage diagnostic also has three conflicting bases. Neither can be
+made physically identical by relocating individual instructions or fragments.
+Their retained complete mismatches remain unchanged.
+
+One new ordinary C++ open nested-try fixture was compiled and independently linked
+with retained support code, without execution. Its three complete runtime sections
+match all318 bytes at consistent bases, including metadata, calls, continuations,
+frame/state effects and the trap suffix. Generic malformed/negative cases and the
+existing consumer/export tests exercise refusal paths. This checks a finite
+compiled-artifact capability under the unchanged original image/context; it does
+not establish actual deployment, original callback contracts or game equivalence.
+
+Independent review caught a necessary whole-object boundary: a COFF COMMON
+allocation can live only in the symbol table. An unused four-byte allocation
+escaped the first section-only check. The repaired domain validates all symbol
+definitions and section auxiliaries, rejecting COMMON, weak aliases, unknown
+absolute definitions and unplaced definitions before acceptance. The original
+review rejection is preserved; it was never installed or used for game credit.
