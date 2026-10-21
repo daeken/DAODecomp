@@ -1889,3 +1889,28 @@ the record; no flag is declared unobservable. Actual compiler comparison accepte
 the observed low-byte zero idiom. Entry-EAX-dependent arithmetic/nonconstant flags
 and indirect call contracts remain unsupported. Reproduce the new generic guards
 with `python -m unittest discover -s tests -p test_replayable_leaf_receivers.py -v`.
+
+
+### Retain upper-register state when proposing a byte load
+
+The receiver-load proposal also covers an observed 8-bit read when both the sole
+EAX write and return value contain the same epoch-zero, first-read snapshot,
+zero-extended to 64 bits and ORed with entry EAX masked by `0xffffffffffffff00`.
+The ordered read and result write must share an instruction origin. Other reads,
+stores, flags, widths, changed receivers, masks or return targets refuse. The
+source returns an unsigned char through a raw byte dereference; this describes
+the proposed access width, not an original field/type/extent or validity contract.
+The complete FlowIR retains upper EAX and return/fault/stack obligations, and
+complete actual compiler comparison remains mandatory. Reproduce focused guards
+with `python -m unittest discover -s tests -p test_replayable_leaf_byte_loads.py -v`.
+
+To measure a rule's reach without a compiler sweep, enumerate retained typed
+lifts, bind their requests, original identity/ranges/bytes and lifter inputs, then
+deduplicate by identity while preferring the current lifter. Replay the existing
+`recover-ir` source-only route only for the actual rule's instruction domain.
+Keep older-lifter predictions conditional and record refusals, missing caches and
+out-of-domain records separately. Report discovered candidates in size/RVA order
+for later complete checks; source-only output grants no acceptance or export.
+The current repository lacks a persistent whole-inventory typed-IR index and a
+bulk cached applicability endpoint. Its older whole-inventory scan scripts lift
+functions anew, so they are not a cheap cache reevaluation mechanism.

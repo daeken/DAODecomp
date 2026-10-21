@@ -389,3 +389,26 @@ complete sampled objects retain nine exact, one encoding, one behavioral and
 two known mismatches; the two generation refusals complete the fifteen-identity
 sample. Expansion-029 adds eight units while preserving the prior thirty-three.
 Next sorted candidate is `(4 bytes, 0x1f060)`; twenty recorded holes remain.
+
+
+The fourth size-priority window visited ten four-byte functions. Nine actual
+objects matched their complete ranges. Eight reused reviewed receiver-word or
+address proposals; the new byte-load proposal requires the same single memory
+snapshot to feed an explicit upper-EAX-preserving result. The x87 load at
+`0x78290` remains an incomplete typed lift and never reached the compiler. Fourteen
+complete objects retain ten exact, one encoding, one behavioral and two known
+mismatches; the refusal completes the fifteen-identity sample. Expansion-030 adds
+nine units while preserving forty-one earlier units. Next is `(4 bytes, 0xe13d0)`;
+twenty-one identities remain deferred.
+
+Rule applicability and acceptance have separate coverage. A source-only audit of
+2,143 retained local lift files found 900 distinct pinned identities: 69 with the
+current lifter and 831 with older lifters. Of 203 one/two-instruction cached
+identities replayed through the leaf routes, 36 produced applicable proposals
+(all current-lifter: 27 historically accepted and the nine current successes);
+167 refused, and 697 longer cached identities were outside this rule domain.
+No additional unaccepted candidate was found in that cache. The other 26,655
+inventory identities lack retained local typed IR in this enumeration and remain
+uninspected for applicability. This is not a whole-binary reevaluation: efficient
+coverage needs a persistent typed-IR inventory and cached bulk applicability
+route. No acceptance is inferred from size, prior acceptance or source generation.

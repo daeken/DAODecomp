@@ -28,6 +28,12 @@ public static class Vc8LeafReturnProfile
         if(value is BitValue{Operation:"Add",Bits:32 or 64,Operands:var terms}&&terms.Length==2&&LowWord(terms[0])==new RegisterInput(1)&&terms[1] is Constant{Bits:32 or 64,Value:<=4096} c){offset=(int)c.Value;return true;}
         return false;
     }
+    static bool LowByteRead(RecoveredValue value,MemoryReadValue read)
+    {
+        if(value is not BitValue{Operation:"Or",Bits:64,Operands:var terms}||terms.Length!=2)return false;
+        if(terms[0] is not BitValue{Operation:"And",Bits:64,Operands:var mask}||mask.Length!=2||mask[0]!=new RegisterInput(0)||mask[1]!=new Constant(ulong.MaxValue-255,64))return false;
+        return terms[1] is BitValue{Operation:"Zext",Bits:64,Operands:var bytes}&&bytes.Length==1&&bytes[0]==read;
+    }
     public static LeafReturnFunction Raise(JsonElement lift)
     {
         var rows=lift.GetProperty("instructions").EnumerateArray().ToArray();Need(rows.Length is 1 or 2,"leaf_return_instruction_domain");
@@ -47,8 +53,10 @@ public static class Vc8LeafReturnProfile
             return new(flow,"void",null,cleanup/4);
         }
         Need(writes.Length==1&&writes[0].Address==new RegisterInput(0)&&writes[0].Bits is 32 or 64,"leaf_return_one_result_write");
-        if(pre.Length==2&&pre[0].Kind=="memory_read"&&pre[1]==writes[0]&&pre[0].Pc==writes[0].Pc&&pre[0].Bits==32&&pre[0].Value is MemoryReadValue{Bits:32,Epoch:0,ReadOrdinal:1} read&&pre[0].Address==read.Address&&LowWord(exit.Return)==read&&LowWord(writes[0].Value!)==read&&ReceiverOffset(read.Address,out var loadOffset))
-            return new(flow,"unsigned int",null,cleanup/4,"load_word",loadOffset);
+        if(pre.Length==2&&pre[0].Kind=="memory_read"&&pre[1]==writes[0]&&pre[0].Pc==writes[0].Pc&&pre[0].Value is MemoryReadValue{Epoch:0,ReadOrdinal:1} read&&pre[0].Bits==read.Bits&&pre[0].Address==read.Address&&ReceiverOffset(read.Address,out var loadOffset)) {
+            if(read.Bits==32&&LowWord(exit.Return)==read&&LowWord(writes[0].Value!)==read)return new(flow,"unsigned int",null,cleanup/4,"load_word",loadOffset);
+            if(read.Bits==8&&LowByteRead(exit.Return,read)&&LowByteRead(writes[0].Value!,read))return new(flow,"unsigned char",null,cleanup/4,"load_byte",loadOffset);
+        }
         if(pre.Length==1&&ReceiverOffset(exit.Return,out var addressOffset)&&ReceiverOffset(writes[0].Value!,out var writeOffset)&&addressOffset==writeOffset)
             return new(flow,"unsigned int",null,cleanup/4,"address",addressOffset);
         Need(pre.All(e=>e.Kind=="flag_write"&&e.Bits==1&&e.Value is Constant{Bits:1}||e.Kind=="register_write"&&e.Address==new RegisterInput(0)),"leaf_return_extra_effect");
@@ -66,6 +74,7 @@ public static class Vc8LeafReturnProfile
         var parameters=string.Join(", ",Enumerable.Range(0,ir.ProposedWordParameters).Select(i=>$"unsigned int arg_{i}"));
         var receiver=$"(reinterpret_cast<unsigned int>(this) + {ir.ReceiverOffset}u)";
         var statement=ir.ReceiverOperation switch {
+            "load_byte"=>$"    return *reinterpret_cast<unsigned char*>({receiver});\n",
             "load_word"=>$"    return *reinterpret_cast<unsigned int*>({receiver});\n",
             "address"=>$"    return {receiver};\n",
             null=>ir.ConstantValue is ulong value?$"    return {value}u;\n":"",

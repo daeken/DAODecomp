@@ -2797,3 +2797,30 @@ took 1.76 seconds; eight actual VC8 object invocations ran in Windows 11 ARM64
 translation. Two compile-request jobs stopped before compiler dispatch because
 generation was unsupported. No LINK, CI, full scan or game ran. Eight fresh
 exports in expansion-029 preserve the thirty-three earlier public units.
+
+
+### 2026-10-21: four-byte receiver loads and measured rule reach
+
+Nine of ten selected functions produced complete 4/4-byte matches. Eight reused
+the previous receiver rules; one required a guarded byte load preserving the
+upper-EAX expression and the exact ordered read snapshot. The remaining x87 load
+was opaque in the lifter and stopped before compilation. No floating-point source
+signature or exception behavior was guessed. The prior twenty holes remain, with
+this refusal added; the next size/RVA candidate is `(4, 0xe13d0)`.
+
+Eighty-seven focused tests passed on macOS ARM64. Fourteen complete comparisons
+through both independent routes retained ten exact, one encoding, one behavioral
+and two known mismatches. One C# build took 1.80 seconds; nine VC8 object builds
+ran in Windows 11 ARM64 translation. No LINK, full suite, CI or game ran. Nine
+fresh exports in expansion-030 preserve the forty-one earlier public units.
+
+The first explicit cached rule-reach audit found 900 distinct pinned identities
+among 2,143 local lift paths, against 27,555 inventory identities. Only 69 had
+current-lifter caches; 831 had bound older-lifter caches. Source-only replay of
+203 one/two-instruction records found 36 applicable current proposals, all already
+covered by 27 historical results or this batch's nine successes. There were 167
+refusals and 697 cached identities outside the leaf instruction domain. No new
+unaccepted candidate emerged; 26,655 identities had no local cache to inspect.
+The report identifies the missing persistent typed-IR index/bulk cached route
+instead of treating a small sample as a whole-binary result. No new lifts or
+acceptance checks ran for this reach audit.
