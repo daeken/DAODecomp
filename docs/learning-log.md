@@ -2500,7 +2500,8 @@ replacement, new acceptance or source export followed from these improvements.
 
 The first-catch expansion was mostly a duplicated suffix, not arithmetic. A
 reusable loop/discriminator proposal now emits that suffix once while retaining
-normal-recovery versus resumed-rethrow routes. A definite-state intersection
+normal-recovery versus resumed-rethrow routes. The resumed-rethrow interpretation
+was later found incorrect and withdrawn (see the state correction below). A definite-state intersection
 supplies the shared register inputs; it does not equate raw parent-frame offsets
 or introduce nonthrowing declarations.
 
@@ -2549,3 +2550,35 @@ against 488 original (prior 565); the ordering repair was retained despite that
 increase. Ten prior controls still freshly pass both gates; the frontier remains
 a nonaccepting mismatch with no new export. Ordinary unwind, numeric return-PC,
 frame/value/alias correspondence and trap behavior remain unresolved.
+
+
+### 2026-10-21 — Correct the state model before restructuring source
+
+An independent original-ASM reconstruction caught a concrete address-role error:
+registration−4 is saved ESP, whereas registration+8 is state. Direct PE byte checks
+of the relevant runtime instructions and fifteen retained bound sections confirm
+that normal catch completion restores saved ESP and does not undo the catch's
+state-2 write. The resumed suffix therefore selects cleanup for eligible C++
+exceptions, conditional on no intervening state mutation. State1 preparation and
+state3 cleanup failures propagate without another local cleanup. Earlier reports
+of resumed state1 and the loop's bare rethrow are invalidated, not silently reused.
+
+The generic region model now makes those state/lifetime boundaries explicit and
+keeps unknown mutation/category outcomes unknown. The source proposal uses forward
+nested protection and duplicates the shared suffix under its two contexts. A
+single-entry forward CFG pass emits if/else without moving memory or call effects;
+crossing entries/exits refuse. No private per-function candidate or guest-memory
+framework was copied into production. Value names and raw accesses still expose
+the limits of recovered types and frame correspondence.
+
+Two actual pinned VC8 compiler invocations produced the full candidate and one
+focused open probe. Complete comparison rejects 637 candidate bytes against488
+original, with no unresolved targets; main is242 versus230. The ten probe traces
+(two source versions, five routes) confirm cleanup on resumed failure in the new
+proposal and its absence in the old one. They also expose different retry-failure
+destruction order: the enclosing handler unwinds a caught object before cleanup.
+This is a retained counterexample and a concrete next limitation, not a match or
+permission to ignore ordinary exception lifetime. No additional source variants
+were compiled. Both compiler results used Windows11 ARM64 x86 translation; the
+original function was not executed. Existing ten controls are freshly checked
+with unchanged objects; public10/historical836/frontier12a0 remain unchanged.

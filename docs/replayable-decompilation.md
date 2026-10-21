@@ -271,11 +271,13 @@ The current development frontier remains `0x1210`: generated source is useful
 recovery evidence, but its retained native comparison is a mismatch.
 
 
-The current multi-try source experiment is `post_catch_shared_tail_v2`: literal
-continuation effects execute after catch completion, informed by targeted
-original-bound runtime ordering and a pinned VC8 lifetime probe. Its complete
-581-byte candidate still mismatches the 488-byte original at `0x12a0`; ten public
-sources and 836 historical distinct accepted identities are unchanged. Context,
-frame aliases, ordinary unwinding, numeric return-PC and trap obligations remain
-unproved; the multi-try route is still nonaccepting. See the methodology and
-learning log for the distinction between runtime observations and source probes.
+The current multi-try source experiment is `forward_protected_continuation_v3`:
+forward nested try/catch regions replace the invented resumed loop. Original
+normal catch completion restores saved ESP, not EH state; the resumed suffix
+retains state2 absent mutation and its eligible C++ exceptions select cleanup.
+The previous state1/bare-rethrow interpretation was incorrect. Continuation
+reloads remain after caught-object destruction. Full comparison is still a
+637/488-byte mismatch, and an open VC8 probe exposes changed retry-failure
+destruction ordering in the new enclosing-catch proposal. Ten public sources,
+836 historical accepted identities and frontier0x12a0 remain unchanged. See the
+methodology and learning log for the retained counterexample and limitations.

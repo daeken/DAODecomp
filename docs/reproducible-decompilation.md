@@ -1392,8 +1392,10 @@ argument order. Unsupported effects, signed types, unknown flags, cyclic source
 regions, changed state topology and malformed trap PCs refuse. Register and
 layout names are candidate spellings, not recovered class semantics.
 
-The normal suffix remains in state 0, while the catch-return suffix executes in
-state 1. Emit both source paths rather than declaring unknown callees nonthrowing
+The normal suffix remains in state 0; the catch-return suffix retains state 2
+on supported normal completion absent callback/alias mutation. The earlier
+state-1 claim confused saved ESP with the EH state word and is withdrawn. Emit
+both source paths rather than declaring unknown callees nonthrowing
 to persuade the compiler to merge them. C++ linkage keeps unknown calls capable
 of throwing under `/EHsc`; an open C-linkage probe lost its catches and was
 retained as a failed source hypothesis. Source generation records full original
@@ -1457,40 +1459,40 @@ virtual call, so a nonthrowing declaration cannot be inferred to move the shared
 suffix outside its exception context. The nonaccepting multi-try route is
 unchanged, and parent-frame/continuation correspondence is still required.
 
-### Trial a shared tail without a nonthrowing assumption
+### Retained rejected shared-tail experiment
 
-The bounded EBP source profile can propose `guarded_shared_tail_v1` for a normal
-suffix also reached by a catch-return continuation. It intersects the normal and
-resumed register/parent definitions, requires compatible empty outgoing stacks
-and no incoming flags, and carries only definitely defined register values into
-one emitted suffix. Missing definitions still refuse; source coalescing is not a
-proof that two original/candidate frame slots correspond.
+The historical `guarded_shared_tail_v1` proposal intersected normal and resumed
+register/parent definitions, required compatible empty outgoing stacks and no
+incoming flags, and carried definitely defined values into one emitted suffix.
+Its definite-input checks remain useful; its exception routing is withdrawn.
 
-An explicit resume discriminator distinguishes failure routes: normal-tail
-failure enters the allocation catch, while resumed-tail failure rethrows. The
-nested cleanup catch, original throw and breakpoint primitive remain present.
-All external calls retain potentially throwing C++ linkage. This is a compiler
-candidate, **not a proven exception-runtime transformation**: the additional
-handler, caught-object destruction timing, ordinary unwinding, numeric return
-PCs, stack aliases and continuation/frame correspondence remain obligations.
-The duplicate-tail spelling remains available to the direct source API with
-`shared_tail=false`; `shared_tail=true` selects the experimental proposal.
+That experiment used an explicit resume discriminator: normal-tail failure
+entered the allocation catch, while resumed-tail failure performed a bare
+rethrow. **The latter route is incorrect for the original's eligible state-2
+exceptions**, which select cleanup absent intervening state mutation. Keeping a
+nested cleanup catch elsewhere in the emitted source did not repair that missing
+route. The old generated sources and their nonmatches remain retained evidence,
+not the current source selector or a proven runtime transformation.
 
-Three paired VC8 compiles on the current frontier produced complete graphs of
-565 and 582 bytes, then an inconclusive candidate with eight unowned alignment
-bytes. The original graph is 488 bytes; the preceding reviewed candidate was
-608. The retained 565-byte candidate has main/catch/continuation sizes 280/61/8
-versus original 230/36/6. The larger placement variant and coalescing variant
-were reversed. The ownership checker continues to reject unowned bytes; no
-padding exception or comparison policy was added.
+Three paired VC8 compiles at frontier0x12a0 produced complete graphs of565 and582
+bytes, then an inconclusive candidate with eight unowned alignment bytes. The
+original graph is488 bytes; the preceding candidate was608. The retained565-byte
+candidate had main/catch/continuation sizes280/61/8 versus original230/36/6.
+The larger placement and coalescing variants were reversed. The ownership checker
+rejected unowned bytes; no padding exception or comparison policy was added.
 
 An open generated-source host probe exercised five success/throw scenarios for
-both spellings. It confirmed the proposed dispatch and exposed a real lifetime
-difference: caught-object destruction precedes the resumed suffix in the shared
-variant, whereas the duplicate-tail spelling executes that suffix inside the
-catch. This is macOS C++ evidence, not pinned guest-runtime evidence. Both native
-comparison routes remain nonaccepting; no source export or frontier advance
-follows from smaller code or the host probe.
+both spellings. It observed their proposed dispatch and exposed differing caught-
+object destruction timing; it did not validate the original exception routes.
+That macOS C++ evidence is separate from the later pinned-runtime address-role
+correction and VC8 counterexamples below. Both native comparison routes rejected
+the historical proposal, and it earned no source export or frontier advance.
+
+The direct source API currently selects `forward_protected_continuation_v3` with
+`shared_tail=true`. The name of that Boolean is retained for API compatibility;
+it no longer selects the loop or a single emitted suffix. `shared_tail=false`
+retains the older duplicate-inside-catch spelling only as a rejected lifetime
+comparison probe. Neither option grants runtime equivalence or acceptance.
 
 
 ### Keep continuation effects after catch completion
@@ -1511,7 +1513,7 @@ normal-return destruction guard. These are bounded instruction observations:
 indirect callbacks, helper failures, SEH dispatch and destructor exceptional
 outcomes remain unproved. Symbol association alone does not establish semantics.
 
-The source proposal `post_catch_shared_tail_v2` therefore places continuation
+The retained, rejected source proposal `post_catch_shared_tail_v2` places continuation
 loads and effects in the resumed iteration **after leaving the catch**, before
 entering the shared protected suffix. Loading parent words inside the catch can
 capture values before destruction changes them. The definite-state join and
@@ -1536,3 +1538,49 @@ frontier compiles to a complete 581-byte graph versus 488 original, rather than 
 prior 565. Both gates still reject it. Runtime state, frame/alias mapping, ordinary
 unwinding, numeric CALL return PCs and trap delivery/resumption remain required;
 no size or lifetime-probe observation grants acceptance.
+
+
+### Separate saved ESP, exception state and forward source regions
+
+For this bounded VC8 EBP profile, let the parent frame be B and the registration
+node R=B−12. Saved ESP is R−4=B−16; EH state is R+8=B−4. Catch entry stores
+`try_high+1` in state. The retry catch subsequently writes state 2. Normal catch
+completion restores **saved ESP**, not that state. Guarded exception destruction
+precedes continuation transfer. The state therefore remains 2 unless an alias or
+callback changes it. This is original instruction evidence under those conditions,
+not an assertion that the entire runtime has been executed or proved.
+
+`EbpExceptionRegions` records the distinct slots, state intervals, origins and
+lifetime boundary. Eligible C++ exceptions from the initial suffix select retry;
+those from retry allocation, catch completion or the resumed suffix select cleanup
+if they reach the parent in state 2. State-1 preparation and state-3 cleanup lie
+outside both local try intervals. Unknown state mutations and unestablished
+exception categories return unknown. FuncInfo magic/flags remain checked; ordinary
+access faults are never silently converted into C++ throws.
+
+The current nonaccepting proposal, `forward_protected_continuation_v3`, uses nested
+try/catch and two forward suffix copies. A cleanup guard activates at the observed
+state-2 marker. Catch completion precedes continuation reloads. Forward conditional
+regions become if/else only when every branch is forward and each arm has a single
+entry; crossing entries/exits refuse. Ordered loads, stores and calls are retained.
+Raw word accesses remain because object extent, source types and aliases are not
+proved. Register/temp spellings still need further value-identity recovery; this
+is not recovered historical source or a native replacement.
+
+One real VC8 compilation produced a complete 637-byte graph against 488 original
+(main 242/230), with zero unresolved comparison targets. Both complete comparison
+routes reject it. A second compiler invocation built a ten-case open probe comparing
+the old and new emitted methods on five routes. The resumed-suffix failure now
+performs cleanup, exposing the old bare-rethrow error. The same probe also exposes
+a limitation: the enclosing cleanup catch changes retry-failure exception-object
+destruction ordering. That counterexample is retained; no source spelling sweep
+or acceptance relaxation follows from the repair. Complete original frame,
+ordinary unwinding/current-exception lifetime, saved registers, aliases, numeric
+CALL-return observations, fault delivery and literal INT3 resumption remain required.
+
+The compiler/probe ran under Windows 11 ARM64 x86 translation; focused generic tests
+ran on macOS ARM64. Ten released controls retain their exact cached objects and
+fresh source/comparison checks. Historical accepted count 836, public source count
+10 and frontier 0x12a0 remain unchanged. Outside-sample work, full suites, CI and
+original-game execution are unrun. Old state-1/resumed-rethrow reports remain
+immutable rejected evidence and must not be used as current semantic claims.

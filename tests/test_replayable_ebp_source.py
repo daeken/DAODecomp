@@ -34,7 +34,7 @@ def fixture():
  trap=inner[-1]['pc'];inner[-1]['tree']['Body']=[node('IlTrap',Architecture='x86',Vector=3,InstructionPc=const(trap,64),ContinuationPc=const(trap+1,64))]
  resume=rows(RESUME,[('8b7dec',[write(7,load(-20))]),('8b75e8',[write(6,load(-24))])])
  def dep(code,role,continuations):return dict(role=role,graph=dict(entry_va=code[0]['pc'],continuation_candidates=continuations),typed_instructions=[dict(lift=dict(instructions=code))])
- graph=dict(handler=dict(va=HANDLER,profile=dict(cookie_checked=True)),FuncInfo=dict(states=4),unwind_map=dict(transitions=[dict(to_state=v,action_va=0)for v in(-1,-1,1,1)]),try_map=dict(entries=[dict(try_low=state,try_high=state,catch_high=3,handlers=dict(entries=[dict(type_va=0,entry_va=entry)]))for state,entry in[(2,INNER),(0,OUTER)]]))
+ graph=dict(handler=dict(va=HANDLER,profile=dict(cookie_checked=True)),FuncInfo=dict(states=4,flags=1,bytes_hex="22059319"+"00000000"*7+"01000000"),unwind_map=dict(transitions=[dict(to_state=v,action_va=0)for v in(-1,-1,1,1)]),try_map=dict(entries=[dict(try_low=state,try_high=state,catch_high=3,handlers=dict(entries=[dict(type_va=0,entry_va=entry)]))for state,entry in[(2,INNER),(0,OUTER)]]))
  frame=dict(normal_paths=[],incoming=dict(required_bytes=8,frame_escaped=False),return_cleanup_bytes=[8],instruction_origins=[r['pc']for r in first+suffix],normal_continuation_contract='synthetic candidate source fixture',exceptional_semantics_unknown=True)
  deps=[dict(target=t,lift=dict(mode='Bits32',decode_complete=True,lift_errors=0,opaque_instructions=0,instructions=[row(t,ret(0),'c3')]))for t in (ALLOC,LATER)]
  return dict(ebp_try_source=True,rva=BASE-0x500000,image_base=0x500000,image_end=0xa00000,module='open.exe',lift=dict(schema='sharpretro_owned_ranges_v1',ranges=[dict(lift=dict(instructions=first)),dict(lift=dict(instructions=suffix))]),frame=frame,eh=dict(graph=graph,dependencies=[dep(inner,'catch_entry',[]),dep(outer,'catch_entry',[RESUME]),dep(resume,'literal_return_continuation_candidate',[])],typed_lift_errors=0,typed_opaque_instructions=0,security_cookie_va=COOKIE),callees=dict(callees=deps,runtime_terminal_evidence=runtime))
@@ -145,8 +145,8 @@ class EbpSourceTests(unittest.TestCase):
   p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];r['tree']['Body'].insert(0,node('IlLet',Id=200,Val=node('IlBin',Op=dict(name='Add'),L=reg(1),R=const(0x100000000,64),Ty=ty(64))));r['tree']['Body'].append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(200,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);self.assertIn(f"unsigned __int64 t_main_{r['pc']:x}_200;",result['source'])
 
 
- def test_shared_tail_dispatch_keeps_calls_and_rethrows_resumed_failures(self):
-  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (resumed) throw;',s);self.assertIn('for (;;) {',s);self.assertIn('if (!resumed) {',s);self.assertIn('resumed = true;',s);self.assertIn('r_shared_7 =',s);self.assertIn('parent_m20',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'post_catch_shared_tail_v2');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
+ def test_forward_protected_suffix_has_both_exception_regions(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),2);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (!cleanup_active) throw;',s);self.assertNotIn('for (;;)',s);self.assertNotIn('resumed',s);self.assertNotIn('goto ',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'forward_protected_continuation_v3');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
  def test_shared_tail_requires_both_register_inputs(self):
   p=fixture();p['shared_tail']=True;p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'][0]['tree']['Body']=[];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_7')
  def test_shared_tail_retains_parent_and_stack_dominance_guards(self):
@@ -158,20 +158,42 @@ class EbpSourceTests(unittest.TestCase):
  def test_shared_tail_private_parent_must_exist_on_both_paths(self):
   p=fixture();p['shared_tail']=True;p['lift']['ranges'][1]['lift']['instructions'][0]['tree']['Body']=push(load(-24));self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_parent_word')
  def test_shared_tail_retains_aliasable_memory_and_call_order(self):
-  p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)
+  p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),2);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)
 
- def test_resumed_parent_reads_follow_catch_completion_before_resumed_try(self):
-  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source']
-  # The next iteration executes this block only after leaving the catch. No
-  # cached receiver/size loads remain in the catch before exception destruction.
-  head=s.index('for (;;) {');resume=s.index('if (resumed) {',head);first_try=s.index('try {',resume);catch=s.index('} catch (...)',first_try)
+ def test_resumed_parent_reads_follow_catch_completion_inside_cleanup_protection(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];catch=s.index('} catch (...)');completion=s.index('\n      }',catch);cleanup=s.rindex('} catch (...)')
   for register,parent in [(7,20),(6,24)]:
    assignment='r_continuation_'+str(register)+' = static_cast<unsigned int>(parent_m'+str(parent)+');'
-   self.assertEqual(s.count(assignment),1);self.assertLess(resume,s.index(assignment));self.assertLess(s.index(assignment),first_try);self.assertNotIn(assignment,s[catch:])
-  self.assertLess(s.index('resumed = true;',catch),s.rindex('}'))
+   self.assertEqual(s.count(assignment),1);self.assertLess(completion,s.index(assignment));self.assertLess(s.index(assignment),cleanup)
+  self.assertLess(s.index('cleanup_active = true;',catch),completion)
  def test_continuation_memory_effect_occurs_outside_allocation_catch(self):
   p=fixture();p['shared_tail']=True;rows=p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'];rows[1]['tree']['Body'].append(node('IlStore',Addr=reg(7),Val=const(99,32)))
-  r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];a=s.index('write_word(static_cast');self.assertLess(s.index('if (resumed) {'),a);self.assertLess(a,s.index('try {',s.index('for (;;) {')));self.assertEqual(s.count('write_word(static_cast'),1)
+  r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];a=s.index('write_word(static_cast');self.assertLess(s.index('\n      }',s.index('} catch (...)')),a);self.assertLess(a,s.rindex('} catch (...)'));self.assertEqual(s.count('write_word(static_cast'),1)
+
+ def dispatch(self,plan,state,category='eligible_cpp',unchanged=True):
+  return self.run_source(dict(ebp_region_dispatch=plan,state=state,category=category,runtime_state_unchanged=unchanged))
+ def test_saved_esp_and_state_are_distinct_and_completion_retains_retry_state(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);plan=r['ir']['exception_regions'];self.assertEqual(plan['registration_parent_offset'],-12);self.assertEqual(plan['saved_esp_parent_offset'],-16);self.assertEqual(plan['state_parent_offset'],-4)
+  regions={x['role']:x for x in plan['regions']};self.assertEqual(regions['catch_preparation']['state'],1)
+  for name in ('retry_allocation','catch_completion','literal_continuation','resumed_suffix'):
+   self.assertEqual(regions[name]['state'],2);self.assertEqual(regions[name]['handler'],INNER)
+  self.assertTrue(regions['literal_continuation']['after_catch_completion']);self.assertFalse(plan['proof'])
+ def test_initial_and_resumed_suffix_dispatch_differ(self):
+  plan=self.run_source(fixture())['ir']['exception_regions'];self.assertEqual(self.dispatch(plan,0)['handler'],OUTER);self.assertEqual(self.dispatch(plan,2)['handler'],INNER)
+ def test_preparation_and_cleanup_failure_cannot_reenter_cleanup(self):
+  plan=self.run_source(fixture())['ir']['exception_regions']
+  for state in (-1,1,3):self.assertEqual(self.dispatch(plan,state)['status'],'propagate')
+ def test_runtime_mutation_and_fault_categories_stay_unknown(self):
+  plan=self.run_source(fixture())['ir']['exception_regions']
+  for state,category,unchanged in [(None,'eligible_cpp',True),(2,'eligible_cpp',False),(2,'access_fault',True),(2,'foreign',True),(99,'eligible_cpp',True)]:
+   r=self.dispatch(plan,state,category,unchanged);self.assertEqual(r['status'],'unknown');self.assertIsNone(r['handler'])
+ def test_state_word_cannot_be_confused_with_saved_esp_store(self):
+  p=fixture();p['eh']['dependencies'][1]['typed_instructions'][0]['lift']['instructions'][1]['tree']['Body']=[store(-4,reg(4))];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_catch_SP_role')
+ def test_unknown_or_changed_state_and_category_profile_refuse(self):
+  for value in (reg(0),const(1,8)):
+   p=fixture();p['eh']['dependencies'][1]['typed_instructions'][0]['lift']['instructions'][5]['tree']['Body']=[store(-4,value)];self.assertEqual(self.run_source(p)['status'],'unsupported')
+  for key,value in [('flags',0),('bytes_hex','21059319'+'00000000'*7+'01000000')]:
+   p=fixture();p['eh']['graph']['FuncInfo'][key]=value;self.assertEqual(self.run_source(p)['blocker'],'EBP_regions_exception_category_profile')
 
  def test_resume_load_cannot_bypass_its_only_definition(self):
   p=fixture();p['shared_tail']=True;rows=p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'];rows[0]['tree']['Body']=[node('IlBranch',Kind=dict(name='CondJmp'),Target=const(rows[1]['pc'],32),Cond=const(1,1))]
