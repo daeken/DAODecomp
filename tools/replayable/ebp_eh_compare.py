@@ -12,7 +12,7 @@ from tools.replayable.range_eh import metadata,reachable,need
 from tools.replayable.ebp_eh_candidate import inspect
 
 
-def compare(original,owned_ranges,object_bytes,main_name):
+def compare(original,owned_ranges,object_bytes,main_name,*,external_bindings=None):
     result=dict(schema='EBP_try_graph_comparison_diagnostic_v1',diagnostic_only=True,acceptance_supported=False,proof=False,original_sha256=sha(original),object_sha256=sha(object_bytes),nodes=[],blockers=[])
     try:
         reader=Original(original);obj=Coff(object_bytes);candidate=inspect(object_bytes,main_name)
@@ -44,6 +44,10 @@ def compare(original,owned_ranges,object_bytes,main_name):
         def pair(name,a,b,code=False):
             if code:
                 av=a['instructions'];bv=b['instructions'];pairs.append((name,av,bv,None));
+                # Root correspondence follows the try/continuation operand edge,
+                # independently of the node's instruction count. Interiors still
+                # require the full positional pairing below.
+                if av and bv:placement[(main_section,bv[0]['pc'])]=av[0]['pc']
                 if len(av)==len(bv):
                     for ar,br in zip(av,bv):placement[(main_section,br['pc'])]=ar['pc']
             else:
@@ -71,6 +75,8 @@ def compare(original,owned_ranges,object_bytes,main_name):
                 for rel in obj.sections[section-1].relocations:
                     if not off<=rel.offset<off+len(cb):continue
                     at=rel.offset-off;need(at+4<=len(cb),'comparison_relocation_extent');sym=obj.symbols[rel.symbol];target=placement.get((sym.section,sym.value))
+                    if target is None and sym.section==0 and sym.value==0 and sym.storage==2 and sym.name in (external_bindings or {}):
+                        target=external_bindings[sym.name];need(type(target)is int and 0<=target<=0xffffffff,'invalid_external_binding');chunk.setdefault('bound_external_references',[]).append(dict(offset=at,symbol=sym.name,target=target))
                     if target is None:
                         unknown.update(range(at,at+4));chunk['unresolved_references'].append(dict(offset=at,kind=rel.kind,symbol=sym.name));continue
                     need(rel.kind in (6,0x14),'comparison_relocation_kind');struct.pack_into('<I',patched,at,(target if rel.kind==6 else target-(ova+at+4))&0xffffffff)

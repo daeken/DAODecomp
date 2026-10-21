@@ -2436,3 +2436,37 @@ permits an aliasing write of 99, then faults. The correction exports the stale
 word as unknown with explicit uncertainty/fresh-word metadata, while retaining
 ordered writes. Separate tests cover invalidated and selectively fresh words;
 43 focused tests passed after the correction. No acceptance policy changed.
+
+
+### EBP source generation and the first compiled nested-catch candidate
+
+A typed trap does not require a general guest OS implementation merely to emit
+the same compiler primitive. An open VC8 probe confirmed `__debugbreak()` emits
+INT3 and retains the following instruction. A second probe used C++ linkage for
+a potentially throwing call and retained both catches plus the post-rethrow
+INT3. The earlier C-linkage probe lost its catches under `/EHsc`; it remains
+recorded as a failure, not equivalent source.
+
+The reusable EBP source pass produced the first complete candidate at `0x12a0`.
+It compiled successfully, but complete inspection exposed a premature closing
+of the outer try: the original state remains active across the normal suffix.
+The corrected source emits that suffix in both its normal and catch contexts,
+preserving unknown call exceptions rather than assuming nonthrowing callees.
+It also compiled. Current code is longer and uses different parent-frame slots;
+the complete native/EH graph is a nonmatch.
+
+Four compiler calls were used: two open primitive probes and two game-source
+candidates. No original execution or linked replacement occurred. Fresh host
+checks preserve all ten previous controls (eight exact, one SIB, one bounded
+behavioral); the frontier candidate remains a separate nonmatch. Historical 836
+accepted identities and ten public sources remain unchanged. The expanded strict
+route reports complete mismatches but cannot accept multi-try graph equality.
+Future work must improve source/layout and establish remaining frame/continuation
+obligations before any acceptance or export.
+
+Independent review caught a forward branch that bypassed a register assignment,
+leaving an uninitialized generated C++ local. The correction tracks definite
+initialization and compatible outgoing stacks at CFG joins, conservatively
+bounds catch-entry locals, and checks definite try/continuation facts. It refuses
+the witness without inventing an initial register value. The actual frontier
+source remains byte-for-byte unchanged, so its completed compile is reused.

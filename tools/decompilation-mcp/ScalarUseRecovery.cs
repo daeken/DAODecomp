@@ -34,7 +34,7 @@ public static class ScalarUseRecovery
         var inline=new HashSet<int>();
         foreach(var (id,at) in definitions){if(deferredCaptures?.Contains(id)==true||uses.GetValueOrDefault(id,[]).Count!=1)continue;var reads=new HashSet<(string,int)>();if(!Pure(nodes[at].GetProperty("Val"),reads,[id]))continue;var endpoints=ExpandedUses(id,[]);bool safe=endpoints.All(end=>end>at);
             foreach(int end in endpoints)for(int k=at+1;k<end;k++){
-                if(Expressions(nodes[k]).Any(n=>Tag(n) is "IlLoad" or "IlStore" or "IlBranch" or "IlUndefined" or "IlFault" or "IlIf"))safe=false;
+                if(Expressions(nodes[k]).Any(n=>Tag(n) is "IlLoad" or "IlStore" or "IlBranch" or "IlUndefined" or "IlFault" or "IlTrap" or "IlIf"))safe=false;
                 if(Tag(nodes[k])=="IlWriteReg"&&reads.Contains((nodes[k].GetProperty("Kind").GetProperty("name").GetString()!,nodes[k].GetProperty("Idx").GetInt32())))safe=false;
             }
             if(safe)inline.Add(id);

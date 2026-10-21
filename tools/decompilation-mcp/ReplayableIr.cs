@@ -56,11 +56,11 @@ public static class ArchitecturalFaults
     {
         Need(Tag(n)=="IlIf"&&n.GetProperty("Else").GetArrayLength()==0,"architectural_fault_guard_shape");var yes=n.GetProperty("Then").EnumerateArray().ToArray();
         Need(yes.Length==1&&Tag(yes[0])=="IlFault","architectural_fault_guard_shape");var fault=yes[0];Need(fault.GetProperty("Architecture").GetString()=="x86"&&fault.GetProperty("Vector").GetInt32()==0,"unsupported_architectural_fault");
-        var c=n.GetProperty("Cond");Need(Tag(c.GetProperty("Ty"))=="I"&&c.GetProperty("Ty").GetProperty("Bits").GetInt32()==1&&!c.GetProperty("Ty").GetProperty("Signed").GetBoolean()&&!Contains(c,"IlFault")&&!Contains(c,"IlIf")&&!Contains(c,"IlBranch")&&!Contains(c,"IlStore")&&!Contains(c,"IlWriteReg"),"architectural_fault_condition");return c;
+        var c=n.GetProperty("Cond");Need(Tag(c.GetProperty("Ty"))=="I"&&c.GetProperty("Ty").GetProperty("Bits").GetInt32()==1&&!c.GetProperty("Ty").GetProperty("Signed").GetBoolean()&&!Contains(c,"IlFault")&&!Contains(c,"IlTrap")&&!Contains(c,"IlIf")&&!Contains(c,"IlBranch")&&!Contains(c,"IlStore")&&!Contains(c,"IlWriteReg"),"architectural_fault_condition");return c;
     }
     static void NonControlEffects(JsonElement n,int depth=0)
     {
-        Need(depth<=8,"architectural_effect_nesting_budget");string tag=Tag(n);Need(!Contains(n,"IlFault")&&!Contains(n,"IlBranch"),"nested_architectural_control_effect");
+        Need(depth<=8,"architectural_effect_nesting_budget");string tag=Tag(n);Need(!Contains(n,"IlFault")&&!Contains(n,"IlTrap")&&!Contains(n,"IlBranch"),"nested_architectural_control_effect");
         if(tag=="IlIf") {foreach(var arm in new[]{"Then","Else"})foreach(var child in n.GetProperty(arm).EnumerateArray())NonControlEffects(child,depth+1);return;}
         Need(tag is "IlLet" or "IlWriteReg" or "IlStore","unsupported_architectural_control_effect:"+tag);Need(!Contains(n,"IlIf"),"nested_architectural_control_effect");
     }
@@ -72,7 +72,7 @@ public static class ArchitecturalFaults
             if(tag=="IlIf"&&!Contains(n,"IlFault")) {NonControlEffects(n);continue;}
             if(tag=="IlIf") {var condition=Guard(n);sites.Add(new(row.GetProperty("pc").GetUInt64(),i,"x86",0,condition.Clone(),nodes.Take(i).Select(x=>x.Clone()).ToArray()));continue;}
             Need(tag is "IlLet" or "IlWriteReg" or "IlStore" or "IlBranch","unsupported_architectural_control_effect:"+tag);
-            Need(!Contains(n,"IlFault")&&!Contains(n,"IlIf"),"nested_architectural_control_effect");
+            Need(!Contains(n,"IlFault")&&!Contains(n,"IlTrap")&&!Contains(n,"IlIf"),"nested_architectural_control_effect");
             if(tag=="IlBranch")Need(i==nodes.Length-1,"nonterminal_architectural_branch");else NonControlEffects(n);
         }
         return sites.ToArray();

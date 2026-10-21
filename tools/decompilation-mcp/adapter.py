@@ -85,7 +85,7 @@ def run(request):
     require(build['compiler'] == compiler_receipt and compiler_receipt['sha256'] == sha(compiler),
             'compiler_receipt_binding')
     coff = Coff(obj)
-    requested, symbols = eh_native.inferred_requests(source, coff, entries, reader)
+    requested, symbols = eh_native.inferred_requests(source, coff, entries, reader, allow_split=True)
     require(target['rva'] in requested, 'requested_target_missing_from_source_or_object')
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     md.detail = True
@@ -115,6 +115,7 @@ def run(request):
         status = ('full_match' if report['status'] == 'exact_eh_graph_match' else
                   'mismatch' if report['status'] == 'eh_graph_nonmatch' else 'inconclusive')
     else:
+        require(all(len(spec['ranges'])==1 for spec in requested.values()), 'split_ranges_require_complete_EH_comparison')
         require(project.get('compiler_flags') is not None and build['flags'] == project['compiler_flags'],
                 'ordinary_selected_flags')
         report = compare.compare_bytes(original, obj, requested, symbols, sha(source), build['compiler'],

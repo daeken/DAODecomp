@@ -1369,3 +1369,56 @@ Fault snapshots export stack-memory uncertainty and the exact fresh-word set.
 After a potentially aliasing store, cached nonfresh words become unknown; a later
 full-word stack write restores only its own word. Ordered earlier effects remain
 in the snapshot, so sanitization does not erase the write that caused uncertainty.
+
+
+### Generate an EBP nested-catch candidate without dropping exception regions
+
+The typed INT3 dependency `5335255bc997ca27791285ec621804640338025a`
+represents a breakpoint with separate instruction and continuation PCs. Normal
+ABI/terminal/owned-range consumers refuse unsupported trap effects, including
+traps hidden inside another effect. The bounded source profile retains a typed
+breakpoint site and emits the compiler intrinsic `__debugbreak()`. Microsoft's
+[documented intrinsic](https://learn.microsoft.com/en-us/cpp/intrinsics/debugbreak)
+is a candidate spelling; actual VC8 compilation separately confirmed an INT3
+with a subsequent continuation and an INT3 after a nested rethrow. This does not
+implement exception delivery, debugger behavior or resumption.
+
+`Vc8EbpTryProfile` recognizes the complete bounded VC8 EBP registration/cookie
+prologue and epilogue, two rooted catch-all regions, four states, zero unwind
+actions, a literal runtime continuation and a bound zero-argument rethrow.
+Parent-frame words become shared locals or observed incoming arguments. Typed
+operations preserve unsigned widths, operand capture, loads/stores and call
+argument order. Unsupported effects, signed types, unknown flags, cyclic source
+regions, changed state topology and malformed trap PCs refuse. Register and
+layout names are candidate spellings, not recovered class semantics.
+
+The normal suffix remains in state 0, while the catch-return suffix executes in
+state 1. Emit both source paths rather than declaring unknown callees nonthrowing
+to persuade the compiler to merge them. C++ linkage keeps unknown calls capable
+of throwing under `/EHsc`; an open C-linkage probe lost its catches and was
+retained as a failed source hypothesis. Source generation records full original
+main/exception origins, compiler-frame origins and duplicated continuation origins.
+It does not establish frame aliasing, ABI or exception equivalence.
+
+The strict backend now reports complete split-range main/EH **nonmatches**, using
+original/runtime/source symbol bindings and operand-rooted catch/continuation
+nodes. Every owned byte and required metadata/handler node is counted. A differing
+node cannot lose its unmatched suffix. Equality in this additional diagnostic
+route remains inconclusive: parent-frame correspondence, continuation convention
+and trap-resumption obligations do not disappear. The route cannot return a
+match or promote a source export, and existing accepting domains are unchanged.
+
+Reproduce with the focused EBP source, trap-consumer, fault, candidate-EH, native
+EH, scalar and frame tests; then generate through the ordinary MCP route. Preserve
+failed source versions and compile receipts. The first actual `0x12a0` candidate
+and a corrected exception-region candidate both compiled with the pinned VC8
+toolchain in Windows 11 ARM64 x86 translation. Their strict comparison differs;
+there is no accepted `0x12a0` source, frontier advance or game execution.
+
+Source proposals require definite initialization at each forward control-flow
+join: registers, flags and private parent words are intersected across incoming
+paths, while stack positions and outgoing captures must agree. Catch entry uses
+only parent words initialized before its try region. A skipped assignment or
+incompatible argument stack refuses generation; unknown values are never filled
+with zero. Independent review exposed this boundary and its rejected fixture is
+retained with the corrected refusal.

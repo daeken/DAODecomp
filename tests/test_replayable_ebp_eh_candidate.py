@@ -67,3 +67,21 @@ class DiagnosticIsolationTests(unittest.TestCase):
    with patch.object(eh_native,'check',return_value=dict(status='inconclusive',backend='open_test_only',functions=[])),patch.object(ebp_eh_compare,'compare',return_value=dict(status='full_match',forged_diagnostic=True)):
     r=a.compare_built(request,folder,source)
    self.assertEqual(r['status'],'inconclusive');self.assertEqual(json.loads((folder/'range-eh-comparison.json').read_text())['status'],'full_match');self.assertEqual(json.loads((folder/'comparison.json').read_text())['status'],'inconclusive')
+
+class BoundNonmatchTests(unittest.TestCase):
+ def test_external_binding_diagnostic_stays_nonaccepting_even_when_equal(self):
+  o,s,y,owned=fixture();r=compare(o,owned,coff(s,y),P,external_bindings=dict(cookie=0x401400,runtime=0x401401));self.assertEqual(r['counts']['unresolved'],0);self.assertEqual(r['counts']['different'],0);self.assertFalse(r['acceptance_supported'])
+ def test_strict_nonmatch_route_never_accepts_diagnostic_equality(self):
+  from unittest.mock import patch
+  from tools.replayable.ebp_eh_native import compare_nonmatch
+  o,s,y,owned=fixture();spec={0x1000:dict(symbol=P,ranges=[dict(start_rva=lo-0x400000,end_rva_inclusive=hi-0x400001)for lo,hi in owned])};roots=dict(root_bindings=dict(cookie=0x401400,runtime=0x401401))
+  with patch('tools.replayable.ebp_eh_native.derive',return_value=dict(target=0x401402)):
+   r=compare_nonmatch(o,b'open inventory',{},coff(s,y),spec,{},roots);self.assertEqual(r['status'],'inconclusive');self.assertFalse(r['acceptance_supported']);self.assertTrue(r['functions'][0]['all_bytes_accounted'])
+   mutate_section(s,0,24,b'\x40');r=compare_nonmatch(o,b'open inventory',{},coff(s,y),spec,{},roots);self.assertEqual(r['status'],'eh_graph_nonmatch');self.assertEqual(r['functions'][0]['counts']['different'],1);self.assertFalse(r['acceptance_supported'])
+ def test_unowned_or_unresolved_graph_never_becomes_exact(self):
+  from unittest.mock import patch
+  from tools.replayable.ebp_eh_native import compare_nonmatch
+  o,s,y,owned=fixture();spec={0x1000:dict(symbol=P,ranges=[dict(start_rva=lo-0x400000,end_rva_inclusive=hi-0x400001)for lo,hi in owned])}
+  with patch('tools.replayable.ebp_eh_native.derive',return_value=dict(target=0x401402)):
+   r=compare_nonmatch(o,b'open inventory',{},coff(s,y),spec,{},dict(root_bindings={}));self.assertEqual(r['status'],'inconclusive');self.assertEqual(r['functions'][0]['counts']['unresolved'],8)
+   spec[0x1000]['ranges']=spec[0x1000]['ranges'][:1];r=compare_nonmatch(o,b'open inventory',{},coff(s,y),spec,{},dict(root_bindings={}));self.assertEqual(r['status'],'inconclusive');self.assertFalse(r['functions'][0]['all_bytes_accounted'])

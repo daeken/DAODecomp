@@ -220,7 +220,10 @@ public sealed partial class Engine
                 var frame=X86FlowRecovery.Raise(lifted.GetProperty("lift"),new(Vc8EhProfile.Abi,true,true,[new SegmentedAddress(new SegmentInput(4),new Constant(0,64))],PrivateSubwordStack:true,MaximumOutgoingBytes:64,AliasableMemoryStores:true,MaximumPaths:128,IncomingWordStores:true,ExplicitOwnedRanges:true,SignedFrameDisplacements:true,DeferredUndefinedFlags:true,TrackFreshStackWords:true,NormalReturnTerminalRuntime:dependencies.TryGetProperty("runtime_terminal_evidence",out var terminalRuntime)?terminalRuntime.Deserialize<RuntimeTerminalEvidence>(Options):null,ConstantConditionEffects:true),callees);
                 File.WriteAllText(Path.Combine(folder,"range-frame-ir.json"),Json(frame));
                 if(rooted.GetProperty("typed_lift_errors").GetInt32()!=0||rooted.GetProperty("typed_opaque_instructions").GetInt32()!=0)throw new ArgumentException("owned_EH_required_effect_unsupported");
-                throw new ArgumentException("owned_ranges_EBP_try_catch_source_recovery_unsupported");
+                var candidate=Vc8EbpTryProfile.Emit(lifted.GetProperty("lift"),frame,rooted,dependencies,request.GetProperty("rva").GetUInt32(),lifted.GetProperty("image_base").GetUInt32(),lifted.GetProperty("image_end").GetUInt32(),project.Module);
+                File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(candidate));File.WriteAllText(Path.Combine(folder,"candidate.cpp"),candidate.Source);
+                if(request.TryGetProperty("expected_source_sha256",out var expected)&&expected.ValueKind!=JsonValueKind.Null&&expected.GetString()!=HashText(candidate.Source))throw new ArgumentException("generated_source_hash_mismatch_no_compile");
+                return candidate.Source;
             }
             var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();
             var rva=request.GetProperty("rva").GetUInt32();var imageBase=lifted.GetProperty("image_base").GetUInt32();var imageEnd=lifted.GetProperty("image_end").GetUInt32();object ir;string source;
