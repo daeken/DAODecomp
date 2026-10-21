@@ -1074,3 +1074,48 @@ reads check source hashes and the completed durable export revision. Unknown or
 interrupted publication does not gain success through retry or version changes.
 These independently compiled wrappers still need type/symbol/ODR integration;
 export is neither new function-match credit nor a linked executable or game proof.
+
+### Observe ordered behavior through an unregistered x86 frame
+
+The explicit `windows-x86-inherited-unwind-ordered-events-v1` policy excludes
+inspection of temporary saved fault CPU/stack context and debugger/code-address
+introspection. It retains synchronous faults, ordinary exception propagation and
+unwinding, results, ordered memory/call effects, aliasing, modular arithmetic and
+normal ABI obligations. This is an opt-in compiled-artifact relation, separately
+reported as `behaviorally_equivalent`; exact and SIB encoding results remain
+separate. The earlier full-context SAT counterexample remains valid under its
+stronger observation boundary.
+
+The bounded implementation admits only complete single-range Windows IA-32
+ordinary bodies without local exception registration or function-table metadata.
+A complete direct CFG bijection pairs original call targets and return cleanup.
+Actual attested SharpRetro trees feed fresh bitvector/byte-memory queries for the
+changed blocks. Every ordered access keeps its address, width, value, segment and
+preceding memory effects; ESP and nonvolatile registers also agree at every
+possibly faulting access. Live boundary registers and arithmetic flags agree;
+all GPRs agree at external calls. ESP/nonvolatile state is also retained at
+changed block exits, so a later unchanged access cannot expose a discarded
+unwind value. The accepting queries permit a shared arbitrary memory array at
+each corresponding event: repeated observations are not assumed constant, and
+ordered writes remain individually checked. This overapproximates interference
+without assuming nonaliasing or erasing an access. Unknown solver results and unsupported trees
+refuse. No bounds, valid-memory or nonaliasing premise erases a faulting access.
+
+Ordinary unwinding has a separate structural obligation: no local registration,
+FS/GS or special-register instruction; no candidate unwind metadata or original
+PE function table; identical supported stack-save/restore/cleanup protocol; and
+mapped continuations for the same actual direct callees, with numerically equal
+CALL return-address words. A shifted return address cannot pass with an
+unmodeled callee: a supplied pointer may alias that slot and expose the word as
+ordinary data. No private-stack nonaliasing premise is invented. Together with
+the memory, ESP and nonvolatile obligations, this relates the inputs to the
+inherited x86 registration chain. It introduces no local cleanup or catch.
+Callees may return, throw, terminate or diverge; their outcomes are paired, never
+replaced by success. Code-address introspection is excluded by the observation policy, but that does
+not erase ordinary data effects from an aliased return slot. The accepting
+subdomain therefore keeps call-return words equal. This is a bounded static simulation under synchronous Windows
+x86 registration-chain semantics, not execution of Windows unwinding, proof of
+arbitrary handler/callee implementations, portable C++ semantics or the game.
+Registered EH frames and more general metadata still require their own complete
+EH graph path. The new policy and implementation participate in recipe/input
+keys, fresh retained checks and source-export provenance.

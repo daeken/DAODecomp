@@ -674,3 +674,14 @@ external declarations remain profile hypotheses that need deliberate ODR/type/
 symbol integration before linking. Export is distinct from matching, source
 integration and game execution. The existing historical source collection is
 unchanged; the root README updater reports replayable source counts separately.
+
+The explicit `x86-bits32-scalar-behavioral-events-v1` recipe composes scalar/typed
+source recovery with `compare-windows-x86-inherited-unwind-ordered-events-v1`.
+Register the pinned solver configuration with observation profile
+`windows-x86-inherited-unwind-ordered-events-v1`. Supported complete ordinary
+ranges can return `behaviorally_equivalent`, with `strict_status: mismatch`,
+separate fresh behavioral certificate and inherited-registration obligations.
+The prior `abi_effects` recipe stays diagnostic/nonaccepting. Current cache/status
+and source export distinguish exact, encoding and behavioral results; none imply
+linked integration or game execution. Registered/multi-range EH bodies do not
+pass this ordinary-body relation.

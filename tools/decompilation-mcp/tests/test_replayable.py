@@ -71,3 +71,8 @@ ScalarSourceTests = load_shared('test_replayable_scalar_source').ScalarSourceTes
 
 SourceExportTests = load_shared('test_replayable_source_export').SourceExportTests
 SourceExportProgressTests = load_shared('test_replayable_source_export').SourceExportProgressTests
+
+UnregisteredUnwindTests = load_shared('test_replayable_behavioral').UnregisteredUnwindTests
+BehavioralPipelineTests = load_shared('test_replayable_behavioral').BehavioralPipelineTests
+BehavioralBoundaryTests = load_shared('test_replayable_behavioral').BehavioralBoundaryTests
+ReturnSlotAliasTests = load_shared('test_replayable_behavioral').ReturnSlotAliasTests

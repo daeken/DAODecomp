@@ -2137,3 +2137,69 @@ that request's entire input closure fixed the gap. Both failed attempts remain
 local. Public output is an allowlisted projection; reports and their raw bytes
 stay private. The output remains independent translation units, with unresolved
 wrapper/type/signature integration stated explicitly.
+
+### Separate the observation decision from the unwind obligation
+
+The user approved a provisional boundary excluding temporary saved fault context
+and code/debugger introspection. That did not turn the old ABI diagnostic into
+an accepted result: its ordinary exception/unwind obligation was still missing.
+The next relation adds a separate inherited-registration check for complete
+ordinary IA-32 bodies, while retaining the full-context counterexample and exact
+byte mismatch. The current 131/130-byte frontier has no local registration or
+function-table metadata; both bodies have the same supported stack protocol and
+same actual call targets with mapped continuations. Fresh stronger access
+queries include ESP and nonvolatile state. These observations support a bounded
+static registration-chain simulation, not a claim of native exception execution.
+
+The compiler difference remains explained at the causal level already measured:
+modular reassociation of pure sums and movement of an independent ECX
+subtraction across an outgoing argument stack store. The current typed-member
+capacity-read/SUB/store order already matches the original; the earlier
+132-byte raw-fallback capacity-scheduling discrepancy remains historical. Identical source-spelling and compiler-version
+experiments provided no reusable rule for reproducing the historical schedule.
+The new result records its narrower observation policy instead of pretending the
+bytes or fault temporary context became identical.
+
+The separately requested fixed-source flag diagnostic held the latest 115-line
+`0x1210` source and SP1 compiler constant. All 32 profiles compiled successfully,
+with seven distinct output groups and zero exact full-range matches; the baseline
+was closest. Measured compiler time was 2.482 seconds and dispatch time 6.777
+seconds. These measurements explain why this checkpoint does not adopt a new
+production flag profile. The separate inventory-wide lifter audit visited 27,555
+identities: 15 ranges stopped decoding and 4,745 functions contained opaque
+intrinsics. That is diagnostic coverage, not reconstruction or match credit.
+
+The next actual identity, `0x12a0`, exposes an upstream prerequisite rather than a
+reason to skip it. Fresh actual lifting of both owned ranges preserves all 230
+bytes and excludes the 42-byte gap. The unsigned `MUL` still becomes the opaque
+`mul-wide` intrinsic in the pinned frontend. Original-rooted metadata also shows
+four EH states and two nested catch-all entries, with exceptional continuation
+code outside the main ranges. No source or comparison was manufactured for this
+identity: typed unsigned multiplication and explicit multi-range/EH recovery are
+separate required capabilities. The local generation refusal and opaque tree
+remain reproducible evidence.
+
+The user-requested repeat on authentic VC8 RTM held this same latest source
+constant across the same 32 profiles. Again all compiler exits were known and
+no full exact match appeared (about 2.55 seconds compiler and 6.75 seconds
+dispatch). RTM and SP1 tests are diagnostics, not production flag changes or
+new match credit. Current scoped behavioral evidence uses the selected SP1
+profile and explicitly preserves its strict 131/130-byte mismatch.
+
+Independent review rejected the first behavioral freeze on a concrete missing
+effect: CALL itself pushes a return address. A shorter caller can push a
+different word, and an ordinary callee can copy it through an aliased argument
+without inspecting any debugger or fault context. The corrected rule refuses
+changed call-return PCs for unmodeled callees. This is stronger than the user's
+code-introspection exclusion and does not assume caller/private-stack separation.
+
+A follow-up diagnostic executed the actual original/candidate `0x1210` bodies
+and the actual original `_memmove_s`/`_memmove` path in Unicorn, with no call
+stubs. Modular source-pointer arithmetic can reach the active return slot; both
+runs return the same receiver, stack pointer and length four, but write
+`0x401272` versus `0x401271` into ordinary buffer memory. The large size/capacity
+state looks malformed and is not evidence of game reachability. It nevertheless
+refutes the proposed unrestricted relation: no justified object-validity or
+nonaliasing precondition currently excludes it. The exact mismatch therefore
+remains unresolved even after the approved fault-context exclusion. The failed
+freeze, open review counterexample and actual-code diagnostic remain preserved.

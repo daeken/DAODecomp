@@ -38,6 +38,12 @@ changing source acceptance.
 provides a separate bounded source-acceptance path for supported compiler-generated
 exception dependencies, with fresh runtime/artifact checks before export.
 
+A separately selected [bounded behavioral relation](docs/reproducible-decompilation.md#observe-ordered-behavior-through-an-unregistered-x86-frame)
+keeps exact and encoding results distinct. Its explicit observation policy
+excludes temporary fault-context and code/debugger introspection while retaining
+ordered effects, normal ABI behavior and supported ordinary exception unwinding.
+Unsupported obligations remain unresolved; this is not whole-game proof.
+
 <!-- progress:start -->
 ## Progress
 

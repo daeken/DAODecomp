@@ -19,17 +19,24 @@ def sort(w):return f'(_ BitVec {w})'
 
 class Terms:
  def __init__(self):
-  self.lines=['(set-logic QF_AUFBV)','(set-option :timeout 3000)','(declare-fun memory () (Array (_ BitVec 32) (_ BitVec 8)))'];self.serial=0
+  self.lines=['(set-logic QF_AUFBV)','(set-option :timeout 3000)','(declare-fun memory () (Array (_ BitVec 32) (_ BitVec 8)))'];self.serial=0;self.event_arrays=set()
   for i in range(8):self.lines.append(f'(declare-fun R{i} () (_ BitVec 32))')
   for i in FLAGS:self.lines.append(f'(declare-fun F{i} () (_ BitVec 1))')
+ # Shared event-indexed arrays overapproximate arbitrary external memory
+ # changes between accesses. Stores are still compared as ordered events;
+ # this cannot authorize read elimination or infer stable repeated reads.
+ def event_memory(self,index):
+  name=f'event_memory_{index}'
+  if index not in self.event_arrays:self.lines.append(f'(declare-fun {name} () (Array (_ BitVec 32) (_ BitVec 8)))');self.event_arrays.add(index)
+  return name
  def bind(self,term,w):
   name=f'v{self.serial}';self.serial+=1;self.lines.append(f'(define-fun {name} () {sort(w)} {term})');return name
  def array(self,term):
   name=f'm{self.serial}';self.serial+=1;self.lines.append(f'(define-fun {name} () (Array (_ BitVec 32) (_ BitVec 8)) {term})');return name
 
 class State:
- def __init__(self,terms):
-  self.t=terms;self.reg={i:f'((_ zero_extend 32) R{i})' for i in range(8)};self.flag={i:f'F{i}' for i in FLAGS};self.mem='memory';self.events=[];self.tmp={};self.writes=set();self.flag_writes=set();self.faults=[];self.budget=12000
+ def __init__(self,terms,arbitrary_event_memory=False):
+  self.arbitrary_event_memory=arbitrary_event_memory;self.t=terms;self.reg={i:f'((_ zero_extend 32) R{i})' for i in range(8)};self.flag={i:f'F{i}' for i in FLAGS};self.mem='memory';self.events=[];self.tmp={};self.writes=set();self.flag_writes=set();self.faults=[];self.budget=12000
  def value(self,n):
   self.budget-=1;need(self.budget>=0,'effect_expression_budget');k=tag(n);w=bits(n)
   if k=='IlConst':
@@ -55,7 +62,9 @@ class State:
    if op in comparisons:need(w==1,'effect_predicate_width');return f'(ite ({comparisons[op]} {a} {b}) #b1 #b0)',w
    need(op in ops and w==aw,'effect_binary_domain');return f'({ops[op]} {a} {b})',w
   if k=='IlLoad':
-   need(w in (8,16,32),'effect_memory_width');address=self.address(n['Addr']);values=[f'(select {self.mem} (bvadd {address} {bv(i,32)}))' for i in reversed(range(w//8))];term=values[0] if len(values)==1 else '(concat '+' '.join(values)+')';value=self.t.bind(term,w);self.events.append(('read',address,w,value,self.segments['read']));self.faults.append(dict(registers=dict(self.reg),flags=dict(self.flag)));return value,w
+   need(w in (8,16,32),'effect_memory_width')
+   if self.arbitrary_event_memory:self.mem=self.t.event_memory(len(self.events))
+   address=self.address(n['Addr']);values=[f'(select {self.mem} (bvadd {address} {bv(i,32)}))' for i in reversed(range(w//8))];term=values[0] if len(values)==1 else '(concat '+' '.join(values)+')';value=self.t.bind(term,w);self.events.append(('read',address,w,value,self.segments['read']));self.faults.append(dict(registers=dict(self.reg),flags=dict(self.flag)));return value,w
   raise Refusal('effect_unsupported_expression:'+k)
  def wrapped(self,x):
   if tag(x)=='IlTmp':return x['Id'] in self.wrapped_temps and bits(x)==64
@@ -88,25 +97,26 @@ class State:
      if kind=='X86':need(i in self.reg and w==64,'effect_write_register');self.reg[i]=self.t.bind(v,w);self.writes.add(i)
      else:need(kind=='Eflags' and i in self.flag and w==1,'effect_write_flag');self.flag[i]=self.t.bind(v,w);self.flag_writes.add(i)
     elif k=='IlStore':
+     if self.arbitrary_event_memory:self.mem=self.t.event_memory(len(self.events))
      a=self.address(n['Addr']);v,w=self.value(n['Val']);need(w in (8,16,32),'effect_store_width');value=self.t.bind(v,w);self.events.append(('write',a,w,value,self.segments['write']));self.faults.append(dict(registers=dict(self.reg),flags=dict(self.flag)))
      for i in range(w//8):self.mem=self.t.array(f'(store {self.mem} (bvadd {a} {bv(i,32)}) ((_ extract {i*8+7} {i*8}) {value}))')
     else:raise Refusal('effect_unsupported_statement:'+k)
   return self
 
-def prove_window(left,right,live_registers,solver,*,fault_context='full-registers',fault_live_registers=None):
+def prove_window(left,right,live_registers,solver,*,fault_context='full-registers',fault_live_registers=None,arbitrary_event_memory=False):
  """Return a fresh solver receipt. Only UNSAT succeeds; uncertainty refuses.
 
  full-registers includes register/flag context at each possibly faulting event.
  abi-event-only is diagnostic until the outer profile explicitly authorizes its
  narrower observation boundary; it still preserves every ordered memory access.
  """
- need(fault_context in ('full-registers','abi-event-only'),'effect_fault_observation_profile');need(fault_context=='full-registers' or fault_live_registers is not None,'effect_explicit_fault_register_contract_required');fault_live=list(range(8)) if fault_context=='full-registers' else sorted(set(fault_live_registers));need(set(fault_live)<=set(range(8)),'effect_fault_live_registers');need(set(live_registers)<=set(range(8)),'effect_live_registers');t=Terms();a=State(t).run(left);b=State(t).run(right);need(len(a.events)==len(b.events),'effect_memory_event_count');equal=[]
+ need(fault_context in ('full-registers','abi-event-only'),'effect_fault_observation_profile');need(fault_context=='full-registers' or fault_live_registers is not None,'effect_explicit_fault_register_contract_required');fault_live=list(range(8)) if fault_context=='full-registers' else sorted(set(fault_live_registers));need(set(fault_live)<=set(range(8)),'effect_fault_live_registers');need(set(live_registers)<=set(range(8)),'effect_live_registers');t=Terms();a=State(t,arbitrary_event_memory).run(left);b=State(t,arbitrary_event_memory).run(right);need(len(a.events)==len(b.events),'effect_memory_event_count');equal=[]
  for i,(x,y) in enumerate(zip(a.events,b.events)):
   need(x[:1]==y[:1] and x[2]==y[2],'effect_memory_event_order_or_width');need(x[4]==y[4],'effect_memory_segment_difference');equal.extend([f'(= {x[1]} {y[1]})',f'(= {x[3]} {y[3]})'])
   equal.extend(f'(= {a.faults[i]["registers"][r]} {b.faults[i]["registers"][r]})' for r in fault_live)
   if fault_context=='full-registers':
    equal.extend(f'(= {a.faults[i]["flags"][f]} {b.faults[i]["flags"][f]})' for f in FLAGS)
- equal.extend(f'(= {a.reg[r]} {b.reg[r]})' for r in live_registers);equal.extend(f'(= {a.flag[f]} {b.flag[f]})' for f in FLAGS);equal.append(f'(= {a.mem} {b.mem})');query='\n'.join(t.lines+[f'(assert (not (and {" ".join(equal)})))','(check-sat)'])+'\n';path=Path(solver).resolve();need(path.is_file(),'effect_solver_unavailable');run=subprocess.run([str(path),'-in','-smt2'],input=query,text=True,capture_output=True,timeout=6,env={'PATH':'/usr/bin:/bin','LC_ALL':'C'});need(run.returncode==0 and not run.stderr and run.stdout.strip() in ('sat','unsat','unknown'),'effect_solver_protocol');return dict(status=run.stdout.strip(),query=query,query_sha256=hashlib.sha256(query.encode()).hexdigest(),solver_path=str(path),solver_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),live_registers=sorted(live_registers),flags_checked=list(FLAGS),ordered_memory_events=len(a.events),fault_observation_profile=fault_context,fault_preserved_registers=fault_live,full_fault_register_context_checked=fault_context=='full-registers',whole_function_equivalence_proven=False)
+ equal.extend(f'(= {a.reg[r]} {b.reg[r]})' for r in live_registers);equal.extend(f'(= {a.flag[f]} {b.flag[f]})' for f in FLAGS);equal.append(f'(= {a.mem} {b.mem})');query='\n'.join(t.lines+[f'(assert (not (and {" ".join(equal)})))','(check-sat)'])+'\n';path=Path(solver).resolve();need(path.is_file(),'effect_solver_unavailable');run=subprocess.run([str(path),'-in','-smt2'],input=query,text=True,capture_output=True,timeout=6,env={'PATH':'/usr/bin:/bin','LC_ALL':'C'});need(run.returncode==0 and not run.stderr and run.stdout.strip() in ('sat','unsat','unknown'),'effect_solver_protocol');return dict(status=run.stdout.strip(),query=query,query_sha256=hashlib.sha256(query.encode()).hexdigest(),solver_path=str(path),solver_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),live_registers=sorted(live_registers),flags_checked=list(FLAGS),ordered_memory_events=len(a.events),fault_observation_profile=fault_context,fault_preserved_registers=fault_live,arbitrary_external_memory_between_events=arbitrary_event_memory,full_fault_register_context_checked=fault_context=='full-registers',whole_function_equivalence_proven=False)
 
 # Complete direct CFG pairing limits the local solver obligation to changed
 # blocks. Unchanged instructions remain byte-identical, apart from their bound
@@ -178,7 +188,7 @@ def pair_cfg(original,candidate,pc,exit_live_registers):
   pairs.append(dict(left_pc=a,right_pc=b,left=x['body'],right=y['body'],unchanged=unchanged,live_registers=sorted(la[a]|lb[b]),terminator=x['kind'][0]))
  need(0<sum(not p['unchanged'] for p in pairs)<=2,'effect_changed_block_budget');return pairs,mapping
 
-def certify_typed_effects(original,candidate,*,pc,lifts,solver,exit_live_registers,fault_context='full-registers',fault_live_registers=None):
+def certify_typed_effects(original,candidate,*,pc,lifts,solver,exit_live_registers,fault_context='full-registers',fault_live_registers=None,boundary_live_registers=(),arbitrary_event_memory=False):
  """Complete direct-CFG obligation; caller still owns artifacts/relocations/EH.
 
  This function has no queue side effects. An event-only diagnostic must not be
@@ -195,6 +205,8 @@ def certify_typed_effects(original,candidate,*,pc,lifts,solver,exit_live_registe
  pairs,mapping=pair_cfg(original,candidate,pc,exit_live_registers);proofs=[]
  for pair in pairs:
   if pair['unchanged']:continue
-  proof=prove_window([lookups[0][i.address] for i in pair['left']],[lookups[1][i.address] for i in pair['right']],pair['live_registers'],solver,fault_context=fault_context,fault_live_registers=fault_live_registers)
+  need(set(boundary_live_registers)<=set(range(8)),'effect_boundary_register_domain')
+  live=sorted(set(pair['live_registers'])|set(boundary_live_registers))
+  proof=prove_window([lookups[0][i.address] for i in pair['left']],[lookups[1][i.address] for i in pair['right']],live,solver,fault_context=fault_context,fault_live_registers=fault_live_registers,arbitrary_event_memory=arbitrary_event_memory)
   need(proof['status']=='unsat','effect_window_not_proved:'+proof['status']);proof.update(original_block_pc=pair['left_pc'],candidate_block_pc=pair['right_pc'],original_instruction_count=len(pair['left']),candidate_instruction_count=len(pair['right']));proofs.append(proof)
  return dict(rule='x86-flat32-direct-CFG-ordered-ABI-effects-v1',effect_windows=proofs,control_bijection={str(a):b for a,b in mapping.items()},complete_original_bytes=len(original),complete_candidate_bytes=len(candidate),unchanged_blocks=sum(p['unchanged'] for p in pairs),typed_pair_sha256=hashlib.sha256(json.dumps(lifts,sort_keys=True,separators=(',',':')).encode()).hexdigest(),fault_observation_profile=fault_context,exit_live_registers=sorted(exit_live_registers),strict_byte_match=False,whole_function_equivalence_proven=False,proof=False)

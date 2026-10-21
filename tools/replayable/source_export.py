@@ -25,7 +25,7 @@ def check(request,folder,source,selected):
     import replayable_adapter as pipeline
     old=selected['request'];result=selected['result'];project=dict(allowed_roots=request['export_read_roots']);job=selected['job_id'];previous=Path(old['project']['replayable']['output_root'])/job
     need(re.fullmatch('[0-9a-f]{32}',job) is not None and old['operation']=='replayable' and old['compile'] is True,'export_replayable_compiled_job')
-    need(result['status'] in ('full_match','encoding_equivalent') and result['status']==selected['status'] and result.get('proof') is False,'export_nonaccepting_result')
+    need(result['status'] in ('full_match','encoding_equivalent','behaviorally_equivalent') and result['status']==selected['status'] and result.get('proof') is False,'export_nonaccepting_result')
     need(parse(read(project,previous/'request.json'))==old and parse(read(project,previous/'result.json'))==result,'export_durable_file_binding')
     need(old['rva']==request['rva'] and old['entry']==request['entry'] and old['recipe']==request['recipe'] and old['project']==request['project'],'export_selected_request_binding')
     for path,expected in old['inputs'].items():need(digest(read(project,path))==expected,'export_historical_input_changed')
@@ -53,8 +53,12 @@ def check(request,folder,source,selected):
     if result['status']=='encoding_equivalent':
         certificate=parse(read(project,previous/'encoding-equivalence.json'))
         need(digest(read(project,previous/'encoding-equivalence.json'))==result['encoding_equivalence_sha256'] and certificate==result['encoding_equivalence']==result['retained_check']['encoding_equivalence'] and result['strict_status']=='mismatch' and result['match_kind']=='encoding_equivalent' and result['proof'] is False,'export_historical_encoding_binding')
+    if result['status']=='behaviorally_equivalent':
+        certificate=parse(read(project,previous/'behavioral-equivalence.json'))
+        need(digest(read(project,previous/'behavioral-equivalence.json'))==result['behavioral_equivalence_sha256'] and certificate==result['behavioral_equivalence']==result['retained_check']['behavioral_equivalence'] and result['strict_status']=='mismatch' and result['match_kind']=='behaviorally_equivalent' and certificate['accepted'] is True and certificate['observation_profile']=='windows-x86-inherited-unwind-ordered-events-v1','export_historical_behavioral_binding')
     fresh=pipeline.compare_built(request,folder,source)
     need(fresh['status']==result['status'],'export_fresh_comparison_disagrees')
     if fresh['status']=='encoding_equivalent':need(fresh['encoding_equivalence']==result['encoding_equivalence'],'export_fresh_encoding_disagrees')
+    if fresh['status']=='behaviorally_equivalent':need(fresh['behavioral_equivalence']==result['behavioral_equivalence'],'export_fresh_behavioral_disagrees')
     for path,expected in old['inputs'].items():need(digest(read(project,path))==expected,'export_historical_input_changed_during_check')
     return fresh

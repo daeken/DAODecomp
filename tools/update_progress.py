@@ -148,6 +148,7 @@ def replayable_exports(snapshot, module_sha256):
     if not 1 <= len(index['functions']) <= 16:
         raise ValueError('invalid replayable source snapshot size')
     counts = {'full_match': 0, 'encoding_equivalent': 0}
+    if any(row.get('accepted_kind')=='behaviorally_equivalent' for row in index.get('functions',[])):counts['behaviorally_equivalent']=0
     seen = set()
     for row in index['functions']:
         rva, source_hash = row['rva'], row['source_sha256']
@@ -163,6 +164,8 @@ def replayable_exports(snapshot, module_sha256):
                 or parts[3] != f'{rva:08x}-{source_hash[:16]}.cpp'
                 or hashlib.sha256(snapshot.read('src/native/replayable/' + row['source'])).hexdigest() != source_hash):
             raise ValueError('invalid replayable source identity or content')
+        if row['accepted_kind']=='behaviorally_equivalent' and (row.get('observation_policy')!='windows-x86-inherited-unwind-ordered-events-v1' or not isinstance(row.get('behavioral_certificate_sha256'),str) or len(row['behavioral_certificate_sha256'])!=64 or any(c not in '0123456789abcdef' for c in row['behavioral_certificate_sha256'])):
+            raise ValueError('invalid behavioral source observation binding')
         seen.add(rva)
         counts[row['accepted_kind']] += 1
     if any(type(value) is not int for value in index['counts'].values()) or counts != {key: index['counts'].get(key, 0) for key in counts} or set(index['counts']) - set(counts):
@@ -203,6 +206,7 @@ def progress(snapshot):
         f"| Exported replayable C++ units (separate snapshot) | {sum(exported.values()):,} |",
         f"| Replayable exports with exact artifact evidence | {exported['full_match']:,} |",
         f"| Replayable exports with bounded encoding evidence | {exported['encoding_equivalent']:,} |",
+        *([f"| Replayable exports with bounded behavioral evidence | {exported['behaviorally_equivalent']:,} |"] if exported.get('behaviorally_equivalent') else []),
     ]
     return "\n".join([
         "## Progress", "",

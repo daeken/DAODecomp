@@ -125,3 +125,9 @@ class SourceExportProgressTests(unittest.TestCase):
    else:index['export_job_id']='c'*32
    data['src/native/replayable/index.json']=json.dumps(index).encode()
    with self.subTest(mutation=mutation),self.assertRaises(ValueError):updater.replayable_exports(snapshot,module)
+
+ def test_behavioral_progress_requires_separate_policy_and_certificate_hash(self):
+  updater,snapshot,data,index,module=self.fixture();row=index['functions'][0];row.update(accepted_kind='behaviorally_equivalent',observation_policy='windows-x86-inherited-unwind-ordered-events-v1',behavioral_certificate_sha256='e'*64);index['counts']={'behaviorally_equivalent':1};data['src/native/replayable/index.json']=json.dumps(index).encode();self.assertEqual(updater.replayable_exports(snapshot,module),{'full_match':0,'encoding_equivalent':0,'behaviorally_equivalent':1})
+  for key in ('observation_policy','behavioral_certificate_sha256'):
+   changed=copy.deepcopy(index);changed['functions'][0].pop(key);data['src/native/replayable/index.json']=json.dumps(changed).encode()
+   with self.assertRaises(ValueError):updater.replayable_exports(snapshot,module)

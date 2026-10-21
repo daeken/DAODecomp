@@ -146,7 +146,16 @@ def run(request):
             report['abi_effects_policy_blocker']='pending_user_observation_scope;ordinary_exception_unwinding_not_proved'
         except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
             report['abi_effects_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
-    compact = dict(schema_version=1, status=status, strict_status=strict_status, match_kind=status if status in ('encoding_equivalent','abi_trace_equivalent') else 'exact' if status=='full_match' else 'none', backend=report['backend'],
+    behavioral_certificate=None
+    if not needs_eh and status=='mismatch' and target.get('allow_behavioral_equivalence') is True:
+        try:
+            from tools.replayable.abi_effects_check import certify_report
+            behavioral_certificate=certify_report(report,project,inputs,behavioral=True)
+            report['behavioral_equivalence']=behavioral_certificate
+            status='behaviorally_equivalent'
+        except (ValueError,KeyError,TypeError,OSError,subprocess.SubprocessError) as exc:
+            report['behavioral_refusal']=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    compact = dict(schema_version=1, status=status, strict_status=strict_status, match_kind=status if status in ('encoding_equivalent','behaviorally_equivalent') else 'exact' if status=='full_match' else 'none', backend=report['backend'],
                    requested_rva=target['rva'], module_sha256=module_hash, source_sha256=sha(source),
                    object_sha256=sha(obj), compiler_sha256=sha(compiler),
                    input_snapshot_sha256=sha(json.dumps(inputs, sort_keys=True).encode()),
@@ -159,6 +168,7 @@ def run(request):
                    compiler_provenance='retained receipt plus actual registered compiler hash; complete compiler installation closure not attested')
     if certificate is not None:compact['encoding_equivalence']=certificate
     if abi_certificate is not None:compact.update(abi_effects_diagnostic=abi_certificate,abi_effects_acceptance_enabled=False,abi_effects_policy_blocker='pending_user_observation_scope;ordinary_exception_unwinding_not_proved')
+    if behavioral_certificate is not None:compact.update(behavioral_equivalence=behavioral_certificate,observation_policy=behavioral_certificate['observation_profile'])
     return compact, report
 
 

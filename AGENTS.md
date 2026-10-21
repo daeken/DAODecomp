@@ -104,3 +104,11 @@
   Keep proprietary inputs, raw captures and credentials local. This is shared
   experiment/tooling documentation, not a new per-function authoring requirement.
 
+- The user provisionally approved a separately labeled bounded behavioral lane
+  excluding debugger/code-address introspection and inspection of saved temporary
+  fault CPU/stack context. Ordinary synchronous faults, exception propagation/
+  unwinding, ordered effects, aliasing, termination and normal ABI obligations
+  remain required. Bind this observation policy in recipe/cache/export evidence;
+  an old nonaccepting ABI diagnostic alone never grants acceptance. Unsupported
+  unwind/handler/solver obligations stay unknown. Do not re-ask the same scope
+  permission; machinery still requires independent review before installation.
