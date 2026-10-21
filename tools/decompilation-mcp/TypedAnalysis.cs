@@ -22,20 +22,13 @@ public sealed partial class Engine
         }
         File.WriteAllText(Path.Combine(folder,"typed-analysis-index.json"),Json(receipt));
     }
-    static object ReplayLeafAnalysis(JsonElement payload,uint rva,string module)
+    static async Task<object> ReplaySourceAnalysis(JsonElement payload,uint rva,string module,PipelineRecipe recipe)
     {
         var lift=payload.GetProperty("lift");
-        if(lift.GetProperty("schema").GetString()!="sharpretro_instruction_lift_v1")throw new ArgumentException("cached_leaf_owned_ranges_unsupported");
-        var count=lift.GetProperty("instructions").GetArrayLength();if(count is <1 or >2)throw new ArgumentException("cached_leaf_instruction_domain");
-        var imageBase=payload.GetProperty("image_base").GetUInt32();
-        if(Vc8LeafReturnProfile.TryRaise(lift,out var leaf)) {
-            var source=Vc8LeafReturnProfile.Emit(leaf!,rva,imageBase,module);
-            return new{status="source_proposal",ir=(object)leaf!,source,source_sha256=HashText(source),proof=false,acceptance_credit=false};
-        }
-        var basic=X86Recovery.Raise(lift,Vc8Profile.Abi);
-        if(!basic.BareNearReturn)throw new ArgumentException("cached_leaf_profile_unsupported");
-        var bare=Vc8Profile.Emit(basic,rva,imageBase,payload.GetProperty("image_end").GetUInt32(),module);
-        return new{status="source_proposal",ir=(object)basic,source=bare,source_sha256=HashText(bare),proof=false,acceptance_credit=false};
+        if(CallFreeBoundary(lift) is string boundary)throw new ArgumentException(boundary);
+        var request=JsonSerializer.SerializeToElement(new{rva,recipe},Options);
+        var recovered=await RecoverLinearSource(request,payload,module,()=>Task.FromResult(EmptyDependencies(payload)),()=>throw new ArgumentException("cached_EH_evidence_unavailable"));
+        return new{status="source_proposal",ir=recovered.Ir,source=recovered.Source,source_sha256=HashText(recovered.Source),profile_attempts=recovered.Attempts,proof=false,acceptance_credit=false};
     }
     public async Task<object> ReplayableAnalysisReplay(string projectId,string[] functionIds,string? recipeJson)
     {
@@ -58,14 +51,14 @@ public sealed partial class Engine
             }
             if(current.Count>1)status="ambiguous_current_records";
             else if(current.Count==1) {
-                try{proposal=ReplayLeafAnalysis(current[0],f.Rva,p.Config.Module);status="source_proposal";}
-                catch(Exception e) when(e is ArgumentException or KeyNotFoundException or InvalidOperationException){status="unsupported";proposal=new{blocker=e.Message,proof=false};}
+                try{proposal=await ReplaySourceAnalysis(current[0],f.Rva,p.Config.Module,recipe);status="source_proposal";}
+                catch(Exception e) when(e is ArgumentException or KeyNotFoundException or InvalidOperationException){status="unsupported";proposal=new{blocker=e.Message,profile_attempts=(e as SourceRecoveryRefusal)?.Attempts,proof=false};}
             }
             reports.Add(new{function_id=f.Id,rva=f.Rva,status,versions,proposal});
             summaries.Add(new{function_id=f.Id,rva=f.Rva,status,versions,source_sha256=proposal==null?null:JsonSerializer.SerializeToElement(proposal,Options).TryGetProperty("source_sha256",out var sourceHash)?sourceHash.GetString():null});
         }
         foreach(var pair in inputs)if(Hash(File.ReadAllBytes(pair.Key))!=pair.Value)throw new ArgumentException("typed_analysis_input_changed_during_replay");
-        var report=new{schema="typed-analysis-leaf-replay-v1",project_id=projectId,recipe,inputs,runtime_sha256=Hash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)),profile="bounded_leaf_source_proposal_v1",records=reports,new_lifts=0,compiler_invocations=0,acceptance_checks=0,acceptance_credit=false,proof=false};
+        var report=new{schema="typed-analysis-leaf-replay-v1",project_id=projectId,recipe,inputs,runtime_sha256=Hash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)),profile="existing_call_free_source_profiles_v1",records=reports,new_lifts=0,compiler_invocations=0,acceptance_checks=0,acceptance_credit=false,proof=false};
         var path=Path.Combine(folder,"report.json");File.WriteAllText(path,Json(report));
         return new{status="source_only_analysis",report_id=reportId,report_sha256=Hash(File.ReadAllBytes(path)),records=summaries,new_lifts=0,compiler_invocations=0,acceptance_checks=0,acceptance_credit=false,proof=false};
     }
@@ -112,9 +105,9 @@ public sealed partial class Engine
                 if(current.Count>1)status="ambiguous_current_records";
                 else if(current.Count==1) {
                     var lift=current[0].GetProperty("lift");
-                    if(lift.GetProperty("schema").GetString()!="sharpretro_instruction_lift_v1"||lift.GetProperty("instructions").GetArrayLength()>2)status="profile_not_implemented";
-                    else try{proposal=ReplayLeafAnalysis(current[0],f.Rva,p.Config.Module);status="source_proposal";}
-                    catch(Exception e) when(e is ArgumentException or KeyNotFoundException or InvalidOperationException){status="unsupported";proposal=new{blocker=e.Message,proof=false};}
+                    if(CallFreeBoundary(lift) is string boundary)status=boundary;
+                    else try{proposal=await ReplaySourceAnalysis(current[0],f.Rva,p.Config.Module,recipe);status="source_proposal";}
+                    catch(Exception e) when(e is ArgumentException or KeyNotFoundException or InvalidOperationException){status="unsupported";proposal=new{blocker=e.Message,profile_attempts=(e as SourceRecoveryRefusal)?.Attempts,proof=false};}
                 }
                 else if(status=="validated")status="unavailable";
                 recoverySeconds+=watch.Elapsed.TotalSeconds-stamp;

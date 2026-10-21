@@ -225,37 +225,14 @@ public sealed partial class Engine
                 if(request.TryGetProperty("expected_source_sha256",out var expected)&&expected.ValueKind!=JsonValueKind.Null&&expected.GetString()!=HashText(candidate.Source))throw new ArgumentException("generated_source_hash_mismatch_no_compile");
                 return candidate.Source;
             }
-            var recipe=request.GetProperty("recipe").Deserialize<PipelineRecipe>(Options)!;recipe.Validate();
-            var rva=request.GetProperty("rva").GetUInt32();var imageBase=lifted.GetProperty("image_base").GetUInt32();var imageEnd=lifted.GetProperty("image_end").GetUInt32();object ir;string source;
-            try {var basic=X86Recovery.Raise(lifted.GetProperty("lift"),Vc8Profile.Abi);source=Vc8Profile.Emit(basic,rva,imageBase,imageEnd,project.Module);ir=basic;}
-            catch(ArgumentException) when(recipe.UsesStackArguments) {
-                var dependencies=await ReplayableAdapter(request,"lift_callees",folder);if(dependencies.TryGetProperty("error",out var dependencyError))throw new ArgumentException(dependencyError.GetString());
-                File.WriteAllText(Path.Combine(folder,"callee-lifts.json"),dependencies.GetRawText());
-                if(dependencies.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("callee_caller_binding_changed");
-                var callees=dependencies.GetProperty("callees").EnumerateArray().Select(c=>new CalleeStackLift(c.GetProperty("target").GetUInt64(),c.GetProperty("lift"))).ToArray();
-                try {if(Vc8LeafReturnProfile.TryRaise(lifted.GetProperty("lift"),out var leaf)){ir=leaf!;source=Vc8LeafReturnProfile.Emit(leaf!,rva,imageBase,project.Module);}else{var stackIr=Vc8StackArgsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8StackArgsProfile.Emit(stackIr,rva,imageBase,imageEnd,project.Module);ir=stackIr;}}
-                catch(ArgumentException) when(recipe.UsesConditionalCalls) {
-                    try {var conditional=recipe.UsesCallAdapters?Vc8CallAdaptersProfile.Raise(lifted.GetProperty("lift"),callees):Vc8ConditionalCallsProfile.Raise(lifted.GetProperty("lift"),callees);source=Vc8ConditionalCallsProfile.Emit(conditional,rva,imageBase,imageEnd,project.Module);ir=conditional;}
-                    catch(ArgumentException) when((recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift")))||recipe.UsesByValueCalls) {
-                        if(recipe.UsesEh&&Vc8EhProfile.MayHaveFrame(lifted.GetProperty("lift"))) {
-                        var evidence=await ReplayableAdapter(request,"lift_eh",folder);if(evidence.TryGetProperty("error",out var ehError))throw new ArgumentException(ehError.GetString());File.WriteAllText(Path.Combine(folder,"eh-evidence.json"),evidence.GetRawText());
-                        if(evidence.GetProperty("caller_slice_sha256").GetString()!=lifted.GetProperty("binary_slice_sha256").GetString())throw new ArgumentException("EH_caller_binding_changed");
-                        var recovered=Vc8EhProfile.Raise(lifted.GetProperty("lift"),callees,evidence);ir=recovered;File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));source=Vc8EhProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);
-                        } else {
-                            try {var recovered=Vc8ByValueCallsProfile.Raise(lifted.GetProperty("lift"),callees);ir=recovered;source=Vc8ByValueCallsProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module);}
-                            catch(ArgumentException) when(recipe.UsesCountedLoops) {
-                                try {var recovered=Vc8LoopsProfile.Raise(lifted.GetProperty("lift"));ir=recovered;source=Vc8LoopsProfile.Emit(recovered,rva,imageBase,project.Module);}
-                                catch(ArgumentException) when(recipe.UsesOrderedMemory) {
-                                    StructuredMemoryFunction recovered;
-                                    try {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees);}
-                                    catch(ArgumentException) when(recipe.UsesTerminalMemory) {recovered=Vc8StructuredMemoryProfile.Raise(lifted.GetProperty("lift"),callees,dependencies.GetProperty("runtime_terminal_evidence").Deserialize<RuntimeTerminalEvidence>(Options));}
-                                    ir=recovered;source=Vc8StructuredMemoryProfile.Emit(recovered,rva,imageBase,imageEnd,project.Module,lifted.GetProperty("lift"),recipe.UsesTypedReceiver,recipe.UsesScalarSource,recipe.UsesIncomingSlotValues);
-                                }
-                            }
-                        }
-                    }
-                }
+            var callFree=IsCompleteCallFree(lifted.GetProperty("lift"));
+            async Task<JsonElement> Dependencies() {
+                if(callFree)return EmptyDependencies(lifted);
+                var value=await ReplayableAdapter(request,"lift_callees",folder);File.WriteAllText(Path.Combine(folder,"callee-lifts.json"),value.GetRawText());return value;
             }
+            async Task<JsonElement> Eh() {var value=await ReplayableAdapter(request,"lift_eh",folder);File.WriteAllText(Path.Combine(folder,"eh-evidence.json"),value.GetRawText());return value;}
+            var recovered=await RecoverLinearSource(request,lifted,project.Module,Dependencies,Eh,ir=>File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir)),attempts=>File.WriteAllText(Path.Combine(folder,"source-profile-attempts.json"),Json(attempts)));
+            var ir=recovered.Ir;var source=recovered.Source;
             File.WriteAllText(Path.Combine(folder,"recovered-ir.json"),Json(ir));File.WriteAllText(Path.Combine(folder,"candidate.cpp"),source);
             if(request.TryGetProperty("expected_source_sha256",out var expectedSource)&&expectedSource.ValueKind!=JsonValueKind.Null&&expectedSource.GetString()!=HashText(source))throw new ArgumentException("generated_source_hash_mismatch_no_compile");
         return source;

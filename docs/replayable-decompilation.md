@@ -439,3 +439,12 @@ all outcomes and identical payloads;92 complete bodies expose missing broader
 replay profiles rather than proven semantic blockers. Timings, overlapping effect/
 call incidence and storage limits are documented in the methodology and learning
 log. Fifty-nine public units and all acceptance policies remain unchanged.
+
+
+Shared ordinary/cached source selection now removes the two-instruction replay
+cutoff for complete closed-control bodies while retaining every existing profile
+guard. Calls and external/indirect jumps require unavailable evidence explicitly.
+The nine selected diagnostic functions produce five detailed, ordinary-matching
+refusal traces and four uninspected control boundaries; no source, compiler run or
+acceptance results. A generic longer store fixture confirms exact source/IR reuse.
+The queue remains `(4 bytes,0xfe920)` and all59 public units are preserved.

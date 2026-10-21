@@ -1997,3 +1997,40 @@ Process startup, backend validation and extraction are partly combined timings;
 no isolated startup speedup or whole-inventory storage prediction is claimed.
 Use `populate: true` once for an authorized exact ID list, then `populate: false`
 for the same IDs; inspect every report status and separately budget total disk.
+
+
+### Share ordinary and cached call-free source selection
+
+Ordinary linear generation and both saved-analysis replay routes now use the same
+existing profile sequence. Complete typed control flow must contain only returns
+and direct internal branches before cached replay supplies an empty dependency
+set. Calls report `dependency_uninspected`; external or indirect jumps report
+`control_target_uninspected`. No target traversal, signature or no-throw assumption
+is introduced. Owned-range/EH evidence remains outside this cached path.
+
+The shared sequence preserves existing linear, leaf/stack, conditional, EH/by-value,
+counted-loop and ordered-memory guards. Ordinary call-bearing functions retain
+their existing bound dependency/EH callbacks. For closed call-free bodies, ordinary
+generation no longer relifts a caller merely to discover an empty dependency set.
+Each attempted profile records its actual refusal before trying the next existing
+profile; this distinguishes the final refusal from earlier and co-occurring limits.
+It does not establish that any one refusal is the exclusive semantic blocker.
+
+Use `replayable_analysis_batch` with `populate:false`, explicit identities and the
+same recipe to replay bound saved bodies. Reports retain `profile_attempts` for
+generated source or a complete handled refusal chain. Existing record hashes,
+producer/range invalidation, unknown outcomes and independent acceptance gates
+remain unchanged. The generic three-instruction store fixture produces identical
+ordinary/cached source and IR and performs no replay lift or compiler invocation.
+
+The first nine-function application (472 owned bytes) produced no source and no
+new acceptance. Five closed-control bodies now expose existing signed-value, loop
+or scalar-path guards with exact ordinary/cached refusal traces. Four have external
+or indirect JMPs despite having no CALL opcode and remain uninspected at that
+boundary. Cached classification of nine took0.611 seconds; five fresh ordinary
+generation jobs took5.135 seconds. Those timings cover different work and are not
+a claimed nine-function speedup. No compiler ran for the selected originals.
+
+Missing control metadata declines the dependency shortcut conservatively; ordinary
+generation keeps its existing bound evidence path. Saved records still require all
+metadata before replay. Older open export fixtures exercise this fallback.

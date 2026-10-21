@@ -2873,3 +2873,27 @@ claims. Historical4745 opaque identities use an older lifter and are incidence
 evidence only. Next candidates are shared replay of existing broader profiles,
 proper typed x87 effects, and exact bound dependency reuse. No semantic capability
 was implemented merely because it appears in this ranking.
+
+
+### 2026-10-21: distinguish no CALL opcode from closed control flow
+
+The nine previously unimplemented cached profiles were not a uniform call-free
+recovery family. Four terminate or dispatch through external/indirect jumps; no
+target traversal was authorized. The remaining five reach existing source profiles
+but refuse. Two encounter signed integer typed domains, two unsupported loop
+shapes and one scalar predicate/path domain. Other attempted profiles also refuse,
+so these are diagnostic candidates, not exclusive blockers or predicted matches.
+
+Ordinary and cached generation now share the existing selection/recovery sequence
+and retain ordered profile-refusal traces. Two rounds of five fresh lifts exactly match retained
+032 payloads and all five refusal traces agree. Generic three-instruction stores
+demonstrate actual ordinary/cached source and IR parity beyond the old two-instruction
+cutoff. An open counted-loop fixture still encounters an earlier unhandled-domain
+dictionary exception in shared selection, although its isolated loop profile works;
+that diagnostic is retained and no exception swallowing or semantic expansion was
+used to force it through. Four C# builds include a corrected local-name error and a conservative metadata
+routing repair. Focused export tests caught that regression before review.
+Zero VC8,VM,LINK,CI,full-suite or game runs occurred; no source or acceptance was
+invented. Five retained objects preserve exact/encoding/behavioral/two mismatch
+outcomes through both complete routes. Fifty-nine public units and the recovery
+queue `(4 bytes,0xfe920)` remain unchanged.
