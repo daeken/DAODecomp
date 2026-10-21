@@ -143,3 +143,19 @@ class EbpSourceTests(unittest.TestCase):
   p=comparison_fixture();rows=p['lift']['ranges'][0]['lift']['instructions'];next(n for n in rows[16]['tree']['Body']if n.get('Id')==101)['Val']=reg(1);result=self.run_source(p);self.assertEqual(result['status'],'generated',result);condition=next(line for line in result['source'].splitlines()if 'goto L_main_'in line);self.assertNotIn(' <= ',condition)
  def test_capture_word_narrowing_preserves_arbitrary_high_bits(self):
   p=fixture();r=p['lift']['ranges'][0]['lift']['instructions'][16];r['tree']['Body'].insert(0,node('IlLet',Id=200,Val=node('IlBin',Op=dict(name='Add'),L=reg(1),R=const(0x100000000,64),Ty=ty(64))));r['tree']['Body'].append(write(0,node('IlCast',Kind=dict(name='Trunc'),X=tmp(200,64),Ty=ty(32))));result=self.run_source(p);self.assertEqual(result['status'],'generated',result);self.assertIn(f"unsigned __int64 t_main_{r['pc']:x}_200;",result['source'])
+
+
+ def test_shared_tail_dispatch_keeps_calls_and_rethrows_resumed_failures(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (resumed) throw;',s);self.assertIn('for (;;) {',s);self.assertIn('if (!resumed) {',s);self.assertIn('resumed = true;',s);self.assertIn('r_shared_7 =',s);self.assertIn('parent_m20',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'guarded_shared_tail_v1');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
+ def test_shared_tail_requires_both_register_inputs(self):
+  p=fixture();p['shared_tail']=True;p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'][0]['tree']['Body']=[];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_7')
+ def test_shared_tail_retains_parent_and_stack_dominance_guards(self):
+  for index,target in [(17,18),(19,20)]:
+   p=bypass(fixture(),index,target);p['shared_tail']=True;self.assertEqual(self.run_source(p)['status'],'unsupported')
+ def test_shared_tail_does_not_invent_caller_saved_registers(self):
+  p=fixture();p['shared_tail']=True;p['lift']['ranges'][1]['lift']['instructions'][0]['tree']['Body']=push(reg(1));self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_1')
+
+ def test_shared_tail_private_parent_must_exist_on_both_paths(self):
+  p=fixture();p['shared_tail']=True;p['lift']['ranges'][1]['lift']['instructions'][0]['tree']['Body']=push(load(-24));self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_parent_word')
+ def test_shared_tail_retains_aliasable_memory_and_call_order(self):
+  p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)

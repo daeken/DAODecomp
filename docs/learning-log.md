@@ -2495,3 +2495,28 @@ flag-fact invalidation at joins, mismatched unsigned operands/widths, genuine wi
 values and all retained initialization refusals. Compiler runs used Windows 11
 ARM64 x86 translation; host tests ran on macOS ARM64. No game execution, linked
 replacement, new acceptance or source export followed from these improvements.
+
+### 2026-10-21 — Share the continuation as a source hypothesis
+
+The first-catch expansion was mostly a duplicated suffix, not arithmetic. A
+reusable loop/discriminator proposal now emits that suffix once while retaining
+normal-recovery versus resumed-rethrow routes. A definite-state intersection
+supplies the shared register inputs; it does not equate raw parent-frame offsets
+or introduce nonthrowing declarations.
+
+Three real VC8 runs under Windows 11 ARM64 x86 translation measured 565 and 582
+bytes against the 488-byte original; the third refused complete ownership because
+of eight unowned alignment bytes. The 565-byte proposal is retained, reducing the
+preceding 608-byte graph while increasing main from234 to280 and reducing first
+catch135 to61 and continuation23 to8. Full comparisons still reject it. Metadata
+agreement and code size do not discharge handler, frame, alias or return-PC
+obligations. The two subsequent variants and their failures remain local evidence.
+
+Ten open generated-C++ host cases preserved the expected success/throw routing
+but exposed differing caught-object destruction timing between the two source
+spellings. That observation is an unresolved runtime requirement, not a new
+observation exclusion. A failed host probe build (an attempted definition of the
+compiler's breakpoint builtin) was retained and corrected without replacing the
+primitive. One malformed local submission was rejected before job creation;
+durable job/barrier reconciliation confirmed no compiler dispatch before retry.
+No new accepted identity, public source or game-execution claim resulted.

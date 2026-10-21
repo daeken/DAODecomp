@@ -1456,3 +1456,38 @@ remain. In particular, an observed deallocation dependency reaches an indirect
 virtual call, so a nonthrowing declaration cannot be inferred to move the shared
 suffix outside its exception context. The nonaccepting multi-try route is
 unchanged, and parent-frame/continuation correspondence is still required.
+
+### Trial a shared tail without a nonthrowing assumption
+
+The bounded EBP source profile can propose `guarded_shared_tail_v1` for a normal
+suffix also reached by a catch-return continuation. It intersects the normal and
+resumed register/parent definitions, requires compatible empty outgoing stacks
+and no incoming flags, and carries only definitely defined register values into
+one emitted suffix. Missing definitions still refuse; source coalescing is not a
+proof that two original/candidate frame slots correspond.
+
+An explicit resume discriminator distinguishes failure routes: normal-tail
+failure enters the allocation catch, while resumed-tail failure rethrows. The
+nested cleanup catch, original throw and breakpoint primitive remain present.
+All external calls retain potentially throwing C++ linkage. This is a compiler
+candidate, **not a proven exception-runtime transformation**: the additional
+handler, caught-object destruction timing, ordinary unwinding, numeric return
+PCs, stack aliases and continuation/frame correspondence remain obligations.
+The duplicate-tail spelling remains available to the direct source API with
+`shared_tail=false`; `shared_tail=true` selects the experimental proposal.
+
+Three paired VC8 compiles on the current frontier produced complete graphs of
+565 and 582 bytes, then an inconclusive candidate with eight unowned alignment
+bytes. The original graph is 488 bytes; the preceding reviewed candidate was
+608. The retained 565-byte candidate has main/catch/continuation sizes 280/61/8
+versus original 230/36/6. The larger placement variant and coalescing variant
+were reversed. The ownership checker continues to reject unowned bytes; no
+padding exception or comparison policy was added.
+
+An open generated-source host probe exercised five success/throw scenarios for
+both spellings. It confirmed the proposed dispatch and exposed a real lifetime
+difference: caught-object destruction precedes the resumed suffix in the shared
+variant, whereas the duplicate-tail spelling executes that suffix inside the
+catch. This is macOS C++ evidence, not pinned guest-runtime evidence. Both native
+comparison routes remain nonaccepting; no source export or frontier advance
+follows from smaller code or the host probe.
