@@ -146,7 +146,7 @@ class EbpSourceTests(unittest.TestCase):
 
 
  def test_shared_tail_dispatch_keeps_calls_and_rethrows_resumed_failures(self):
-  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (resumed) throw;',s);self.assertIn('for (;;) {',s);self.assertIn('if (!resumed) {',s);self.assertIn('resumed = true;',s);self.assertIn('r_shared_7 =',s);self.assertIn('parent_m20',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'guarded_shared_tail_v1');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertEqual(s.count('= fn_00002000('),2);self.assertIn('if (resumed) throw;',s);self.assertIn('for (;;) {',s);self.assertIn('if (!resumed) {',s);self.assertIn('resumed = true;',s);self.assertIn('r_shared_7 =',s);self.assertIn('parent_m20',s);self.assertEqual(r['ir']['shared_input_registers'],[6,7]);self.assertEqual(r['ir']['continuation_lowering'],'post_catch_shared_tail_v2');self.assertLess(s.index('= fn_00002100('),s.index('} catch (...)'));self.assertIn('__debugbreak();',s);self.assertFalse(r['proof'])
  def test_shared_tail_requires_both_register_inputs(self):
   p=fixture();p['shared_tail']=True;p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'][0]['tree']['Body']=[];self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_7')
  def test_shared_tail_retains_parent_and_stack_dominance_guards(self):
@@ -159,3 +159,20 @@ class EbpSourceTests(unittest.TestCase):
   p=fixture();p['shared_tail']=True;p['lift']['ranges'][1]['lift']['instructions'][0]['tree']['Body']=push(load(-24));self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_parent_word')
  def test_shared_tail_retains_aliasable_memory_and_call_order(self):
   p=fixture();p['shared_tail']=True;rows=p['lift']['ranges'][1]['lift']['instructions'];rows[0]['tree']['Body'].insert(0,node('IlStore',Addr=reg(7),Val=const(99,32)));r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];self.assertEqual(s.count('= fn_00002100('),1);self.assertLess(s.index('write_word(static_cast'),s.index('= fn_00002100('));self.assertIn('99u',s)
+
+ def test_resumed_parent_reads_follow_catch_completion_before_resumed_try(self):
+  p=fixture();p['shared_tail']=True;r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source']
+  # The next iteration executes this block only after leaving the catch. No
+  # cached receiver/size loads remain in the catch before exception destruction.
+  head=s.index('for (;;) {');resume=s.index('if (resumed) {',head);first_try=s.index('try {',resume);catch=s.index('} catch (...)',first_try)
+  for register,parent in [(7,20),(6,24)]:
+   assignment='r_continuation_'+str(register)+' = static_cast<unsigned int>(parent_m'+str(parent)+');'
+   self.assertEqual(s.count(assignment),1);self.assertLess(resume,s.index(assignment));self.assertLess(s.index(assignment),first_try);self.assertNotIn(assignment,s[catch:])
+  self.assertLess(s.index('resumed = true;',catch),s.rindex('}'))
+ def test_continuation_memory_effect_occurs_outside_allocation_catch(self):
+  p=fixture();p['shared_tail']=True;rows=p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'];rows[1]['tree']['Body'].append(node('IlStore',Addr=reg(7),Val=const(99,32)))
+  r=self.run_source(p);self.assertEqual(r['status'],'generated',r);s=r['source'];a=s.index('write_word(static_cast');self.assertLess(s.index('if (resumed) {'),a);self.assertLess(a,s.index('try {',s.index('for (;;) {')));self.assertEqual(s.count('write_word(static_cast'),1)
+
+ def test_resume_load_cannot_bypass_its_only_definition(self):
+  p=fixture();p['shared_tail']=True;rows=p['eh']['dependencies'][2]['typed_instructions'][0]['lift']['instructions'];rows[0]['tree']['Body']=[node('IlBranch',Kind=dict(name='CondJmp'),Target=const(rows[1]['pc'],32),Cond=const(1,1))]
+  self.assertEqual(self.run_source(p)['blocker'],'EBP_try_undefined_register_7')

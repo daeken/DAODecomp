@@ -1491,3 +1491,48 @@ variant, whereas the duplicate-tail spelling executes that suffix inside the
 catch. This is macOS C++ evidence, not pinned guest-runtime evidence. Both native
 comparison routes remain nonaccepting; no source export or frontier advance
 follows from smaller code or the host probe.
+
+
+### Keep continuation effects after catch completion
+
+Do not infer caught-object lifetime from the layout of a recovered catch body.
+Follow the original-bound runtime callback, its normal cleanup, and the transfer
+to the literal continuation. Targeted archive-linker-index lookup can bind only
+required helper sections and relocation edges, without scanning another function
+inventory. Preserve complete sections and explicit entry offsets when an assembly
+helper shares a section; a guessed function prefix loses relevant code.
+
+At the current frontier, fifteen selected runtime sections match the pinned CRT
+archive outside relocation fields, with actual original targets retained. The
+normal path saves the catch return address, restores/unlinks exception context,
+conditionally destroys an eligible caught object, then returns and transfers to
+the parent continuation. Rethrow records a zero continuation and avoids that
+normal-return destruction guard. These are bounded instruction observations:
+indirect callbacks, helper failures, SEH dispatch and destructor exceptional
+outcomes remain unproved. Symbol association alone does not establish semantics.
+
+The source proposal `post_catch_shared_tail_v2` therefore places continuation
+loads and effects in the resumed iteration **after leaving the catch**, before
+entering the shared protected suffix. Loading parent words inside the catch can
+capture values before destruction changes them. The definite-state join and
+initialization refusals remain; this placement does not establish that C++ locals
+and potentially aliased guest parent words have a valid state correspondence.
+The older duplicate-tail source option is explicitly a lifetime hypothesis.
+
+A pinned VC8 SP1 open fixture distinguishes these orders. Each generated class
+was given a real word member, the continuation writes 99 to that receiver word,
+and a caught-object destructor writes 77 to the same word. Across fifteen runs
+(three spellings and five success/throw routes), the old shared placement returns
+77 on fallback success; the revised placement returns 99 with final 99. The
+duplicate spelling returns 99 but leaves 77 after destruction. VC8 also emitted
+throw-temporary destruction events absent from the previous host traces. Preserve
+those differences instead of importing host expectations into guest evidence.
+
+This probe used the pinned static CRT, actual Windows imports and x86 translation
+on Windows 11 ARM64; it did not execute the original function. Missing library
+layout, import decoration, link and pre-main failures remain retained. The
+candidate object was unchanged across linker-only repairs. The revised actual
+frontier compiles to a complete 581-byte graph versus 488 original, rather than the
+prior 565. Both gates still reject it. Runtime state, frame/alias mapping, ordinary
+unwinding, numeric CALL return PCs and trap delivery/resumption remain required;
+no size or lifetime-probe observation grants acceptance.

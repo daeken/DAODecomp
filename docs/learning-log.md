@@ -2520,3 +2520,32 @@ compiler's breakpoint builtin) was retained and corrected without replacing the
 primitive. One malformed local submission was rejected before job creation;
 durable job/barrier reconciliation confirmed no compiler dispatch before retry.
 No new accepted identity, public source or game-execution claim resulted.
+
+
+### 2026-10-21 — Observe catch completion before moving parent loads
+
+Targeted original/runtime binding established a conditional normal-path order:
+catch callback return, context restoration and ownership unlinking, eligible
+caught-object destruction, then parent-continuation transfer. The shared proposal
+had moved the suffix after catch completion but still loaded its continuation
+inputs inside the catch. Continuation loads and effects now move together after
+completion. No exception state, destructor or alias behavior is declared harmless.
+
+Fifteen open VC8/CRT runs distinguish duplicate, precompletion-shared and revised
+postcompletion-shared methods. With destructor/continuation writes 77/99 to the
+same valid word, fallback success returns 77 under the old shared method and99
+under the revised method; the duplicate method returns 99 but leaves 77 afterward.
+Nested rethrow and resumed-suffix throw traces were retained, including VC8's
+extra temporary-destruction events. This is translated Windows open-source probe
+evidence, not original-game execution or a parent-stack alias proof.
+
+Two actual C++ compiler calls produced the open probe object and revised game
+candidate; an additional failed precompiler library-layout attempt was charged
+conservatively against the batch allowance. Linker-only failures exposed missing
+imports, a script-name collision, and decorated API names; each was retained.
+No implementation was substituted for unknown runtime calls. The final probe
+links the pinned CRT to real Windows imports. The new full candidate is 581 bytes
+against 488 original (prior 565); the ordering repair was retained despite that
+increase. Ten prior controls still freshly pass both gates; the frontier remains
+a nonaccepting mismatch with no new export. Ordinary unwind, numeric return-PC,
+frame/value/alias correspondence and trap behavior remain unresolved.
