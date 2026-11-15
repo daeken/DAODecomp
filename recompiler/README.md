@@ -63,6 +63,11 @@ the [validation workflow](../docs/validation.md).
 
 ## Whole-module generation and compilation
 
+Use the sibling [SharpRetro checkout](https://github.com/daeken/SharpRetro/tree/0b88000191668064ff972e6cbf97d4ec7080a7d8/Decompiler)
+at commit `0b88000191668064ff972e6cbf97d4ec7080a7d8` for the PE32 backend and
+variable-origin API. Use `--sharp-retro /path/to/SharpRetro` on `new` to choose a
+different checkout path.
+
 The native ABI now caches normalized provider basenames across calls. Each call
 still resolves the target's actual module and checks its executable page. Loader
 load/unload notifications invalidate the names without retaining a DLL reference;
@@ -439,10 +444,7 @@ separate cached error value.
 ## Agent workflow
 
 Run from the DAODecomp root; .NET 10, Python 3.10+, CMake and Clang/GCC are needed.
-Use the sibling [SharpRetro checkout](https://github.com/daeken/SharpRetro/tree/0b88000191668064ff972e6cbf97d4ec7080a7d8/Decompiler)
-at commit `0b88000191668064ff972e6cbf97d4ec7080a7d8` for the PE32 backend and
-variable-origin API. Use `--sharp-retro /path/to/SharpRetro` on `new` to choose a
-different checkout path.
+
 
 ```sh
 python3 -m tools.recomp new gamedata/bin_ship/DAOrigins.exe
