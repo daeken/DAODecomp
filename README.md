@@ -5,6 +5,13 @@ replacement executable using the original game's data files. Binary matching is
 explicitly not a goal. Source organization, compiler choice and instruction
 selection may differ; observable function behavior must agree with the reference.
 
+## Decompiler workbench
+
+[Start with the recovery workbench](docs/recovery-workbench.md) to inspect
+generated PE32 C++, trace startup calls, propose variable names and types,
+and review shared struct and class layouts. The [recompiler guide](recompiler/README.md)
+covers source generation, the SharpRetro dependency and the command-line workflow.
+
 <!-- progress:start -->
 ## Progress
 

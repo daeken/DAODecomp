@@ -1,0 +1,280 @@
+{
+  "binary_sha256": "ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f",
+  "domain": {
+    "arena_base": 805306368,
+    "arena_size": 1024,
+    "compared_flag_mask": 2245,
+    "ecx": "arena + object offset",
+    "entry_esp": 1342179328,
+    "entry_flags": 514,
+    "memory": "deterministic arena bytes with explicit object/implementation/nested pointer layouts; offsets/spans must remain mapped; aliases and unaligned objects included",
+    "module_global": {
+      "address": 269548304,
+      "values": [
+        0,
+        1,
+        4294967295
+      ]
+    },
+    "other_gprs": "fixed sentinels; all eight 32-bit GPR exits observed",
+    "stack_arguments": "two raw 32-bit words at ESP+4/+8, including noncanonical low bytes; source bool validity is not asserted",
+    "stack_base": 1342177280,
+    "stack_size": 4096
+  },
+  "excluded": {
+    "AF": "architecturally undefined on logical paths; other system/reserved flags are outside contract",
+    "object_lifetime": "no source class construction, Library::init or real visibility traversal is certified",
+    "original_memory_reads": "native Windows page guards cannot log each read; reviewed instruction paths and explicit valid graphs bound the tested accesses",
+    "stack_frame_bytes": "native return addresses differ; caller/callee scratch and unused arguments within the declared active frame are not compared"
+  },
+  "functions": [
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e270",
+      "instruction_sha256": "e63537d0689f374dc18c0455e4c5f08ffce772363daa4e220b504553ca5f92e4",
+      "module_data_accesses": [
+        {
+          "address": 269548304,
+          "width": 32,
+          "write": false
+        }
+      ],
+      "observed_machine_behavior": "Let A=R32(this+4). Gate zero: return R32(R32(A+4)) via helper c0080; gate nonzero: return R32(A).",
+      "rva": 385648,
+      "size": 69,
+      "slice_sha256": "0fd43ba66bc73a7ef2cc2a8a2f22b2073e308e57bcd9835f8155d6c4cce72ec1",
+      "symbol_names": [
+        "?getViewer@Commander@Umbra@@IBEPBVViewer@12@XZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e2c0",
+      "instruction_sha256": "12beff484afc1f2e8a71bee1770bae8fc0f491e13fcf0c4b47cc0ec5748f5f75",
+      "module_data_accesses": [
+        {
+          "address": 269548304,
+          "width": 32,
+          "write": false
+        }
+      ],
+      "observed_machine_behavior": "Gate zero returns zero. Gate nonzero returns R32(this+4)+0x3c modulo 2^32.",
+      "rva": 385728,
+      "size": 35,
+      "slice_sha256": "20614ee841388385dbbe076be9c5a309fd3c91e94189b635229ebfba20830fc4",
+      "symbol_names": [
+        "?getOcclusionQuery@Commander@Umbra@@IBEPAVOcclusionQuery@12@XZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e2f0",
+      "instruction_sha256": "c52945c3cc8b08c8997353b217fcb3d9b26ea84bdb1f6d84e3e734d1a32e4a44",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return R32(R32(this)).",
+      "rva": 385776,
+      "size": 18,
+      "slice_sha256": "c467d0faa1407082ecf55c02efc0763e8fdde41481cdfa58446c73438e893060",
+      "symbol_names": [
+        "?getIndex@OcclusionQuery@Commander@Umbra@@QBEHXZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e380",
+      "instruction_sha256": "ef1b8299e68c2155739417c1a24541f05a099e8c22cbc774d772e0a8915a4468",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return guest address 0x1010acd0; no object dereference.",
+      "rva": 385920,
+      "size": 16,
+      "slice_sha256": "3cb34ed1a991645773a5779ee797a0bdb44635a676131ca13c7aac3b25df5f8d",
+      "symbol_names": [
+        "?getVertices@OcclusionQuery@Commander@Umbra@@QBEPBVVector3@3@XZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e390",
+      "instruction_sha256": "d497097fbd3c507c2c73ffe7a886e6c793bce75d3febce7ab7ecbea7a3a31c6c",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return R32(R32(this)+0x10).",
+      "rva": 385936,
+      "size": 19,
+      "slice_sha256": "4fccf7d87bd3ebfe335b20e0985c04f8114889feaea1a30f2e83085f78b273e9",
+      "symbol_names": [
+        "?getVertexCount@OcclusionQuery@Commander@Umbra@@QBEHXZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e3b0",
+      "instruction_sha256": "5593b7ca589c851a361e50c469569c67445d1ebc198487c98787375683a35c1d",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return R32(R32(this)+0x0c).",
+      "rva": 385968,
+      "size": 19,
+      "slice_sha256": "fee0f3db35e48791f6714424c52d8a1b2961729aa8af305c21369f1159e230ed",
+      "symbol_names": [
+        "?getTriangleCount@OcclusionQuery@Commander@Umbra@@QBEHXZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e3d0",
+      "instruction_sha256": "247e8cf831ff6dc390f3d2378b7859ffaa13b77439e9998d742950182ff4060d",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return guest address 0x1010a730; no object dereference.",
+      "rva": 386000,
+      "size": 16,
+      "slice_sha256": "d77aada9e801176995565c0687a37d373ab2c5fd833fb77a7b58a99904183ae0",
+      "symbol_names": [
+        "?getTriangles@OcclusionQuery@Commander@Umbra@@QBEPBVVector3i@3@XZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e3e0",
+      "instruction_sha256": "acf44a46351d30174cbc5b937b7a94ba0124c2ed52c24eb8427451b423c7bd90",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Let A=R32(this). Raw EAX is (A & 0xffffff00) | R8(A+5), preserving pointer-derived upper bits.",
+      "rva": 386016,
+      "size": 19,
+      "slice_sha256": "865f4e2a6583af290b5b23738305d729212f31456e7277967f847f50c4016c05",
+      "symbol_names": [
+        "?getWaitForResult@OcclusionQuery@Commander@Umbra@@QBE_NXZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 8,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e400",
+      "instruction_sha256": "b9721c16efaedd5f5b0ba2702ecb2e5a5c3d8d2decf5b5ff5ae5b40e9c2d06f2",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Let A=R32(this); W8(A+4,low8(argument0)); reload B=R32(this); W32(B+8,argument1). Preserve sequential alias effects; RET cleans eight argument bytes.",
+      "rva": 386048,
+      "size": 35,
+      "slice_sha256": "96f800ed3f12355f15859574955d491e4f8b22c8efa1ef25281fbce7e2a24ae9",
+      "symbol_names": [
+        "?setResult@OcclusionQuery@Commander@Umbra@@QAEX_NH@Z"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e430",
+      "instruction_sha256": "cf2f9b61016ddebf3d3cb0bb471b1a2c2fd048f65f64b9d3a936577f01e98845",
+      "module_data_accesses": [
+        {
+          "address": 269548304,
+          "width": 32,
+          "write": false
+        }
+      ],
+      "observed_machine_behavior": "Let A=R32(this+4). Gate zero: B=R32(A+4), return zero when R32(B+0x38)==0, otherwise B+0x38 via helper c00b0. Gate nonzero: return zero when R32(A+0x38)==0xffffffff, otherwise A+0x38.",
+      "rva": 386096,
+      "size": 84,
+      "slice_sha256": "85b49217584bc5f2f8d26df4909f40ad50275a577c0e0c448478754e6a61a303",
+      "symbol_names": [
+        "?getInstance@Commander@Umbra@@IBEPBVInstance@12@XZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-0005e490",
+      "instruction_sha256": "a8f6174ca34204f8786038007d99c94507e50c8735c59d2f1af1ddddfabbdecc",
+      "module_data_accesses": [
+        {
+          "address": 269548304,
+          "width": 32,
+          "write": false
+        }
+      ],
+      "observed_machine_behavior": "Let A=R32(this+4). Gate zero: return R32(R32(A+4)+4) via helper c00e0. Gate nonzero: return R32(A+4).",
+      "rva": 386192,
+      "size": 58,
+      "slice_sha256": "d1079056fbb31271a35ae473f3dcf17f65421f0d6907c223bcfcf0b3e8cabe79",
+      "symbol_names": [
+        "?getTextMessage@Commander@Umbra@@IBEPBDXZ"
+      ]
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-000c0080",
+      "instruction_sha256": "26a61ce872824f999c6ece668a716d7e5c80a739b2e64721d524ac096e6cde15",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return R32(R32(this+4)).",
+      "rva": 786560,
+      "size": 33,
+      "slice_sha256": "f30770d91c045791e3249f89fc7cc96b574a29dce0c81feb11ca43c00ff7706f",
+      "symbol_names": []
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-000c00b0",
+      "instruction_sha256": "39963ad6a38b2e9bdc4033dbe28f3eef86489b0c6e830341cfb3b01b2b322749",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Let A=R32(this+4). Return zero when R32(A+0x38)==0, otherwise A+0x38 modulo 2^32.",
+      "rva": 786608,
+      "size": 46,
+      "slice_sha256": "9a7aa39bcf67caef78c3c1d353d75a4c82ebf1084be7d4323a243ad02d739156",
+      "symbol_names": []
+    },
+    {
+      "behavior_status": "instruction-derived hypothesis checked by independent original execution over the reported corpus; no universal proof",
+      "cleanup_bytes": 0,
+      "external_effects": "none in the selected instruction paths; only arena/stack writes; unknown callees are forbidden",
+      "id": "umbra.dll:ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f:rva-000c00e0",
+      "instruction_sha256": "7b3c528544975ecb6bc520b9489588ad29501a2ae20bcafeb49fbd9a89a7e6bb",
+      "module_data_accesses": [],
+      "observed_machine_behavior": "Return R32(R32(this+4)+4).",
+      "rva": 786656,
+      "size": 28,
+      "slice_sha256": "c8bb756f54c2cbedf9261026bea7a2f64308cb3fd633edf8590ea79ed0e9782f",
+      "symbol_names": []
+    }
+  ],
+  "image_base": 268435456,
+  "module": "umbra.dll",
+  "notation": "R8/R32 and W8/W32 are little-endian guest accesses; address arithmetic wraps modulo 2^32. this denotes entry ECX. Other register/flag exits are specified by original measured state, not guessed source returns.",
+  "observations": [
+    "all eight raw 32-bit GPRs including ESP",
+    "CF/PF/ZF/SF/OF; candidate must define each compared flag",
+    "every arena byte",
+    "module gate global unchanged",
+    "original full writable .data unchanged after fixture preparation",
+    "candidate rejects all writes outside declared arena and bounded stack frame",
+    "native stack guards outside active frame unchanged"
+  ],
+  "provenance": {
+    "acceptance": "repeated exact observed corpus agreement plus return and alias-store mutation controls; no proof or accepted recovery-registry promotion",
+    "bounds": "direct disassembly, entry through reachable RET; fixed slice and instruction hashes checked before every run",
+    "execution": "original pinned DLL under Wine WoW64/Rosetta; translated Windows x86/x64 and native ARM64 sanitizer builds",
+    "source": "SharpRetro machine-state lift, exported decorated signatures retained as declarations only"
+  },
+  "schema_version": 1,
+  "scope": "Bounded integer/memory machine-state contracts for 11 Commander/OcclusionQuery exports and 3 internal helpers. Constructed states, not captured initialized Umbra objects."
+}

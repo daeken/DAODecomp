@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SharpRetroRoot Condition="'$(SharpRetroRoot)' == ''">$(MSBuildThisFileDirectory)../../../SharpRetro</SharpRetroRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SharpRetroRoot)/Decompiler/Decompiler.csproj" />
+    <None Include="$(SharpRetroRoot)/Decompiler/CppRuntime.hpp" Link="CppRuntime.hpp" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SharpRetroRoot)/Decompiler/IntegerRuntime.hpp" Link="IntegerRuntime.hpp" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SharpRetroRoot)/Decompiler/StringRuntime.hpp" Link="StringRuntime.hpp" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
