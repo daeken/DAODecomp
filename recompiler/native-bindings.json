@@ -1,0 +1,1293 @@
+{
+  "bindings": [
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "gdi32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GdiFlush) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "actual current thread GDI flush",
+      "symbol": "GdiFlush"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-cancelio",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "live owned file; actual native operation, BOOL and error; no pending guest I/O is currently admitted",
+      "symbol": "CancelIo"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "LCID"
+        },
+        {
+          "mode": "scalar",
+          "type": "DWORD"
+        },
+        {
+          "count_argument": 3,
+          "mode": "ansi_counted",
+          "nullable": false
+        },
+        {
+          "mode": "scalar",
+          "type": "int"
+        },
+        {
+          "count_argument": 5,
+          "mode": "ansi_counted",
+          "nullable": false
+        },
+        {
+          "mode": "scalar",
+          "type": "int"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::CompareStringA) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "int",
+      "scope": "known counted strings on original shared backing; positive counts bound bytes or WCHARs, negative counts include observed terminator, zero count permits NULL; real locale/flags/comparison/failure",
+      "symbol": "CompareStringA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "LCID"
+        },
+        {
+          "mode": "scalar",
+          "type": "DWORD"
+        },
+        {
+          "count_argument": 3,
+          "mode": "utf16_counted",
+          "nullable": false
+        },
+        {
+          "mode": "scalar",
+          "type": "int"
+        },
+        {
+          "count_argument": 5,
+          "mode": "utf16_counted",
+          "nullable": false
+        },
+        {
+          "mode": "scalar",
+          "type": "int"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::CompareStringW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "int",
+      "scope": "known counted strings on original shared backing; positive counts bound bytes or WCHARs, negative counts include observed terminator, zero count permits NULL; real locale/flags/comparison/failure",
+      "symbol": "CompareStringW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": false
+        },
+        {
+          "mode": "utf16",
+          "nullable": false
+        },
+        {
+          "mode": "scalar",
+          "type": "BOOL"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::CopyFileW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "two known UTF16 paths, raw fail-if-exists BOOL; actual copy/failure",
+      "symbol": "CopyFileW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPSECURITY_ATTRIBUTES"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "HANDLE (*)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "HANDLE",
+      "scope": "known path, optional default-security attributes and owned optional template file; actual native create/open/error and file ownership; OVERLAPPED flag retained but pending I/O transport unsupported",
+      "symbol": "CreateFileA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCWSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPSECURITY_ATTRIBUTES"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "HANDLE (*)(LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "HANDLE",
+      "scope": "known path, optional default-security attributes and owned optional template file; actual native create/open/error and file ownership; OVERLAPPED flag retained but pending I/O transport unsupported",
+      "symbol": "CreateFileW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": false
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::DeleteFileW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "known UTF16 path; actual filesystem mutation and failure",
+      "symbol": "DeleteFileW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "input_record",
+          "type": "FILETIME"
+        },
+        {
+          "mode": "output_record",
+          "type": "FILETIME"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "output_defined_when": "nonzero",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::FileTimeToLocalFileTime) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "known FILETIME input, checked FILETIME output; documented fields defined only on actual nonzero result; failure bytes retained but unknown",
+      "symbol": "FileTimeToLocalFileTime"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "input_record",
+          "type": "FILETIME"
+        },
+        {
+          "mode": "output_record",
+          "type": "SYSTEMTIME"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "output_defined_when": "nonzero",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::FileTimeToSystemTime) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "known FILETIME input, checked SYSTEMTIME output; documented fields defined only on actual nonzero result; failure bytes retained but unknown",
+      "symbol": "FileTimeToSystemTime"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findclose",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "live search handle; real close/error; retire search only on success",
+      "symbol": "FindClose"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWIN32_FIND_DATAA"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "HANDLE (*)(LPCSTR, LPWIN32_FIND_DATAA) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilea",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "HANDLE",
+      "scope": "known pattern and checked find record; actual search/error; owned search identity; documented fields and terminated string prefixes only; reserved storage, padding and tails unknown",
+      "symbol": "FindFirstFileA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCWSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWIN32_FIND_DATAW"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "HANDLE (*)(LPCWSTR, LPWIN32_FIND_DATAW) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "HANDLE",
+      "scope": "known pattern and checked find record; actual search/error; owned search identity; documented fields and terminated string prefixes only; reserved storage, padding and tails unknown",
+      "symbol": "FindFirstFileW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWIN32_FIND_DATAW"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE, LPWIN32_FIND_DATAW) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findnextfilew",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "live wide search and checked record; actual enumeration/end/error; documented successful fields and strings only, failed output unknown",
+      "symbol": "FindNextFileW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "live owned file; actual native operation, BOOL and error; no pending guest I/O is currently admitted",
+      "symbol": "FlushFileBuffers"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetConsoleCP) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "UINT",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "GetConsoleCP"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetConsoleOutputCP) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "UINT",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "GetConsoleOutputCP"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPSTR"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(DWORD, LPSTR) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getcurrentdirectorya",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "checked byte/WCHAR capacity or zero query; actual current directory/result/error; successful string prefix defined, failed/short output unknown",
+      "symbol": "GetCurrentDirectoryA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWSTR"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(DWORD, LPWSTR) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getcurrentdirectoryw",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "checked byte/WCHAR capacity or zero query; actual current directory/result/error; successful string prefix defined, failed/short output unknown",
+      "symbol": "GetCurrentDirectoryW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "PULARGE_INTEGER"
+        },
+        {
+          "mode": "bridge",
+          "type": "PULARGE_INTEGER"
+        },
+        {
+          "mode": "bridge",
+          "type": "PULARGE_INTEGER"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(LPCSTR, PULARGE_INTEGER, PULARGE_INTEGER, PULARGE_INTEGER) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdiskfreespaceexa",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "optional known path and three optional checked 64-bit outputs; actual native disk query/error; outputs defined on success only",
+      "symbol": "GetDiskFreeSpaceExA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "ansi",
+          "nullable": true
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetDriveTypeA) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "UINT",
+      "scope": "optional root path; NULL uses actual current directory",
+      "symbol": "GetDriveTypeA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "ansi",
+          "nullable": false
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetFileAttributesA) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "DWORD",
+      "scope": "known ANSI path; actual filesystem attributes/failure",
+      "symbol": "GetFileAttributesA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPDWORD"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(HANDLE, LPDWORD) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfilesize",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "owned file and optional checked DWORD high output; actual length/error, high defined on success only",
+      "symbol": "GetFileSize"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPSTR*"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(LPCSTR, DWORD, LPSTR, LPSTR *) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfullpathnamea",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "known input and checked output capacity/optional file-part pointer; actual full path/result/error; success retains checked interior pointer; failed/short outputs unknown, aliases preserve original backing",
+      "symbol": "GetFullPathNameA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPCWSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWSTR"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPWSTR*"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(LPCWSTR, DWORD, LPWSTR, LPWSTR *) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfullpathnamew",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "known input and checked output capacity/optional file-part pointer; actual full path/result/error; success retains checked interior pointer; failed/short outputs unknown, aliases preserve original backing",
+      "symbol": "GetFullPathNameW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "output_record",
+          "type": "SYSTEMTIME"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "output_defined_when": "always",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetLocalTime) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "checked SYSTEMTIME output; eight actual returned WORD fields defined",
+      "symbol": "GetLocalTime"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "output_record",
+          "type": "SYSTEMTIME"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "output_defined_when": "always",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetSystemTime) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "checked SYSTEMTIME output; eight actual returned WORD fields defined",
+      "symbol": "GetSystemTime"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetThreadLocale) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "LCID",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "GetThreadLocale"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetUserDefaultLCID) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "LCID",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "GetUserDefaultLCID"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapdestroy",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "registered heap; actual native operation/error; destroy requires owned non-process heap and retires all its registered blocks on successful destruction",
+      "symbol": "HeapDestroy"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heaplock",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "registered heap; actual native operation/error; destroy requires owned non-process heap and retires all its registered blocks on successful destruction",
+      "symbol": "HeapLock"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "SIZE_T"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "LPVOID (*)(HANDLE, DWORD, LPVOID, SIZE_T) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heaprealloc",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "LPVOID",
+      "scope": "registered heap and live allocation base; actual resize/failure and existing unknown-bit relocation; HEAP_GENERATE_EXCEPTIONS unsupported",
+      "symbol": "HeapReAlloc"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapunlock",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "registered heap; actual native operation/error; destroy requires owned non-process heap and retires all its registered blocks on successful destruction",
+      "symbol": "HeapUnlock"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::IsDebuggerPresent) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "IsDebuggerPresent"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "LCID"
+        },
+        {
+          "mode": "scalar",
+          "type": "DWORD"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::IsValidLocale) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "raw LCID and flags; real validity result",
+      "symbol": "IsValidLocale"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "ansi",
+          "nullable": true
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::OutputDebugStringA) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "optional known terminated debug string; real native debug output",
+      "symbol": "OutputDebugStringA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": true
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::OutputDebugStringW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "optional known terminated debug string; real native debug output",
+      "symbol": "OutputDebugStringW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "BOOL"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPDWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPOVERLAPPED"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPOVERLAPPED_COMPLETION_ROUTINE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE, LPVOID, DWORD, WINBOOL, DWORD, LPDWORD, LPOVERLAPPED, LPOVERLAPPED_COMPLETION_ROUTINE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readdirectorychangesw",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "owned synchronous directory, aligned checked buffer and nonnull count; NULL OVERLAPPED/callback only; actual blocking notifications/result/error; successful returned prefix only, failures unknown",
+      "symbol": "ReadDirectoryChangesW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPDWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPOVERLAPPED"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "owned synchronous file, checked output bytes and nonnull count, NULL OVERLAPPED; real read, EOF/failure/count; success defines returned prefix only, failure buffer unknown; original backing preserves aliases",
+      "symbol": "ReadFile"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": false
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::RemoveDirectoryW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "known UTF16 path; actual filesystem mutation and failure",
+      "symbol": "RemoveDirectoryW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setendoffile",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "live owned file; actual native operation, BOOL and error; no pending guest I/O is currently admitted",
+      "symbol": "SetEndOfFile"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "ansi",
+          "nullable": false
+        },
+        {
+          "mode": "ansi",
+          "nullable": true
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::SetEnvironmentVariableA) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "known ANSI name and optional value; NULL value performs actual environment deletion",
+      "symbol": "SetEnvironmentVariableA"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "UINT"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::SetErrorMode) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "UINT",
+      "scope": "real process error mode and returned previous mode",
+      "symbol": "SetErrorMode"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LONG"
+        },
+        {
+          "mode": "bridge",
+          "type": "PLONG"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "DWORD (*)(HANDLE, LONG, PLONG, DWORD) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfilepointer",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "DWORD",
+      "scope": "owned file, signed low distance, optional known high in/out, real seek/error; high defined on success only",
+      "symbol": "SetFilePointer"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "DWORD"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::Sleep) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "real blocking sleep including INFINITE; no synthesized elapsed-time result",
+      "symbol": "Sleep"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::SwitchToThread) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "real current process/thread scalar query; no pointer transport",
+      "symbol": "SwitchToThread"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "SIZE_T"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "LPVOID (*)(LPVOID, SIZE_T, DWORD, DWORD) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "LPVOID",
+      "scope": "owned data reservation/commit or new NULL/fixed-address reservation; RESERVE/COMMIT/TOP_DOWN and READWRITE/READONLY/NOACCESS only; actual native address/failure/page extents, zero new committed pages, preserve recommitted knownness; guest namespace collisions rejected",
+      "symbol": "VirtualAlloc"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "LPVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "SIZE_T"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        }
+      ],
+      "bridge": "memory",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_memory.hpp",
+        "sdk_observation": "WINBOOL (*)(LPVOID, SIZE_T, DWORD) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "owned virtual reservation with RELEASE or DECOMMIT; actual Windows result/error; synchronize partial committed ranges and permissions, retire decommitted/released bytes and their unknown origins only on native success",
+      "symbol": "VirtualFree"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "bridge",
+          "type": "HANDLE"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPCVOID"
+        },
+        {
+          "mode": "bridge",
+          "type": "DWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPDWORD"
+        },
+        {
+          "mode": "bridge",
+          "type": "LPOVERLAPPED"
+        }
+      ],
+      "bridge": "files",
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "implementation_header": "recompiler/runtime/native_files.hpp",
+        "sdk_observation": "WINBOOL (*)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED) __attribute__((stdcall))",
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile",
+        "status": "Explicit bounded native adapter. Declaration is not whole API/function/game acceptance."
+      },
+      "result": "BOOL",
+      "scope": "owned synchronous file, known checked byte span and nonnull count, NULL OVERLAPPED; actual write/failure/count and original input/count aliases",
+      "symbol": "WriteFile"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": true
+        },
+        {
+          "mode": "utf16",
+          "nullable": true
+        },
+        {
+          "mode": "utf16",
+          "nullable": true
+        },
+        {
+          "mode": "utf16",
+          "nullable": false
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::WritePrivateProfileStringW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "optional known section/key/value and nonnull known filename; actual INI write/delete/cache operation",
+      "symbol": "WritePrivateProfileStringW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "utf16",
+          "nullable": false
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "kernel32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::lstrlenW) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "int",
+      "scope": "nonnull known terminated UTF16 input; actual native length",
+      "symbol": "lstrlenW"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "int"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "user32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::GetSystemMetrics) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "int",
+      "scope": "real system metric query",
+      "symbol": "GetSystemMetrics"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "int"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "user32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::PostQuitMessage) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "void",
+      "scope": "real quit message posted to current thread queue",
+      "symbol": "PostQuitMessage"
+    },
+    {
+      "arguments": [],
+      "calling_convention": "stdcall",
+      "library": "user32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::ReleaseCapture) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "actual thread capture release; dependent native-to-guest window callbacks require the callback bridge",
+      "symbol": "ReleaseCapture"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "int"
+        },
+        {
+          "mode": "scalar",
+          "type": "int"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "user32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::SetCursorPos) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "BOOL",
+      "scope": "signed screen coordinates and actual cursor move",
+      "symbol": "SetCursorPos"
+    },
+    {
+      "arguments": [
+        {
+          "mode": "scalar",
+          "type": "BOOL"
+        }
+      ],
+      "calling_convention": "stdcall",
+      "library": "user32.dll",
+      "provenance": {
+        "semantics": "https://learn.microsoft.com/en-us/windows/win32/api/; retain real API implementation, declared input spans and output fields only",
+        "signature": "Windows SDK declaration, checked with decltype(&::ShowCursor) at compilation; four-byte scalar arguments and x86 stdcall"
+      },
+      "result": "int",
+      "scope": "raw BOOL bits and actual thread cursor-display count",
+      "symbol": "ShowCursor"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Generated and explicit checked Windows x86 adapters. Scoped contracts only; pending callbacks/COM/threads and unsupported memory/lifetime domains remain explicit failures. No successful stubs."
+}

@@ -1,0 +1,112 @@
+#include "functions.hpp"
+#include "native_imports.hpp"
+#include "static_code_lookup.hpp"
+#include <algorithm>
+#include <array>
+#include <cstdlib>
+#include <cstring>
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
+namespace recomp_generated {
+static const std::array<FunctionEntry,@FUNCTION_COUNT@> entries{{
+@ENTRIES@
+}};
+static const std::array<CodeEntry,@CODE_COUNT@> code{{
+@CODE@
+}};
+static const std::array<ImportEntry,@IMPORT_COUNT@> imports{{
+@IMPORTS@
+}};
+std::span<const FunctionEntry> compiled_functions() { return entries; }
+std::span<const CodeEntry> compiled_code() { return code; }
+std::span<const ImportEntry> declared_imports() { return imports; }
+GuestFunction resolve_guest(std::uint32_t address) {
+    auto entry=std::lower_bound(entries.begin(),entries.end(),address,[](const auto& item,auto key){ return item.address<key; });
+    if(entry!=entries.end() && entry->address==address) return entry->function;
+    if(extra_guest_function) if(auto function=extra_guest_function(address)) return function;
+    throw std::runtime_error("untranslated guest function target");
+}
+sharp_retro::Exit invoke_guest(std::uint32_t address,sharp_retro::State& state,sharp_retro::Memory& memory,std::uint64_t budget) {
+    auto function=resolve_guest(address); state.pc=address; return function(state,memory,budget);
+}
+sharp_retro::Exit resume_guest(std::uint32_t stop,sharp_retro::State& state,sharp_retro::Memory& memory,
+                             std::uint64_t& budget,ImportHandler handler) {
+    if(state.pc>0xffffffffULL) throw std::runtime_error("invalid guest32 program counter");
+    if(state.pc==stop) throw std::runtime_error("stop address reached without a completed return");
+    if(budget==0) return sharp_retro::Exit::budget_exhausted;
+    // Emulated C++ TLS may allocate on first use. Preserve the real Windows
+    // last-error value across cache initialization and environment inspection.
+#ifdef _WIN32
+    auto saved_last_error=::GetLastError();
+#endif
+    static const bool cache_enabled=[] {
+        auto* value=std::getenv("RECOMP_DISABLE_STATIC_CODE_CACHE");
+        return !value || std::strcmp(value,"1")!=0;
+    }();
+    static thread_local StaticCodeLookup<CodeEntry> thread_code{code};
+    auto* cached_code=cache_enabled ? &thread_code : nullptr;
+#ifdef _WIN32
+    ::SetLastError(saved_last_error);
+#endif
+    for(;;) {
+        if(state.pc>0xffffffffULL) throw std::runtime_error("invalid guest32 program counter");
+        if(state.pc==stop) throw std::runtime_error("stop address reached without a completed return");
+        if(budget==0) return sharp_retro::Exit::budget_exhausted;
+        auto address=std::uint32_t(state.pc);
+        sharp_retro::Exit outcome;
+        auto target=[&]() -> const CodeEntry* {
+            if(cached_code) return cached_code->find(address);
+            auto target=std::lower_bound(code.begin(),code.end(),address,[](const auto& item,auto key){ return item.address<key; });
+            return target!=code.end() && target->address==address ? &*target : nullptr;
+        }();
+        auto step=target ? target->step : (extra_guest_step ? extra_guest_step(address) : nullptr);
+        if(step) {
+            auto before=budget;
+            outcome=step(state,memory,budget);
+            if(outcome==sharp_retro::Exit::budget_exhausted) return outcome;
+            if(budget>=before) throw std::runtime_error("guest dispatcher made no instruction progress");
+        } else {
+            auto found=std::lower_bound(imports.begin(),imports.end(),address,[](const auto& item,auto key){ return item.address<key; });
+            const ImportEntry* binding=found!=imports.end() && found->address==address ? &*found :
+#if defined(_WIN32) && defined(__i386__) && defined(RECOMP_NATIVE_EXECUTION)
+                nullptr; // Real GetProcAddress/vtable addresses use the native ABI directly.
+#else
+                resolve_dynamic_native_import(address);
+#endif
+            if(!binding) {
+#if defined(_WIN32) && defined(__i386__)
+                if(invoke_native_abi_address(address,state,memory)) {
+                    --budget;
+                    if(state.pc==stop) return sharp_retro::Exit::returned;
+                    continue;
+                }
+#endif
+                if(missing_guest_code && missing_guest_code(address)) {
+                    if(!extra_guest_step || !extra_guest_step(address)) throw std::runtime_error("candidate did not supply missing PC");
+                    continue; // No guest instruction or external-call unit ran.
+                }
+                throw std::runtime_error("untranslated guest code/import target");
+            }
+            if(binding->translated_module) throw std::runtime_error("translated module import requires generated module binding");
+            --budget; // One explicit external-dispatch unit, not native instruction accounting.
+            if(handler) handler(*binding,state,memory); else invoke_native_import(*binding,state,memory);
+            outcome=sharp_retro::Exit::returned;
+        }
+        if(state.pc==stop) {
+            if(outcome!=sharp_retro::Exit::returned) throw std::runtime_error("non-return transfer reached stop address");
+            return sharp_retro::Exit::returned;
+        }
+    }
+}
+sharp_retro::Exit execute_guest(std::uint32_t address,std::uint32_t stop,sharp_retro::State& state,
+                              sharp_retro::Memory& memory,std::uint64_t& budget,ImportHandler handler) {
+    (void)resolve_guest(address); // Refuse an unknown entry before changing state.
+    if(address==stop) throw std::runtime_error("entry equals return stop");
+    state.pc=address;
+    return resume_guest(stop,state,memory,budget,handler);
+}
+} // namespace recomp_generated

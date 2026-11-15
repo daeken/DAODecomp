@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "default_import_policy": "native",
+  "modules": {
+    "daorigins.exe": {
+      "policy": "translate",
+      "sha256": "2346caee611002d4dff6ecef68eb315b63a37004dd98b39c11a9c26c0b45bfb3"
+    },
+    "umbra.dll": {
+      "policy": "translate",
+      "sha256": "ded9549239269ab3365a32579157ff171f1654cecbb9d6e68bdcca017c9f7d4f",
+      "named_exports": 154,
+      "import_slots": 89,
+      "observed_import_libraries": ["KERNEL32.dll"]
+    }
+  },
+  "notes": "Translate the pinned DAO and Umbra builds. Keep other DLLs native for now. Source/version availability is not an ABI compatibility claim; native imports need explicit contracts and bridges."
+}
